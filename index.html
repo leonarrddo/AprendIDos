@@ -516,38 +516,22 @@
 
     <script>
         // =============================================
-        // Interação simples nos botões do menu
+        // Interação nos botões do menu principal
         // =============================================
         document.querySelectorAll('.cartao-menu').forEach(function(botao) {
             botao.addEventListener('click', function(e) {
-                e.preventDefault();
-                var texto = this.querySelector('.texto-menu').textContent;
+                var texto = this.querySelector('.texto-menu').textContent.trim();
 
-                // Feedback visual temporário
-                this.style.backgroundColor = '#007A43';
-                this.querySelector('.icone-menu').style.color = '#FFFFFF';
-                this.querySelector('.texto-menu').style.color = '#FFFFFF';
-
-                var self = this;
-                setTimeout(function() {
-                    self.style.backgroundColor = '#E8D6B8';
-                    self.querySelector('.icone-menu').style.color = '#2B1B0E';
-                    self.querySelector('.texto-menu').style.color = '#2B1B0E';
-                }, 300);
-
-                // Mensagem acessível
-                var msg = document.createElement('div');
-                msg.setAttribute('role', 'alert');
-                msg.setAttribute('aria-live', 'polite');
-                msg.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#007A43;color:#fff;padding:14px 28px;border-radius:14px;font-size:18px;font-family:Poppins,sans-serif;font-weight:500;box-shadow:0 5px 15px rgba(0,0,0,0.15);z-index:9999;opacity:0;transition:opacity 0.3s;';
-                msg.textContent = 'Você clicou em: ' + texto;
-                document.body.appendChild(msg);
-
-                setTimeout(function() { msg.style.opacity = '1'; }, 50);
-                setTimeout(function() {
-                    msg.style.opacity = '0';
-                    setTimeout(function() { msg.remove(); }, 300);
-                }, 2000);
+                if (texto === 'Lições' || texto === 'Ouça') {
+                    e.preventDefault();
+                    window.location.href = 'licoes.html';
+                } else if (texto === 'Início') {
+                    e.preventDefault();
+                    window.location.href = 'index.html';
+                } else if (texto === 'Ajuda') {
+                    e.preventDefault();
+                    document.querySelector('.rodape-ajuda').scrollIntoView({ behavior: 'smooth' });
+                }
             });
         });
 
@@ -556,20 +540,20 @@
         // =============================================
         document.querySelector('.botao-principal').addEventListener('click', function(e) {
             e.preventDefault();
-
-            var msg = document.createElement('div');
-            msg.setAttribute('role', 'alert');
-            msg.setAttribute('aria-live', 'polite');
-            msg.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#007A43;color:#fff;padding:14px 28px;border-radius:14px;font-size:20px;font-family:Poppins,sans-serif;font-weight:600;box-shadow:0 5px 15px rgba(0,0,0,0.15);z-index:9999;opacity:0;transition:opacity 0.3s;';
-            msg.textContent = 'Vamos começar! Carregando lições...';
-            document.body.appendChild(msg);
-
-            setTimeout(function() { msg.style.opacity = '1'; }, 50);
-            setTimeout(function() {
-                msg.style.opacity = '0';
-                setTimeout(function() { msg.remove(); }, 300);
-            }, 2500);
+            window.location.href = 'licoes.html';
         });
+    </script>
+
+    <!-- Componente VLibras (Acessibilidade em LIBRAS) -->
+    <div vw class="enabled">
+      <div vw-access-button class="active"></div>
+      <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+      </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget('https://vlibras.gov.br/app');
     </script>
 
 </body>

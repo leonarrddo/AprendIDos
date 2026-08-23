@@ -132,11 +132,6 @@
             font-size: 1.15rem;
             font-weight: 900;
             flex-shrink: 0;
-            transition: transform 0.3s ease;
-        }
-
-        .navbar-brand:hover .brand-icon, .brand-icon:hover {
-            transform: rotate(-8deg) scale(1.08);
         }
 
         .navbar-brand span {
@@ -589,18 +584,11 @@
             display: block;
             margin-top: 0.2rem;
         }
-        .question-area .question-word .vowel-highlight,
-        .vowel-highlight {
-            color: #1B5E20 !important;
-            font-weight: 900 !important;
-            background-color: #E8F5E9;
-            padding: 2px 10px;
-            border-radius: 8px;
-            border: 2px solid #C8E6C9;
+        .question-area .question-word .vowel-highlight {
+            color: var(--green-dark);
             text-decoration: underline;
-            text-decoration-thickness: 3.5px;
-            text-underline-offset: 4px;
-            display: inline-block;
+            text-decoration-thickness: 3px;
+            text-underline-offset: 3px;
         }
 
         .options-grid {
@@ -871,34 +859,33 @@
         }
     </style>
 </head>
-
 <body>
-    
+
 <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
 
 <!-- ===== NAVBAR ===== -->
 <nav class="navbar" role="navigation" aria-label="Navegação principal">
     <div class="navbar-left">
-        <a href="licoes.html" class="btn-back" aria-label="Voltar para a página de lições">
+        <a href="#" class="btn-back" aria-label="Voltar">
             <i class="fas fa-arrow-left" aria-hidden="true"></i>
             Voltar
         </a>
-        <a href="index.html" class="navbar-brand" aria-label="AprendIDos">
+        <a href="#" class="navbar-brand" aria-label="AprendIDos">
             <div class="brand-icon" aria-hidden="true">A</div>
             <span>AprendIDos</span>
         </a>
     </div>
 
     <div class="navbar-nav" role="menubar">
-        <a href="index.html" class="navbar-nav-item" role="menuitem" aria-label="Início">
+        <a href="#" class="navbar-nav-item" role="menuitem" aria-label="Início">
             <i class="fas fa-home" aria-hidden="true"></i>
             <span>Início</span>
         </a>
-        <a href="licoes.html" class="navbar-nav-item" role="menuitem" aria-label="Módulos">
+        <a href="#" class="navbar-nav-item" role="menuitem" aria-label="Módulos">
             <i class="fas fa-book" aria-hidden="true"></i>
             <span>Módulos</span>
         </a>
-        <a href="licoes.html" class="navbar-nav-item active" role="menuitem" aria-current="page" aria-label="Atividades">
+        <a href="#" class="navbar-nav-item active" role="menuitem" aria-current="page" aria-label="Atividades">
             <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
             <span>Atividades</span>
         </a>
@@ -909,15 +896,15 @@
     </button>
 
     <div class="navbar-mobile-menu" id="mobileMenu">
-        <a href="index.html" role="menuitem">
+        <a href="#" role="menuitem">
             <i class="fas fa-home" aria-hidden="true"></i>
             Início
         </a>
-        <a href="licoes.html" role="menuitem">
+        <a href="#" role="menuitem">
             <i class="fas fa-book" aria-hidden="true"></i>
             Módulos
         </a>
-        <a href="licoes.html" class="active" role="menuitem" aria-current="page">
+        <a href="#" class="active" role="menuitem" aria-current="page">
             <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
             Atividades
         </a>
@@ -935,7 +922,7 @@
     <div class="instruction-card">
         <div class="instruction-text">
             <p>Ouça e repita cada vogal.</p>
-            <p>Toque nas fotos para ouvir as vogais.</p>
+            <p>Toque no botão para começar.</p>
         </div>
         <button class="btn-play-instruction" id="btnInstruction" aria-label="Ouvir instrução" onclick="playInstruction()">
             <i class="fas fa-play" aria-hidden="true"></i>
@@ -1192,17 +1179,10 @@
                 <ul id="errorList"></ul>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;">
-                <a href="licoes.html" class="btn-restart" style="background-color: var(--green); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;" aria-label="Voltar para a lista de lições">
-                    <i class="fas fa-check-circle" aria-hidden="true"></i>
-                    Salvar e Ver Outras Lições
-                </a>
-
-                <button class="btn-restart" onclick="restartExercise()" style="background-color: #FAF3E0; color: #3E2723; border: 2px solid #C8E6C9;" aria-label="Refazer a atividade">
-                    <i class="fas fa-redo" aria-hidden="true"></i>
-                    Refazer atividade
-                </button>
-            </div>
+            <button class="btn-restart" onclick="restartExercise()" aria-label="Refazer a atividade">
+                <i class="fas fa-redo" aria-hidden="true"></i>
+                Refazer atividade
+            </button>
         </div>
     </section>
 </main>
@@ -1214,542 +1194,308 @@
 
 <div id="srAnnouncer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-<!-- Componente VLibras (Acessibilidade em LIBRAS) -->
-<div vw class="enabled">
-  <div vw-access-button class="active"></div>
-  <div vw-plugin-wrapper>
-    <div class="vw-plugin-top-wrapper"></div>
-  </div>
-</div>
-<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 <script>
-  new window.VLibras.Widget('https://vlibras.gov.br/app');
-</script>
-
-<script>
-// ============================================================
-// AprendIDos — Vogais: Script INLINE (funciona em file://)
-// ============================================================
-
-var vowelData = {
-    a: { letter: 'A', example: 'Avião' },
-    e: { letter: 'E', example: 'Escada' },
-    i: { letter: 'I', example: 'Ilha' },
-    o: { letter: 'O', example: 'Ônibus' },
-    u: { letter: 'U', example: 'Urso' }
-};
-
-// =========================================================
-// BANCO DE PALAVRAS — 200 palavras do cotidiano brasileiro
-// 40 por vogal → mais de 50 rodadas sem sentir repetição!
-// =========================================================
-var wordBank = [
-    // ── VOGAL A (40 palavras) ──
-    { word: 'Abelha',     vowel: 'A' },
-    { word: 'Árvore',     vowel: 'A' },
-    { word: 'Amigo',      vowel: 'A' },
-    { word: 'Amor',       vowel: 'A' },
-    { word: 'Avó',        vowel: 'A' },
-    { word: 'Água',       vowel: 'A' },
-    { word: 'Alface',     vowel: 'A' },
-    { word: 'Azul',       vowel: 'A' },
-    { word: 'Abóbora',    vowel: 'A' },
-    { word: 'Abraço',     vowel: 'A' },
-    { word: 'Açúcar',     vowel: 'A' },
-    { word: 'Alegria',    vowel: 'A' },
-    { word: 'Aluno',      vowel: 'A' },
-    { word: 'Anel',       vowel: 'A' },
-    { word: 'Arco',       vowel: 'A' },
-    { word: 'Avião',      vowel: 'A' },
-    { word: 'Avental',    vowel: 'A' },
-    { word: 'Aranha',     vowel: 'A' },
-    { word: 'Artista',    vowel: 'A' },
-    { word: 'Amora',      vowel: 'A' },
-    { word: 'Aldeia',     vowel: 'A' },
-    { word: 'Almofada',   vowel: 'A' },
-    { word: 'Alpiste',    vowel: 'A' },
-    { word: 'Amêndoa',    vowel: 'A' },
-    { word: 'Anzol',      vowel: 'A' },
-    { word: 'Apito',      vowel: 'A' },
-    { word: 'Aquário',    vowel: 'A' },
-    { word: 'Arame',      vowel: 'A' },
-    { word: 'Areia',      vowel: 'A' },
-    { word: 'Armário',    vowel: 'A' },
-    { word: 'Arpão',      vowel: 'A' },
-    { word: 'Arrozal',    vowel: 'A' },
-    { word: 'Artesão',    vowel: 'A' },
-    { word: 'Assoalho',   vowel: 'A' },
-    { word: 'Atum',       vowel: 'A' },
-    { word: 'Aula',       vowel: 'A' },
-    { word: 'Aurora',     vowel: 'A' },
-    { word: 'Automóvel',  vowel: 'A' },
-    { word: 'Aveia',      vowel: 'A' },
-    { word: 'Azulejo',    vowel: 'A' },
-
-    // ── VOGAL E (40 palavras) ──
-    { word: 'Escola',     vowel: 'E' },
-    { word: 'Elefante',   vowel: 'E' },
-    { word: 'Estrela',    vowel: 'E' },
-    { word: 'Escada',     vowel: 'E' },
-    { word: 'Espelho',    vowel: 'E' },
-    { word: 'Erva',       vowel: 'E' },
-    { word: 'Ervilha',    vowel: 'E' },
-    { word: 'Estrada',    vowel: 'E' },
-    { word: 'Enfermeiro', vowel: 'E' },
-    { word: 'Escova',     vowel: 'E' },
-    { word: 'Êxito',      vowel: 'E' },
-    { word: 'Exercício',  vowel: 'E' },
-    { word: 'Envelope',   vowel: 'E' },
-    { word: 'Espiga',     vowel: 'E' },
-    { word: 'Espada',     vowel: 'E' },
-    { word: 'Estante',    vowel: 'E' },
-    { word: 'Esfera',     vowel: 'E' },
-    { word: 'Esponja',    vowel: 'E' },
-    { word: 'Estojo',     vowel: 'E' },
-    { word: 'Estribo',    vowel: 'E' },
-    { word: 'Espiga',     vowel: 'E' },
-    { word: 'Escorpião',  vowel: 'E' },
-    { word: 'Esquilo',    vowel: 'E' },
-    { word: 'Estopa',     vowel: 'E' },
-    { word: 'Espuma',     vowel: 'E' },
-    { word: 'Esteira',    vowel: 'E' },
-    { word: 'Edifício',   vowel: 'E' },
-    { word: 'Efeito',     vowel: 'E' },
-    { word: 'Égua',       vowel: 'E' },
-    { word: 'Elástico',   vowel: 'E' },
-    { word: 'Elevador',   vowel: 'E' },
-    { word: 'Emoção',     vowel: 'E' },
-    { word: 'Empada',     vowel: 'E' },
-    { word: 'Empadão',    vowel: 'E' },
-    { word: 'Encanto',    vowel: 'E' },
-    { word: 'Enxada',     vowel: 'E' },
-    { word: 'Erário',     vowel: 'E' },
-    { word: 'Escrita',    vowel: 'E' },
-    { word: 'Estação',    vowel: 'E' },
-    { word: 'Estepe',     vowel: 'E' },
-
-    // ── VOGAL I (40 palavras) ──
-    { word: 'Inseto',     vowel: 'I' },
-    { word: 'Igreja',     vowel: 'I' },
-    { word: 'Ilha',       vowel: 'I' },
-    { word: 'Iluminar',   vowel: 'I' },
-    { word: 'Idoso',      vowel: 'I' },
-    { word: 'Inverno',    vowel: 'I' },
-    { word: 'Irmão',      vowel: 'I' },
-    { word: 'Início',     vowel: 'I' },
-    { word: 'Índio',      vowel: 'I' },
-    { word: 'Imagem',     vowel: 'I' },
-    { word: 'Instrução',  vowel: 'I' },
-    { word: 'Infância',   vowel: 'I' },
-    { word: 'Ingresso',   vowel: 'I' },
-    { word: 'Imposto',    vowel: 'I' },
-    { word: 'Infinito',   vowel: 'I' },
-    { word: 'Iguaria',    vowel: 'I' },
-    { word: 'Igualdade',  vowel: 'I' },
-    { word: 'Ilusão',     vowel: 'I' },
-    { word: 'Imenso',     vowel: 'I' },
-    { word: 'Incêndio',   vowel: 'I' },
-    { word: 'Indústria',  vowel: 'I' },
-    { word: 'Inimigo',    vowel: 'I' },
-    { word: 'Interesse',  vowel: 'I' },
-    { word: 'Intuição',   vowel: 'I' },
-    { word: 'Inventor',   vowel: 'I' },
-    { word: 'Ipê',        vowel: 'I' },
-    { word: 'Irmandade',  vowel: 'I' },
-    { word: 'Irrigação',  vowel: 'I' },
-    { word: 'Itinerário', vowel: 'I' },
-    { word: 'Idioma',     vowel: 'I' },
-    { word: 'Ignorância', vowel: 'I' },
-    { word: 'Iguana',     vowel: 'I' },
-    { word: 'Impacto',    vowel: 'I' },
-    { word: 'Impressora', vowel: 'I' },
-    { word: 'Incisivo',   vowel: 'I' },
-    { word: 'Inocente',   vowel: 'I' },
-    { word: 'Inscrito',   vowel: 'I' },
-    { word: 'Instinto',   vowel: 'I' },
-    { word: 'Irônico',    vowel: 'I' },
-    { word: 'Isolado',    vowel: 'I' },
-
-    // ── VOGAL O (40 palavras) ──
-    { word: 'Ovelha',     vowel: 'O' },
-    { word: 'Ouro',       vowel: 'O' },
-    { word: 'Olho',       vowel: 'O' },
-    { word: 'Ônibus',     vowel: 'O' },
-    { word: 'Ovo',        vowel: 'O' },
-    { word: 'Oração',     vowel: 'O' },
-    { word: 'Obra',       vowel: 'O' },
-    { word: 'Osso',       vowel: 'O' },
-    { word: 'Otimismo',   vowel: 'O' },
-    { word: 'Ofício',     vowel: 'O' },
-    { word: 'Orelha',     vowel: 'O' },
-    { word: 'Oceano',     vowel: 'O' },
-    { word: 'Objeto',     vowel: 'O' },
-    { word: 'Obrigação',  vowel: 'O' },
-    { word: 'Oficial',    vowel: 'O' },
-    { word: 'Oliva',      vowel: 'O' },
-    { word: 'Ombro',      vowel: 'O' },
-    { word: 'Onça',       vowel: 'O' },
-    { word: 'Opção',      vowel: 'O' },
-    { word: 'Operação',   vowel: 'O' },
-    { word: 'Opinião',    vowel: 'O' },
-    { word: 'Oportunidade', vowel: 'O' },
-    { word: 'Oráculo',    vowel: 'O' },
-    { word: 'Orçamento',  vowel: 'O' },
-    { word: 'Orvalho',    vowel: 'O' },
-    { word: 'Osório',     vowel: 'O' },
-    { word: 'Ouriço',     vowel: 'O' },
-    { word: 'Outono',     vowel: 'O' },
-    { word: 'Outubro',    vowel: 'O' },
-    { word: 'Ouvidoria',  vowel: 'O' },
-    { word: 'Oásis',      vowel: 'O' },
-    { word: 'Obeso',      vowel: 'O' },
-    { word: 'Oblíquo',    vowel: 'O' },
-    { word: 'Obsessão',   vowel: 'O' },
-    { word: 'Obstáculo',  vowel: 'O' },
-    { word: 'Odor',       vowel: 'O' },
-    { word: 'Oferta',     vowel: 'O' },
-    { word: 'Ópera',      vowel: 'O' },
-    { word: 'Ostra',      vowel: 'O' },
-    { word: 'Oval',       vowel: 'O' },
-
-    // ── VOGAL U (40 palavras) ──
-    { word: 'Uva',        vowel: 'U' },
-    { word: 'Urubu',      vowel: 'U' },
-    { word: 'Urso',       vowel: 'U' },
-    { word: 'Unha',       vowel: 'U' },
-    { word: 'Uniforme',   vowel: 'U' },
-    { word: 'Universo',   vowel: 'U' },
-    { word: 'Urgência',   vowel: 'U' },
-    { word: 'Último',     vowel: 'U' },
-    { word: 'Usina',      vowel: 'U' },
-    { word: 'Útil',       vowel: 'U' },
-    { word: 'Urna',       vowel: 'U' },
-    { word: 'Úmido',      vowel: 'U' },
-    { word: 'Unicórnio',  vowel: 'U' },
-    { word: 'Utensílio',  vowel: 'U' },
-    { word: 'Ubiquidade', vowel: 'U' },
-    { word: 'Ultramar',   vowel: 'U' },
-    { word: 'Umbigo',     vowel: 'U' },
-    { word: 'Umidade',    vowel: 'U' },
-    { word: 'Unidade',    vowel: 'U' },
-    { word: 'União',      vowel: 'U' },
-    { word: 'Único',      vowel: 'U' },
-    { word: 'Uníssono',   vowel: 'U' },
-    { word: 'Urânio',     vowel: 'U' },
-    { word: 'Urdidura',   vowel: 'U' },
-    { word: 'Urucum',     vowel: 'U' },
-    { word: 'Ursinho',    vowel: 'U' },
-    { word: 'Urucubaca',  vowel: 'U' },
-    { word: 'Urutau',     vowel: 'U' },
-    { word: 'Usufruir',   vowel: 'U' },
-    { word: 'Utopia',     vowel: 'U' },
-    { word: 'Uísque',     vowel: 'U' },
-    { word: 'Urbano',     vowel: 'U' },
-    { word: 'Ufanismo',   vowel: 'U' },
-    { word: 'Ucraniano',  vowel: 'U' },
-    { word: 'Ultrasom',   vowel: 'U' },
-    { word: 'Unanimidade', vowel: 'U' },
-    { word: 'Unânime',    vowel: 'U' },
-    { word: 'Uivar',      vowel: 'U' },
-    { word: 'Ufologia',   vowel: 'U' },
-    { word: 'Ultrassom',  vowel: 'U' }
-];
-
-var questions = [];
-var currentIdx = 0;
-var hits = 0;
-var misses = 0;
-var answered = false;
-var errorLog = [];
-var TOTAL = 10;
-var allVowels = 'AEIOUÁÉÍÓÚÃÕÂÊÎÔÛaeiouáéíóúãõâêîôû';
-
-// ---- SÍNTESE DE VOZ ----
-var ptVoiceCache = null;
-
-function loadVoices() {
-    var voices = window.speechSynthesis.getVoices();
-    if (voices.length > 0) {
-        ptVoiceCache = voices.find(function(v) {
-            return v.lang === 'pt-BR' || v.lang === 'pt_BR' || v.lang.startsWith('pt');
-        }) || null;
-    }
-}
-
-if ('speechSynthesis' in window) {
-    loadVoices();
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-}
-
-function speak(text, onEnd) {
-    if (!('speechSynthesis' in window)) {
-        if (onEnd) onEnd();
-        return;
-    }
-
-    // Para fala anterior
-    window.speechSynthesis.cancel();
-
-    // Remove animações de qualquer botão
-    document.querySelectorAll('.speaking').forEach(function(el) {
-        el.classList.remove('speaking');
-    });
-
-    var u = new SpeechSynthesisUtterance(text);
-    u.lang = 'pt-BR';
-    u.rate = 0.85;
-    u.pitch = 1.0;
-    u.volume = 1.0;
-
-    // Tenta usar voz Portuguesa
-    if (!ptVoiceCache) loadVoices();
-    if (ptVoiceCache) u.voice = ptVoiceCache;
-
-    var cleanup = function() {
-        document.querySelectorAll('.speaking').forEach(function(el) {
-            el.classList.remove('speaking');
-        });
-        if (onEnd) onEnd();
+    var vowelData = {
+        a: { letter: 'A', example: 'Avião' },
+        e: { letter: 'E', example: 'Escada' },
+        i: { letter: 'I', example: 'Ilha' },
+        o: { letter: 'O', example: 'Ônibus' },
+        u: { letter: 'U', example: 'Urso' }
     };
 
-    u.onend = cleanup;
-    u.onerror = cleanup;
+    var wordBank = [
+        { word: 'Abelha', vowel: 'A' },
+        { word: 'Escola', vowel: 'E' },
+        { word: 'Inseto', vowel: 'I' },
+        { word: 'Ovelha', vowel: 'O' },
+        { word: 'Uva', vowel: 'U' },
+        { word: 'Árvore', vowel: 'A' },
+        { word: 'Elefante', vowel: 'E' },
+        { word: 'Igreja', vowel: 'I' },
+        { word: 'Ouro', vowel: 'O' },
+        { word: 'Unha', vowel: 'U' },
+        { word: 'Amigo', vowel: 'A' },
+        { word: 'Estrela', vowel: 'E' },
+        { word: 'Iluminar', vowel: 'I' },
+        { word: 'Olho', vowel: 'O' },
+        { word: 'Urubu', vowel: 'U' }
+    ];
 
-    // Workaround do Chrome: pequeno delay garante reprodução
-    setTimeout(function() {
-        try {
-            window.speechSynthesis.speak(u);
-        } catch (e) {
-            cleanup();
+    var questions = [];
+    var currentIdx = 0;
+    var hits = 0;
+    var misses = 0;
+    var answered = false;
+    var errorLog = [];
+    var TOTAL = 10;
+
+    var allVowels = 'AEIOUÁÉÍÓÚÃÕÂÊÎÔÛaeiouáéíóúãõâêîôû';
+
+    function highlightFirstVowel(word) {
+        for (var i = 0; i < word.length; i++) {
+            if (allVowels.includes(word[i])) {
+                return word.slice(0, i) +
+                    '<span class="vowel-highlight">' + word[i] + '</span>' +
+                    word.slice(i + 1);
+            }
         }
-    }, 80);
-}
+        return word;
+    }
 
-// ---- VOGAIS ----
-function speakVowel(key) {
-    var data = vowelData[key];
-    if (!data) return;
-    document.querySelectorAll('.vowel-card').forEach(function(c) { c.classList.remove('speaking'); });
-    var card = document.querySelector('.vowel-card[data-vowel="' + key + '"]');
-    if (card) card.classList.add('speaking');
-    speak(data.letter + '. ' + data.letter + ' de ' + data.example + '.', function() {
-        if (card) card.classList.remove('speaking');
-    });
-}
+    function initExercise() {
+        questions = shuffle([...wordBank]).slice(0, TOTAL);
+        currentIdx = 0;
+        hits = 0;
+        misses = 0;
+        answered = false;
+        errorLog = [];
+        document.getElementById('hitsCount').textContent = '0';
+        document.getElementById('missesCount').textContent = '0';
+        document.getElementById('exerciseCard').style.display = 'block';
+        document.getElementById('completionScreen').classList.remove('visible');
+        loadQuestion();
+    }
 
-function playInstruction() {
-    var btn = document.getElementById('btnInstruction');
-    if (btn) btn.classList.add('speaking');
-    speak('Ouça e repita cada vogal. Toque nas fotos para ouvir as vogais.', function() {
-        if (btn) btn.classList.remove('speaking');
-    });
-}
+    function loadQuestion() {
+        answered = false;
+        var q = questions[currentIdx];
+        document.getElementById('questionWord').innerHTML = highlightFirstVowel(q.word);
+        var pct = (currentIdx / TOTAL) * 100;
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('progressBar').setAttribute('aria-valuenow', Math.round(pct));
+        document.getElementById('progressLabel').textContent = 'Pergunta ' + (currentIdx + 1) + ' de ' + TOTAL;
+        document.getElementById('feedbackArea').innerHTML = '';
+        document.querySelectorAll('.btn-option').forEach(function(btn) {
+            btn.disabled = false;
+            btn.classList.remove('correct', 'wrong');
+        });
+        setTimeout(function() { playQuestionAudio(); }, 350);
+    }
 
-// ---- EXERCÍCIOS ----
-function highlightFirstVowel(word) {
-    for (var i = 0; i < word.length; i++) {
-        if (allVowels.includes(word[i])) {
-            return word.slice(0, i) +
-                '<span class="vowel-highlight">' + word[i] + '</span>' +
-                word.slice(i + 1);
+    function playQuestionAudio() {
+        if (currentIdx >= questions.length) return;
+        var btn = document.getElementById('btnExerciseAudio');
+        btn.classList.add('speaking');
+        var word = questions[currentIdx].word;
+        speak('Qual é a primeira vogal da palavra ' + word + '?', function() {
+            btn.classList.remove('speaking');
+        });
+    }
+
+    function playHelpExercise() {
+        var btn = document.getElementById('btnHelpExercise');
+        btn.classList.add('speaking');
+        speak('Escolha a primeira vogal da palavra que aparece na tela.', function() {
+            btn.classList.remove('speaking');
+        });
+    }
+
+    function checkAnswer(selected) {
+        if (answered) return;
+        answered = true;
+        var q = questions[currentIdx];
+        var correct = selected === q.vowel;
+
+        document.querySelectorAll('.btn-option').forEach(function(b) { b.disabled = true; });
+
+        var selBtn = document.querySelector('.btn-option[data-vowel="' + selected + '"]');
+        selBtn.classList.add(correct ? 'correct' : 'wrong');
+
+        if (!correct) {
+            document.querySelector('.btn-option[data-vowel="' + q.vowel + '"]').classList.add('correct');
+            errorLog.push({ word: q.word, correctVowel: q.vowel, chosenVowel: selected });
         }
-    }
-    return word;
-}
 
-function initExercise() {
-    questions = shuffle(wordBank.slice()).slice(0, TOTAL);
-    currentIdx = 0; hits = 0; misses = 0; answered = false; errorLog = [];
-    var hitsEl = document.getElementById('hitsCount');
-    var missesEl = document.getElementById('missesCount');
-    var cardEl = document.getElementById('exerciseCard');
-    var compEl = document.getElementById('completionScreen');
-    if (hitsEl) hitsEl.textContent = '0';
-    if (missesEl) missesEl.textContent = '0';
-    if (cardEl) cardEl.style.display = 'block';
-    if (compEl) compEl.classList.remove('visible');
-    loadQuestion();
-}
+        if (correct) {
+            hits++;
+            document.getElementById('hitsCount').textContent = hits;
+            showFeedback('success', 'Muito bem!');
+            speak('Muito bem!');
+        } else {
+            misses++;
+            document.getElementById('missesCount').textContent = misses;
+            showFeedback('error', 'Vamos tentar novamente.');
+            speak('Vamos tentar novamente. A resposta era ' + q.vowel + '.');
+        }
 
-function loadQuestion() {
-    answered = false;
-    if (!questions[currentIdx]) return;
-    var q = questions[currentIdx];
-    var qWord = document.getElementById('questionWord');
-    var pFill = document.getElementById('progressFill');
-    var pBar = document.getElementById('progressBar');
-    var pLabel = document.getElementById('progressLabel');
-    var fbArea = document.getElementById('feedbackArea');
-    if (qWord) qWord.innerHTML = highlightFirstVowel(q.word);
-    var pct = (currentIdx / TOTAL) * 100;
-    if (pFill) pFill.style.width = pct + '%';
-    if (pBar) pBar.setAttribute('aria-valuenow', Math.round(pct));
-    if (pLabel) pLabel.textContent = 'Pergunta ' + (currentIdx + 1) + ' de ' + TOTAL;
-    if (fbArea) fbArea.innerHTML = '';
-    document.querySelectorAll('.btn-option').forEach(function(btn) {
-        btn.disabled = false;
-        btn.classList.remove('correct', 'wrong');
-    });
-    // Lê a pergunta automaticamente após pequeno delay
-    setTimeout(playQuestionAudio, 500);
-}
+        announceSR(correct
+            ? 'Muito bem! A resposta é ' + q.vowel + '.'
+            : 'Vamos tentar novamente. A resposta era ' + q.vowel + '.'
+        );
 
-function playQuestionAudio() {
-    if (currentIdx >= questions.length) return;
-    var btn = document.getElementById('btnExerciseAudio');
-    if (btn) btn.classList.add('speaking');
-    var word = questions[currentIdx].word;
-    speak('Qual é a primeira vogal da palavra ' + word + '?', function() {
-        if (btn) btn.classList.remove('speaking');
-    });
-}
+        var isLast = currentIdx >= TOTAL - 1;
+        var label = isLast ? 'Ver resultado' : 'Próxima pergunta';
+        var icon = isLast ? 'fa-flag-checkered' : 'fa-arrow-right';
 
-function playHelpExercise() {
-    var btn = document.getElementById('btnHelpExercise');
-    if (btn) btn.classList.add('speaking');
-    speak('Escolha a primeira vogal da palavra que aparece na tela.', function() {
-        if (btn) btn.classList.remove('speaking');
-    });
-}
-
-function checkAnswer(selected) {
-    if (answered) return;
-    answered = true;
-    var q = questions[currentIdx];
-    var correct = selected === q.vowel;
-    document.querySelectorAll('.btn-option').forEach(function(b) { b.disabled = true; });
-    var selBtn = document.querySelector('.btn-option[data-vowel="' + selected + '"]');
-    if (selBtn) selBtn.classList.add(correct ? 'correct' : 'wrong');
-    if (!correct) {
-        var correctBtn = document.querySelector('.btn-option[data-vowel="' + q.vowel + '"]');
-        if (correctBtn) correctBtn.classList.add('correct');
-        errorLog.push({ word: q.word, correctVowel: q.vowel, chosenVowel: selected });
-    }
-    if (correct) {
-        hits++;
-        var hitsEl = document.getElementById('hitsCount');
-        if (hitsEl) hitsEl.textContent = hits;
-        showFeedback('success', 'Muito bem!');
-        speak('Muito bem!');
-    } else {
-        misses++;
-        var missesEl = document.getElementById('missesCount');
-        if (missesEl) missesEl.textContent = misses;
-        showFeedback('error', 'Vamos tentar novamente.');
-        speak('Vamos tentar novamente. A resposta era ' + q.vowel + '.');
-    }
-    var isLast = currentIdx >= TOTAL - 1;
-    var label = isLast ? 'Ver resultado' : 'Próxima pergunta';
-    var icon = isLast ? 'fa-flag-checkered' : 'fa-arrow-right';
-    setTimeout(function() {
-        var fbArea = document.getElementById('feedbackArea');
-        if (fbArea) {
-            fbArea.innerHTML +=
+        setTimeout(function() {
+            document.getElementById('feedbackArea').innerHTML +=
                 '<button class="btn-next" onclick="nextQuestion()" aria-label="' + label + '">' +
                 '<i class="fas ' + icon + '" aria-hidden="true"></i> ' + label + '</button>';
             var nb = document.querySelector('.btn-next');
             if (nb) nb.focus();
-        }
-    }, correct ? 200 : 800);
-}
-
-function nextQuestion() {
-    currentIdx++;
-    if (currentIdx >= TOTAL) {
-        showCompletion();
-    } else {
-        loadQuestion();
+        }, correct ? 200 : 800);
     }
-}
 
-function showFeedback(type, msg) {
-    var icon = type === 'success' ? 'fa-check-circle' : 'fa-redo';
-    var fbArea = document.getElementById('feedbackArea');
-    if (fbArea) {
-        fbArea.innerHTML =
+    function nextQuestion() {
+        currentIdx++;
+        if (currentIdx >= TOTAL) {
+            showCompletion();
+        } else {
+            loadQuestion();
+        }
+    }
+
+    function showFeedback(type, msg) {
+        var icon = type === 'success' ? 'fa-check-circle' : 'fa-redo';
+        document.getElementById('feedbackArea').innerHTML =
             '<div class="feedback-msg ' + type + '" role="alert">' +
             '<i class="fas ' + icon + '" aria-hidden="true"></i> ' + msg + '</div>';
     }
-}
 
-function showCompletion() {
-    var exCard = document.getElementById('exerciseCard');
-    var compScreen = document.getElementById('completionScreen');
-    if (exCard) exCard.style.display = 'none';
-    if (compScreen) compScreen.classList.add('visible');
-    var finalHitsEl = document.getElementById('finalHits');
-    var finalMissesEl = document.getElementById('finalMisses');
-    var finalTotalEl = document.getElementById('finalTotal');
-    var progFill = document.getElementById('progressFill');
-    if (finalHitsEl) finalHitsEl.textContent = hits;
-    if (finalMissesEl) finalMissesEl.textContent = misses;
-    if (finalTotalEl) finalTotalEl.textContent = TOTAL;
-    if (progFill) progFill.style.width = '100%';
-    var msg;
-    if (hits === TOTAL) msg = 'Perfeito! Você acertou todas!';
-    else if (hits >= 7) msg = 'Muito bom! Continue assim!';
-    else if (hits >= 5) msg = 'Bom trabalho! Revise e tente de novo.';
-    else msg = 'Não desista! Refaça e vai ficar melhor.';
-    var compMsgEl = document.getElementById('completionMsg');
-    if (compMsgEl) compMsgEl.textContent = msg;
-    var errorSummaryEl = document.getElementById('errorSummary');
-    var errorListEl = document.getElementById('errorList');
-    if (errorListEl) errorListEl.innerHTML = '';
-    if (errorLog.length > 0 && errorSummaryEl && errorListEl) {
-        errorSummaryEl.style.display = 'block';
-        errorLog.forEach(function(err) {
-            var li = document.createElement('li');
-            li.innerHTML = err.word +
-                ' — você escolheu <span class="wrong-answer">' + err.chosenVowel + '</span>' +
-                ' <span class="arrow"><i class="fas fa-arrow-right" aria-hidden="true"></i></span> ' +
-                'o correto é <span class="correct-answer">' + err.correctVowel + '</span>';
-            errorListEl.appendChild(li);
-        });
-    } else if (errorSummaryEl) {
-        errorSummaryEl.style.display = 'none';
+    function showCompletion() {
+        document.getElementById('exerciseCard').style.display = 'none';
+        document.getElementById('completionScreen').classList.add('visible');
+        document.getElementById('finalHits').textContent = hits;
+        document.getElementById('finalMisses').textContent = misses;
+        document.getElementById('finalTotal').textContent = TOTAL;
+        document.getElementById('progressFill').style.width = '100%';
+
+        var msg;
+        if (hits === TOTAL) msg = 'Perfeito! Você acertou todas!';
+        else if (hits >= 7) msg = 'Muito bom! Continue assim!';
+        else if (hits >= 5) msg = 'Bom trabalho! Revise e tente de novo.';
+        else msg = 'Não desista! Refaça e vai ficar melhor.';
+        document.getElementById('completionMsg').textContent = msg;
+
+        var errorSummaryEl = document.getElementById('errorSummary');
+        var errorListEl = document.getElementById('errorList');
+        errorListEl.innerHTML = '';
+
+        if (errorLog.length > 0) {
+            errorSummaryEl.style.display = 'block';
+            errorLog.forEach(function(err) {
+                var li = document.createElement('li');
+                li.innerHTML = err.word +
+                    ' — você escolheu <span class="wrong-answer">' + err.chosenVowel + '</span>' +
+                    ' <span class="arrow"><i class="fas fa-arrow-right" aria-hidden="true"></i></span> ' +
+                    'o correto é <span class="correct-answer">' + err.correctVowel + '</span>';
+                errorListEl.appendChild(li);
+            });
+        } else {
+            errorSummaryEl.style.display = 'none';
+        }
+
+        speak('Parabéns! Você terminou! ' + msg);
+        announceSR('Atividade concluída. ' + hits + ' acertos de ' + TOTAL + '. ' + msg);
+
+        setTimeout(function() {
+            var b = document.querySelector('.btn-restart');
+            if (b) b.focus();
+        }, 300);
     }
-    // Salva progresso no localStorage
-    try {
-        var prog = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
-        prog['vogais'] = { completed: true, score: hits, total: TOTAL, date: new Date().toISOString() };
-        localStorage.setItem('aprendidos_progresso', JSON.stringify(prog));
-    } catch(e) {}
-    speak('Parabéns! Você terminou! ' + msg);
-}
 
-function restartExercise() { initExercise(); }
+    function restartExercise() { initExercise(); }
 
-function toggleMenu() {
-    var menu = document.getElementById('mobileMenu');
-    var btn = document.querySelector('.navbar-hamburger');
-    if (menu && btn) {
+    function speakVowel(key) {
+        var data = vowelData[key];
+        if (!data) return;
+        document.querySelectorAll('.vowel-card').forEach(function(c) { c.classList.remove('speaking'); });
+        var card = document.querySelector('.vowel-card[data-vowel="' + key + '"]');
+        if (card) card.classList.add('speaking');
+        speak(data.letter + '. ' + data.letter + ' de ' + data.example + '.', function() {
+            if (card) card.classList.remove('speaking');
+        });
+    }
+
+    function playInstruction() {
+        var btn = document.getElementById('btnInstruction');
+        btn.classList.add('speaking');
+        speak('Ouça e repita cada vogal. Toque nos cards para aprender.', function() {
+            btn.classList.remove('speaking');
+        });
+    }
+
+    function speak(text, onEnd) {
+        if (!('speechSynthesis' in window)) {
+            if (onEnd) onEnd();
+            return;
+        }
+        window.speechSynthesis.cancel();
+        document.querySelectorAll('.speaking').forEach(function(el) {
+            el.classList.remove('speaking');
+        });
+        var u = new SpeechSynthesisUtterance(text);
+        u.lang = 'pt-BR';
+        u.rate = 0.82;
+        u.pitch = 1.0;
+        u.volume = 1.0;
+        var voices = window.speechSynthesis.getVoices();
+        var ptVoice = voices.find(function(v) { return v.lang.startsWith('pt'); });
+        if (ptVoice) u.voice = ptVoice;
+        if (onEnd) u.onend = onEnd;
+        u.onerror = function() {
+            document.querySelectorAll('.speaking').forEach(function(el) {
+                el.classList.remove('speaking');
+            });
+        };
+        window.speechSynthesis.speak(u);
+    }
+
+    function announceSR(text) {
+        var el = document.getElementById('srAnnouncer');
+        el.textContent = '';
+        setTimeout(function() { el.textContent = text; }, 60);
+    }
+
+    function shuffle(arr) {
+        for (var i = arr.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+        }
+        return arr;
+    }
+
+    function toggleMenu() {
+        var menu = document.getElementById('mobileMenu');
+        var btn = document.querySelector('.navbar-hamburger');
         var isOpen = menu.classList.toggle('open');
         btn.setAttribute('aria-expanded', isOpen);
     }
-}
 
-function shuffle(arr) {
-    for (var i = arr.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    document.addEventListener('click', function(e) {
+        var menu = document.getElementById('mobileMenu');
+        var btn = document.querySelector('.navbar-hamburger');
+        if (menu.classList.contains('open') &&
+            !menu.contains(e.target) &&
+            !btn.contains(e.target)) {
+            menu.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    document.querySelector('.options-grid').addEventListener('keydown', function(e) {
+        var btns = Array.from(this.querySelectorAll('.btn-option:not(:disabled)'));
+        var idx = btns.indexOf(document.activeElement);
+        if (idx < 0) return;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            btns[(idx + 1) % btns.length].focus();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            btns[(idx - 1 + btns.length) % btns.length].focus();
+        }
+    });
+
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = function() {
+            window.speechSynthesis.getVoices();
+        };
     }
-    return arr;
-}
 
-// Fecha menu mobile ao clicar fora
-document.addEventListener('click', function(e) {
-    var menu = document.getElementById('mobileMenu');
-    var btn = document.querySelector('.navbar-hamburger');
-    if (menu && btn && menu.classList.contains('open') &&
-        !menu.contains(e.target) && !btn.contains(e.target)) {
-        menu.classList.remove('open');
-        btn.setAttribute('aria-expanded', 'false');
-    }
-});
-
-// Inicia os exercícios
-initExercise();
+    initExercise();
 </script>
-
 </body>
 </html>

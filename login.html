@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AprendIDos — Aprender hoje, transformar sempre.</title>
+<title>AprendIDos — Entrar na plataforma</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -18,6 +19,9 @@
     --texto: #2D2444;
     --texto-suave: #5C5470;
     --branco: #ffffff;
+    --verde: #28A745;
+    --verde-hover: #218838;
+    --erro: #DC3545;
   }
 
   html, body {
@@ -37,11 +41,11 @@
     z-index: -2;
   }
 
-  /* Overlay escuro translúcido (tonalidade neutra, sem parecer roxo) */
+  /* Overlay escuro translúcido */
   .bg-overlay {
     position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, rgba(15, 15, 20, 0.55) 0%, rgba(30, 30, 35, 0.45) 100%);
+    background: linear-gradient(135deg, rgba(15, 15, 20, 0.58) 0%, rgba(30, 30, 35, 0.48) 100%);
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
     z-index: -1;
@@ -58,7 +62,7 @@
     text-align: center;
   }
 
-  /* Logo - Tamanho ajustado (levemente diminuída) */
+  /* Logo */
   .logo {
     width: 420px; 
     max-width: 85vw;
@@ -76,7 +80,7 @@
   .slogan {
     font-family: 'Fredoka', sans-serif;
     font-weight: 600;
-    font-size: 1.8rem; /* Tamanho ajustado */
+    font-size: 1.8rem;
     color: #ffffff;
     margin-top: 4px; 
     letter-spacing: 0.3px;
@@ -88,10 +92,10 @@
   .botoes {
     display: flex;
     flex-direction: column;
-    gap: 24px; 
+    gap: 20px; 
     width: 100%;
     max-width: 440px; 
-    margin-top: 52px;
+    margin-top: 44px;
     animation: surgir 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
   }
 
@@ -106,21 +110,21 @@
     justify-content: center;
     gap: 14px;
     width: 100%;
-    padding: 22px 24px;
+    padding: 20px 24px;
     border-radius: 20px;
     font-family: 'Nunito', sans-serif;
-    font-size: 1.3rem; 
-    font-weight: 700;
+    font-size: 1.25rem; 
+    font-weight: 800;
     cursor: pointer;
     border: 2px solid transparent;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    min-height: 72px; 
+    min-height: 68px; 
     text-decoration: none;
   }
 
   .btn:active { transform: scale(0.98); }
   .btn:focus-visible { outline: 4px solid #ffffff; outline-offset: 3px; }
-  .btn svg { width: 30px; height: 30px; flex-shrink: 0; }
+  .btn svg, .btn i { width: 30px; height: 30px; font-size: 28px; flex-shrink: 0; }
 
   /* Botão Google */
   .btn-google {
@@ -151,7 +155,7 @@
   /* Botão E-mail */
   .btn-email {
     background: var(--bege);
-    color: var(--roxo);
+    color: var(--roxo-escuro);
     border-color: #E8D5BD;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20);
   }
@@ -161,17 +165,183 @@
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
   }
 
-  /* Responsivo - Ajustes para celulares */
-  @media (max-width: 600px) {
-    .logo { width: 300px; } /* Diminuído levemente no mobile também */
-    .slogan { font-size: 1.5rem; margin-top: 4px; }
-    .botoes { margin-top: 40px; gap: 20px; max-width: 100%; }
-    .btn { font-size: 1.15rem; padding: 18px 18px; min-height: 68px; }
-    .btn svg { width: 28px; height: 28px; }
+  /* Caixa Criar Conta */
+  .area-cadastro {
+    margin-top: 14px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 18px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #ffffff;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; transition-duration: 0.01ms !important; }
+  .area-cadastro p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  }
+
+  .btn-criar-conta {
+    background: #FFD54F;
+    color: #3E2723;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1.15rem;
+    padding: 12px 20px;
+    border-radius: 14px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-criar-conta:hover {
+    background: #FFCA28;
+    transform: scale(1.02);
+  }
+
+  /* ==========================================================
+     MODAL DE LOGIN COM E-MAIL
+     ========================================================== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-overlay.open {
+    display: flex;
+    opacity: 1;
+  }
+
+  .modal-content {
+    background: #ffffff;
+    width: 100%;
+    max-width: 460px;
+    border-radius: 26px;
+    padding: 32px 28px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+    position: relative;
+    text-align: left;
+    animation: zoomModal 0.3s ease;
+  }
+
+  @keyframes zoomModal {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: #F3F3F3;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--texto-suave);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-close:hover { background: #E0E0E0; color: var(--texto); }
+
+  .modal-titulo {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.75rem;
+    color: var(--roxo-escuro);
+    margin-bottom: 6px;
+  }
+
+  .modal-subtitulo {
+    font-size: 1.05rem;
+    color: var(--texto-suave);
+    margin-bottom: 22px;
+    font-weight: 600;
+  }
+
+  .campo-grupo {
+    margin-bottom: 16px;
+  }
+
+  .campo-label {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--texto);
+    margin-bottom: 6px;
+  }
+
+  .campo-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #E8D6B8;
+    background: #FDFBF7;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .campo-input:focus {
+    border-color: var(--roxo);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(107,79,187,0.15);
+  }
+
+  .btn-entrar-email {
+    width: 100%;
+    padding: 16px;
+    background: var(--roxo);
+    color: #ffffff;
+    border: none;
+    border-radius: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: all 0.2s ease;
+  }
+  .btn-entrar-email:hover {
+    background: var(--roxo-escuro);
+  }
+
+  .feedback-erro-login {
+    display: none;
+    background: #FFEBEB;
+    color: var(--erro);
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-top: 12px;
+  }
+
+  /* Responsivo */
+  @media (max-width: 600px) {
+    .logo { width: 300px; }
+    .slogan { font-size: 1.5rem; margin-top: 4px; }
+    .botoes { margin-top: 32px; gap: 16px; max-width: 100%; }
+    .btn { font-size: 1.15rem; padding: 16px 18px; min-height: 64px; }
+    .btn svg, .btn i { width: 26px; height: 26px; font-size: 24px; }
   }
 </style>
 </head>
@@ -180,19 +350,21 @@
   <div class="bg-overlay" aria-hidden="true"></div>
 
   <main class="container">
-    <!-- Logo ajustada -->
-    <img
-      src="https://z-cdn-media.chatglm.cn/files/dccd2866-4c25-4482-b7a7-4d0d1e15d377.png?auth_key=1886391764-18bb28b2f3374b2ea7866cd244c35326-0-f2332627d4ee3b90bf75b318175d04c5"
-      alt="Logo AprendIDos com coruja e idosos"
-      class="logo"
-    >
+    <a href="inicio.html" title="Página inicial">
+      <img
+        src="https://z-cdn-media.chatglm.cn/files/dccd2866-4c25-4482-b7a7-4d0d1e15d377.png?auth_key=1886391764-18bb28b2f3374b2ea7866cd244c35326-0-f2332627d4ee3b90bf75b318175d04c5"
+        alt="Logo AprendIDos com coruja e idosos"
+        class="logo"
+      >
+    </a>
 
     <h1 class="slogan">
       Aprender hoje, transformar sempre.
     </h1>
 
     <div class="botoes" role="group" aria-label="Opções de login">
-      <button class="btn btn-google" type="button" aria-label="Entrar com Google">
+      <!-- Botão Google -->
+      <button class="btn btn-google" id="btnGoogleLogin" type="button" aria-label="Entrar com Google">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
           <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -202,30 +374,140 @@
         <span>Entrar com Google</span>
       </button>
 
-      <button class="btn btn-facebook" type="button" aria-label="Entrar com Facebook">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-        </svg>
+      <!-- Botão Facebook -->
+      <button class="btn btn-facebook" id="btnFacebookLogin" type="button" aria-label="Entrar com Facebook">
+        <i class="fa-brands fa-facebook" aria-hidden="true"></i>
         <span>Entrar com Facebook</span>
       </button>
 
-      <button class="btn btn-email" type="button" aria-label="Entrar com e-mail">
+      <!-- Botão E-mail -->
+      <button class="btn btn-email" id="btnAbrirModalEmail" type="button" aria-label="Entrar com e-mail">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="2" y="4" width="20" height="16" rx="3"/>
           <path d="M3 6.5l9 6 9-6"/>
         </svg>
         <span>Entrar com e-mail</span>
       </button>
+
+      <!-- Área de Cadastro -->
+      <div class="area-cadastro">
+        <p>Novo por aqui?</p>
+        <a href="cadastro.html" class="btn-criar-conta">
+          <i class="fa-solid fa-user-plus"></i> Criar uma conta grátis
+        </a>
+      </div>
     </div>
   </main>
 
-<script>
-  document.querySelectorAll('.btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      btn.style.transform = 'scale(0.96)';
-      setTimeout(() => btn.style.transform = '', 150);
+  <!-- Modal Login com E-mail -->
+  <div class="modal-overlay" id="modalEmail" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+    <div class="modal-content">
+      <button class="modal-close" id="btnFecharModal" aria-label="Fechar janela">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h2 class="modal-titulo" id="modalTitulo">Entrar com e-mail</h2>
+      <p class="modal-subtitulo">Informe seu e-mail e senha para continuar:</p>
+
+      <form id="formLoginEmail">
+        <div class="campo-grupo">
+          <label class="campo-label" for="loginEmail">Seu E-mail:</label>
+          <input type="email" id="loginEmail" class="campo-input" placeholder="exemplo@email.com" required>
+        </div>
+
+        <div class="campo-grupo">
+          <label class="campo-label" for="loginSenha">Sua Senha:</label>
+          <input type="password" id="loginSenha" class="campo-input" placeholder="Digite sua senha" required>
+        </div>
+
+        <div id="erroLoginEmail" class="feedback-erro-login" role="alert"></div>
+
+        <button type="submit" class="btn-entrar-email" id="btnConfirmarEmail">
+          <i class="fa-solid fa-right-to-bracket"></i> Entrar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Integração JavaScript -->
+  <script type="module">
+    import { signInWithProvider, signInWithEmail } from './auth.js';
+
+    // 1. Login com Google
+    document.getElementById('btnGoogleLogin').addEventListener('click', async () => {
+      try {
+        await signInWithProvider('google', 'index.html');
+      } catch (err) {
+        alert('Erro ao entrar com Google: ' + err.message);
+      }
     });
-  });
-</script>
+
+    // 2. Login com Facebook
+    document.getElementById('btnFacebookLogin').addEventListener('click', async () => {
+      try {
+        await signInWithProvider('facebook', 'index.html');
+      } catch (err) {
+        alert('Erro ao entrar com Facebook: ' + err.message);
+      }
+    });
+
+    // 3. Controle do Modal de E-mail
+    const modal = document.getElementById('modalEmail');
+    const btnAbrir = document.getElementById('btnAbrirModalEmail');
+    const btnFechar = document.getElementById('btnFecharModal');
+    const formLogin = document.getElementById('formLoginEmail');
+    const erroEl = document.getElementById('erroLoginEmail');
+
+    btnAbrir.addEventListener('click', () => {
+      modal.classList.add('open');
+      document.getElementById('loginEmail').focus();
+    });
+
+    btnFechar.addEventListener('click', () => {
+      modal.classList.remove('open');
+      erroEl.style.display = 'none';
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('open');
+        erroEl.style.display = 'none';
+      }
+    });
+
+    formLogin.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const senha = document.getElementById('loginSenha').value;
+
+      try {
+        erroEl.style.display = 'none';
+        const btn = document.getElementById('btnConfirmarEmail');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
+
+        await signInWithEmail(email, senha, 'index.html');
+      } catch (err) {
+        erroEl.textContent = 'Erro ao entrar: ' + err.message;
+        erroEl.style.display = 'block';
+        const btn = document.getElementById('btnConfirmarEmail');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Entrar';
+      }
+    });
+  </script>
+
+  <!-- Componente VLibras (Acessibilidade em LIBRAS) -->
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
+
 </body>
 </html>

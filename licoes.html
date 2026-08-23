@@ -326,14 +326,14 @@
       box-shadow: 0 2px 8px rgba(62, 39, 35, 0.06);
       cursor: pointer;
       position: relative;
-      opacity: 0;
-      transform: translateY(30px);
+      opacity: 1;
+      transform: translateY(0);
+      animation: fadeSlideIn 0.5s ease forwards;
     }
 
     .activity-card.visible {
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.25s ease;
     }
 
     .activity-card:hover {
@@ -870,32 +870,34 @@
   </style>
 </head>
 <body>
-    <script src="js/licoes.js"></script>
 
   <!-- NAVBAR -->
   <nav class="navbar">
     <div class="navbar-left">
-      <button class="btn-voltar" aria-label="Voltar">
+      <a href="login.html" class="btn-voltar" aria-label="Voltar para a tela de login" style="text-decoration:none;">
         <i class="fas fa-arrow-left"></i>
         <span>Voltar</span>
-      </button>
-      <a href="#" class="navbar-brand">
+      </a>
+      <a href="index.html" class="navbar-brand">
         <div class="navbar-logo">A</div>
         <span class="navbar-title">AprendIDos</span>
       </a>
     </div>
-    <div class="navbar-right">
-      <button class="nav-item" aria-label="Início">
-        <i class="fas fa-home"></i>
-        <span>Início</span>
-      </button>
-      <button class="nav-item" aria-label="Módulos">
-        <i class="fas fa-book"></i>
-        <span>Módulos</span>
-      </button>
-      <button class="nav-item nav-active" aria-label="Atividades">
-        <i class="fas fa-puzzle-piece"></i>
-        <span>Atividades</span>
+    <div class="navbar-right" style="display: flex; align-items: center; gap: 12px;">
+      <!-- Perfil do Usuário Logado -->
+      <div id="userProfileBadge" style="display: flex; align-items: center; gap: 10px; background: #FAF3E0; padding: 6px 14px; border-radius: 20px; border: 1.5px solid #E8D5A8;">
+        <div id="userAvatarCircle" style="width: 38px; height: 38px; border-radius: 50%; background: #2E7D32; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; overflow: hidden;">
+          <i class="fas fa-user"></i>
+        </div>
+        <span id="userDisplayName" style="font-weight: 800; font-size: 16px; color: #3E2723; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+          Aprendiz
+        </span>
+      </div>
+
+      <!-- Botão Sair (Logout) -->
+      <button id="btnLogout" class="btn-voltar" style="background-color: #FFEBEB; color: #DC3545; border: 1.5px solid #FFCDD2;" title="Sair da minha conta" aria-label="Sair da conta">
+        <i class="fas fa-right-from-bracket"></i>
+        <span>Sair</span>
       </button>
     </div>
   </nav>
@@ -903,24 +905,24 @@
   <main class="main-content">
 
     <section class="page-header">
-      <h1>Atividades Disponíveis</h1>
+      <h1 id="pageGreeting">Atividades Disponíveis</h1>
       <p>Escolha uma lição e continue sua aprendizagem.</p>
     </section>
 
     <section class="progress-section">
       <div class="progress-info">
         <span class="progress-label"><i class="fas fa-chart-line"></i> Seu progresso</span>
-        <span class="progress-count" id="progressCount">2 de 9 concluídas</span>
+        <span class="progress-count" id="progressCount">0 de 9 concluídas</span>
       </div>
       <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="progressFill" style="width: 22%;"></div>
+        <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
       </div>
     </section>
 
     <section class="activities-grid" id="activitiesGrid">
 
       <!-- 1. AS LETRAS -->
-      <div class="activity-card" data-index="0" data-completed="true">
+      <div class="activity-card" data-index="0" data-completed="false">
         <div class="icon-circle" style="background-color: #2E7D32;">
           <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
             <rect x="5" y="28" width="34" height="50" rx="8" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="4.5"/>
@@ -930,16 +932,15 @@
             <rect x="81" y="28" width="34" height="50" rx="8" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="4.5"/>
             <text x="98" y="64" font-family="Nunito, sans-serif" font-size="32" font-weight="900" fill="#FFFFFF" text-anchor="middle">C</text>
           </svg>
-          <div class="check-badge"><i class="fas fa-check"></i></div>
         </div>
-        <span class="status-badge badge-concluida"><i class="fas fa-check-circle"></i> Concluída</span>
+        <span class="status-badge badge-iniciar"><i class="fas fa-play-circle"></i> Iniciar</span>
         <h3>As Letras</h3>
         <p class="description">Conheça o alfabeto com calma</p>
-        <button class="card-btn btn-rever" data-action="review">Rever Lição</button>
+        <button class="card-btn btn-comecar" data-action="start">Começar</button>
       </div>
 
       <!-- 2. AS VOGAIS -->
-      <div class="activity-card" data-index="1" data-completed="true">
+      <div class="activity-card" data-index="1" data-completed="false" onclick="window.location.href='vogais.html'">
         <div class="icon-circle" style="background-color: #388E3C;">
           <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
             <rect x="4" y="12" width="34" height="40" rx="7" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="3.5"/>
@@ -953,12 +954,11 @@
             <rect x="64" y="64" width="34" height="40" rx="7" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="3.5"/>
             <text x="81" y="95" font-family="Nunito, sans-serif" font-size="30" font-weight="900" fill="#FFFFFF" text-anchor="middle">U</text>
           </svg>
-          <div class="check-badge"><i class="fas fa-check"></i></div>
         </div>
-        <span class="status-badge badge-concluida"><i class="fas fa-check-circle"></i> Concluída</span>
+        <span class="status-badge badge-iniciar"><i class="fas fa-play-circle"></i> Iniciar</span>
         <h3>As Vogais</h3>
         <p class="description">Ouça e pratique as vogais</p>
-        <button class="card-btn btn-rever" data-action="review">Rever Lição</button>
+        <button class="card-btn btn-comecar" data-action="start" onclick="event.stopPropagation(); window.location.href='vogais.html';">Começar</button>
       </div>
 
       <!-- 3. CONSOANTES E SONS -->
@@ -1102,7 +1102,20 @@
   <!-- Container para toasts -->
   <div class="toast-container" id="toastContainer"></div>
 
-  
+  <!-- Script principal de lições e integração -->
+  <script type="module" src="licoes.js"></script>
+
+  <!-- Componente VLibras (Acessibilidade em LIBRAS) -->
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
 
 </body>
 </html>

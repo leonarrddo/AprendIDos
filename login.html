@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AprendIDos — Aprender hoje, transformar sempre.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --roxo: #6B4FBB;
+    --roxo-escuro: #4A3291;
+    --bege: #F5E6D3;
+    --bege-hover: #EFD9BE;
+    --texto: #2D2444;
+    --texto-suave: #5C5470;
+    --branco: #ffffff;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Nunito', sans-serif;
+    color: var(--texto);
+    overflow-x: hidden;
+  }
+
+  /* Fundo com imagem */
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    background-image: url('https://z-cdn-media.chatglm.cn/files/833f9c73-23d5-481c-9914-07ae95d0bb3f.png?auth_key=1886391152-94507ce811ca4457ac818c6c7044c788-0-c35347db60f54c221c3e02f7edc676a2');
+    background-size: cover;
+    background-position: center;
+    z-index: -2;
+  }
+
+  /* Overlay escuro translúcido (tonalidade neutra, sem parecer roxo) */
+  .bg-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(15, 15, 20, 0.55) 0%, rgba(30, 30, 35, 0.45) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: -1;
+  }
+
+  /* Container central */
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+    text-align: center;
+  }
+
+  /* Logo - Tamanho ajustado (levemente diminuída) */
+  .logo {
+    width: 420px; 
+    max-width: 85vw;
+    height: auto;
+    filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.5));
+    animation: surgirLogo 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes surgirLogo {
+    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Slogan */
+  .slogan {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 1.8rem; /* Tamanho ajustado */
+    color: #ffffff;
+    margin-top: 4px; 
+    letter-spacing: 0.3px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+    animation: surgir 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  }
+
+  /* Wrapper dos botões */
+  .botoes {
+    display: flex;
+    flex-direction: column;
+    gap: 24px; 
+    width: 100%;
+    max-width: 440px; 
+    margin-top: 52px;
+    animation: surgir 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  }
+
+  @keyframes surgir {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    padding: 22px 24px;
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.3rem; 
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 72px; 
+    text-decoration: none;
+  }
+
+  .btn:active { transform: scale(0.98); }
+  .btn:focus-visible { outline: 4px solid #ffffff; outline-offset: 3px; }
+  .btn svg { width: 30px; height: 30px; flex-shrink: 0; }
+
+  /* Botão Google */
+  .btn-google {
+    background: var(--branco);
+    color: #3c4043;
+    border-color: #dadce0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+  .btn-google:hover {
+    background: #fafafa;
+    border-color: var(--roxo);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.30);
+  }
+
+  /* Botão Facebook */
+  .btn-facebook {
+    background: #1877F2;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(24, 119, 242, 0.45);
+  }
+  .btn-facebook:hover {
+    background: #166FE5;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(24, 119, 242, 0.55);
+  }
+
+  /* Botão E-mail */
+  .btn-email {
+    background: var(--bege);
+    color: var(--roxo);
+    border-color: #E8D5BD;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20);
+  }
+  .btn-email:hover {
+    background: var(--bege-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Responsivo - Ajustes para celulares */
+  @media (max-width: 600px) {
+    .logo { width: 300px; } /* Diminuído levemente no mobile também */
+    .slogan { font-size: 1.5rem; margin-top: 4px; }
+    .botoes { margin-top: 40px; gap: 20px; max-width: 100%; }
+    .btn { font-size: 1.15rem; padding: 18px 18px; min-height: 68px; }
+    .btn svg { width: 28px; height: 28px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="bg-layer" aria-hidden="true"></div>
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <main class="container">
+    <!-- Logo ajustada -->
+    <img
+      src="https://z-cdn-media.chatglm.cn/files/dccd2866-4c25-4482-b7a7-4d0d1e15d377.png?auth_key=1886391764-18bb28b2f3374b2ea7866cd244c35326-0-f2332627d4ee3b90bf75b318175d04c5"
+      alt="Logo AprendIDos com coruja e idosos"
+      class="logo"
+    >
+
+    <h1 class="slogan">
+      Aprender hoje, transformar sempre.
+    </h1>
+
+    <div class="botoes" role="group" aria-label="Opções de login">
+      <button class="btn btn-google" type="button" aria-label="Entrar com Google">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        <span>Entrar com Google</span>
+      </button>
+
+      <button class="btn btn-facebook" type="button" aria-label="Entrar com Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+        <span>Entrar com Facebook</span>
+      </button>
+
+      <button class="btn btn-email" type="button" aria-label="Entrar com e-mail">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="4" width="20" height="16" rx="3"/>
+          <path d="M3 6.5l9 6 9-6"/>
+        </svg>
+        <span>Entrar com e-mail</span>
+      </button>
+    </div>
+  </main>
+
+<script>
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.style.transform = 'scale(0.96)';
+      setTimeout(() => btn.style.transform = '', 150);
+    });
+  });
+</script>
+</body>
+</html>

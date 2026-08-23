@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AprendIDos - Aprender não tem idade</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts: Poppins + Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ========================================
+           RESET E BASE
+        ======================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', 'Nunito', sans-serif;
+            background-color: #F3F3F3;
+            color: #2B1B0E;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========================================
+           CABEÇALHO SUPERIOR
+        ======================================== */
+        .header-superior {
+            background-color: #F3F3F3;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 40px 20px;
+        }
+
+        .titulo-principal {
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
+            margin-top: 25px;
+        }
+
+        .titulo-principal .aprend {
+            color: #007A43;
+        }
+
+        .titulo-principal .id {
+            color: #C89B3C;
+        }
+
+        .titulo-principal .os {
+            color: #007A43;
+        }
+
+        .subtitulo-header {
+            font-size: 24px;
+            font-weight: 400;
+            color: #5C4A3D;
+            text-align: center;
+            max-width: 800px;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* ========================================
+           MENU PRINCIPAL
+        ======================================== */
+        .menu-principal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+            padding: 0 40px;
+            flex-wrap: wrap;
+        }
+
+        .cartao-menu {
+            width: 200px;
+            height: 95px;
+            background-color: #E8D6B8;
+            border-radius: 20px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            border: none;
+            outline: none;
+        }
+
+        .cartao-menu:hover,
+        .cartao-menu:focus-visible {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 22px rgba(0, 0, 0, 0.13);
+        }
+
+        .cartao-menu:focus-visible {
+            outline: 3px solid #007A43;
+            outline-offset: 3px;
+        }
+
+        .cartao-menu .icone-menu {
+            font-size: 35px;
+            color: #2B1B0E;
+            line-height: 1;
+        }
+
+        .cartao-menu .texto-menu {
+            font-size: 22px;
+            font-weight: 500;
+            color: #2B1B0E;
+            line-height: 1;
+        }
+
+        /* ========================================
+           SEÇÃO HERO
+        ======================================== */
+        .secao-hero {
+            background-color: #F5F0E6;
+            border-top: 1px solid #D8C7A6;
+            border-bottom: 1px solid #D8C7A6;
+            padding: 60px 40px;
+        }
+
+        .hero-conteudo {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .coluna-esquerda {
+            width: 50%;
+            flex-shrink: 0;
+        }
+
+        .titulo-hero {
+            font-size: 60px;
+            font-weight: 700;
+            color: #2B1B0E;
+            line-height: 1.1;
+            max-width: 550px;
+        }
+
+        .texto-hero {
+            font-size: 22px;
+            color: #5C4A3D;
+            line-height: 1.7;
+            max-width: 500px;
+            margin-top: 25px;
+        }
+
+        .botao-principal {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 220px;
+            height: 60px;
+            background-color: #007A43;
+            color: #FFFFFF;
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            border-radius: 18px;
+            border: none;
+            cursor: pointer;
+            margin-top: 35px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.12);
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+        }
+
+        .botao-principal:hover,
+        .botao-principal:focus-visible {
+            background-color: #009955;
+            transform: scale(1.05);
+            box-shadow: 0px 8px 22px rgba(0, 0, 0, 0.18);
+            color: #FFFFFF;
+        }
+
+        .botao-principal:focus-visible {
+            outline: 3px solid #C89B3C;
+            outline-offset: 3px;
+        }
+
+        /* ========================================
+           COLUNA DIREITA - ILUSTRAÇÃO
+        ======================================== */
+        .coluna-direita {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cartao-ilustracao {
+            width: 380px;
+            height: 380px;
+            background-color: #FFFFFF;
+            border-radius: 25px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.10);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .cartao-ilustracao img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 10%;
+            border-radius: 14px;
+            display: block;
+        }
+
+        /* ========================================
+           RODAPÉ DE AJUDA
+        ======================================== */
+        .rodape-ajuda {
+            background-color: #E8D6B8;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 40px;
+            gap: 8px;
+        }
+
+        .texto-rodape-superior {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2B1B0E;
+            text-align: center;
+        }
+
+        .area-telefone {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .area-telefone .icone-telefone {
+            font-size: 28px;
+            color: #007A43;
+        }
+
+        .area-telefone .numero-telefone {
+            font-size: 36px;
+            font-weight: 700;
+            color: #007A43;
+            line-height: 1;
+        }
+
+        .texto-rodape-inferior {
+            font-size: 18px;
+            color: #5C4A3D;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        /* ========================================
+           RESPONSIVIDADE - TABLET (até 992px)
+        ======================================== */
+        @media (max-width: 992px) {
+            .hero-conteudo {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .coluna-esquerda {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .titulo-hero {
+                font-size: 48px;
+                max-width: 100%;
+            }
+
+            .texto-hero {
+                max-width: 100%;
+            }
+
+            .botao-principal {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .coluna-direita {
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            .cartao-menu {
+                width: 180px;
+            }
+        }
+
+        /* ========================================
+           RESPONSIVIDADE - CELULAR (até 768px)
+        ======================================== */
+        @media (max-width: 768px) {
+            .header-superior {
+                padding: 20px 20px 15px;
+                min-height: auto;
+            }
+
+            .titulo-principal {
+                font-size: 38px;
+                margin-top: 15px;
+            }
+
+            .subtitulo-header {
+                font-size: 18px;
+                max-width: 100%;
+            }
+
+            .menu-principal {
+                gap: 15px;
+                padding: 0 20px;
+            }
+
+            .cartao-menu {
+                width: 45%;
+                height: 85px;
+            }
+
+            .cartao-menu .icone-menu {
+                font-size: 30px;
+            }
+
+            .cartao-menu .texto-menu {
+                font-size: 20px;
+            }
+
+            .secao-hero {
+                padding: 40px 20px;
+            }
+
+            .titulo-hero {
+                font-size: 38px;
+            }
+
+            .texto-hero {
+                font-size: 18px;
+                line-height: 1.6;
+            }
+
+            .botao-principal {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .cartao-ilustracao {
+                width: 300px;
+                height: 300px;
+            }
+
+            .rodape-ajuda {
+                padding: 25px 20px;
+                min-height: auto;
+            }
+
+            .texto-rodape-superior {
+                font-size: 20px;
+            }
+
+            .area-telefone .numero-telefone {
+                font-size: 28px;
+            }
+
+            .area-telefone .icone-telefone {
+                font-size: 24px;
+            }
+
+            .texto-rodape-inferior {
+                font-size: 16px;
+            }
+        }
+
+        /* ========================================
+           ANIMAÇÕES SUAVES DE ENTRADA
+        ======================================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animar-entrada {
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .animar-delay-1 { animation-delay: 0.1s; }
+        .animar-delay-2 { animation-delay: 0.2s; }
+        .animar-delay-3 { animation-delay: 0.3s; }
+        .animar-delay-4 { animation-delay: 0.4s; }
+        .animar-delay-5 { animation-delay: 0.5s; }
+        .animar-delay-6 { animation-delay: 0.6s; }
+        .animar-delay-7 { animation-delay: 0.7s; }
+    </style>
+</head>
+<body>
+
+    <!-- =============================================
+         CABEÇALHO SUPERIOR
+    ============================================= -->
+    <header class="header-superior" role="banner">
+        <h1 class="titulo-principal animar-entrada animar-delay-1">
+            <span class="aprend">Aprend</span><span class="id">ID</span><span class="os">os</span>
+        </h1>
+        <p class="subtitulo-header animar-entrada animar-delay-2">
+            Aprender não tem idade. Estamos aqui para ajudar você a ler, escrever e descobrir novos conhecimentos no seu próprio ritmo.
+        </p>
+
+        <!-- MENU PRINCIPAL -->
+        <nav class="menu-principal animar-entrada animar-delay-3" role="navigation" aria-label="Menu principal">
+            <a href="#inicio" class="cartao-menu" role="button" aria-label="Início - Retornar para a página inicial">
+                <i class="bi bi-house-fill icone-menu" aria-hidden="true"></i>
+                <span class="texto-menu">Início</span>
+            </a>
+            <a href="#licoes" class="cartao-menu" role="button" aria-label="Lições - Abrir os módulos de aprendizagem">
+                <i class="bi bi-book-fill icone-menu" aria-hidden="true"></i>
+                <span class="texto-menu">Lições</span>
+            </a>
+            <a href="#ouca" class="cartao-menu" role="button" aria-label="Ouça - Abrir atividades com áudio e narração">
+                <i class="bi bi-headphones icone-menu" aria-hidden="true"></i>
+                <span class="texto-menu">Ouça</span>
+            </a>
+            <a href="#ajuda" class="cartao-menu" role="button" aria-label="Ajuda - Abrir suporte ao usuário">
+                <i class="bi bi-telephone-fill icone-menu" aria-hidden="true"></i>
+                <span class="texto-menu">Ajuda</span>
+            </a>
+        </nav>
+    </header>
+
+    <!-- =============================================
+         SEÇÃO PRINCIPAL (HERO)
+    ============================================= -->
+    <main>
+        <section class="secao-hero" aria-label="Seção principal de boas-vindas">
+            <div class="hero-conteudo">
+
+                <!-- COLUNA ESQUERDA -->
+                <div class="coluna-esquerda animar-entrada animar-delay-4">
+                    <h2 class="titulo-hero">Nunca é tarde para aprender.</h2>
+                    <p class="texto-hero">
+                        Com aulas simples, letras grandes e atividades interativas, você pode desenvolver suas habilidades de leitura e escrita de forma tranquila e acolhedora.
+                    </p>
+                    <a href="#comecar" class="botao-principal" role="button" aria-label="Começar agora as atividades de aprendizagem">
+                        Começar Agora
+                    </a>
+                </div>
+
+                <!-- COLUNA DIREITA -->
+                <div class="coluna-direita animar-entrada animar-delay-6">
+                    <div class="cartao-ilustracao" role="img" aria-label="Quatro idosos de diferentes etnias, sorridentes, lendo livros juntos em um ambiente acolhedor">
+                        <img 
+                            src="https://z-cdn-media.chatglm.cn/files/f89d55d4-23c1-455a-81fe-b1d7a7c587ee.png?auth_key=1887175723-80ddaf378f2f4e17914b468374db4644-0-dd5f053c9d93dcba8c86cf3519afdc1e" 
+                            alt="Quatro idosos sorridentes lendo livros juntos" 
+                            loading="eager"
+                        >
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- =============================================
+         RODAPÉ DE AJUDA
+    ============================================= -->
+    <footer class="rodape-ajuda animar-entrada animar-delay-7" role="contentinfo">
+        <p class="texto-rodape-superior">Precisa de ajuda? Estamos aqui para você.</p>
+        <div class="area-telefone">
+            <i class="bi bi-telephone-fill icone-telefone" aria-hidden="true"></i>
+            <span class="numero-telefone">(11) 90000-0000</span>
+        </div>
+        <p class="texto-rodape-inferior">Atendemos por telefone e WhatsApp, todos os dias.</p>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // =============================================
+        // Interação simples nos botões do menu
+        // =============================================
+        document.querySelectorAll('.cartao-menu').forEach(function(botao) {
+            botao.addEventListener('click', function(e) {
+                e.preventDefault();
+                var texto = this.querySelector('.texto-menu').textContent;
+
+                // Feedback visual temporário
+                this.style.backgroundColor = '#007A43';
+                this.querySelector('.icone-menu').style.color = '#FFFFFF';
+                this.querySelector('.texto-menu').style.color = '#FFFFFF';
+
+                var self = this;
+                setTimeout(function() {
+                    self.style.backgroundColor = '#E8D6B8';
+                    self.querySelector('.icone-menu').style.color = '#2B1B0E';
+                    self.querySelector('.texto-menu').style.color = '#2B1B0E';
+                }, 300);
+
+                // Mensagem acessível
+                var msg = document.createElement('div');
+                msg.setAttribute('role', 'alert');
+                msg.setAttribute('aria-live', 'polite');
+                msg.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#007A43;color:#fff;padding:14px 28px;border-radius:14px;font-size:18px;font-family:Poppins,sans-serif;font-weight:500;box-shadow:0 5px 15px rgba(0,0,0,0.15);z-index:9999;opacity:0;transition:opacity 0.3s;';
+                msg.textContent = 'Você clicou em: ' + texto;
+                document.body.appendChild(msg);
+
+                setTimeout(function() { msg.style.opacity = '1'; }, 50);
+                setTimeout(function() {
+                    msg.style.opacity = '0';
+                    setTimeout(function() { msg.remove(); }, 300);
+                }, 2000);
+            });
+        });
+
+        // =============================================
+        // Interação do botão "Começar Agora"
+        // =============================================
+        document.querySelector('.botao-principal').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            var msg = document.createElement('div');
+            msg.setAttribute('role', 'alert');
+            msg.setAttribute('aria-live', 'polite');
+            msg.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#007A43;color:#fff;padding:14px 28px;border-radius:14px;font-size:20px;font-family:Poppins,sans-serif;font-weight:600;box-shadow:0 5px 15px rgba(0,0,0,0.15);z-index:9999;opacity:0;transition:opacity 0.3s;';
+            msg.textContent = 'Vamos começar! Carregando lições...';
+            document.body.appendChild(msg);
+
+            setTimeout(function() { msg.style.opacity = '1'; }, 50);
+            setTimeout(function() {
+                msg.style.opacity = '0';
+                setTimeout(function() { msg.remove(); }, 300);
+            }, 2500);
+        });
+    </script>
+
+</body>
+</html>

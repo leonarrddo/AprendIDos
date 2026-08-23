@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AprendIDos — Aprender hoje, transformar sempre.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --roxo: #6B4FBB;
+    --roxo-escuro: #4A3291;
+    --verde: #28A745;
+    --verde-hover: #218838;
+    --texto: #2D2444;
+    --branco: #ffffff;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Nunito', sans-serif;
+    color: var(--texto);
+    overflow-x: hidden;
+  }
+
+  /* Fundo com a NOVA imagem */
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    background-image: url('https://z-cdn-media.chatglm.cn/files/e229779a-37c4-4680-abad-f2e9bfff1768.png?auth_key=1886393100-a55ffd2034d24285b17592d3446d2735-0-2a8baa826b9758dfc72f034ebf558694');
+    background-size: cover;
+    background-position: center;
+    z-index: -2;
+  }
+
+  /* Overlay escuro translúcido (tonalidade neutra, sem parecer roxo) */
+  .bg-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(15, 15, 20, 0.55) 0%, rgba(30, 30, 35, 0.45) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: -1;
+  }
+
+  /* Container central */
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+    text-align: center;
+  }
+
+  /* Logo - AUMENTADA NOVAMENTE */
+  .logo {
+    width: 480px; /* Aumentada de 420px para 480px */
+    max-width: 85vw;
+    height: auto;
+    filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.5));
+    animation: surgirLogo 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes surgirLogo {
+    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Slogan */
+  .slogan {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 1.8rem; 
+    color: #ffffff;
+    margin-top: 4px; 
+    letter-spacing: 0.3px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+    animation: surgir 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  }
+
+  /* Botão "Começar agora" */
+  .btn-comecar {
+    margin-top: 56px;
+    background: var(--verde);
+    color: var(--branco);
+    padding: 22px 60px;
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 24px rgba(40, 167, 69, 0.45);
+    animation: surgir 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+    text-decoration: none;
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .btn-comecar svg {
+    width: 32px;
+    height: 32px;
+    fill: var(--branco);
+  }
+
+  .btn-comecar:hover {
+    background: var(--verde-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(40, 167, 69, 0.60);
+  }
+
+  .btn-comecar:active { transform: scale(0.98); }
+  
+  .btn-comecar:focus-visible { 
+    outline: 4px solid #ffffff; 
+    outline-offset: 3px; 
+  }
+
+  @keyframes surgir {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsivo - Ajustes para celulares */
+  @media (max-width: 600px) {
+    .logo { width: 340px; } /* Aumentada no mobile também */
+    .slogan { font-size: 1.5rem; margin-top: 4px; }
+    .btn-comecar { 
+      margin-top: 40px; 
+      font-size: 1.25rem; 
+      padding: 18px 30px; 
+      width: 100%;
+    }
+    .btn-comecar svg { width: 26px; height: 26px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="bg-layer" aria-hidden="true"></div>
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <main class="container">
+    <!-- Logo -->
+    <img
+      src="https://z-cdn-media.chatglm.cn/files/dccd2866-4c25-4482-b7a7-4d0d1e15d377.png?auth_key=1886391764-18bb28b2f3374b2ea7866cd244c35326-0-f2332627d4ee3b90bf75b318175d04c5"
+      alt="Logo AprendIDos com coruja e idosos"
+      class="logo"
+    >
+
+    <h1 class="slogan">
+      Aprender hoje, transformar sempre.
+    </h1>
+
+    <!-- Botão Começar Agora com Ícone de Play -->
+    <button class="btn-comecar" type="button" aria-label="Começar agora">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+      Começar agora
+    </button>
+  </main>
+
+
+
+<script>
+  
+  const btnComecar = document.querySelector('.btn-comecar');
+
+  if (btnComecar) {
+    btnComecar.addEventListener('click', function() {
+      btnComecar.style.transform = 'scale(0.96)';
+
+      setTimeout(function() {
+        window.location.href = 'login.html';
+      }, 150);
+    });
+  }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AprendIDos - Atividades</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #FAF3E0;
+      color: #3E2723;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ===== FUNDO TEXTURIZADO ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(46,125,50,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 85% 80%, rgba(109,76,65,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255,213,79,0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      background-color: #FFFFFF;
+      padding: 0 20px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(62, 39, 35, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-voltar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #F5DEB3;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #3E2723;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-voltar:hover {
+      background-color: #E8D5A8;
+    }
+
+    .btn-voltar:active {
+      transform: scale(0.95);
+    }
+
+    .btn-voltar i {
+      font-size: 18px;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .navbar-logo {
+      width: 44px;
+      height: 44px;
+      background-color: #2E7D32;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-size: 23px;
+      font-weight: 900;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-logo:hover {
+      transform: rotate(-8deg) scale(1.05);
+    }
+
+    .navbar-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #2E7D32;
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      padding: 10px 22px;
+      border-radius: 14px;
+      transition: background-color 0.2s, transform 0.15s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .nav-item:hover {
+      background-color: #FAF3E0;
+      transform: translateY(-1px);
+    }
+
+    .nav-item i {
+      font-size: 40px;
+      color: #5D4037;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .nav-item span {
+      font-size: 15px;
+      font-weight: 800;
+      color: #5D4037;
+      transition: color 0.2s;
+    }
+
+    .nav-item.nav-active {
+      background-color: #E8F5E9;
+    }
+
+    .nav-item.nav-active i {
+      color: #2E7D32;
+    }
+
+    .nav-item.nav-active span {
+      color: #2E7D32;
+    }
+
+    .nav-item:active {
+      transform: scale(0.94);
+    }
+
+    /* ===== CONTEÚDO PRINCIPAL ===== */
+    .main-content {
+      flex: 1;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px 24px 56px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== CABEÇALHO COM ANIMAÇÃO ===== */
+    .page-header {
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeSlideIn 0.6s ease forwards;
+    }
+
+    .page-header h1 {
+      font-size: 32px;
+      font-weight: 900;
+      color: #3E2723;
+      margin-bottom: 10px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .page-header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #2E7D32, #66BB6A);
+      border-radius: 2px;
+      animation: underlineGrow 0.8s ease 0.4s forwards;
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    .page-header p {
+      font-size: 20px;
+      color: #5D4037;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    /* ===== BARRA DE PROGRESSO ===== */
+    .progress-section {
+      background-color: #FFFFFF;
+      border-radius: 16px;
+      padding: 22px 26px;
+      margin-bottom: 36px;
+      box-shadow: 0 2px 8px rgba(62, 39, 35, 0.06);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeSlideIn 0.6s ease 0.15s forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #2E7D32, #66BB6A, #A5D6A7);
+    }
+
+    .progress-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .progress-label {
+      font-size: 20px;
+      font-weight: 700;
+      color: #3E2723;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-label i {
+      color: #2E7D32;
+      font-size: 18px;
+    }
+
+    .progress-count {
+      font-size: 20px;
+      font-weight: 800;
+      color: #2E7D32;
+      transition: transform 0.3s ease;
+    }
+
+    .progress-count.bump {
+      animation: bumpScale 0.4s ease;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 16px;
+      background-color: #F5DEB3;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2E7D32, #43A047, #66BB6A);
+      border-radius: 8px;
+      transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+    }
+
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 2s ease-in-out infinite;
+    }
+
+    /* ===== GRID ===== */
+    .activities-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    /* ===== CARD ===== */
+    .activity-card {
+      background-color: #F5DEB3;
+      border-radius: 20px;
+      padding: 28px 24px 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 2px 8px rgba(62, 39, 35, 0.06);
+      cursor: pointer;
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .activity-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.25s ease;
+    }
+
+    .activity-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(62, 39, 35, 0.14);
+    }
+
+    .activity-card.visible:hover {
+      transform: translateY(-4px);
+    }
+
+    .activity-card:active {
+      transform: translateY(-1px) scale(0.98);
+    }
+
+    /* ===== BRILHO NO HOVER DO CARD ===== */
+    .activity-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.25), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .activity-card:hover::before {
+      opacity: 1;
+    }
+
+    /* ===== ÍCONE CIRCULAR ===== */
+    .icon-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      position: relative;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .activity-card:hover .icon-circle {
+      transform: scale(1.06) rotate(-2deg);
+    }
+
+    .icon-circle svg {
+      width: 96px;
+      height: 96px;
+    }
+
+    .icon-circle .check-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 32px;
+      height: 32px;
+      background-color: #FFFFFF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2E7D32;
+      font-size: 16px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      animation: popIn 0.4s ease;
+    }
+
+    /* ===== BADGE ===== */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 20px;
+      border-radius: 24px;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: 0.3px;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+
+    .status-badge.badge-iniciar {
+      background-color: #5D4037;
+      color: #FFFFFF;
+    }
+
+    .status-badge.badge-concluida {
+      background-color: #2E7D32;
+      color: #FFFFFF;
+    }
+
+    /* ===== TÍTULO DO CARD ===== */
+    .activity-card h3 {
+      font-size: 22px;
+      font-weight: 900;
+      color: #3E2723;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    /* ===== DESCRIÇÃO DO CARD ===== */
+    .activity-card .description {
+      font-size: 19px;
+      color: #3E2723;
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 22px;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ===== BOTÕES ===== */
+    .card-btn {
+      width: 100%;
+      padding: 18px 20px;
+      border: none;
+      border-radius: 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 19px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      letter-spacing: 0.3px;
+      min-height: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%), rgba(255,255,255,0.3), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .card-btn:active::after {
+      opacity: 1;
+    }
+
+    .card-btn:active {
+      transform: scale(0.96);
+    }
+
+    .card-btn.btn-comecar {
+      background-color: #2E7D32;
+      color: #FFFFFF;
+      box-shadow: 0 3px 10px rgba(46,125,50,0.3);
+    }
+
+    .card-btn.btn-comecar:hover {
+      background-color: #256028;
+      box-shadow: 0 5px 16px rgba(46,125,50,0.4);
+    }
+
+    .card-btn.btn-rever {
+      background-color: #E8F5E9;
+      color: #2E7D32;
+      border: 3.5px solid #2E7D32;
+    }
+
+    .card-btn.btn-rever:hover {
+      background-color: #C8E6C9;
+    }
+
+    /* ===== CARD COMPLETANDO ANIMAÇÃO ===== */
+    .activity-card.completing {
+      animation: cardComplete 0.6s ease;
+    }
+
+    /* ===== TOAST ===== */
+    .toast-container {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background-color: #3E2723;
+      color: #FFFFFF;
+      padding: 16px 28px;
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      box-shadow: 0 8px 30px rgba(62,39,35,0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      animation: toastIn 0.4s ease forwards;
+      pointer-events: auto;
+      white-space: nowrap;
+    }
+
+    .toast.toast-out {
+      animation: toastOut 0.35s ease forwards;
+    }
+
+    .toast i {
+      font-size: 20px;
+      color: #66BB6A;
+    }
+
+    /* ===== CONFETE ===== */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      z-index: 9998;
+      pointer-events: none;
+      animation: confettiFall var(--duration) ease-in forwards;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background-color: #FFFFFF;
+      padding: 24px 24px;
+      text-align: center;
+      border-top: 1px solid rgba(62, 39, 35, 0.08);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer p {
+      font-size: 16px;
+      font-weight: 600;
+      color: #8D6E63;
+    }
+
+    .footer p span {
+      color: #2E7D32;
+      font-weight: 800;
+    }
+
+    /* ===== ANIMAÇÕES ===== */
+    @keyframes fadeSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes underlineGrow {
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+    @keyframes bumpScale {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shimmer {
+      0%, 100% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); }
+      70% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes cardComplete {
+      0% { transform: scale(1); }
+      20% { transform: scale(1.03); }
+      40% { transform: scale(0.97); }
+      60% { transform: scale(1.01); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes toastIn {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes toastOut {
+      to {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+      }
+    }
+
+    @keyframes confettiFall {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--x-drift), var(--y-fall)) rotate(var(--rotation)) scale(0.3);
+      }
+    }
+
+    /* ===== RESPEITA PREFERÊNCIA DE MOVIMENTO REDUZIDO ===== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ==========================================================
+       MOBILE
+       ========================================================== */
+    @media (max-width: 640px) {
+
+      .navbar {
+        height: 100px;
+        padding: 0 10px;
+      }
+
+      .navbar-left {
+        gap: 6px;
+      }
+
+      .btn-voltar {
+        padding: 10px 10px;
+        font-size: 13px;
+        border-radius: 10px;
+        gap: 4px;
+      }
+
+      .btn-voltar i {
+        font-size: 16px;
+      }
+
+      .btn-voltar span {
+        display: none;
+      }
+
+      .navbar-logo {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        font-size: 24px;
+      }
+
+      .navbar-title {
+        font-size: 16px;
+      }
+
+      .navbar-right {
+        gap: 0px;
+      }
+
+      .nav-item {
+        padding: 6px 12px;
+        border-radius: 10px;
+        gap: 2px;
+      }
+
+      .nav-item i {
+        font-size: 44px;
+      }
+
+      .nav-item span {
+        font-size: 13px;
+      }
+
+      .main-content {
+        padding: 32px 18px 48px;
+      }
+
+      .page-header {
+        margin-bottom: 32px;
+      }
+
+      .page-header h1 {
+        font-size: 34px;
+        margin-bottom: 12px;
+      }
+
+      .page-header p {
+        font-size: 24px;
+        line-height: 1.7;
+      }
+
+      .progress-section {
+        padding: 24px 22px;
+        margin-bottom: 32px;
+        border-radius: 18px;
+      }
+
+      .progress-label {
+        font-size: 24px;
+      }
+
+      .progress-count {
+        font-size: 24px;
+      }
+
+      .progress-bar-bg {
+        height: 24px;
+        border-radius: 12px;
+      }
+
+      .progress-bar-fill {
+        border-radius: 12px;
+      }
+
+      .activities-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .activity-card {
+        padding: 32px 24px 28px;
+        border-radius: 22px;
+      }
+
+      .icon-circle {
+        width: 140px;
+        height: 140px;
+        margin-bottom: 24px;
+      }
+
+      .icon-circle svg {
+        width: 104px;
+        height: 104px;
+      }
+
+      .icon-circle .check-badge {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+      }
+
+      .status-badge {
+        padding: 8px 24px;
+        font-size: 16px;
+        margin-bottom: 18px;
+        border-radius: 26px;
+      }
+
+      .activity-card h3 {
+        font-size: 30px;
+        font-weight: 900;
+        margin-bottom: 12px;
+        line-height: 1.15;
+      }
+
+      .activity-card .description {
+        font-size: 24px;
+        line-height: 1.8;
+        color: #3E2723;
+        margin-bottom: 24px;
+        min-height: auto;
+      }
+
+      .card-btn {
+        padding: 20px 22px;
+        font-size: 22px;
+        border-radius: 18px;
+        min-height: 68px;
+      }
+
+      .card-btn.btn-rever {
+        border-width: 4px;
+      }
+
+      .footer {
+        padding: 28px 20px;
+      }
+
+      .footer p {
+        font-size: 17px;
+      }
+
+      .toast {
+        font-size: 15px;
+        padding: 14px 22px;
+      }
+    }
+
+    /* Tablet */
+    @media (min-width: 641px) and (max-width: 768px) {
+      .navbar {
+        height: 88px;
+      }
+
+      .navbar-title {
+        font-size: 18px;
+      }
+
+      .nav-item {
+        padding: 8px 18px;
+      }
+
+      .nav-item i {
+        font-size: 36px;
+      }
+
+      .nav-item span {
+        font-size: 14px;
+      }
+
+      .activities-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      .icon-circle {
+        width: 120px;
+        height: 120px;
+      }
+
+      .icon-circle svg {
+        width: 88px;
+        height: 88px;
+      }
+    }
+  </style>
+</head>
+<body>
+    <script src="js/licoes.js"></script>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <button class="btn-voltar" aria-label="Voltar">
+        <i class="fas fa-arrow-left"></i>
+        <span>Voltar</span>
+      </button>
+      <a href="#" class="navbar-brand">
+        <div class="navbar-logo">A</div>
+        <span class="navbar-title">AprendIDos</span>
+      </a>
+    </div>
+    <div class="navbar-right">
+      <button class="nav-item" aria-label="Início">
+        <i class="fas fa-home"></i>
+        <span>Início</span>
+      </button>
+      <button class="nav-item" aria-label="Módulos">
+        <i class="fas fa-book"></i>
+        <span>Módulos</span>
+      </button>
+      <button class="nav-item nav-active" aria-label="Atividades">
+        <i class="fas fa-puzzle-piece"></i>
+        <span>Atividades</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="main-content">
+
+    <section class="page-header">
+      <h1>Atividades Disponíveis</h1>
+      <p>Escolha uma lição e continue sua aprendizagem.</p>
+    </section>
+
+    <section class="progress-section">
+      <div class="progress-info">
+        <span class="progress-label"><i class="fas fa-chart-line"></i> Seu progresso</span>
+        <span class="progress-count" id="progressCount">2 de 9 concluídas</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill" style="width: 22%;"></div>
+      </div>
+    </section>
+
+    <section class="activities-grid" id="activitiesGrid">
+
+      <!-- 1. AS LETRAS -->
+      <div class="activity-card" data-index="0" data-completed="true">
+        <div class="icon-circle" style="background-color: #2E7D32;">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="28" width="34" height="50" rx="8" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="4.5"/>
+            <text x="22" y="64" font-family="Nunito, sans-serif" font-size="32" font-weight="900" fill="#FFFFFF" text-anchor="middle">A</text>
+            <rect x="43" y="28" width="34" height="50" rx="8" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="4.5"/>
+            <text x="60" y="64" font-family="Nunito, sans-serif" font-size="32" font-weight="900" fill="#FFFFFF" text-anchor="middle">B</text>
+            <rect x="81" y="28" width="34" height="50" rx="8" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="4.5"/>
+            <text x="98" y="64" font-family="Nunito, sans-serif" font-size="32" font-weight="900" fill="#FFFFFF" text-anchor="middle">C</text>
+          </svg>
+          <div class="check-badge"><i class="fas fa-check"></i></div>
+        </div>
+        <span class="status-badge badge-concluida"><i class="fas fa-check-circle"></i> Concluída</span>
+        <h3>As Letras</h3>
+        <p class="description">Conheça o alfabeto com calma</p>
+        <button class="card-btn btn-rever" data-action="review">Rever Lição</button>
+      </div>
+
+      <!-- 2. AS VOGAIS -->
+      <div class="activity-card" data-index="1" data-completed="true">
+        <div class="icon-circle" style="background-color: #388E3C;">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="12" width="34" height="40" rx="7" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="3.5"/>
+            <text x="21" y="43" font-family="Nunito, sans-serif" font-size="30" font-weight="900" fill="#FFFFFF" text-anchor="middle">A</text>
+            <rect x="43" y="12" width="34" height="40" rx="7" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="3.5"/>
+            <text x="60" y="43" font-family="Nunito, sans-serif" font-size="30" font-weight="900" fill="#FFFFFF" text-anchor="middle">E</text>
+            <rect x="82" y="12" width="34" height="40" rx="7" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="3.5"/>
+            <text x="99" y="43" font-family="Nunito, sans-serif" font-size="30" font-weight="900" fill="#FFFFFF" text-anchor="middle">I</text>
+            <rect x="22" y="64" width="34" height="40" rx="7" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="3.5"/>
+            <text x="39" y="95" font-family="Nunito, sans-serif" font-size="30" font-weight="900" fill="#FFFFFF" text-anchor="middle">O</text>
+            <rect x="64" y="64" width="34" height="40" rx="7" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="3.5"/>
+            <text x="81" y="95" font-family="Nunito, sans-serif" font-size="30" font-weight="900" fill="#FFFFFF" text-anchor="middle">U</text>
+          </svg>
+          <div class="check-badge"><i class="fas fa-check"></i></div>
+        </div>
+        <span class="status-badge badge-concluida"><i class="fas fa-check-circle"></i> Concluída</span>
+        <h3>As Vogais</h3>
+        <p class="description">Ouça e pratique as vogais</p>
+        <button class="card-btn btn-rever" data-action="review">Rever Lição</button>
+      </div>
+
+      <!-- 3. CONSOANTES E SONS -->
+      <div class="activity-card" data-index="2" data-completed="false">
+        <div class="icon-circle" style="background-color: #00695C;">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="6" width="64" height="30" rx="7" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="3.5"/>
+            <text x="40" y="30" font-family="Nunito, sans-serif" font-size="24" font-weight="900" fill="#FFFFFF" text-anchor="middle">BA</text>
+            <rect x="8" y="42" width="64" height="30" rx="7" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="3.5"/>
+            <text x="40" y="66" font-family="Nunito, sans-serif" font-size="24" font-weight="900" fill="#FFFFFF" text-anchor="middle">BE</text>
+            <rect x="8" y="78" width="64" height="30" rx="7" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="3.5"/>
+            <text x="40" y="102" font-family="Nunito, sans-serif" font-size="24" font-weight="900" fill="#FFFFFF" text-anchor="middle">BI</text>
+            <rect x="80" y="44" width="12" height="18" rx="3" fill="#FFD54F"/>
+            <path d="M94,42 Q108,53 94,64" fill="none" stroke="#FFD54F" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M100,36 Q116,53 100,70" fill="none" stroke="#FFD54F" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+          </svg>
+        </div>
+        <span class="status-badge badge-iniciar"><i class="fas fa-play-circle"></i> Iniciar</span>
+        <h3>Consoantes e Sons</h3>
+        <p class="description">Aprenda sons e palavras simples</p>
+        <button class="card-btn btn-comecar" data-action="start">Começar</button>
+      </div>
+
+      <!-- 4. MEU NOME -->
+      <div class="activity-card" data-index="3" data-completed="false">
+        <div class="icon-circle" style="background-color: #6D4C41;">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="8" width="64" height="100" rx="5" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+            <line x1="28" y1="34" x2="60" y2="34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+            <line x1="28" y1="54" x2="60" y2="54" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+            <line x1="28" y1="74" x2="60" y2="74" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+            <line x1="28" y1="94" x2="60" y2="94" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+            <text x="44" y="38" font-family="Nunito, sans-serif" font-size="16" font-weight="800" fill="#FFD54F" text-anchor="middle">João</text>
+            <line x1="90" y1="10" x2="76" y2="82" stroke="#FFD54F" stroke-width="8" stroke-linecap="round"/>
+            <line x1="76" y1="82" x2="74" y2="96" stroke="#FFD54F" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="status-badge badge-iniciar"><i class="fas fa-play-circle"></i> Iniciar</span>
+        <h3>Meu Nome</h3>
+        <p class="description">Treine escrever seu próprio nome</p>
+        <button class="card-btn btn-comecar" data-action="start">Começar</button>
+      </div>
+
+      <!-- 5. SÍLABAS -->
+      <div class="activity-card" data-index="4" data-completed="false">
+        <div class="icon-circle" style="background-color: #1B5E20;">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="18" width="42" height="36" rx="8" fill="rgba(0,0,0,0.1)"/>
+            <rect x="7" y="14" width="42" height="36" rx="8" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="4"/>
+            <text x="28" y="42" font-family="Nunito, sans-serif" font-size="24" font-weight="900" fill="#FFFFFF" text-anchor="middle">BA</text>
+            <text x="60" y="40" font-family="Nunito, sans-serif" font-size="22" font-weight="900" fill="#FFD54F" text-anchor="middle">+</text>
+            <rect x="70" y="18" width="42" height="36" rx="8" fill="rgba(0,0,0,0.1)"/>
+            <rect x="67" y="14" width="42" height="36" rx="8" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="4"/>
+            <text x="88" y="42" font-family="Nunito, sans-serif" font-size="24" font-weight="900" fill="#FFFFFF" text-anchor="middle">LA</text>
+            <line x1="60" y1="58" x2="60" y2="76" stroke="#FFD54F" stroke-width="4" stroke-linecap="round"/>
+            <polyline points="50,72 60,82 70,72" fill="none" stroke="#FFD54F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="60" y="108" font-family="Nunito, sans-serif" font-size="34" font-weight="900" fill="#FFD54F" text-anchor="middle">BALA</text>
+          </svg>
+        </div>
+        <span class="status-badge badge-iniciar"><i class="fas fa-play-circle"></i> Iniciar</span>
+        <h3>Sílabas</h3>
+        <p class="description">Junte sons para formar palavras</p>
+        <button class="card-btn btn-comecar" data-action="start">Começar</button>
+      </div>
+
+      <!-- 6. PALAVRAS DO DIA A DIA -->
+      <div class="activity-card" data-index="5" data-completed="false">
+        <div class="icon-circle" style="background-color: #558B2F;">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="60,12 12,56 108,56" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round"/>
+            <rect x="22" y="56" width="76" height="50" fill="none" stroke="#FFFFFF" stroke-width="5"/>
+            <rect x="46" y="74" width="28" height="32" rx="4" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+          </svg>
+        </div>
+        <span class="status-badge badge-iniciar"><i class="fas fa-play-circle"></i> Iniciar</span>
+        <h3>Palavras do Dia a Dia</h3>
+        <p class="description">Reconheça palavras do cotidiano</p>
+        <button class="card-btn btn-comecar" data-action="start">Começar</button>
+      </div>
+
+      <!-- 7. FRASES SIMPLES -->
+      <div class="activity-card" data-index="6" data-completed="false">
+        <div class="icon-circle" style="background-color: #33691E;">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="8" width="108" height="80" rx="18" fill="none" stroke="#FFFFFF" stroke-width="4.5"/>
+            <polygon points="34,88 24,108 48,88" fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linejoin="round"/>
+            <text x="60" y="46" font-family="Nunito, sans-serif" font-size="34" font-weight="800" fill="#FFFFFF" text-anchor="middle">EU</text>
+            <text x="60" y="80" font-family="Nunito, sans-serif" font-size="34" font-weight="800" fill="#FFFFFF" text-anchor="middle">VOU.</text>
+          </svg>
+        </div>
+        <span class="status-badge badge-iniciar"><i class="fas fa-play-circle"></i> Iniciar</span>
+        <h3>Frases Simples</h3>
+        <p class="description">Monte frases curtas e fáceis</p>
+        <button class="card-btn btn-comecar" data-action="start">Começar</button>
+      </div>
+
+      <!-- 8. PEQUENAS LEITURAS -->
+      <div class="activity-card" data-index="7" data-completed="false">
+        <div class="icon-circle" style="background-color: #795548;">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <path d="M60,16 L60,104 L18,104 L18,24 Q18,16 26,16 Z" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+            <path d="M60,16 L60,104 L102,104 L102,24 Q102,16 94,16 Z" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+            <line x1="30" y1="48" x2="52" y2="48" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+            <line x1="30" y1="70" x2="48" y2="70" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+            <line x1="68" y1="48" x2="90" y2="48" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+            <line x1="68" y1="70" x2="86" y2="70" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+          </svg>
+        </div>
+        <span class="status-badge badge-iniciar"><i class="fas fa-play-circle"></i> Iniciar</span>
+        <h3>Pequenas Leituras</h3>
+        <p class="description">Leia textos pequenos e simples</p>
+        <button class="card-btn btn-comecar" data-action="start">Começar</button>
+      </div>
+
+      <!-- 9. ESCRITA -->
+      <div class="activity-card" data-index="8" data-completed="false">
+        <div class="icon-circle" style="background-color: #43A047;">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="8" width="60" height="100" rx="5" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+            <line x1="26" y1="30" x2="58" y2="30" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+            <line x1="26" y1="50" x2="58" y2="50" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+            <line x1="26" y1="70" x2="58" y2="70" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+            <line x1="26" y1="90" x2="58" y2="90" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+            <line x1="90" y1="8" x2="74" y2="86" stroke="#FFD54F" stroke-width="9" stroke-linecap="round"/>
+            <line x1="74" y1="86" x2="72" y2="100" stroke="#FFD54F" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="status-badge badge-iniciar"><i class="fas fa-play-circle"></i> Iniciar</span>
+        <h3>Escrita</h3>
+        <p class="description">Pratique letras e palavras</p>
+        <button class="card-btn btn-comecar" data-action="start">Começar</button>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p><span>AprendIDos</span> — Alfabetização para todas as idades</p>
+  </footer>
+
+  <!-- Container para toasts -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  
+
+</body>
+</html>

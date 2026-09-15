@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +30,9 @@
             --vowel-u: #6A1B9A;
         }
 
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -64,7 +67,10 @@
             text-decoration: none;
             transition: top 0.2s;
         }
-        .skip-link:focus { top: 0.5rem; }
+
+        .skip-link:focus {
+            top: 0.5rem;
+        }
 
         /* ===== NAVBAR ===== */
         .navbar {
@@ -77,7 +83,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
         }
 
         .navbar-left {
@@ -102,11 +108,15 @@
             cursor: pointer;
             transition: all 0.2s;
             text-decoration: none;
+            appearance: none;
+            -webkit-appearance: none;
         }
+
         .btn-back:hover {
             background: var(--green-pale);
             border-color: var(--green);
         }
+
         .btn-back:focus-visible {
             outline: 3px solid var(--green);
             outline-offset: 2px;
@@ -135,7 +145,8 @@
             transition: transform 0.3s ease;
         }
 
-        .navbar-brand:hover .brand-icon, .brand-icon:hover {
+        .navbar-brand:hover .brand-icon,
+        .brand-icon:hover {
             transform: rotate(-8deg) scale(1.08);
         }
 
@@ -165,25 +176,36 @@
             transition: all 0.2s;
             min-width: 108px;
         }
+
         .navbar-nav-item i {
             font-size: 2.3rem;
             line-height: 1;
         }
+
         .navbar-nav-item span {
             font-size: 1.05rem;
             font-weight: 800;
             line-height: 1.2;
         }
+
         .navbar-nav-item:hover {
             color: var(--green);
             background: var(--green-pale);
         }
+
         .navbar-nav-item.active {
             color: var(--green);
             background: var(--green-pale);
         }
-        .navbar-nav-item.active i { font-weight: 900; }
-        .navbar-nav-item.active span { font-weight: 900; }
+
+        .navbar-nav-item.active i {
+            font-weight: 900;
+        }
+
+        .navbar-nav-item.active span {
+            font-weight: 900;
+        }
+
         .navbar-nav-item:focus-visible {
             outline: 3px solid var(--green);
             outline-offset: 2px;
@@ -211,10 +233,14 @@
             border-bottom: 3px solid var(--green);
             padding: 0.8rem 1.2rem;
             gap: 0.3rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             z-index: 99;
         }
-        .navbar-mobile-menu.open { display: flex; }
+
+        .navbar-mobile-menu.open {
+            display: flex;
+        }
+
         .navbar-mobile-menu a {
             display: flex;
             align-items: center;
@@ -227,11 +253,13 @@
             border-radius: 8px;
             transition: all 0.2s;
         }
+
         .navbar-mobile-menu a i {
             font-size: 1.8rem;
             width: 2rem;
             text-align: center;
         }
+
         .navbar-mobile-menu a:hover,
         .navbar-mobile-menu a.active {
             color: var(--green);
@@ -240,14 +268,17 @@
 
         /* ===== CONTAINER ===== */
         .container {
-            max-width: 920px;
+            max-width: 1060px;
             margin: 0 auto;
             padding: 2rem 1.5rem 3rem;
             flex: 1;
         }
 
         /* ===== CABEÇALHO ===== */
-        .activity-header { margin-bottom: 2rem; }
+        .activity-header {
+            margin-bottom: 2rem;
+        }
+
         .activity-header h1 {
             font-size: 2rem;
             font-weight: 900;
@@ -255,6 +286,7 @@
             margin-bottom: 0.3rem;
             line-height: 1.2;
         }
+
         .activity-header .subtitle {
             font-size: 1.1rem;
             color: var(--fg-secondary);
@@ -271,16 +303,21 @@
             display: flex;
             align-items: center;
             gap: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
         }
-        .instruction-card .instruction-text { flex: 1; }
+
+        .instruction-card .instruction-text {
+            flex: 1;
+        }
+
         .instruction-card .instruction-text p {
             font-size: 1.15rem;
             font-weight: 700;
             color: var(--fg);
             line-height: 1.6;
         }
-        .instruction-card .instruction-text p + p {
+
+        .instruction-card .instruction-text p+p {
             margin-top: 0.3rem;
             font-size: 1rem;
             color: var(--fg-secondary);
@@ -302,21 +339,38 @@
             justify-content: center;
             transition: all 0.25s;
         }
+
         .btn-play-instruction:hover {
             background: var(--green);
             color: #fff;
             transform: scale(1.05);
         }
-        .btn-play-instruction:active { transform: scale(0.97); }
-        .btn-play-instruction:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+
+        .btn-play-instruction:active {
+            transform: scale(0.97);
+        }
+
+        .btn-play-instruction:focus-visible {
+            outline: 3px solid var(--green);
+            outline-offset: 3px;
+        }
+
         .btn-play-instruction.speaking {
             background: var(--green);
             color: #fff;
             animation: pulse-green 1s ease infinite;
         }
+
         @keyframes pulse-green {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(46,125,50,0.3); }
-            50% { box-shadow: 0 0 0 12px rgba(46,125,50,0); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 0 12px rgba(46, 125, 50, 0);
+            }
         }
 
         /* ===== SEÇÃO VOGAIS ===== */
@@ -329,7 +383,11 @@
             align-items: center;
             gap: 0.5rem;
         }
-        .section-title i { color: var(--green); font-size: 1.2rem; }
+
+        .section-title i {
+            color: var(--green);
+            font-size: 1.2rem;
+        }
 
         .vowels-grid {
             display: grid;
@@ -346,50 +404,85 @@
             text-align: center;
             cursor: pointer;
             transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.3rem;
         }
+
         .vowel-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
         }
+
         .vowel-card:focus-visible {
             outline: 3px solid var(--green);
             outline-offset: 3px;
         }
+
         .vowel-card.speaking {
             border-color: var(--green);
-            box-shadow: 0 0 0 4px var(--green-light), 0 6px 18px rgba(46,125,50,0.12);
+            box-shadow: 0 0 0 4px var(--green-light), 0 6px 18px rgba(46, 125, 50, 0.12);
             transform: scale(1.04);
         }
 
         .vowel-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             height: 5px;
             border-radius: var(--radius) var(--radius) 0 0;
         }
-        .vowel-card[data-vowel="a"]::before { background: var(--vowel-a); }
-        .vowel-card[data-vowel="e"]::before { background: var(--vowel-e); }
-        .vowel-card[data-vowel="i"]::before { background: var(--vowel-i); }
-        .vowel-card[data-vowel="o"]::before { background: var(--vowel-o); }
-        .vowel-card[data-vowel="u"]::before { background: var(--vowel-u); }
+
+        .vowel-card[data-vowel="a"]::before {
+            background: var(--vowel-a);
+        }
+
+        .vowel-card[data-vowel="e"]::before {
+            background: var(--vowel-e);
+        }
+
+        .vowel-card[data-vowel="i"]::before {
+            background: var(--vowel-i);
+        }
+
+        .vowel-card[data-vowel="o"]::before {
+            background: var(--vowel-o);
+        }
+
+        .vowel-card[data-vowel="u"]::before {
+            background: var(--vowel-u);
+        }
 
         .vowel-letter {
             font-size: 3.2rem;
             font-weight: 900;
             line-height: 1;
         }
-        .vowel-card[data-vowel="a"] .vowel-letter { color: var(--vowel-a); }
-        .vowel-card[data-vowel="e"] .vowel-letter { color: var(--vowel-e); }
-        .vowel-card[data-vowel="i"] .vowel-letter { color: var(--vowel-i); }
-        .vowel-card[data-vowel="o"] .vowel-letter { color: var(--vowel-o); }
-        .vowel-card[data-vowel="u"] .vowel-letter { color: var(--vowel-u); }
+
+        .vowel-card[data-vowel="a"] .vowel-letter {
+            color: var(--vowel-a);
+        }
+
+        .vowel-card[data-vowel="e"] .vowel-letter {
+            color: var(--vowel-e);
+        }
+
+        .vowel-card[data-vowel="i"] .vowel-letter {
+            color: var(--vowel-i);
+        }
+
+        .vowel-card[data-vowel="o"] .vowel-letter {
+            color: var(--vowel-o);
+        }
+
+        .vowel-card[data-vowel="u"] .vowel-letter {
+            color: var(--vowel-u);
+        }
 
         .vowel-illustration {
             width: 76px;
@@ -397,6 +490,7 @@
             margin: 0.3rem 0;
             flex-shrink: 0;
         }
+
         .vowel-illustration svg {
             width: 100%;
             height: 100%;
@@ -408,17 +502,38 @@
             color: var(--fg);
             line-height: 1.3;
         }
+
         .vowel-example .highlight {
             font-weight: 900;
             text-decoration: underline;
             text-decoration-thickness: 2.5px;
             text-underline-offset: 2px;
         }
-        .vowel-card[data-vowel="a"] .highlight { color: var(--vowel-a); text-decoration-color: var(--vowel-a); }
-        .vowel-card[data-vowel="e"] .highlight { color: var(--vowel-e); text-decoration-color: var(--vowel-e); }
-        .vowel-card[data-vowel="i"] .highlight { color: var(--vowel-i); text-decoration-color: var(--vowel-i); }
-        .vowel-card[data-vowel="o"] .highlight { color: var(--vowel-o); text-decoration-color: var(--vowel-o); }
-        .vowel-card[data-vowel="u"] .highlight { color: var(--vowel-u); text-decoration-color: var(--vowel-u); }
+
+        .vowel-card[data-vowel="a"] .highlight {
+            color: var(--vowel-a);
+            text-decoration-color: var(--vowel-a);
+        }
+
+        .vowel-card[data-vowel="e"] .highlight {
+            color: var(--vowel-e);
+            text-decoration-color: var(--vowel-e);
+        }
+
+        .vowel-card[data-vowel="i"] .highlight {
+            color: var(--vowel-i);
+            text-decoration-color: var(--vowel-i);
+        }
+
+        .vowel-card[data-vowel="o"] .highlight {
+            color: var(--vowel-o);
+            text-decoration-color: var(--vowel-o);
+        }
+
+        .vowel-card[data-vowel="u"] .highlight {
+            color: var(--vowel-u);
+            text-decoration-color: var(--vowel-u);
+        }
 
         .vowel-sound-btn {
             width: 42px;
@@ -436,12 +551,17 @@
             margin-top: 0.2rem;
             flex-shrink: 0;
         }
+
         .vowel-sound-btn:hover {
             background: var(--green);
             color: #fff;
             border-color: var(--green);
         }
-        .vowel-sound-btn:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+
+        .vowel-sound-btn:focus-visible {
+            outline: 3px solid var(--green);
+            outline-offset: 2px;
+        }
 
         /* ===== DIVISOR ===== */
         .divider {
@@ -453,12 +573,182 @@
         }
 
         /* ===== EXERCÍCIO ===== */
+        .exercise-layout {
+            display: grid;
+            grid-template-columns: 1fr 370px;
+            gap: 1.5rem;
+            align-items: stretch;
+            margin-bottom: 2rem;
+        }
+
         .exercise-card {
             background: var(--white);
             border: 2px solid var(--border);
             border-radius: var(--radius);
             padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== CAIXINHA DE SIGNIFICADO (COMPLEMENTO PARA IDOSOS) ===== */
+        .word-meaning-card {
+            background: #FFFFFF;
+            border: 3px solid #C8E6C9;
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 16px rgba(46, 125, 50, 0.08);
+            background: linear-gradient(180deg, #FFFFFF 0%, #F7FAF7 100%);
+            position: relative;
+        }
+
+        .meaning-header {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px dashed #C8E6C9;
+            margin-bottom: 1.2rem;
+        }
+
+        .meaning-header-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #E8F5E9;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            border: 2px solid #C8E6C9;
+        }
+
+        .meaning-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #1B5E20;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .meaning-subtitle {
+            font-size: 0.92rem;
+            color: var(--fg-secondary);
+            font-weight: 600;
+        }
+
+        .meaning-word-box {
+            background: #FFFFFF;
+            border: 2px solid #E0EEDF;
+            border-radius: 14px;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+
+        .meaning-word-label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 0.3rem;
+        }
+
+        .meaning-word-display {
+            font-size: 1.85rem;
+            font-weight: 900;
+            color: #1B5E20;
+            display: inline-block;
+        }
+
+        .meaning-content-box {
+            background: #FFFDF9;
+            border-left: 6px solid #2E7D32;
+            border-top: 1px solid #F0EAE1;
+            border-right: 1px solid #F0EAE1;
+            border-bottom: 1px solid #F0EAE1;
+            border-radius: 0 14px 14px 0;
+            padding: 1.2rem 1.3rem;
+            margin-bottom: 1.4rem;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .meaning-text {
+            font-size: 1.18rem;
+            line-height: 1.6;
+            color: #2D241E;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .meaning-audio-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-meaning-audio {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: #2E7D32;
+            color: #FFFFFF;
+            border: 3px solid #1B5E20;
+            border-radius: 99px;
+            padding: 0.95rem 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 900;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+            transition: all 0.2s ease;
+            min-height: 60px;
+        }
+
+        .btn-meaning-audio i {
+            font-size: 1.35rem;
+        }
+
+        .btn-meaning-audio:hover {
+            background: #1B5E20;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(46, 125, 50, 0.35);
+        }
+
+        .btn-meaning-audio:active {
+            transform: scale(0.97);
+        }
+
+        .btn-meaning-audio:focus-visible {
+            outline: 3px solid #F57F17;
+            outline-offset: 3px;
+        }
+
+        .btn-meaning-audio.speaking {
+            background: #1B5E20;
+            animation: pulse-green 0.9s ease infinite;
+        }
+
+        .meaning-hint {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #555555;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
 
         .progress-label {
@@ -468,6 +758,7 @@
             text-align: center;
             margin-bottom: 0.4rem;
         }
+
         .progress-bar-track {
             background: var(--green-light);
             border-radius: 99px;
@@ -475,6 +766,7 @@
             margin-bottom: 1.5rem;
             overflow: hidden;
         }
+
         .progress-bar-fill {
             height: 100%;
             background: var(--green);
@@ -491,6 +783,7 @@
             margin-bottom: 1.8rem;
             flex-wrap: wrap;
         }
+
         .score-item {
             display: flex;
             align-items: center;
@@ -499,14 +792,21 @@
             font-weight: 700;
             color: var(--fg-secondary);
         }
+
         .score-num {
             font-size: 1.4rem;
             font-weight: 900;
             min-width: 1.5ch;
             text-align: center;
         }
-        .score-item.hits .score-num { color: var(--green-dark); }
-        .score-item.misses .score-num { color: var(--vowel-a); }
+
+        .score-item.hits .score-num {
+            color: var(--green-dark);
+        }
+
+        .score-item.misses .score-num {
+            color: var(--vowel-a);
+        }
 
         .exercise-instruction {
             font-size: 1.15rem;
@@ -524,6 +824,7 @@
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
+
         .btn-audio-exercise {
             display: inline-flex;
             align-items: center;
@@ -538,12 +839,26 @@
             font-family: 'Nunito', sans-serif;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 3px 10px rgba(46,125,50,0.25);
+            box-shadow: 0 3px 10px rgba(46, 125, 50, 0.25);
         }
-        .btn-audio-exercise:hover { background: var(--green-dark); }
-        .btn-audio-exercise:active { transform: scale(0.97); }
-        .btn-audio-exercise:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
-        .btn-audio-exercise.speaking { animation: pulse-green 0.9s ease infinite; }
+
+        .btn-audio-exercise:hover {
+            background: var(--green-dark);
+        }
+
+        .btn-audio-exercise:active {
+            transform: scale(0.97);
+        }
+
+        .btn-audio-exercise:focus-visible {
+            outline: 3px solid var(--green);
+            outline-offset: 3px;
+        }
+
+        .btn-audio-exercise.speaking {
+            animation: pulse-green 0.9s ease infinite;
+        }
+
         .audio-hint {
             font-size: 0.95rem;
             color: var(--muted);
@@ -565,23 +880,33 @@
             transition: all 0.2s;
             flex-shrink: 0;
         }
+
         .btn-help-exercise:hover {
             background: var(--green);
             color: #fff;
             border-color: var(--green);
         }
-        .btn-help-exercise:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
-        .btn-help-exercise.speaking { animation: pulse-green 0.9s ease infinite; }
+
+        .btn-help-exercise:focus-visible {
+            outline: 3px solid var(--green);
+            outline-offset: 2px;
+        }
+
+        .btn-help-exercise.speaking {
+            animation: pulse-green 0.9s ease infinite;
+        }
 
         .question-area {
             text-align: center;
             margin-bottom: 1.8rem;
         }
+
         .question-area .question-label {
             font-size: 1.1rem;
             font-weight: 700;
             color: var(--fg-secondary);
         }
+
         .question-area .question-word {
             font-size: 1.7rem;
             font-weight: 900;
@@ -589,6 +914,7 @@
             display: block;
             margin-top: 0.2rem;
         }
+
         .question-area .question-word .vowel-highlight,
         .vowel-highlight {
             color: #1B5E20 !important;
@@ -609,6 +935,7 @@
             gap: 0.8rem;
             margin-bottom: 1.2rem;
         }
+
         .btn-option {
             display: flex;
             align-items: center;
@@ -625,14 +952,27 @@
             transition: all 0.2s;
             min-height: 76px;
         }
+
         .btn-option:hover:not(:disabled) {
             border-color: var(--green);
             background: var(--green-pale);
             transform: translateY(-2px);
         }
-        .btn-option:active:not(:disabled) { transform: scale(0.96); }
-        .btn-option:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
-        .btn-option:disabled { cursor: default; opacity: 0.65; }
+
+        .btn-option:active:not(:disabled) {
+            transform: scale(0.96);
+        }
+
+        .btn-option:focus-visible {
+            outline: 3px solid var(--green);
+            outline-offset: 2px;
+        }
+
+        .btn-option:disabled {
+            cursor: default;
+            opacity: 0.65;
+        }
+
         .btn-option.correct {
             border-color: var(--green);
             background: var(--green-pale);
@@ -640,6 +980,7 @@
             opacity: 1 !important;
             animation: pop-correct 0.35s ease;
         }
+
         .btn-option.wrong {
             border-color: #EF9A9A;
             background: #FFF3F3;
@@ -647,17 +988,43 @@
             opacity: 1 !important;
             animation: shake 0.4s ease;
         }
+
         @keyframes pop-correct {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.07); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.07);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
+
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-5px); }
-            40% { transform: translateX(5px); }
-            60% { transform: translateX(-3px); }
-            80% { transform: translateX(3px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-5px);
+            }
+
+            40% {
+                transform: translateX(5px);
+            }
+
+            60% {
+                transform: translateX(-3px);
+            }
+
+            80% {
+                transform: translateX(3px);
+            }
         }
 
         /* ===== FEEDBACK ===== */
@@ -670,6 +1037,7 @@
             justify-content: center;
             gap: 0.8rem;
         }
+
         .feedback-msg {
             font-size: 1.3rem;
             font-weight: 800;
@@ -680,20 +1048,31 @@
             gap: 0.5rem;
             animation: fade-up 0.3s ease;
         }
+
         @keyframes fade-up {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         .feedback-msg.success {
             background: var(--green-pale);
             color: var(--green-dark);
             border: 2px solid var(--green-light);
         }
+
         .feedback-msg.error {
             background: #FFF8E1;
             color: #E65100;
             border: 2px solid #FFE0B2;
         }
+
         .btn-next {
             display: inline-flex;
             align-items: center;
@@ -708,11 +1087,21 @@
             font-family: 'Nunito', sans-serif;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 3px 8px rgba(46,125,50,0.2);
+            box-shadow: 0 3px 8px rgba(46, 125, 50, 0.2);
         }
-        .btn-next:hover { background: var(--green-dark); }
-        .btn-next:active { transform: scale(0.97); }
-        .btn-next:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+
+        .btn-next:hover {
+            background: var(--green-dark);
+        }
+
+        .btn-next:active {
+            transform: scale(0.97);
+        }
+
+        .btn-next:focus-visible {
+            outline: 3px solid var(--green);
+            outline-offset: 3px;
+        }
 
         /* ===== CONCLUSÃO ===== */
         .completion {
@@ -720,10 +1109,32 @@
             padding: 2.5rem 1.5rem;
             display: none;
         }
-        .completion.visible { display: block; animation: fade-up 0.4s ease; }
-        .completion-icon { font-size: 3.5rem; color: var(--green); margin-bottom: 0.8rem; }
-        .completion h2 { font-size: 1.8rem; font-weight: 900; color: var(--fg); margin-bottom: 0.4rem; }
-        .completion p { font-size: 1.1rem; color: var(--fg-secondary); font-weight: 600; margin-bottom: 2rem; }
+
+        .completion.visible {
+            display: block;
+            animation: fade-up 0.4s ease;
+        }
+
+        .completion-icon {
+            font-size: 3.5rem;
+            color: var(--green);
+            margin-bottom: 0.8rem;
+        }
+
+        .completion h2 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--fg);
+            margin-bottom: 0.4rem;
+        }
+
+        .completion p {
+            font-size: 1.1rem;
+            color: var(--fg-secondary);
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
         .completion-stats {
             display: flex;
             justify-content: center;
@@ -731,9 +1142,23 @@
             margin-bottom: 2rem;
             flex-wrap: wrap;
         }
-        .stat { text-align: center; }
-        .stat-value { font-size: 2.5rem; font-weight: 900; line-height: 1; }
-        .stat-label { font-size: 0.95rem; font-weight: 700; color: var(--muted); margin-top: 0.2rem; }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--muted);
+            margin-top: 0.2rem;
+        }
 
         .error-summary {
             background: #FFF8E1;
@@ -746,6 +1171,7 @@
             margin-left: auto;
             margin-right: auto;
         }
+
         .error-summary h3 {
             font-size: 1.05rem;
             font-weight: 800;
@@ -755,11 +1181,13 @@
             align-items: center;
             gap: 0.4rem;
         }
+
         .error-summary ul {
             list-style: none;
             padding: 0;
             margin: 0;
         }
+
         .error-summary li {
             font-size: 1rem;
             font-weight: 700;
@@ -769,16 +1197,21 @@
             align-items: center;
             gap: 0.5rem;
         }
+
         .error-summary li .wrong-answer {
             color: #C62828;
             text-decoration: line-through;
             font-weight: 800;
         }
+
         .error-summary li .correct-answer {
             color: var(--green-dark);
             font-weight: 900;
         }
-        .error-summary li .arrow { color: var(--muted); }
+
+        .error-summary li .arrow {
+            color: var(--muted);
+        }
 
         .btn-restart {
             display: inline-flex;
@@ -794,11 +1227,21 @@
             font-family: 'Nunito', sans-serif;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 3px 10px rgba(46,125,50,0.25);
+            box-shadow: 0 3px 10px rgba(46, 125, 50, 0.25);
         }
-        .btn-restart:hover { background: var(--green-dark); }
-        .btn-restart:active { transform: scale(0.97); }
-        .btn-restart:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+
+        .btn-restart:hover {
+            background: var(--green-dark);
+        }
+
+        .btn-restart:active {
+            transform: scale(0.97);
+        }
+
+        .btn-restart:focus-visible {
+            outline: 3px solid var(--green);
+            outline-offset: 3px;
+        }
 
         /* ===== FOOTER ===== */
         .footer {
@@ -810,42 +1253,103 @@
             color: var(--muted);
             font-weight: 600;
         }
-        .footer i { color: var(--green); }
+
+        .footer i {
+            color: var(--green);
+        }
 
         /* ===== RESPONSIVIDADE ===== */
         @media (max-width: 768px) {
-            .navbar-nav { display: none; }
-            .navbar-hamburger { display: flex; align-items: center; justify-content: center; }
+            .navbar-nav {
+                display: none;
+            }
+
+            .navbar-hamburger {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
         }
+
         @media (max-width: 720px) {
-            html { font-size: 16px; }
-            .activity-header h1 { font-size: 1.6rem; }
-            .vowels-grid { grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
-            .vowel-letter { font-size: 2.6rem; }
-            .vowel-illustration { width: 62px; height: 62px; }
-            .exercise-card { padding: 1.5rem 1rem; }
-            .options-grid { gap: 0.5rem; }
-            .btn-option { font-size: 1.4rem; padding: 0.9rem 0.3rem; min-height: 65px; }
-            .instruction-card { flex-direction: column; text-align: center; gap: 1rem; }
+            html {
+                font-size: 16px;
+            }
+
+            .activity-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .vowels-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.8rem;
+            }
+
+            .vowel-letter {
+                font-size: 2.6rem;
+            }
+
+            .vowel-illustration {
+                width: 62px;
+                height: 62px;
+            }
+
+            .exercise-layout {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+
+            .exercise-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .options-grid {
+                gap: 0.5rem;
+            }
+
+            .btn-option {
+                font-size: 1.4rem;
+                padding: 0.9rem 0.3rem;
+                min-height: 65px;
+            }
+
+            .instruction-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
         }
+
         @media (max-width: 440px) {
-            .vowels-grid { grid-template-columns: repeat(2, 1fr); }
+            .vowels-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .vowels-grid .vowel-card:nth-child(5) {
                 grid-column: 1 / -1;
                 max-width: 50%;
                 justify-self: center;
             }
+
             .options-grid {
                 grid-template-columns: repeat(5, 1fr);
                 gap: 0.35rem;
             }
+
             .btn-option {
                 font-size: 1.2rem;
                 padding: 0.75rem 0.1rem;
                 min-height: 58px;
             }
-            .btn-audio-exercise { padding: 0.8rem 1.3rem; font-size: 1rem; }
-            .score-row { gap: 1rem; }
+
+            .btn-audio-exercise {
+                padding: 0.8rem 1.3rem;
+                font-size: 1rem;
+            }
+
+            .score-row {
+                gap: 1rem;
+            }
         }
 
         /* ===== ACESSIBILIDADE ===== */
@@ -853,19 +1357,26 @@
             outline: 3px solid var(--green);
             outline-offset: 2px;
         }
+
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
+
+            *,
+            *::before,
+            *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
         }
+
         .sr-only {
             position: absolute;
-            width: 1px; height: 1px;
-            padding: 0; margin: -1px;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
             overflow: hidden;
-            clip: rect(0,0,0,0);
+            clip: rect(0, 0, 0, 0);
             white-space: nowrap;
             border: 0;
         }
@@ -873,883 +1384,1183 @@
 </head>
 
 <body>
-    
-<a href="#main-content" class="skip-link">Pular para o conteúdo</a>
 
-<!-- ===== NAVBAR ===== -->
-<nav class="navbar" role="navigation" aria-label="Navegação principal">
-    <div class="navbar-left">
-        <a href="licoes.html" class="btn-back" aria-label="Voltar para a página de lições">
-            <i class="fas fa-arrow-left" aria-hidden="true"></i>
-            Voltar
-        </a>
-        <a href="index.html" class="navbar-brand" aria-label="AprendIDos">
-            <div class="brand-icon" aria-hidden="true">A</div>
-            <span>AprendIDos</span>
-        </a>
-    </div>
+    <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
 
-    <div class="navbar-nav" role="menubar">
-        <a href="index.html" class="navbar-nav-item" role="menuitem" aria-label="Início">
-            <i class="fas fa-home" aria-hidden="true"></i>
-            <span>Início</span>
-        </a>
-        <a href="licoes.html" class="navbar-nav-item" role="menuitem" aria-label="Módulos">
-            <i class="fas fa-book" aria-hidden="true"></i>
-            <span>Módulos</span>
-        </a>
-        <a href="licoes.html" class="navbar-nav-item active" role="menuitem" aria-current="page" aria-label="Atividades">
-            <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
-            <span>Atividades</span>
-        </a>
-    </div>
-
-    <button class="navbar-hamburger" aria-label="Abrir menu" aria-expanded="false" onclick="toggleMenu()">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div class="navbar-mobile-menu" id="mobileMenu">
-        <a href="index.html" role="menuitem">
-            <i class="fas fa-home" aria-hidden="true"></i>
-            Início
-        </a>
-        <a href="licoes.html" role="menuitem">
-            <i class="fas fa-book" aria-hidden="true"></i>
-            Módulos
-        </a>
-        <a href="licoes.html" class="active" role="menuitem" aria-current="page">
-            <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
-            Atividades
-        </a>
-    </div>
-</nav>
-
-<!-- CONTEÚDO -->
-<main class="container" id="main-content">
-
-    <header class="activity-header">
-        <h1>Conhecendo as Vogais</h1>
-        <p class="subtitle">Toque para ouvir e aprender as cinco vogais.</p>
-    </header>
-
-    <div class="instruction-card">
-        <div class="instruction-text">
-            <p>Ouça e repita cada vogal.</p>
-            <p>Toque nas fotos para ouvir as vogais.</p>
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" role="navigation" aria-label="Navegação principal">
+        <div class="navbar-left">
+            <button onclick="history.back()" class="btn-back" aria-label="Voltar para a página anterior">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                Voltar
+            </button>
+            <a href="index.html" class="navbar-brand" aria-label="AprendIDos">
+                <div class="brand-icon" aria-hidden="true">A</div>
+                <span>AprendIDos</span>
+            </a>
         </div>
-        <button class="btn-play-instruction" id="btnInstruction" aria-label="Ouvir instrução" onclick="playInstruction()">
-            <i class="fas fa-play" aria-hidden="true"></i>
+
+        <div class="navbar-nav" role="menubar">
+            <a href="index.html" class="navbar-nav-item" role="menuitem" aria-label="Início">
+                <i class="fas fa-home" aria-hidden="true"></i>
+                <span>Início</span>
+            </a>
+            <a href="licoes.html" class="navbar-nav-item" role="menuitem" aria-label="Módulos">
+                <i class="fas fa-book" aria-hidden="true"></i>
+                <span>Módulos</span>
+            </a>
+            <a href="licoes.html" class="navbar-nav-item active" role="menuitem" aria-current="page"
+                aria-label="Atividades">
+                <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
+                <span>Atividades</span>
+            </a>
+        </div>
+
+        <button class="navbar-hamburger" aria-label="Abrir menu" aria-expanded="false" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
         </button>
-    </div>
 
-    <section aria-labelledby="title-vowels">
-        <h2 class="section-title" id="title-vowels">
-            <i class="fas fa-star" aria-hidden="true"></i>
-            Conheça as Vogais
-        </h2>
+        <div class="navbar-mobile-menu" id="mobileMenu">
+            <a href="index.html" role="menuitem">
+                <i class="fas fa-home" aria-hidden="true"></i>
+                Início
+            </a>
+            <a href="licoes.html" role="menuitem">
+                <i class="fas fa-book" aria-hidden="true"></i>
+                Módulos
+            </a>
+            <a href="licoes.html" class="active" role="menuitem" aria-current="page">
+                <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
+                Atividades
+            </a>
+        </div>
+    </nav>
 
-        <div class="vowels-grid" role="list">
+    <!-- CONTEÚDO -->
+    <main class="container" id="main-content">
 
-            <!-- VOGAL A — Avião -->
-            <div class="vowel-card" data-vowel="a" role="listitem" tabindex="0"
-                 aria-label="Vogal A, A de Avião"
-                 onclick="speakVowel('a')"
-                 onkeydown="if(event.key==='Enter')speakVowel('a')">
-                <div class="vowel-letter" aria-hidden="true">A</div>
-                <div class="vowel-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <ellipse cx="40" cy="38" rx="28" ry="9" fill="#FFCCBC" stroke="#D84315" stroke-width="2.5"/>
-                        <path d="M30 33 L40 14 L50 33" fill="#FFAB91" stroke="#D84315" stroke-width="2.5" stroke-linejoin="round"/>
-                        <path d="M32 43 L40 58 L48 43" fill="#FFAB91" stroke="#D84315" stroke-width="2.5" stroke-linejoin="round"/>
-                        <rect x="60" y="22" width="5" height="18" rx="2" fill="#FFAB91" stroke="#D84315" stroke-width="2"/>
-                        <path d="M62 28 L72 24 L72 32 Z" fill="#FFAB91" stroke="#D84315" stroke-width="2" stroke-linejoin="round"/>
-                        <line x1="10" y1="34" x2="10" y2="42" stroke="#D84315" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="7" y1="32" x2="13" y2="44" stroke="#D84315" stroke-width="2.5" stroke-linecap="round"/>
-                        <circle cx="10" cy="38" r="2.5" fill="#D84315"/>
-                        <circle cx="22" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                        <circle cx="30" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                        <circle cx="38" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                        <circle cx="46" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                        <circle cx="54" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                    </svg>
-                </div>
-                <div class="vowel-example"><span class="highlight">A</span> de Avião</div>
-                <button class="vowel-sound-btn" aria-label="Ouvir a vogal A"
+        <header class="activity-header">
+            <h1>Conhecendo as Vogais</h1>
+            <p class="subtitle">Toque para ouvir e aprender as cinco vogais.</p>
+        </header>
+
+        <div class="instruction-card">
+            <div class="instruction-text">
+                <p>Ouça e repita cada vogal.</p>
+                <p>Toque nas fotos para ouvir as vogais.</p>
+            </div>
+            <button class="btn-play-instruction" id="btnInstruction" aria-label="Ouvir instrução"
+                onclick="playInstruction()">
+                <i class="fas fa-play" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <section aria-labelledby="title-vowels">
+            <h2 class="section-title" id="title-vowels">
+                <i class="fas fa-star" aria-hidden="true"></i>
+                Conheça as Vogais
+            </h2>
+
+            <div class="vowels-grid" role="list">
+
+                <!-- VOGAL A — Avião -->
+                <div class="vowel-card" data-vowel="a" role="listitem" tabindex="0" aria-label="Vogal A, A de Avião"
+                    onclick="speakVowel('a')" onkeydown="if(event.key==='Enter')speakVowel('a')">
+                    <div class="vowel-letter" aria-hidden="true">A</div>
+                    <div class="vowel-illustration" aria-hidden="true">
+                        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <ellipse cx="40" cy="38" rx="28" ry="9" fill="#FFCCBC" stroke="#D84315"
+                                stroke-width="2.5" />
+                            <path d="M30 33 L40 14 L50 33" fill="#FFAB91" stroke="#D84315" stroke-width="2.5"
+                                stroke-linejoin="round" />
+                            <path d="M32 43 L40 58 L48 43" fill="#FFAB91" stroke="#D84315" stroke-width="2.5"
+                                stroke-linejoin="round" />
+                            <rect x="60" y="22" width="5" height="18" rx="2" fill="#FFAB91" stroke="#D84315"
+                                stroke-width="2" />
+                            <path d="M62 28 L72 24 L72 32 Z" fill="#FFAB91" stroke="#D84315" stroke-width="2"
+                                stroke-linejoin="round" />
+                            <line x1="10" y1="34" x2="10" y2="42" stroke="#D84315" stroke-width="2.5"
+                                stroke-linecap="round" />
+                            <line x1="7" y1="32" x2="13" y2="44" stroke="#D84315" stroke-width="2.5"
+                                stroke-linecap="round" />
+                            <circle cx="10" cy="38" r="2.5" fill="#D84315" />
+                            <circle cx="22" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5" />
+                            <circle cx="30" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5" />
+                            <circle cx="38" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5" />
+                            <circle cx="46" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5" />
+                            <circle cx="54" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5" />
+                        </svg>
+                    </div>
+                    <div class="vowel-example"><span class="highlight">A</span> de Avião</div>
+                    <button class="vowel-sound-btn" aria-label="Ouvir a vogal A"
                         onclick="event.stopPropagation(); speakVowel('a')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- VOGAL E — Escada -->
-            <div class="vowel-card" data-vowel="e" role="listitem" tabindex="0"
-                 aria-label="Vogal E, E de Escada"
-                 onclick="speakVowel('e')"
-                 onkeydown="if(event.key==='Enter')speakVowel('e')">
-                <div class="vowel-letter" aria-hidden="true">E</div>
-                <div class="vowel-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="12" y="62" width="56" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
-                        <rect x="12" y="50" width="44" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
-                        <rect x="12" y="38" width="32" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
-                        <rect x="12" y="26" width="20" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
-                        <rect x="12" y="14" width="8" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
-                        <rect x="56" y="50" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825" stroke-width="2"/>
-                        <rect x="44" y="38" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825" stroke-width="2"/>
-                        <rect x="32" y="26" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825" stroke-width="2"/>
-                        <rect x="20" y="14" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825" stroke-width="2"/>
-                        <line x1="12" y1="14" x2="12" y2="69" stroke="#F9A825" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="68" y1="62" x2="20" y2="14" stroke="#F9A825" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="68" y1="62" x2="68" y2="69" stroke="#F9A825" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="20" y1="14" x2="20" y2="21" stroke="#F9A825" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="32" y1="26" x2="32" y2="33" stroke="#F9A825" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="44" y1="38" x2="44" y2="45" stroke="#F9A825" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="56" y1="50" x2="56" y2="57" stroke="#F9A825" stroke-width="2.5" stroke-linecap="round"/>
-                    </svg>
+                        <i class="fas fa-volume-up" aria-hidden="true"></i>
+                    </button>
                 </div>
-                <div class="vowel-example"><span class="highlight">E</span> de Escada</div>
-                <button class="vowel-sound-btn" aria-label="Ouvir a vogal E"
+
+                <!-- VOGAL E — Escada -->
+                <div class="vowel-card" data-vowel="e" role="listitem" tabindex="0" aria-label="Vogal E, E de Escada"
+                    onclick="speakVowel('e')" onkeydown="if(event.key==='Enter')speakVowel('e')">
+                    <div class="vowel-letter" aria-hidden="true">E</div>
+                    <div class="vowel-illustration" aria-hidden="true">
+                        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="12" y="62" width="56" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825"
+                                stroke-width="2.5" />
+                            <rect x="12" y="50" width="44" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825"
+                                stroke-width="2.5" />
+                            <rect x="12" y="38" width="32" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825"
+                                stroke-width="2.5" />
+                            <rect x="12" y="26" width="20" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825"
+                                stroke-width="2.5" />
+                            <rect x="12" y="14" width="8" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825"
+                                stroke-width="2.5" />
+                            <rect x="56" y="50" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825"
+                                stroke-width="2" />
+                            <rect x="44" y="38" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825"
+                                stroke-width="2" />
+                            <rect x="32" y="26" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825"
+                                stroke-width="2" />
+                            <rect x="20" y="14" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825"
+                                stroke-width="2" />
+                            <line x1="12" y1="14" x2="12" y2="69" stroke="#F9A825" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="68" y1="62" x2="20" y2="14" stroke="#F9A825" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="68" y1="62" x2="68" y2="69" stroke="#F9A825" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="20" y1="14" x2="20" y2="21" stroke="#F9A825" stroke-width="2.5"
+                                stroke-linecap="round" />
+                            <line x1="32" y1="26" x2="32" y2="33" stroke="#F9A825" stroke-width="2.5"
+                                stroke-linecap="round" />
+                            <line x1="44" y1="38" x2="44" y2="45" stroke="#F9A825" stroke-width="2.5"
+                                stroke-linecap="round" />
+                            <line x1="56" y1="50" x2="56" y2="57" stroke="#F9A825" stroke-width="2.5"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="vowel-example"><span class="highlight">E</span> de Escada</div>
+                    <button class="vowel-sound-btn" aria-label="Ouvir a vogal E"
                         onclick="event.stopPropagation(); speakVowel('e')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- VOGAL I — Ilha -->
-            <div class="vowel-card" data-vowel="i" role="listitem" tabindex="0"
-                 aria-label="Vogal I, I de Ilha"
-                 onclick="speakVowel('i')"
-                 onkeydown="if(event.key==='Enter')speakVowel('i')">
-                <div class="vowel-letter" aria-hidden="true">I</div>
-                <div class="vowel-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="0" y="0" width="80" height="80" rx="4" fill="#E3F2FD"/>
-                        <circle cx="66" cy="14" r="8" fill="#FFF9C4" stroke="#F9A825" stroke-width="2"/>
-                        <path d="M0 52 Q10 48 20 52 Q30 56 40 52 Q50 48 60 52 Q70 56 80 52 L80 80 L0 80 Z" fill="#90CAF9"/>
-                        <path d="M0 58 Q10 54 20 58 Q30 62 40 58 Q50 54 60 58 Q70 62 80 58" stroke="#64B5F6" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <path d="M0 66 Q10 62 20 66 Q30 70 40 66 Q50 62 60 66 Q70 70 80 66" stroke="#64B5F6" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <ellipse cx="38" cy="52" rx="24" ry="10" fill="#FFF9C4" stroke="#FBC02D" stroke-width="2"/>
-                        <path d="M38 48 Q36 34 40 20" stroke="#795548" stroke-width="4" stroke-linecap="round" fill="none"/>
-                        <path d="M40 20 Q28 10 20 14" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" fill="none"/>
-                        <path d="M40 20 Q52 10 60 14" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" fill="none"/>
-                        <path d="M40 20 Q34 6 40 4" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" fill="none"/>
-                        <path d="M40 20 Q50 14 54 18" stroke="#388E3C" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-                        <path d="M40 20 Q30 14 26 18" stroke="#388E3C" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-                        <circle cx="40" cy="22" r="3" fill="#795548"/>
-                    </svg>
+                        <i class="fas fa-volume-up" aria-hidden="true"></i>
+                    </button>
                 </div>
-                <div class="vowel-example"><span class="highlight">I</span> de Ilha</div>
-                <button class="vowel-sound-btn" aria-label="Ouvir a vogal I"
+
+                <!-- VOGAL I — Ilha -->
+                <div class="vowel-card" data-vowel="i" role="listitem" tabindex="0" aria-label="Vogal I, I de Ilha"
+                    onclick="speakVowel('i')" onkeydown="if(event.key==='Enter')speakVowel('i')">
+                    <div class="vowel-letter" aria-hidden="true">I</div>
+                    <div class="vowel-illustration" aria-hidden="true">
+                        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="0" y="0" width="80" height="80" rx="4" fill="#E3F2FD" />
+                            <circle cx="66" cy="14" r="8" fill="#FFF9C4" stroke="#F9A825" stroke-width="2" />
+                            <path d="M0 52 Q10 48 20 52 Q30 56 40 52 Q50 48 60 52 Q70 56 80 52 L80 80 L0 80 Z"
+                                fill="#90CAF9" />
+                            <path d="M0 58 Q10 54 20 58 Q30 62 40 58 Q50 54 60 58 Q70 62 80 58" stroke="#64B5F6"
+                                stroke-width="2" fill="none" stroke-linecap="round" />
+                            <path d="M0 66 Q10 62 20 66 Q30 70 40 66 Q50 62 60 66 Q70 70 80 66" stroke="#64B5F6"
+                                stroke-width="2" fill="none" stroke-linecap="round" />
+                            <ellipse cx="38" cy="52" rx="24" ry="10" fill="#FFF9C4" stroke="#FBC02D" stroke-width="2" />
+                            <path d="M38 48 Q36 34 40 20" stroke="#795548" stroke-width="4" stroke-linecap="round"
+                                fill="none" />
+                            <path d="M40 20 Q28 10 20 14" stroke="#4CAF50" stroke-width="3" stroke-linecap="round"
+                                fill="none" />
+                            <path d="M40 20 Q52 10 60 14" stroke="#4CAF50" stroke-width="3" stroke-linecap="round"
+                                fill="none" />
+                            <path d="M40 20 Q34 6 40 4" stroke="#4CAF50" stroke-width="3" stroke-linecap="round"
+                                fill="none" />
+                            <path d="M40 20 Q50 14 54 18" stroke="#388E3C" stroke-width="2.5" stroke-linecap="round"
+                                fill="none" />
+                            <path d="M40 20 Q30 14 26 18" stroke="#388E3C" stroke-width="2.5" stroke-linecap="round"
+                                fill="none" />
+                            <circle cx="40" cy="22" r="3" fill="#795548" />
+                        </svg>
+                    </div>
+                    <div class="vowel-example"><span class="highlight">I</span> de Ilha</div>
+                    <button class="vowel-sound-btn" aria-label="Ouvir a vogal I"
                         onclick="event.stopPropagation(); speakVowel('i')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- VOGAL O — Ônibus -->
-            <div class="vowel-card" data-vowel="o" role="listitem" tabindex="0"
-                 aria-label="Vogal O, O de Ônibus"
-                 onclick="speakVowel('o')"
-                 onkeydown="if(event.key==='Enter')speakVowel('o')">
-                <div class="vowel-letter" aria-hidden="true">O</div>
-                <div class="vowel-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="8" y="16" width="60" height="42" rx="6" fill="#BBDEFB" stroke="#1565C0" stroke-width="2.5"/>
-                        <rect x="52" y="22" width="12" height="16" rx="3" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
-                        <line x1="8" y1="42" x2="68" y2="42" stroke="#1565C0" stroke-width="2"/>
-                        <rect x="14" y="22" width="10" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
-                        <rect x="28" y="22" width="10" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
-                        <rect x="42" y="22" width="8" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
-                        <rect x="28" y="46" width="10" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
-                        <circle cx="36" cy="52" r="1.5" fill="#1565C0"/>
-                        <rect x="4" y="48" width="6" height="8" rx="2" fill="#90CAF9" stroke="#1565C0" stroke-width="2"/>
-                        <circle cx="7" cy="50" r="2" fill="#EF5350"/>
-                        <circle cx="22" cy="60" r="7" fill="#E3F2FD" stroke="#1565C0" stroke-width="2.5"/>
-                        <circle cx="22" cy="60" r="3" fill="#1565C0"/>
-                        <circle cx="54" cy="60" r="7" fill="#E3F2FD" stroke="#1565C0" stroke-width="2.5"/>
-                        <circle cx="54" cy="60" r="3" fill="#1565C0"/>
-                        <line x1="2" y1="67" x2="72" y2="67" stroke="#90CAF9" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
+                        <i class="fas fa-volume-up" aria-hidden="true"></i>
+                    </button>
                 </div>
-                <div class="vowel-example"><span class="highlight">O</span> de Ônibus</div>
-                <button class="vowel-sound-btn" aria-label="Ouvir a vogal O"
+
+                <!-- VOGAL O — Ônibus -->
+                <div class="vowel-card" data-vowel="o" role="listitem" tabindex="0" aria-label="Vogal O, O de Ônibus"
+                    onclick="speakVowel('o')" onkeydown="if(event.key==='Enter')speakVowel('o')">
+                    <div class="vowel-letter" aria-hidden="true">O</div>
+                    <div class="vowel-illustration" aria-hidden="true">
+                        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="16" width="60" height="42" rx="6" fill="#BBDEFB" stroke="#1565C0"
+                                stroke-width="2.5" />
+                            <rect x="52" y="22" width="12" height="16" rx="3" fill="#E3F2FD" stroke="#1565C0"
+                                stroke-width="2" />
+                            <line x1="8" y1="42" x2="68" y2="42" stroke="#1565C0" stroke-width="2" />
+                            <rect x="14" y="22" width="10" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0"
+                                stroke-width="2" />
+                            <rect x="28" y="22" width="10" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0"
+                                stroke-width="2" />
+                            <rect x="42" y="22" width="8" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0"
+                                stroke-width="2" />
+                            <rect x="28" y="46" width="10" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0"
+                                stroke-width="2" />
+                            <circle cx="36" cy="52" r="1.5" fill="#1565C0" />
+                            <rect x="4" y="48" width="6" height="8" rx="2" fill="#90CAF9" stroke="#1565C0"
+                                stroke-width="2" />
+                            <circle cx="7" cy="50" r="2" fill="#EF5350" />
+                            <circle cx="22" cy="60" r="7" fill="#E3F2FD" stroke="#1565C0" stroke-width="2.5" />
+                            <circle cx="22" cy="60" r="3" fill="#1565C0" />
+                            <circle cx="54" cy="60" r="7" fill="#E3F2FD" stroke="#1565C0" stroke-width="2.5" />
+                            <circle cx="54" cy="60" r="3" fill="#1565C0" />
+                            <line x1="2" y1="67" x2="72" y2="67" stroke="#90CAF9" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="vowel-example"><span class="highlight">O</span> de Ônibus</div>
+                    <button class="vowel-sound-btn" aria-label="Ouvir a vogal O"
                         onclick="event.stopPropagation(); speakVowel('o')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- VOGAL U — Urso -->
-            <div class="vowel-card" data-vowel="u" role="listitem" tabindex="0"
-                 aria-label="Vogal U, U de Urso"
-                 onclick="speakVowel('u')"
-                 onkeydown="if(event.key==='Enter')speakVowel('u')">
-                <div class="vowel-letter" aria-hidden="true">U</div>
-                <div class="vowel-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="24" cy="20" r="12" fill="#CE93D8" stroke="#6A1B9A" stroke-width="2.5"/>
-                        <circle cx="24" cy="20" r="6" fill="#E1BEE7" stroke="#6A1B9A" stroke-width="1.5"/>
-                        <circle cx="56" cy="20" r="12" fill="#CE93D8" stroke="#6A1B9A" stroke-width="2.5"/>
-                        <circle cx="56" cy="20" r="6" fill="#E1BEE7" stroke="#6A1B9A" stroke-width="1.5"/>
-                        <circle cx="40" cy="44" r="24" fill="#CE93D8" stroke="#6A1B9A" stroke-width="2.5"/>
-                        <ellipse cx="40" cy="52" rx="14" ry="11" fill="#E1BEE7"/>
-                        <circle cx="32" cy="38" r="4" fill="#4A148C"/>
-                        <circle cx="33" cy="37" r="1.5" fill="#fff"/>
-                        <circle cx="48" cy="38" r="4" fill="#4A148C"/>
-                        <circle cx="49" cy="37" r="1.5" fill="#fff"/>
-                        <ellipse cx="40" cy="48" rx="5" ry="3.5" fill="#4A148C"/>
-                        <circle cx="38" cy="48" r="1.2" fill="#E1BEE7"/>
-                        <circle cx="42" cy="48" r="1.2" fill="#E1BEE7"/>
-                        <path d="M34 54 Q40 60 46 54" stroke="#4A148C" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <circle cx="22" cy="48" r="4" fill="#F3E5F5" opacity="0.6"/>
-                        <circle cx="58" cy="48" r="4" fill="#F3E5F5" opacity="0.6"/>
-                    </svg>
+                        <i class="fas fa-volume-up" aria-hidden="true"></i>
+                    </button>
                 </div>
-                <div class="vowel-example"><span class="highlight">U</span> de Urso</div>
-                <button class="vowel-sound-btn" aria-label="Ouvir a vogal U"
+
+                <!-- VOGAL U — Urso -->
+                <div class="vowel-card" data-vowel="u" role="listitem" tabindex="0" aria-label="Vogal U, U de Urso"
+                    onclick="speakVowel('u')" onkeydown="if(event.key==='Enter')speakVowel('u')">
+                    <div class="vowel-letter" aria-hidden="true">U</div>
+                    <div class="vowel-illustration" aria-hidden="true">
+                        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="24" cy="20" r="12" fill="#CE93D8" stroke="#6A1B9A" stroke-width="2.5" />
+                            <circle cx="24" cy="20" r="6" fill="#E1BEE7" stroke="#6A1B9A" stroke-width="1.5" />
+                            <circle cx="56" cy="20" r="12" fill="#CE93D8" stroke="#6A1B9A" stroke-width="2.5" />
+                            <circle cx="56" cy="20" r="6" fill="#E1BEE7" stroke="#6A1B9A" stroke-width="1.5" />
+                            <circle cx="40" cy="44" r="24" fill="#CE93D8" stroke="#6A1B9A" stroke-width="2.5" />
+                            <ellipse cx="40" cy="52" rx="14" ry="11" fill="#E1BEE7" />
+                            <circle cx="32" cy="38" r="4" fill="#4A148C" />
+                            <circle cx="33" cy="37" r="1.5" fill="#fff" />
+                            <circle cx="48" cy="38" r="4" fill="#4A148C" />
+                            <circle cx="49" cy="37" r="1.5" fill="#fff" />
+                            <ellipse cx="40" cy="48" rx="5" ry="3.5" fill="#4A148C" />
+                            <circle cx="38" cy="48" r="1.2" fill="#E1BEE7" />
+                            <circle cx="42" cy="48" r="1.2" fill="#E1BEE7" />
+                            <path d="M34 54 Q40 60 46 54" stroke="#4A148C" stroke-width="2" fill="none"
+                                stroke-linecap="round" />
+                            <circle cx="22" cy="48" r="4" fill="#F3E5F5" opacity="0.6" />
+                            <circle cx="58" cy="48" r="4" fill="#F3E5F5" opacity="0.6" />
+                        </svg>
+                    </div>
+                    <div class="vowel-example"><span class="highlight">U</span> de Urso</div>
+                    <button class="vowel-sound-btn" aria-label="Ouvir a vogal U"
                         onclick="event.stopPropagation(); speakVowel('u')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
+                        <i class="fas fa-volume-up" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <hr class="divider" aria-hidden="true">
+
+        <!-- EXERCÍCIO -->
+        <section aria-labelledby="title-exercise">
+            <h2 class="section-title" id="title-exercise">
+                <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                Agora é sua vez
+            </h2>
+
+            <div class="exercise-layout" id="exerciseLayout">
+                <div class="exercise-card" id="exerciseCard">
+                    <p class="progress-label" id="progressLabel">Pergunta 1 de 10</p>
+                    <div class="progress-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                        aria-valuemax="100" id="progressBar">
+                        <div class="progress-bar-fill" id="progressFill"></div>
+                    </div>
+
+                    <div class="score-row">
+                        <div class="score-item hits">
+                            <i class="fas fa-check-circle" style="color:var(--green)" aria-hidden="true"></i>
+                            <span>Acertos:</span>
+                            <span class="score-num" id="hitsCount" aria-live="polite">0</span>
+                        </div>
+                        <div class="score-item misses">
+                            <i class="fas fa-times-circle" style="color:var(--vowel-a)" aria-hidden="true"></i>
+                            <span>Erros:</span>
+                            <span class="score-num" id="missesCount" aria-live="polite">0</span>
+                        </div>
+                    </div>
+
+                    <p class="exercise-instruction">Escolha a <strong>primeira</strong> vogal da palavra.</p>
+
+                    <div class="audio-row">
+                        <button class="btn-audio-exercise" id="btnExerciseAudio" onclick="playQuestionAudio()"
+                            aria-label="Ouvir a pergunta completa">
+                            <i class="fas fa-volume-up" aria-hidden="true"></i>
+                            Ouvir a palavra
+                        </button>
+                        <button class="btn-help-exercise" id="btnHelpExercise" onclick="playHelpExercise()"
+                            aria-label="Ouvir a instrução do exercício" title="Ouvir instrução">
+                            <i class="fas fa-play" aria-hidden="true"></i>
+                        </button>
+                        <span class="audio-hint">Toque para ouvir</span>
+                    </div>
+
+                    <div class="question-area">
+                        <span class="question-label">Qual é a <strong>primeira</strong> vogal da palavra:</span>
+                        <span class="question-word" id="questionWord">——</span>
+                    </div>
+
+                    <div class="options-grid" role="group" aria-label="Opções de vogais">
+                        <button class="btn-option" data-vowel="A" onclick="checkAnswer('A')" aria-label="Vogal A">A</button>
+                        <button class="btn-option" data-vowel="E" onclick="checkAnswer('E')" aria-label="Vogal E">E</button>
+                        <button class="btn-option" data-vowel="I" onclick="checkAnswer('I')" aria-label="Vogal I">I</button>
+                        <button class="btn-option" data-vowel="O" onclick="checkAnswer('O')" aria-label="Vogal O">O</button>
+                        <button class="btn-option" data-vowel="U" onclick="checkAnswer('U')" aria-label="Vogal U">U</button>
+                    </div>
+
+                    <div class="feedback-area" id="feedbackArea" aria-live="polite" aria-atomic="true"></div>
+                </div>
+
+                <!-- CAIXINHA DE COMPLEMENTO: SIGNIFICADO DA PALAVRA (PARA IDOSOS) -->
+                <aside class="word-meaning-card" id="wordMeaningCard" aria-labelledby="meaningTitle">
+                    <div class="meaning-header">
+                        <div class="meaning-header-icon">
+                            <i class="fas fa-book-open" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <h3 class="meaning-title" id="meaningTitle">O que significa?</h3>
+                            <span class="meaning-subtitle">Para você conhecer e aprender</span>
+                        </div>
+                    </div>
+
+                    <div class="meaning-word-box">
+                        <span class="meaning-word-label">Palavra em destaque:</span>
+                        <span class="meaning-word-display" id="meaningWordDisplay">——</span>
+                    </div>
+
+                    <div class="meaning-content-box">
+                        <p class="meaning-text" id="meaningText">Carregando o significado da palavra...</p>
+                    </div>
+
+                    <div class="meaning-audio-action">
+                        <button class="btn-meaning-audio" id="btnMeaningAudio" onclick="playMeaningAudio()"
+                            aria-label="Ouvir explicação do significado da palavra">
+                            <i class="fas fa-volume-up" aria-hidden="true"></i>
+                            <span>Ouvir o que significa</span>
+                        </button>
+                        <span class="meaning-hint">
+                            <i class="fas fa-hand-pointer" aria-hidden="true"></i> Toque para ouvir a explicação
+                        </span>
+                    </div>
+                </aside>
             </div>
 
+            <div class="completion" id="completionScreen">
+                <div class="completion-icon"><i class="fas fa-trophy" aria-hidden="true"></i></div>
+                <h2>Parabéns! Você terminou!</h2>
+                <p id="completionMsg">Veja como você se saiu.</p>
+                <div class="completion-stats">
+                    <div class="stat">
+                        <div class="stat-value" style="color:var(--green-dark)" id="finalHits">0</div>
+                        <div class="stat-label">Acertos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" style="color:var(--vowel-a)" id="finalMisses">0</div>
+                        <div class="stat-label">Erros</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" style="color:var(--green)" id="finalTotal">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+
+                <div class="error-summary" id="errorSummary" style="display:none;">
+                    <h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Palavras para revisar</h3>
+                    <ul id="errorList"></ul>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;">
+                    <a href="licoes.html" class="btn-restart"
+                        style="background-color: var(--green); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;"
+                        aria-label="Voltar para a lista de lições">
+                        <i class="fas fa-check-circle" aria-hidden="true"></i>
+                        Salvar e Ver Outras Lições
+                    </a>
+
+                    <button class="btn-restart" onclick="restartExercise()"
+                        style="background-color: #FAF3E0; color: #3E2723; border: 2px solid #C8E6C9;"
+                        aria-label="Refazer a atividade">
+                        <i class="fas fa-redo" aria-hidden="true"></i>
+                        Refazer atividade
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <i class="fas fa-seedling" aria-hidden="true"></i>
+        AprendIDos — Alfabetização para todos
+    </footer>
+
+    <div id="srAnnouncer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Componente VLibras (Acessibilidade em LIBRAS) -->
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
         </div>
-    </section>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
 
-    <hr class="divider" aria-hidden="true">
+    <script>
+        // ============================================================
+        // AprendIDos — Vogais: Script INLINE (funciona em file://)
+        // ============================================================
 
-    <!-- EXERCÍCIO -->
-    <section aria-labelledby="title-exercise">
-        <h2 class="section-title" id="title-exercise">
-            <i class="fas fa-pencil-alt" aria-hidden="true"></i>
-            Agora é sua vez
-        </h2>
+        var vowelData = {
+            a: { letter: 'A', example: 'Avião' },
+            e: { letter: 'E', example: 'Escada' },
+            i: { letter: 'I', example: 'Ilha' },
+            o: { letter: 'O', example: 'Ônibus' },
+            u: { letter: 'U', example: 'Urso' }
+        };
 
-        <div class="exercise-card" id="exerciseCard">
-            <p class="progress-label" id="progressLabel">Pergunta 1 de 10</p>
-            <div class="progress-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressBar">
-                <div class="progress-bar-fill" id="progressFill"></div>
-            </div>
-
-            <div class="score-row">
-                <div class="score-item hits">
-                    <i class="fas fa-check-circle" style="color:var(--green)" aria-hidden="true"></i>
-                    <span>Acertos:</span>
-                    <span class="score-num" id="hitsCount" aria-live="polite">0</span>
-                </div>
-                <div class="score-item misses">
-                    <i class="fas fa-times-circle" style="color:var(--vowel-a)" aria-hidden="true"></i>
-                    <span>Erros:</span>
-                    <span class="score-num" id="missesCount" aria-live="polite">0</span>
-                </div>
-            </div>
-
-            <p class="exercise-instruction">Escolha a <strong>primeira</strong> vogal da palavra.</p>
-
-            <div class="audio-row">
-                <button class="btn-audio-exercise" id="btnExerciseAudio" onclick="playQuestionAudio()" aria-label="Ouvir a pergunta completa">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                    Ouvir a palavra
-                </button>
-                <button class="btn-help-exercise" id="btnHelpExercise" onclick="playHelpExercise()" aria-label="Ouvir a instrução do exercício" title="Ouvir instrução">
-                    <i class="fas fa-play" aria-hidden="true"></i>
-                </button>
-                <span class="audio-hint">Toque para ouvir</span>
-            </div>
-
-            <div class="question-area">
-                <span class="question-label">Qual é a <strong>primeira</strong> vogal da palavra:</span>
-                <span class="question-word" id="questionWord">——</span>
-            </div>
-
-            <div class="options-grid" role="group" aria-label="Opções de vogais">
-                <button class="btn-option" data-vowel="A" onclick="checkAnswer('A')" aria-label="Vogal A">A</button>
-                <button class="btn-option" data-vowel="E" onclick="checkAnswer('E')" aria-label="Vogal E">E</button>
-                <button class="btn-option" data-vowel="I" onclick="checkAnswer('I')" aria-label="Vogal I">I</button>
-                <button class="btn-option" data-vowel="O" onclick="checkAnswer('O')" aria-label="Vogal O">O</button>
-                <button class="btn-option" data-vowel="U" onclick="checkAnswer('U')" aria-label="Vogal U">U</button>
-            </div>
-
-            <div class="feedback-area" id="feedbackArea" aria-live="polite" aria-atomic="true"></div>
-        </div>
-
-        <div class="completion" id="completionScreen">
-            <div class="completion-icon"><i class="fas fa-trophy" aria-hidden="true"></i></div>
-            <h2>Parabéns! Você terminou!</h2>
-            <p id="completionMsg">Veja como você se saiu.</p>
-            <div class="completion-stats">
-                <div class="stat">
-                    <div class="stat-value" style="color:var(--green-dark)" id="finalHits">0</div>
-                    <div class="stat-label">Acertos</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" style="color:var(--vowel-a)" id="finalMisses">0</div>
-                    <div class="stat-label">Erros</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" style="color:var(--green)" id="finalTotal">0</div>
-                    <div class="stat-label">Total</div>
-                </div>
-            </div>
-
-            <div class="error-summary" id="errorSummary" style="display:none;">
-                <h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Palavras para revisar</h3>
-                <ul id="errorList"></ul>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;">
-                <a href="licoes.html" class="btn-restart" style="background-color: var(--green); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;" aria-label="Voltar para a lista de lições">
-                    <i class="fas fa-check-circle" aria-hidden="true"></i>
-                    Salvar e Ver Outras Lições
-                </a>
-
-                <button class="btn-restart" onclick="restartExercise()" style="background-color: #FAF3E0; color: #3E2723; border: 2px solid #C8E6C9;" aria-label="Refazer a atividade">
-                    <i class="fas fa-redo" aria-hidden="true"></i>
-                    Refazer atividade
-                </button>
-            </div>
-        </div>
-    </section>
-</main>
-
-<footer class="footer">
-    <i class="fas fa-seedling" aria-hidden="true"></i>
-    AprendIDos — Alfabetização para todos
-</footer>
-
-<div id="srAnnouncer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
-
-<!-- Componente VLibras (Acessibilidade em LIBRAS) -->
-<div vw class="enabled">
-  <div vw-access-button class="active"></div>
-  <div vw-plugin-wrapper>
-    <div class="vw-plugin-top-wrapper"></div>
-  </div>
-</div>
-<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-<script>
-  new window.VLibras.Widget('https://vlibras.gov.br/app');
-</script>
-
-<script>
-// ============================================================
-// AprendIDos — Vogais: Script INLINE (funciona em file://)
-// ============================================================
-
-var vowelData = {
-    a: { letter: 'A', example: 'Avião' },
-    e: { letter: 'E', example: 'Escada' },
-    i: { letter: 'I', example: 'Ilha' },
-    o: { letter: 'O', example: 'Ônibus' },
-    u: { letter: 'U', example: 'Urso' }
+        // =========================================================
+        // SIGNIFICADOS AMIGÁVEIS DAS PALAVRAS (ADAPTADO PARA IDOSOS)
+        // =========================================================
+        var wordMeanings = {
+    'Abelha': 'Pequeno inseto que voa de flor em flor e produz o mel docinho.',
+    'Árvore': 'Planta grande com tronco forte e folhas, que nos dá sombra fresca e frutos.',
+    'Amigo': 'Pessoa querida e de confiança com quem gostamos de conversar e conviver.',
+    'Amor': 'Sentimento bonito de carinho, afeto e cuidado por alguém especial.',
+    'Avó': 'A mãe da nossa mãe ou do nosso pai, cheia de carinho e histórias.',
+    'Avô': 'O pai da nossa mãe ou do nosso pai, companheiro querido da família.',
+    'Água': 'Líquido puro e transparente essencial para beber, cozinhar e ter saúde.',
+    'Alface': 'Verdura de folhas verdes e fresquinhas, muito usada em saladas saudáveis.',
+    'Azul': 'A cor do céu limpo em um dia ensolarado e das águas do mar.',
+    'Abóbora': 'Legume saboroso de cor alaranjada, ótimo para fazer sopas e doces caseiros.',
+    'Abraço': 'Gesto carinhoso de envolver outra pessoa com os braços para demonstrar afeto.',
+    'Açúcar': 'Ingrediente branquinho e doce usado para adoçar café, chás e sobremesas.',
+    'Alegria': 'Sentimento muito bom de felicidade, contentamento e vontade de sorrir.',
+    'Aluno': 'Pessoa que se dedica a aprender coisas novas na escola ou na vida.',
+    'Anel': 'Enfeite em formato de aro que usamos nos dedos da mão.',
+    'Arco': 'Objeto em formato de curva, como o arco-íris colorido que vemos no céu.',
+    'Avião': 'Grande transporte com asas que voa bem alto pelo céu levando pessoas.',
+    'Avental': 'Peça de tecido usada na frente da roupa para não se sujar ao cozinhar ou trabalhar.',
+    'Aranha': 'Pequeno animal de oito perninhas que tece teias delicadas para viver.',
+    'Amora': 'Frutinha pequena, redonda e escura, bem docinha para comer no pé.',
+    'Almofada': 'Espécie de travesseiro macio usado no sofá ou na cama para dar conforto.',
+    'Anzol': 'Pequeno ganchinho de metal preso na linha de pesca para pescar peixes.',
+    'Apito': 'Pequeno objeto que faz um som agudo e forte quando sopramos nele.',
+    'Arame': 'Fio fino de metal flexível, usado para prender coisas ou fazer cercas.',
+    'Areia': 'Pequenos grãozinhos macios que encontramos nas praias e beiras de rios.',
+    'Armário': 'Móvel com portas e prateleiras para guardar roupas, louças e mantimentos.',
+    'Aula': 'Momento de estudo onde aprendemos novos conhecimentos com o professor.',
+    'Aveia': 'Cereal saudável em flocos, muito gostoso em mingaus e com frutas.',
+    'Azulejo': 'Placa decorativa de cerâmica usada para revestir paredes de cozinhas e banheiros.',
+    'Agulha': 'Pequeno instrumento fininho de metal usado para costurar tecidos e botões.',
+    'Alho': 'Tempero de sabor marcante que usamos para refogar o arroz e o feijão.',
+    'Aliança': 'Anel de ouro ou prata usado para simbolizar o casamento e a união.',
+    'Azeite': 'Óleo saudável feito de azeitonas, muito usado para temperar a comida.',
+    'Abacaxi': 'Fruta tropical com casca áspera, coroa verde e polpa amarela e doce.',
+    'Abacate': 'Fruta verde e cremosa, ótima para fazer vitaminas e comer amassadinha.',
+    'Arroz': 'Grão branquinho essencial no prato do brasileiro, que acompanha o feijão.',
+    'Asa': 'Parte do corpo das aves e passarinhos que serve para eles voarem.',
+    'Agasalho': 'Roupa quentinha usada para nos proteger do frio e do vento.',
+    'Alma': 'A nossa essência interior, sentimentos e vida que carregamos no coração.',
+    'Amarelo': 'A cor brilhante do sol da manhã, do girassol e da gema de ovo.',
+    'Escola': 'Lugar acolhedor onde as pessoas vão para aprender, ler, escrever e fazer amigos.',
+    'Elefante': 'Animal muito grande com orelhas largas e uma tromba longa e forte.',
+    'Estrela': 'Ponto brilhante de luz que ilumina o céu durante as noites escuras.',
+    'Escada': 'Estrutura com degraus para subir ou descer de um andar para o outro.',
+    'Espelho': 'Objeto de vidro liso que reflete com clareza a nossa imagem.',
+    'Erva': 'Planta verde que usamos na cozinha para temperar ou fazer chás aromáticos.',
+    'Ervilha': 'Pequeno grãozinho verde e macio, muito saboroso em sopas e saladas.',
+    'Estrada': 'Caminho largo por onde passam os carros, ônibus e caminhões em viagens.',
+    'Enfermeiro': 'Profissional da saúde que cuida dos pacientes com carinho e atenção.',
+    'Escova': 'Objeto com cerdas usado para pentear o cabelo ou escovar os dentes.',
+    'Envelope': 'Capa de papel usada para guardar e enviar cartas, cartões e documentos.',
+    'Espiga': 'Parte do pé de milho coberta por grãos amarelos saborosos.',
+    'Espada': 'Antiga arma comprida com lâmina de metal e cabo para segurar.',
+    'Estante': 'Móvel com prateleiras abertas para organizar livros, fotos e enfeites.',
+    'Esponja': 'Material macio e poroso que usamos para ensaboar a louça ou tomar banho.',
+    'Estojo': 'Bolsinha pequena para guardar lápis, borrachas, canetas e materiais de estudo.',
+    'Esquilo': 'Pequeno bichinho ágil da floresta com rabo felpudo que adora nozes.',
+    'Espuma': 'Massa cheia de bolhinhas de sabão que se forma na água ao lavar algo.',
+    'Esteira': 'Tapete de palha ou tecido usado para descansar ou forrar o chão.',
+    'Égua': 'Fêmea do cavalo, animal forte e companheiro das pessoas no campo.',
+    'Elástico': 'Tira flexível que estica bastante e depois volta ao tamanho normal.',
+    'Elevador': 'Cabine segura que sobe e desce prédios para levar pessoas entre os andares.',
+    'Emoção': 'Sentimento forte que mexe com a gente, como alegria, saudade ou entusiasmo.',
+    'Empada': 'Salgadinho de massa crocante assada com recheio saboroso de frango ou palmito.',
+    'Empadão': 'Torta grande e caprichada de forno, perfeita para o almoço de domingo.',
+    'Enxada': 'Ferramenta de cabo comprido de madeira usada para capinar e cuidar da terra.',
+    'Escrita': 'A arte de formar palavras e frases usando as letras do alfabeto.',
+    'Estação': 'Local onde param os trens e ônibus, ou as épocas do ano como o verão.',
+    'Esmalte': 'Tinta líquida e colorida usada para pintar e embelezar as unhas.',
+    'Espinho': 'Pontinha pontiaguda de algumas plantas, como a roseira, que exige cuidado.',
+    'Espinafre': 'Verdura de folhas verde-escuras, muito nutritiva e boa para a saúde.',
+    'Enxoval': 'Conjunto de roupas de cama, mesa e banho reunidas para uma casa nova.',
+    'Espeto': 'Haste de madeira ou metal usada para assar carnes e legumes na brasa.',
+    'Enxame': 'Grande grupo de abelhas que voam e trabalham juntas na colmeia.',
+    'Estudante': 'Aquele que dedica o seu tempo a estudar e descobrir novos saberes.',
+    'Ensopado': 'Prato quente e reconfortante de carne ou legumes cozidos em caldo temperado.',
+    'Espantalho': 'Boneco feito de palha e roupas velhas colocado na horta para espantar pássaros.',
+    'Entrada': 'Porta ou portão por onde passamos para entrar em uma casa ou lugar.',
+    'Espaço': 'Lugar amplo e aberto, ou a imensidão do céu onde ficam a lua e as estrelas.',
+    'Enfeite': 'Objeto bonito usado para decorar e deixar o ambiente mais alegre.',
+    'Igreja': 'Templo sagrado onde as pessoas se reúnem para orar, agradecer e celebrar a fé.',
+    'Ilha': 'Porção de terra cercada de água limpa por todos os lados.',
+    'Inseto': 'Pequeno ser vivo da natureza, como borboletas, joaninhas e abelhas.',
+    'Idoso': 'Homem maduro que já acumulou muitos anos de vida, experiências e sabedoria.',
+    'Idosa': 'Mulher experiente que carrega nos cabelos e no coração a sabedoria dos anos.',
+    'Inverno': 'A estação mais fria do ano, época de usar agasalho quentinho e tomar sopa.',
+    'Irmão': 'Menino ou homem que é filho dos mesmos pais que nós, nosso companheiro.',
+    'Irmã': 'Menina ou mulher que é filha dos mesmos pais que nós, amiga da família.',
+    'Início': 'O começo de alguma coisa boa, como o primeiro passo de uma caminhada.',
+    'Índio': 'Membro dos povos originários que já viviam no Brasil em harmonia com as matas.',
+    'Imagem': 'Foto, desenho ou figura que representa uma pessoa, lugar ou memória querida.',
+    'Ingresso': 'Bilhete que dá direito a entrar no cinema, no teatro ou em uma festa.',
+    'Incêndio': 'Fogo grande e descontrolado que os bombeiros trabalham para apagar.',
+    'Ipê': 'Árvore brasileira linda que se enche de flores amarelas, roxas ou brancas.',
+    'Isqueiro': 'Pequeno aparelho portátil que produz faísca ou chama para acender o fogão.',
+    'Iogurte': 'Alimento cremoso e gostoso feito com leite fermentado, bom para o café.',
+    'Injeção': 'Remédio líquido aplicado com agulhinha para proteger a saúde ou aliviar dor.',
+    'Ímã': 'Pedacinho de metal que atrai objetos de ferro, como os que prendem recados na geladeira.',
+    'Idade': 'Quantidade de anos que uma pessoa já viveu com saúde e histórias para contar.',
+    'Inchaço': 'Parte do corpo que fica mais alta e aumentada após uma batida ou picada.',
+    'Incenso': 'Bastão perfumado que, ao queimar bem devagar, solta fumaça de cheiro suave.',
+    'Infância': 'A fase gostosa do começo da vida em que éramos crianças e brincávamos.',
+    'Instrumento': 'Objeto usado para tocar música, como o violão, ou ferramenta de trabalho.',
+    'Iguana': 'Lagarto verde e tranquilo que gosta de ficar quieto no sol tomando calor.',
+    'Igual': 'Coisa que é idêntica ou equivalente a outra, sem nenhuma diferença.',
+    'Irmandade': 'União fraterna e carinhosa entre amigos ou companheiros de vida.',
+    'Ideia': 'Pensamento novo que surge na cabeça para resolver algo ou criar algo bom.',
+    'Irrigar': 'Ação de molhar as plantinhas e a terra da horta para que cresçam fortes.',
+    'Iluminação': 'Conjunto de lâmpadas que clareiam as ruas e os cômodos da nossa casa.',
+    'Ilustração': 'Desenho ou pintura bonita feita em um livro para acompanhar a leitura.',
+    'Intervalo': 'Momento de descanso entre as tarefas para relaxar e tomar um café.',
+    'Incrível': 'Algo surpreendente, maravilhoso e muito especial que chama nossa atenção.',
+    'Inchar': 'Aumentar de volume por acúmulo de líquido, como os pés depois de muito caminhar.',
+    'Iniciar': 'Dar o primeiro passo para começar uma nova atividade com ânimo.',
+    'Inocente': 'Pessoa que não tem culpa de nada errado e tem o coração puro e sincero.',
+    'Impressora': 'Máquina que passa textos e fotos do computador para a folha de papel.',
+    'Inseticida': 'Produto próprio para afastar mosquitos e insetos indesejados da casa.',
+    'Invasão': 'Ato de entrar em algum lugar onde não foi convidado ou permitido.',
+    'Inveja': 'Sentimento negativo de querer o que é do outro; o melhor é sempre desejar o bem.',
+    'Imposto': 'Contribuição financeira que a população paga para ajudar nos serviços públicos.',
+    'Ovelha': 'Animal manso de fazenda coberto por uma lã macia usada para fazer agasalhos.',
+    'Ouro': 'Metal precioso e brilhante de cor amarela, muito valioso para fazer joias.',
+    'Olho': 'Órgão precioso do corpo que nos permite enxergar o mundo e quem amamos.',
+    'Ônibus': 'Grande veículo de transporte coletivo que leva as pessoas pela cidade.',
+    'Ovo': 'Alimento saboroso e nutritivo de casca lisa, produzido pelas galinhas.',
+    'Oração': 'Momento de conversar com Deus, agradecer pelas bênçãos e pedir proteção.',
+    'Obra': 'Construção de uma casa ou edifício, ou uma pintura criada por um artista.',
+    'Osso': 'Parte dura e resistente que forma o esqueleto e sustenta o nosso corpo.',
+    'Orelha': 'Parte externa do ouvido por onde escutamos as músicas e conversas queridas.',
+    'Ombro': 'Parte do corpo que liga o pescoço ao braço, onde costumamos dar apoio.',
+    'Onça': 'Lindo felino pintado das florestas brasileiras, forte e muito ágil.',
+    'Orvalho': 'Gotículas frescas de água que cobrem as folhas das plantas no amanhecer.',
+    'Ouriço': 'Pequeno bichinho da natureza com o corpo protegido por espinhos curtos.',
+    'Outono': 'Estação do ano em que as folhas caem das árvores e o clima fica ameno.',
+    'Outubro': 'O décimo mês do ano, conhecido pela primavera florida e dia das crianças.',
+    'Oferta': 'Preço especial com desconto em uma loja, ou algo generoso oferecido de coração.',
+    'Ostra': 'Molusco do fundo do mar que vive em concha dupla e às vezes guarda pérolas.',
+    'Óculos': 'Aparelho com lentes limpas colocado no rosto para ajudar a enxergar bem melhor.',
+    'Óleo': 'Líquido suave e escorregadio usado na cozinha para cozinhar ou lubrificar peças.',
+    'Onda': 'Movimento das águas do mar que sobem, descem e quebram suavemente na areia.',
+    'Orquídea': 'Flor muito bonita, nobre e colorida que nasce em troncos de árvores.',
+    'Oca': 'Casa tradicional e comunitária construída pelos povos indígenas com palha.',
+    'Oficina': 'Lugar onde ferramentas e profissionais consertam carros, sapatos ou objetos.',
+    'Orelhão': 'Aparelho telefônico público de rua, protegido por uma concha grande.',
+    'Ontem': 'O dia que já passou, que vivemos antes de hoje.',
+    'Orquestra': 'Grande grupo de músicos talentosos tocando vários instrumentos juntos.',
+    'Orgulho': 'Sentimento bom de satisfação ao ver uma conquista honesta de quem amamos.',
+    'Orla': 'Calçadão agradável que fica à beira da praia, ótimo para caminhadas ao entardecer.',
+    'Ordem': 'Organização das coisas em seus devidos lugares, sem bagunça.',
+    'Origem': 'O lugar, cidade ou família de onde viemos; o ponto de partida de tudo.',
+    'Orégano': 'Erva de cheiro muito gostoso que colocamos na pizza e no molho de tomate.',
+    'Oito': 'O número que vem logo depois do sete e antes do nove.',
+    'Oitavo': 'Aquele que ocupa a posição de número oito em uma fila ou lista.',
+    'Ocupado': 'Lugar ou pessoa que está cheia de afazeres e sem tempo vago no momento.',
+    'Operário': 'Trabalhador dedicado que põe as mãos na massa em fábricas ou construções.',
+    'Oceano': 'Enorme extensão de água salgada que cobre a maior parte do nosso planeta.',
+    'Objeto': 'Qualquer coisa material que podemos ver e tocar, como um copo ou uma caneta.',
+    'Ovelhinha': 'Filhote meigo e peludinho da ovelha, muito fofo e dócil.',
+    'Olhada': 'Olhar rápido e atento dado a alguma coisa que chama a nossa atenção.',
+    'Oásis': 'Lugar bonito e fértil com água fresca e sombra no meio de um deserto seco.',
+    'Uva': 'Fruta gostosa que dá em cachos, muito doce para comer pura ou em sucos e vinhos.',
+    'Urubu': 'Grande ave de penas pretas da natureza que ajuda na limpeza do meio ambiente.',
+    'Urso': 'Animal grande e forte com pelos grossos que vive nas matas e montanhas.',
+    'Unha': 'Lâmina dura e protetora que cresce na ponta dos nossos dedos.',
+    'Uniforme': 'Roupa igual usada por estudantes, trabalhadores ou times para identificação.',
+    'Universo': 'Tudo o que existe no espaço: estrelas, planetas, sol, lua e galáxias.',
+    'Urgência': 'Situação importante que precisa de atenção rápida e cuidado imediato.',
+    'Último': 'Aquele que vem no final de tudo, depois de todos os outros.',
+    'Usina': 'Grande instalação industrial onde se produz eletricidade ou açúcar.',
+    'Útil': 'Coisa ou pessoa que ajuda, serve para algo de bom e facilita nossa vida.',
+    'Urna': 'Caixa segura onde os cidadãos depositam seus votos nas eleições.',
+    'Úmido': 'Algo que está levemente molhado, como a terra boa após uma chuvinha fina.',
+    'Umbigo': 'Pequena marquinha redonda no centro da barriga por onde fomos nutridos na mãe.',
+    'Umidade': 'Presença de vapor de água no ar ou frescor na terra.',
+    'Unidade': 'Coisa única e inteira, ou posto de saúde do bairro que atende a vizinhança.',
+    'União': 'Pessoas que se juntam com amor e respeito para ajudar e viver em harmonia.',
+    'Único': 'Algo especial que não tem outro igual no mundo todo.',
+    'Ursinho': 'Bichinho fofo de pelúcia que as crianças abraçam com carinho para dormir.',
+    'Uivar': 'O som longo e afinado que os lobos e cachorros soltam olhando para a lua.',
+    'Urtiga': 'Planta do mato que pinica e causa coceira se tocada na pele.',
+    'Urgente': 'Assunto importante que não pode ser deixado para depois.',
+    'Uso': 'Ato de usar ou utilizar algum objeto no dia a dia.',
+    'Usar': 'Aproveitar uma ferramenta, roupa ou utensílio para alguma finalidade.',
+    'Usado': 'Objeto que já teve utilidade por alguém, mas ainda serve e tem história.',
+    'Urina': 'Líquido eliminado pelo corpo ao fazermos xixi, filtrado pelos rins.',
+    'Uruguai': 'País vizinho ao sul do Brasil, conhecido por suas planícies e gente acolhedora.',
+    'Unicórnio': 'Criatura das histórias infantis: cavalo branco com um chifre mágico na testa.',
+    'Urbano': 'Tudo aquilo que diz respeito à cidade e aos seus bairros e ruas.',
+    'Ultra': 'Palavra que indica algo muito grande, além do comum ou muito moderno.',
+    'Uvaia': 'Fruta nativa brasileira amarela, aromática e com sabor levemente azedinho.',
+    'Unificado': 'Coisas que foram reunidas em um só grupo ou conjunto organizado.',
+    'Uivando': 'Ação de soltar um uivo longo no silêncio da noite.',
+    'Utensílio': 'Ferramenta ou objeto útil da casa, como colher, garfo e panelas na cozinha.',
+    'Upa': 'Unidade de Pronto Atendimento que cuida de emergências de saúde no bairro.',
+    'Umbro': 'Marca tradicional e conhecida de artigos esportivos e calçados.',
+    'Urgindo': 'Algo que está pedindo rapidez e pressa para ser feito.',
+    'Umedecer': 'Molhar suavemente com um pouquinho de água, sem ensopar.',
+    'Urucum': 'Fruto com sementinhas vermelhas usado para fazer o colorau caseiro de cozinhar.',
+    'Umbu': 'Fruta típica e saborosa do sertão nordestino, suculenta e refrescante.',
+    'Ungento': 'Pomadinha medicinal suave usada para passar na pele e aliviar dores.',
 };
 
-// =========================================================
-// BANCO DE PALAVRAS — 200 palavras do cotidiano brasileiro
-// 40 por vogal → mais de 50 rodadas sem sentir repetição!
-// =========================================================
-var wordBank = [
-    // ── VOGAL A (40 palavras) ──
-    { word: 'Abelha',     vowel: 'A' },
-    { word: 'Árvore',     vowel: 'A' },
-    { word: 'Amigo',      vowel: 'A' },
-    { word: 'Amor',       vowel: 'A' },
-    { word: 'Avó',        vowel: 'A' },
-    { word: 'Água',       vowel: 'A' },
-    { word: 'Alface',     vowel: 'A' },
-    { word: 'Azul',       vowel: 'A' },
-    { word: 'Abóbora',    vowel: 'A' },
-    { word: 'Abraço',     vowel: 'A' },
-    { word: 'Açúcar',     vowel: 'A' },
-    { word: 'Alegria',    vowel: 'A' },
-    { word: 'Aluno',      vowel: 'A' },
-    { word: 'Anel',       vowel: 'A' },
-    { word: 'Arco',       vowel: 'A' },
-    { word: 'Avião',      vowel: 'A' },
-    { word: 'Avental',    vowel: 'A' },
-    { word: 'Aranha',     vowel: 'A' },
-    { word: 'Artista',    vowel: 'A' },
-    { word: 'Amora',      vowel: 'A' },
-    { word: 'Aldeia',     vowel: 'A' },
-    { word: 'Almofada',   vowel: 'A' },
-    { word: 'Alpiste',    vowel: 'A' },
-    { word: 'Amêndoa',    vowel: 'A' },
-    { word: 'Anzol',      vowel: 'A' },
-    { word: 'Apito',      vowel: 'A' },
-    { word: 'Aquário',    vowel: 'A' },
-    { word: 'Arame',      vowel: 'A' },
-    { word: 'Areia',      vowel: 'A' },
-    { word: 'Armário',    vowel: 'A' },
-    { word: 'Arpão',      vowel: 'A' },
-    { word: 'Arrozal',    vowel: 'A' },
-    { word: 'Artesão',    vowel: 'A' },
-    { word: 'Assoalho',   vowel: 'A' },
-    { word: 'Atum',       vowel: 'A' },
-    { word: 'Aula',       vowel: 'A' },
-    { word: 'Aurora',     vowel: 'A' },
-    { word: 'Automóvel',  vowel: 'A' },
-    { word: 'Aveia',      vowel: 'A' },
-    { word: 'Azulejo',    vowel: 'A' },
 
-    // ── VOGAL E (40 palavras) ──
-    { word: 'Escola',     vowel: 'E' },
-    { word: 'Elefante',   vowel: 'E' },
-    { word: 'Estrela',    vowel: 'E' },
-    { word: 'Escada',     vowel: 'E' },
-    { word: 'Espelho',    vowel: 'E' },
-    { word: 'Erva',       vowel: 'E' },
-    { word: 'Ervilha',    vowel: 'E' },
-    { word: 'Estrada',    vowel: 'E' },
-    { word: 'Enfermeiro', vowel: 'E' },
-    { word: 'Escova',     vowel: 'E' },
-    { word: 'Êxito',      vowel: 'E' },
-    { word: 'Exercício',  vowel: 'E' },
-    { word: 'Envelope',   vowel: 'E' },
-    { word: 'Espiga',     vowel: 'E' },
-    { word: 'Espada',     vowel: 'E' },
-    { word: 'Estante',    vowel: 'E' },
-    { word: 'Esfera',     vowel: 'E' },
-    { word: 'Esponja',    vowel: 'E' },
-    { word: 'Estojo',     vowel: 'E' },
-    { word: 'Estribo',    vowel: 'E' },
-    { word: 'Espiga',     vowel: 'E' },
-    { word: 'Escorpião',  vowel: 'E' },
-    { word: 'Esquilo',    vowel: 'E' },
-    { word: 'Estopa',     vowel: 'E' },
-    { word: 'Espuma',     vowel: 'E' },
-    { word: 'Esteira',    vowel: 'E' },
-    { word: 'Edifício',   vowel: 'E' },
-    { word: 'Efeito',     vowel: 'E' },
-    { word: 'Égua',       vowel: 'E' },
-    { word: 'Elástico',   vowel: 'E' },
-    { word: 'Elevador',   vowel: 'E' },
-    { word: 'Emoção',     vowel: 'E' },
-    { word: 'Empada',     vowel: 'E' },
-    { word: 'Empadão',    vowel: 'E' },
-    { word: 'Encanto',    vowel: 'E' },
-    { word: 'Enxada',     vowel: 'E' },
-    { word: 'Erário',     vowel: 'E' },
-    { word: 'Escrita',    vowel: 'E' },
-    { word: 'Estação',    vowel: 'E' },
-    { word: 'Estepe',     vowel: 'E' },
+        // =========================================================
+        // BANCO DE PALAVRAS — 200 palavras do cotidiano brasileiro
+        // 40 por vogal → mais de 50 rodadas sem sentir repetição!
+        // =========================================================
+        var wordBank = [
+            // ── VOGAL A (40 palavras simples do cotidiano) ──
+            { word: 'Abelha', vowel: 'A' },
+            { word: 'Árvore', vowel: 'A' },
+            { word: 'Amigo', vowel: 'A' },
+            { word: 'Amor', vowel: 'A' },
+            { word: 'Avó', vowel: 'A' },
+            { word: 'Avô', vowel: 'A' },
+            { word: 'Água', vowel: 'A' },
+            { word: 'Alface', vowel: 'A' },
+            { word: 'Azul', vowel: 'A' },
+            { word: 'Abóbora', vowel: 'A' },
+            { word: 'Abraço', vowel: 'A' },
+            { word: 'Açúcar', vowel: 'A' },
+            { word: 'Alegria', vowel: 'A' },
+            { word: 'Aluno', vowel: 'A' },
+            { word: 'Anel', vowel: 'A' },
+            { word: 'Arco', vowel: 'A' },
+            { word: 'Avião', vowel: 'A' },
+            { word: 'Avental', vowel: 'A' },
+            { word: 'Aranha', vowel: 'A' },
+            { word: 'Amora', vowel: 'A' },
+            { word: 'Almofada', vowel: 'A' },
+            { word: 'Anzol', vowel: 'A' },
+            { word: 'Apito', vowel: 'A' },
+            { word: 'Arame', vowel: 'A' },
+            { word: 'Areia', vowel: 'A' },
+            { word: 'Armário', vowel: 'A' },
+            { word: 'Aula', vowel: 'A' },
+            { word: 'Aveia', vowel: 'A' },
+            { word: 'Azulejo', vowel: 'A' },
+            { word: 'Agulha', vowel: 'A' },
+            { word: 'Alho', vowel: 'A' },
+            { word: 'Aliança', vowel: 'A' },
+            { word: 'Azeite', vowel: 'A' },
+            { word: 'Abacaxi', vowel: 'A' },
+            { word: 'Abacate', vowel: 'A' },
+            { word: 'Arroz', vowel: 'A' },
+            { word: 'Asa', vowel: 'A' },
+            { word: 'Agasalho', vowel: 'A' },
+            { word: 'Alma', vowel: 'A' },
+            { word: 'Amarelo', vowel: 'A' },
 
-    // ── VOGAL I (40 palavras) ──
-    { word: 'Inseto',     vowel: 'I' },
-    { word: 'Igreja',     vowel: 'I' },
-    { word: 'Ilha',       vowel: 'I' },
-    { word: 'Iluminar',   vowel: 'I' },
-    { word: 'Idoso',      vowel: 'I' },
-    { word: 'Inverno',    vowel: 'I' },
-    { word: 'Irmão',      vowel: 'I' },
-    { word: 'Início',     vowel: 'I' },
-    { word: 'Índio',      vowel: 'I' },
-    { word: 'Imagem',     vowel: 'I' },
-    { word: 'Instrução',  vowel: 'I' },
-    { word: 'Infância',   vowel: 'I' },
-    { word: 'Ingresso',   vowel: 'I' },
-    { word: 'Imposto',    vowel: 'I' },
-    { word: 'Infinito',   vowel: 'I' },
-    { word: 'Iguaria',    vowel: 'I' },
-    { word: 'Igualdade',  vowel: 'I' },
-    { word: 'Ilusão',     vowel: 'I' },
-    { word: 'Imenso',     vowel: 'I' },
-    { word: 'Incêndio',   vowel: 'I' },
-    { word: 'Indústria',  vowel: 'I' },
-    { word: 'Inimigo',    vowel: 'I' },
-    { word: 'Interesse',  vowel: 'I' },
-    { word: 'Intuição',   vowel: 'I' },
-    { word: 'Inventor',   vowel: 'I' },
-    { word: 'Ipê',        vowel: 'I' },
-    { word: 'Irmandade',  vowel: 'I' },
-    { word: 'Irrigação',  vowel: 'I' },
-    { word: 'Itinerário', vowel: 'I' },
-    { word: 'Idioma',     vowel: 'I' },
-    { word: 'Ignorância', vowel: 'I' },
-    { word: 'Iguana',     vowel: 'I' },
-    { word: 'Impacto',    vowel: 'I' },
-    { word: 'Impressora', vowel: 'I' },
-    { word: 'Incisivo',   vowel: 'I' },
-    { word: 'Inocente',   vowel: 'I' },
-    { word: 'Inscrito',   vowel: 'I' },
-    { word: 'Instinto',   vowel: 'I' },
-    { word: 'Irônico',    vowel: 'I' },
-    { word: 'Isolado',    vowel: 'I' },
+            // ── VOGAL E (40 palavras simples do cotidiano) ──
+            { word: 'Escola', vowel: 'E' },
+            { word: 'Elefante', vowel: 'E' },
+            { word: 'Estrela', vowel: 'E' },
+            { word: 'Escada', vowel: 'E' },
+            { word: 'Espelho', vowel: 'E' },
+            { word: 'Erva', vowel: 'E' },
+            { word: 'Ervilha', vowel: 'E' },
+            { word: 'Estrada', vowel: 'E' },
+            { word: 'Enfermeiro', vowel: 'E' },
+            { word: 'Escova', vowel: 'E' },
+            { word: 'Envelope', vowel: 'E' },
+            { word: 'Espiga', vowel: 'E' },
+            { word: 'Espada', vowel: 'E' },
+            { word: 'Estante', vowel: 'E' },
+            { word: 'Esponja', vowel: 'E' },
+            { word: 'Estojo', vowel: 'E' },
+            { word: 'Esquilo', vowel: 'E' },
+            { word: 'Espuma', vowel: 'E' },
+            { word: 'Esteira', vowel: 'E' },
+            { word: 'Égua', vowel: 'E' },
+            { word: 'Elástico', vowel: 'E' },
+            { word: 'Elevador', vowel: 'E' },
+            { word: 'Emoção', vowel: 'E' },
+            { word: 'Empada', vowel: 'E' },
+            { word: 'Empadão', vowel: 'E' },
+            { word: 'Enxada', vowel: 'E' },
+            { word: 'Escrita', vowel: 'E' },
+            { word: 'Estação', vowel: 'E' },
+            { word: 'Esmalte', vowel: 'E' },
+            { word: 'Espinho', vowel: 'E' },
+            { word: 'Espinafre', vowel: 'E' },
+            { word: 'Enxoval', vowel: 'E' },
+            { word: 'Espeto', vowel: 'E' },
+            { word: 'Enxame', vowel: 'E' },
+            { word: 'Estudante', vowel: 'E' },
+            { word: 'Ensopado', vowel: 'E' },
+            { word: 'Espantalho', vowel: 'E' },
+            { word: 'Entrada', vowel: 'E' },
+            { word: 'Espaço', vowel: 'E' },
+            { word: 'Enfeite', vowel: 'E' },
 
-    // ── VOGAL O (40 palavras) ──
-    { word: 'Ovelha',     vowel: 'O' },
-    { word: 'Ouro',       vowel: 'O' },
-    { word: 'Olho',       vowel: 'O' },
-    { word: 'Ônibus',     vowel: 'O' },
-    { word: 'Ovo',        vowel: 'O' },
-    { word: 'Oração',     vowel: 'O' },
-    { word: 'Obra',       vowel: 'O' },
-    { word: 'Osso',       vowel: 'O' },
-    { word: 'Otimismo',   vowel: 'O' },
-    { word: 'Ofício',     vowel: 'O' },
-    { word: 'Orelha',     vowel: 'O' },
-    { word: 'Oceano',     vowel: 'O' },
-    { word: 'Objeto',     vowel: 'O' },
-    { word: 'Obrigação',  vowel: 'O' },
-    { word: 'Oficial',    vowel: 'O' },
-    { word: 'Oliva',      vowel: 'O' },
-    { word: 'Ombro',      vowel: 'O' },
-    { word: 'Onça',       vowel: 'O' },
-    { word: 'Opção',      vowel: 'O' },
-    { word: 'Operação',   vowel: 'O' },
-    { word: 'Opinião',    vowel: 'O' },
-    { word: 'Oportunidade', vowel: 'O' },
-    { word: 'Oráculo',    vowel: 'O' },
-    { word: 'Orçamento',  vowel: 'O' },
-    { word: 'Orvalho',    vowel: 'O' },
-    { word: 'Osório',     vowel: 'O' },
-    { word: 'Ouriço',     vowel: 'O' },
-    { word: 'Outono',     vowel: 'O' },
-    { word: 'Outubro',    vowel: 'O' },
-    { word: 'Ouvidoria',  vowel: 'O' },
-    { word: 'Oásis',      vowel: 'O' },
-    { word: 'Obeso',      vowel: 'O' },
-    { word: 'Oblíquo',    vowel: 'O' },
-    { word: 'Obsessão',   vowel: 'O' },
-    { word: 'Obstáculo',  vowel: 'O' },
-    { word: 'Odor',       vowel: 'O' },
-    { word: 'Oferta',     vowel: 'O' },
-    { word: 'Ópera',      vowel: 'O' },
-    { word: 'Ostra',      vowel: 'O' },
-    { word: 'Oval',       vowel: 'O' },
+            // ── VOGAL I (40 palavras simples do cotidiano) ──
+            { word: 'Igreja', vowel: 'I' },
+            { word: 'Ilha', vowel: 'I' },
+            { word: 'Inseto', vowel: 'I' },
+            { word: 'Idoso', vowel: 'I' },
+            { word: 'Idosa', vowel: 'I' },
+            { word: 'Inverno', vowel: 'I' },
+            { word: 'Irmão', vowel: 'I' },
+            { word: 'Irmã', vowel: 'I' },
+            { word: 'Início', vowel: 'I' },
+            { word: 'Índio', vowel: 'I' },
+            { word: 'Imagem', vowel: 'I' },
+            { word: 'Ingresso', vowel: 'I' },
+            { word: 'Incêndio', vowel: 'I' },
+            { word: 'Ipê', vowel: 'I' },
+            { word: 'Isqueiro', vowel: 'I' },
+            { word: 'Iogurte', vowel: 'I' },
+            { word: 'Injeção', vowel: 'I' },
+            { word: 'Ímã', vowel: 'I' },
+            { word: 'Idade', vowel: 'I' },
+            { word: 'Inchaço', vowel: 'I' },
+            { word: 'Incenso', vowel: 'I' },
+            { word: 'Infância', vowel: 'I' },
+            { word: 'Instrumento', vowel: 'I' },
+            { word: 'Iguana', vowel: 'I' },
+            { word: 'Igual', vowel: 'I' },
+            { word: 'Irmandade', vowel: 'I' },
+            { word: 'Ideia', vowel: 'I' },
+            { word: 'Irrigar', vowel: 'I' },
+            { word: 'Iluminação', vowel: 'I' },
+            { word: 'Ilustração', vowel: 'I' },
+            { word: 'Intervalo', vowel: 'I' },
+            { word: 'Incrível', vowel: 'I' },
+            { word: 'Inchar', vowel: 'I' },
+            { word: 'Iniciar', vowel: 'I' },
+            { word: 'Inocente', vowel: 'I' },
+            { word: 'Impressora', vowel: 'I' },
+            { word: 'Inseticida', vowel: 'I' },
+            { word: 'Invasão', vowel: 'I' },
+            { word: 'Inveja', vowel: 'I' },
+            { word: 'Imposto', vowel: 'I' },
 
-    // ── VOGAL U (40 palavras) ──
-    { word: 'Uva',        vowel: 'U' },
-    { word: 'Urubu',      vowel: 'U' },
-    { word: 'Urso',       vowel: 'U' },
-    { word: 'Unha',       vowel: 'U' },
-    { word: 'Uniforme',   vowel: 'U' },
-    { word: 'Universo',   vowel: 'U' },
-    { word: 'Urgência',   vowel: 'U' },
-    { word: 'Último',     vowel: 'U' },
-    { word: 'Usina',      vowel: 'U' },
-    { word: 'Útil',       vowel: 'U' },
-    { word: 'Urna',       vowel: 'U' },
-    { word: 'Úmido',      vowel: 'U' },
-    { word: 'Unicórnio',  vowel: 'U' },
-    { word: 'Utensílio',  vowel: 'U' },
-    { word: 'Ubiquidade', vowel: 'U' },
-    { word: 'Ultramar',   vowel: 'U' },
-    { word: 'Umbigo',     vowel: 'U' },
-    { word: 'Umidade',    vowel: 'U' },
-    { word: 'Unidade',    vowel: 'U' },
-    { word: 'União',      vowel: 'U' },
-    { word: 'Único',      vowel: 'U' },
-    { word: 'Uníssono',   vowel: 'U' },
-    { word: 'Urânio',     vowel: 'U' },
-    { word: 'Urdidura',   vowel: 'U' },
-    { word: 'Urucum',     vowel: 'U' },
-    { word: 'Ursinho',    vowel: 'U' },
-    { word: 'Urucubaca',  vowel: 'U' },
-    { word: 'Urutau',     vowel: 'U' },
-    { word: 'Usufruir',   vowel: 'U' },
-    { word: 'Utopia',     vowel: 'U' },
-    { word: 'Uísque',     vowel: 'U' },
-    { word: 'Urbano',     vowel: 'U' },
-    { word: 'Ufanismo',   vowel: 'U' },
-    { word: 'Ucraniano',  vowel: 'U' },
-    { word: 'Ultrasom',   vowel: 'U' },
-    { word: 'Unanimidade', vowel: 'U' },
-    { word: 'Unânime',    vowel: 'U' },
-    { word: 'Uivar',      vowel: 'U' },
-    { word: 'Ufologia',   vowel: 'U' },
-    { word: 'Ultrassom',  vowel: 'U' }
-];
+            // ── VOGAL O (40 palavras simples do cotidiano) ──
+            { word: 'Ovelha', vowel: 'O' },
+            { word: 'Ouro', vowel: 'O' },
+            { word: 'Olho', vowel: 'O' },
+            { word: 'Ônibus', vowel: 'O' },
+            { word: 'Ovo', vowel: 'O' },
+            { word: 'Oração', vowel: 'O' },
+            { word: 'Obra', vowel: 'O' },
+            { word: 'Osso', vowel: 'O' },
+            { word: 'Orelha', vowel: 'O' },
+            { word: 'Ombro', vowel: 'O' },
+            { word: 'Onça', vowel: 'O' },
+            { word: 'Orvalho', vowel: 'O' },
+            { word: 'Ouriço', vowel: 'O' },
+            { word: 'Outono', vowel: 'O' },
+            { word: 'Outubro', vowel: 'O' },
+            { word: 'Oferta', vowel: 'O' },
+            { word: 'Ostra', vowel: 'O' },
+            { word: 'Óculos', vowel: 'O' },
+            { word: 'Óleo', vowel: 'O' },
+            { word: 'Onda', vowel: 'O' },
+            { word: 'Orquídea', vowel: 'O' },
+            { word: 'Oca', vowel: 'O' },
+            { word: 'Oficina', vowel: 'O' },
+            { word: 'Orelhão', vowel: 'O' },
+            { word: 'Ontem', vowel: 'O' },
+            { word: 'Orquestra', vowel: 'O' },
+            { word: 'Orgulho', vowel: 'O' },
+            { word: 'Orla', vowel: 'O' },
+            { word: 'Ordem', vowel: 'O' },
+            { word: 'Origem', vowel: 'O' },
+            { word: 'Orégano', vowel: 'O' },
+            { word: 'Oito', vowel: 'O' },
+            { word: 'Oitavo', vowel: 'O' },
+            { word: 'Ocupado', vowel: 'O' },
+            { word: 'Operário', vowel: 'O' },
+            { word: 'Oceano', vowel: 'O' },
+            { word: 'Objeto', vowel: 'O' },
+            { word: 'Ovelhinha', vowel: 'O' },
+            { word: 'Olhada', vowel: 'O' },
+            { word: 'Oásis', vowel: 'O' },
 
-var questions = [];
-var currentIdx = 0;
-var hits = 0;
-var misses = 0;
-var answered = false;
-var errorLog = [];
-var TOTAL = 10;
-var allVowels = 'AEIOUÁÉÍÓÚÃÕÂÊÎÔÛaeiouáéíóúãõâêîôû';
+            // ── VOGAL U (40 palavras simples do cotidiano) ──
+            { word: 'Uva', vowel: 'U' },
+            { word: 'Urubu', vowel: 'U' },
+            { word: 'Urso', vowel: 'U' },
+            { word: 'Unha', vowel: 'U' },
+            { word: 'Uniforme', vowel: 'U' },
+            { word: 'Universo', vowel: 'U' },
+            { word: 'Urgência', vowel: 'U' },
+            { word: 'Último', vowel: 'U' },
+            { word: 'Usina', vowel: 'U' },
+            { word: 'Útil', vowel: 'U' },
+            { word: 'Urna', vowel: 'U' },
+            { word: 'Úmido', vowel: 'U' },
+            { word: 'Umbigo', vowel: 'U' },
+            { word: 'Umidade', vowel: 'U' },
+            { word: 'Unidade', vowel: 'U' },
+            { word: 'União', vowel: 'U' },
+            { word: 'Único', vowel: 'U' },
+            { word: 'Ursinho', vowel: 'U' },
+            { word: 'Uivar', vowel: 'U' },
+            { word: 'Urtiga', vowel: 'U' },
+            { word: 'Urgente', vowel: 'U' },
+            { word: 'Uso', vowel: 'U' },
+            { word: 'Usar', vowel: 'U' },
+            { word: 'Usado', vowel: 'U' },
+            { word: 'Urina', vowel: 'U' },
+            { word: 'Uruguai', vowel: 'U' },
+            { word: 'Unicórnio', vowel: 'U' },
+            { word: 'Urbano', vowel: 'U' },
+            { word: 'Ultra', vowel: 'U' }
+        ];
 
-// ---- SÍNTESE DE VOZ ----
-var ptVoiceCache = null;
+        var questions = [];
+        var currentIdx = 0;
+        var hits = 0;
+        var misses = 0;
+        var answered = false;
+        var errorLog = [];
+        var TOTAL = 10;
+        var allVowels = 'AEIOUÁÉÍÓÚÃÕÂÊÎÔÛaeiouáéíóúãõâêîôû';
 
-function loadVoices() {
-    var voices = window.speechSynthesis.getVoices();
-    if (voices.length > 0) {
-        ptVoiceCache = voices.find(function(v) {
-            return v.lang === 'pt-BR' || v.lang === 'pt_BR' || v.lang.startsWith('pt');
-        }) || null;
-    }
-}
+        // ---- SÍNTESE DE VOZ ----
+        var ptVoiceCache = null;
 
-if ('speechSynthesis' in window) {
-    loadVoices();
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-}
+        function loadVoices() {
+            var voices = window.speechSynthesis.getVoices();
+            if (voices.length > 0) {
+                ptVoiceCache = voices.find(function (v) {
+                    return v.lang === 'pt-BR' || v.lang === 'pt_BR' || v.lang.startsWith('pt');
+                }) || null;
+            }
+        }
 
-function speak(text, onEnd) {
-    if (!('speechSynthesis' in window)) {
-        if (onEnd) onEnd();
-        return;
-    }
+        if ('speechSynthesis' in window) {
+            loadVoices();
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
 
-    // Para fala anterior
-    window.speechSynthesis.cancel();
+        function speak(text, onEnd) {
+            if (!('speechSynthesis' in window)) {
+                if (onEnd) onEnd();
+                return;
+            }
 
-    // Remove animações de qualquer botão
-    document.querySelectorAll('.speaking').forEach(function(el) {
-        el.classList.remove('speaking');
-    });
+            // Para fala anterior
+            window.speechSynthesis.cancel();
 
-    var u = new SpeechSynthesisUtterance(text);
-    u.lang = 'pt-BR';
-    u.rate = 0.85;
-    u.pitch = 1.0;
-    u.volume = 1.0;
+            // Remove animações de qualquer botão
+            document.querySelectorAll('.speaking').forEach(function (el) {
+                el.classList.remove('speaking');
+            });
 
-    // Tenta usar voz Portuguesa
-    if (!ptVoiceCache) loadVoices();
-    if (ptVoiceCache) u.voice = ptVoiceCache;
+            var u = new SpeechSynthesisUtterance(text);
+            u.lang = 'pt-BR';
+            u.rate = 0.85;
+            u.pitch = 1.0;
+            u.volume = 1.0;
 
-    var cleanup = function() {
-        document.querySelectorAll('.speaking').forEach(function(el) {
-            el.classList.remove('speaking');
+            // Tenta usar voz Portuguesa
+            if (!ptVoiceCache) loadVoices();
+            if (ptVoiceCache) u.voice = ptVoiceCache;
+
+            var cleanup = function () {
+                document.querySelectorAll('.speaking').forEach(function (el) {
+                    el.classList.remove('speaking');
+                });
+                if (onEnd) onEnd();
+            };
+
+            u.onend = cleanup;
+            u.onerror = cleanup;
+
+            // Workaround do Chrome: pequeno delay garante reprodução
+            setTimeout(function () {
+                try {
+                    window.speechSynthesis.speak(u);
+                } catch (e) {
+                    cleanup();
+                }
+            }, 80);
+        }
+
+        // ---- VOGAIS ----
+        function speakVowel(key) {
+            var data = vowelData[key];
+            if (!data) return;
+            document.querySelectorAll('.vowel-card').forEach(function (c) { c.classList.remove('speaking'); });
+            var card = document.querySelector('.vowel-card[data-vowel="' + key + '"]');
+            if (card) card.classList.add('speaking');
+            speak(data.letter + '. ' + data.letter + ' de ' + data.example + '.', function () {
+                if (card) card.classList.remove('speaking');
+            });
+        }
+
+        function playInstruction() {
+            var btn = document.getElementById('btnInstruction');
+            if (btn) btn.classList.add('speaking');
+            speak('Ouça e repita cada vogal. Toque nas fotos para ouvir as vogais.', function () {
+                if (btn) btn.classList.remove('speaking');
+            });
+        }
+
+        // ---- EXERCÍCIOS ----
+        function highlightFirstVowel(word) {
+            for (var i = 0; i < word.length; i++) {
+                if (allVowels.includes(word[i])) {
+                    return word.slice(0, i) +
+                        '<span class="vowel-highlight">' + word[i] + '</span>' +
+                        word.slice(i + 1);
+                }
+            }
+            return word;
+        }
+
+        function initExercise() {
+            questions = shuffle(wordBank.slice()).slice(0, TOTAL);
+            currentIdx = 0; hits = 0; misses = 0; answered = false; errorLog = [];
+            var hitsEl = document.getElementById('hitsCount');
+            var missesEl = document.getElementById('missesCount');
+            var exLayout = document.getElementById('exerciseLayout');
+            var cardEl = document.getElementById('exerciseCard');
+            var compEl = document.getElementById('completionScreen');
+            if (hitsEl) hitsEl.textContent = '0';
+            if (missesEl) missesEl.textContent = '0';
+            if (exLayout) exLayout.style.display = '';
+            if (cardEl) cardEl.style.display = 'block';
+            if (compEl) compEl.classList.remove('visible');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            if (!questions[currentIdx]) return;
+            var q = questions[currentIdx];
+            var qWord = document.getElementById('questionWord');
+            var pFill = document.getElementById('progressFill');
+            var pBar = document.getElementById('progressBar');
+            var pLabel = document.getElementById('progressLabel');
+            var fbArea = document.getElementById('feedbackArea');
+            if (qWord) qWord.innerHTML = highlightFirstVowel(q.word);
+
+            // Atualiza caixinha complementar de significado
+            var mWordDisplay = document.getElementById('meaningWordDisplay');
+            var mText = document.getElementById('meaningText');
+            if (mWordDisplay) mWordDisplay.innerHTML = highlightFirstVowel(q.word);
+            if (mText) {
+                var meaning = q.meaning || wordMeanings[q.word] || ('Palavra simples iniciada com a letra ' + q.vowel + '.');
+                mText.textContent = meaning;
+            }
+
+            var pct = (currentIdx / TOTAL) * 100;
+            if (pFill) pFill.style.width = pct + '%';
+            if (pBar) pBar.setAttribute('aria-valuenow', Math.round(pct));
+            if (pLabel) pLabel.textContent = 'Pergunta ' + (currentIdx + 1) + ' de ' + TOTAL;
+            if (fbArea) fbArea.innerHTML = '';
+            document.querySelectorAll('.btn-option').forEach(function (btn) {
+                btn.disabled = false;
+                btn.classList.remove('correct', 'wrong');
+            });
+            // Lê a pergunta automaticamente após pequeno delay
+            setTimeout(playQuestionAudio, 500);
+        }
+
+        function playMeaningAudio() {
+            if (currentIdx >= questions.length) return;
+            var btn = document.getElementById('btnMeaningAudio');
+            if (btn) btn.classList.add('speaking');
+            var q = questions[currentIdx];
+            var word = q.word;
+            var meaning = q.meaning || wordMeanings[word] || ('Palavra simples iniciada com a letra ' + q.vowel + '.');
+            speak(word + '. ' + meaning, function () {
+                if (btn) btn.classList.remove('speaking');
+            });
+        }
+
+        function playQuestionAudio() {
+            if (currentIdx >= questions.length) return;
+            var btn = document.getElementById('btnExerciseAudio');
+            if (btn) btn.classList.add('speaking');
+            var word = questions[currentIdx].word;
+            speak('Qual é a primeira vogal da palavra ' + word + '?', function () {
+                if (btn) btn.classList.remove('speaking');
+            });
+        }
+
+        function playHelpExercise() {
+            var btn = document.getElementById('btnHelpExercise');
+            if (btn) btn.classList.add('speaking');
+            speak('Escolha a primeira vogal da palavra que aparece na tela.', function () {
+                if (btn) btn.classList.remove('speaking');
+            });
+        }
+
+        function checkAnswer(selected) {
+            if (answered) return;
+            answered = true;
+            var q = questions[currentIdx];
+            var correct = selected === q.vowel;
+            document.querySelectorAll('.btn-option').forEach(function (b) { b.disabled = true; });
+            var selBtn = document.querySelector('.btn-option[data-vowel="' + selected + '"]');
+            if (selBtn) selBtn.classList.add(correct ? 'correct' : 'wrong');
+            if (!correct) {
+                var correctBtn = document.querySelector('.btn-option[data-vowel="' + q.vowel + '"]');
+                if (correctBtn) correctBtn.classList.add('correct');
+                errorLog.push({ word: q.word, correctVowel: q.vowel, chosenVowel: selected });
+            }
+            if (correct) {
+                hits++;
+                var hitsEl = document.getElementById('hitsCount');
+                if (hitsEl) hitsEl.textContent = hits;
+                showFeedback('success', 'Muito bem!');
+                speak('Muito bem!');
+            } else {
+                misses++;
+                var missesEl = document.getElementById('missesCount');
+                if (missesEl) missesEl.textContent = misses;
+                showFeedback('error', 'Vamos tentar novamente.');
+                speak('Vamos tentar novamente. A resposta era ' + q.vowel + '.');
+            }
+            var isLast = currentIdx >= TOTAL - 1;
+            var label = isLast ? 'Ver resultado' : 'Próxima pergunta';
+            var icon = isLast ? 'fa-flag-checkered' : 'fa-arrow-right';
+            setTimeout(function () {
+                var fbArea = document.getElementById('feedbackArea');
+                if (fbArea) {
+                    fbArea.innerHTML +=
+                        '<button class="btn-next" onclick="nextQuestion()" aria-label="' + label + '">' +
+                        '<i class="fas ' + icon + '" aria-hidden="true"></i> ' + label + '</button>';
+                    var nb = document.querySelector('.btn-next');
+                    if (nb) nb.focus();
+                }
+            }, correct ? 200 : 800);
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if (currentIdx >= TOTAL) {
+                showCompletion();
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function showFeedback(type, msg) {
+            var icon = type === 'success' ? 'fa-check-circle' : 'fa-redo';
+            var fbArea = document.getElementById('feedbackArea');
+            if (fbArea) {
+                fbArea.innerHTML =
+                    '<div class="feedback-msg ' + type + '" role="alert">' +
+                    '<i class="fas ' + icon + '" aria-hidden="true"></i> ' + msg + '</div>';
+            }
+        }
+
+        function showCompletion() {
+            var exLayout = document.getElementById('exerciseLayout');
+            var exCard = document.getElementById('exerciseCard');
+            var compScreen = document.getElementById('completionScreen');
+            if (exLayout) exLayout.style.display = 'none';
+            else if (exCard) exCard.style.display = 'none';
+            if (compScreen) compScreen.classList.add('visible');
+            var finalHitsEl = document.getElementById('finalHits');
+            var finalMissesEl = document.getElementById('finalMisses');
+            var finalTotalEl = document.getElementById('finalTotal');
+            var progFill = document.getElementById('progressFill');
+            if (finalHitsEl) finalHitsEl.textContent = hits;
+            if (finalMissesEl) finalMissesEl.textContent = misses;
+            if (finalTotalEl) finalTotalEl.textContent = TOTAL;
+            if (progFill) progFill.style.width = '100%';
+            var msg;
+            if (hits === TOTAL) msg = 'Perfeito! Você acertou todas!';
+            else if (hits >= 7) msg = 'Muito bom! Continue assim!';
+            else if (hits >= 5) msg = 'Bom trabalho! Revise e tente de novo.';
+            else msg = 'Não desista! Refaça e vai ficar melhor.';
+            var compMsgEl = document.getElementById('completionMsg');
+            if (compMsgEl) compMsgEl.textContent = msg;
+            var errorSummaryEl = document.getElementById('errorSummary');
+            var errorListEl = document.getElementById('errorList');
+            if (errorListEl) errorListEl.innerHTML = '';
+            if (errorLog.length > 0 && errorSummaryEl && errorListEl) {
+                errorSummaryEl.style.display = 'block';
+                errorLog.forEach(function (err) {
+                    var li = document.createElement('li');
+                    li.innerHTML = err.word +
+                        ' — você escolheu <span class="wrong-answer">' + err.chosenVowel + '</span>' +
+                        ' <span class="arrow"><i class="fas fa-arrow-right" aria-hidden="true"></i></span> ' +
+                        'o correto é <span class="correct-answer">' + err.correctVowel + '</span>';
+                    errorListEl.appendChild(li);
+                });
+            } else if (errorSummaryEl) {
+                errorSummaryEl.style.display = 'none';
+            }
+            // Salva progresso no localStorage
+            try {
+                var prog = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
+                prog['vogais'] = { completed: true, score: hits, total: TOTAL, date: new Date().toISOString() };
+                localStorage.setItem('aprendidos_progresso', JSON.stringify(prog));
+            } catch (e) { }
+            speak('Parabéns! Você terminou! ' + msg);
+        }
+
+        function restartExercise() { initExercise(); }
+
+        function toggleMenu() {
+            var menu = document.getElementById('mobileMenu');
+            var btn = document.querySelector('.navbar-hamburger');
+            if (menu && btn) {
+                var isOpen = menu.classList.toggle('open');
+                btn.setAttribute('aria-expanded', isOpen);
+            }
+        }
+
+        function shuffle(arr) {
+            for (var i = arr.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+            }
+            return arr;
+        }
+
+        // Fecha menu mobile ao clicar fora
+        document.addEventListener('click', function (e) {
+            var menu = document.getElementById('mobileMenu');
+            var btn = document.querySelector('.navbar-hamburger');
+            if (menu && btn && menu.classList.contains('open') &&
+                !menu.contains(e.target) && !btn.contains(e.target)) {
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
         });
-        if (onEnd) onEnd();
-    };
 
-    u.onend = cleanup;
-    u.onerror = cleanup;
+        window.playMeaningAudio = playMeaningAudio;
 
-    // Workaround do Chrome: pequeno delay garante reprodução
-    setTimeout(function() {
-        try {
-            window.speechSynthesis.speak(u);
-        } catch (e) {
-            cleanup();
-        }
-    }, 80);
-}
-
-// ---- VOGAIS ----
-function speakVowel(key) {
-    var data = vowelData[key];
-    if (!data) return;
-    document.querySelectorAll('.vowel-card').forEach(function(c) { c.classList.remove('speaking'); });
-    var card = document.querySelector('.vowel-card[data-vowel="' + key + '"]');
-    if (card) card.classList.add('speaking');
-    speak(data.letter + '. ' + data.letter + ' de ' + data.example + '.', function() {
-        if (card) card.classList.remove('speaking');
-    });
-}
-
-function playInstruction() {
-    var btn = document.getElementById('btnInstruction');
-    if (btn) btn.classList.add('speaking');
-    speak('Ouça e repita cada vogal. Toque nas fotos para ouvir as vogais.', function() {
-        if (btn) btn.classList.remove('speaking');
-    });
-}
-
-// ---- EXERCÍCIOS ----
-function highlightFirstVowel(word) {
-    for (var i = 0; i < word.length; i++) {
-        if (allVowels.includes(word[i])) {
-            return word.slice(0, i) +
-                '<span class="vowel-highlight">' + word[i] + '</span>' +
-                word.slice(i + 1);
-        }
-    }
-    return word;
-}
-
-function initExercise() {
-    questions = shuffle(wordBank.slice()).slice(0, TOTAL);
-    currentIdx = 0; hits = 0; misses = 0; answered = false; errorLog = [];
-    var hitsEl = document.getElementById('hitsCount');
-    var missesEl = document.getElementById('missesCount');
-    var cardEl = document.getElementById('exerciseCard');
-    var compEl = document.getElementById('completionScreen');
-    if (hitsEl) hitsEl.textContent = '0';
-    if (missesEl) missesEl.textContent = '0';
-    if (cardEl) cardEl.style.display = 'block';
-    if (compEl) compEl.classList.remove('visible');
-    loadQuestion();
-}
-
-function loadQuestion() {
-    answered = false;
-    if (!questions[currentIdx]) return;
-    var q = questions[currentIdx];
-    var qWord = document.getElementById('questionWord');
-    var pFill = document.getElementById('progressFill');
-    var pBar = document.getElementById('progressBar');
-    var pLabel = document.getElementById('progressLabel');
-    var fbArea = document.getElementById('feedbackArea');
-    if (qWord) qWord.innerHTML = highlightFirstVowel(q.word);
-    var pct = (currentIdx / TOTAL) * 100;
-    if (pFill) pFill.style.width = pct + '%';
-    if (pBar) pBar.setAttribute('aria-valuenow', Math.round(pct));
-    if (pLabel) pLabel.textContent = 'Pergunta ' + (currentIdx + 1) + ' de ' + TOTAL;
-    if (fbArea) fbArea.innerHTML = '';
-    document.querySelectorAll('.btn-option').forEach(function(btn) {
-        btn.disabled = false;
-        btn.classList.remove('correct', 'wrong');
-    });
-    // Lê a pergunta automaticamente após pequeno delay
-    setTimeout(playQuestionAudio, 500);
-}
-
-function playQuestionAudio() {
-    if (currentIdx >= questions.length) return;
-    var btn = document.getElementById('btnExerciseAudio');
-    if (btn) btn.classList.add('speaking');
-    var word = questions[currentIdx].word;
-    speak('Qual é a primeira vogal da palavra ' + word + '?', function() {
-        if (btn) btn.classList.remove('speaking');
-    });
-}
-
-function playHelpExercise() {
-    var btn = document.getElementById('btnHelpExercise');
-    if (btn) btn.classList.add('speaking');
-    speak('Escolha a primeira vogal da palavra que aparece na tela.', function() {
-        if (btn) btn.classList.remove('speaking');
-    });
-}
-
-function checkAnswer(selected) {
-    if (answered) return;
-    answered = true;
-    var q = questions[currentIdx];
-    var correct = selected === q.vowel;
-    document.querySelectorAll('.btn-option').forEach(function(b) { b.disabled = true; });
-    var selBtn = document.querySelector('.btn-option[data-vowel="' + selected + '"]');
-    if (selBtn) selBtn.classList.add(correct ? 'correct' : 'wrong');
-    if (!correct) {
-        var correctBtn = document.querySelector('.btn-option[data-vowel="' + q.vowel + '"]');
-        if (correctBtn) correctBtn.classList.add('correct');
-        errorLog.push({ word: q.word, correctVowel: q.vowel, chosenVowel: selected });
-    }
-    if (correct) {
-        hits++;
-        var hitsEl = document.getElementById('hitsCount');
-        if (hitsEl) hitsEl.textContent = hits;
-        showFeedback('success', 'Muito bem!');
-        speak('Muito bem!');
-    } else {
-        misses++;
-        var missesEl = document.getElementById('missesCount');
-        if (missesEl) missesEl.textContent = misses;
-        showFeedback('error', 'Vamos tentar novamente.');
-        speak('Vamos tentar novamente. A resposta era ' + q.vowel + '.');
-    }
-    var isLast = currentIdx >= TOTAL - 1;
-    var label = isLast ? 'Ver resultado' : 'Próxima pergunta';
-    var icon = isLast ? 'fa-flag-checkered' : 'fa-arrow-right';
-    setTimeout(function() {
-        var fbArea = document.getElementById('feedbackArea');
-        if (fbArea) {
-            fbArea.innerHTML +=
-                '<button class="btn-next" onclick="nextQuestion()" aria-label="' + label + '">' +
-                '<i class="fas ' + icon + '" aria-hidden="true"></i> ' + label + '</button>';
-            var nb = document.querySelector('.btn-next');
-            if (nb) nb.focus();
-        }
-    }, correct ? 200 : 800);
-}
-
-function nextQuestion() {
-    currentIdx++;
-    if (currentIdx >= TOTAL) {
-        showCompletion();
-    } else {
-        loadQuestion();
-    }
-}
-
-function showFeedback(type, msg) {
-    var icon = type === 'success' ? 'fa-check-circle' : 'fa-redo';
-    var fbArea = document.getElementById('feedbackArea');
-    if (fbArea) {
-        fbArea.innerHTML =
-            '<div class="feedback-msg ' + type + '" role="alert">' +
-            '<i class="fas ' + icon + '" aria-hidden="true"></i> ' + msg + '</div>';
-    }
-}
-
-function showCompletion() {
-    var exCard = document.getElementById('exerciseCard');
-    var compScreen = document.getElementById('completionScreen');
-    if (exCard) exCard.style.display = 'none';
-    if (compScreen) compScreen.classList.add('visible');
-    var finalHitsEl = document.getElementById('finalHits');
-    var finalMissesEl = document.getElementById('finalMisses');
-    var finalTotalEl = document.getElementById('finalTotal');
-    var progFill = document.getElementById('progressFill');
-    if (finalHitsEl) finalHitsEl.textContent = hits;
-    if (finalMissesEl) finalMissesEl.textContent = misses;
-    if (finalTotalEl) finalTotalEl.textContent = TOTAL;
-    if (progFill) progFill.style.width = '100%';
-    var msg;
-    if (hits === TOTAL) msg = 'Perfeito! Você acertou todas!';
-    else if (hits >= 7) msg = 'Muito bom! Continue assim!';
-    else if (hits >= 5) msg = 'Bom trabalho! Revise e tente de novo.';
-    else msg = 'Não desista! Refaça e vai ficar melhor.';
-    var compMsgEl = document.getElementById('completionMsg');
-    if (compMsgEl) compMsgEl.textContent = msg;
-    var errorSummaryEl = document.getElementById('errorSummary');
-    var errorListEl = document.getElementById('errorList');
-    if (errorListEl) errorListEl.innerHTML = '';
-    if (errorLog.length > 0 && errorSummaryEl && errorListEl) {
-        errorSummaryEl.style.display = 'block';
-        errorLog.forEach(function(err) {
-            var li = document.createElement('li');
-            li.innerHTML = err.word +
-                ' — você escolheu <span class="wrong-answer">' + err.chosenVowel + '</span>' +
-                ' <span class="arrow"><i class="fas fa-arrow-right" aria-hidden="true"></i></span> ' +
-                'o correto é <span class="correct-answer">' + err.correctVowel + '</span>';
-            errorListEl.appendChild(li);
-        });
-    } else if (errorSummaryEl) {
-        errorSummaryEl.style.display = 'none';
-    }
-    // Salva progresso no localStorage
-    try {
-        var prog = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
-        prog['vogais'] = { completed: true, score: hits, total: TOTAL, date: new Date().toISOString() };
-        localStorage.setItem('aprendidos_progresso', JSON.stringify(prog));
-    } catch(e) {}
-    speak('Parabéns! Você terminou! ' + msg);
-}
-
-function restartExercise() { initExercise(); }
-
-function toggleMenu() {
-    var menu = document.getElementById('mobileMenu');
-    var btn = document.querySelector('.navbar-hamburger');
-    if (menu && btn) {
-        var isOpen = menu.classList.toggle('open');
-        btn.setAttribute('aria-expanded', isOpen);
-    }
-}
-
-function shuffle(arr) {
-    for (var i = arr.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
-    }
-    return arr;
-}
-
-// Fecha menu mobile ao clicar fora
-document.addEventListener('click', function(e) {
-    var menu = document.getElementById('mobileMenu');
-    var btn = document.querySelector('.navbar-hamburger');
-    if (menu && btn && menu.classList.contains('open') &&
-        !menu.contains(e.target) && !btn.contains(e.target)) {
-        menu.classList.remove('open');
-        btn.setAttribute('aria-expanded', 'false');
-    }
-});
-
-// Inicia os exercícios
-initExercise();
-</script>
+        // Inicia os exercícios
+        initExercise();
+    </script>
 
 </body>
+
 </html>

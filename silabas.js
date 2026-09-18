@@ -4,46 +4,28 @@
  */
 
 var wordBank = [
-    { word: 'BOLA',  syl1: 'BO', syl2: 'LA',  distractors: ['BA','LO','BO','LA','LE','BU'] },
+    { word: 'BOLO',  syl1: 'BO', syl2: 'LO',  distractors: ['BA','LA','BO','LO','BE','LU'] },
+    { word: 'CAFÉ',  syl1: 'CA', syl2: 'FE',  distractors: ['CO','FI','CA','FE','CE','FU'] },
     { word: 'CASA',  syl1: 'CA', syl2: 'SA',  distractors: ['CO','SI','CA','SA','CE','SU'] },
-    { word: 'FADA',  syl1: 'FA', syl2: 'DA',  distractors: ['FI','DE','FA','DA','FO','DU'] },
-    { word: 'LAGO',  syl1: 'LA', syl2: 'GO',  distractors: ['LO','GA','LA','GO','LU','GI'] },
-    { word: 'MAPA',  syl1: 'MA', syl2: 'PA',  distractors: ['MI','PE','MA','PA','MO','PU'] },
-    { word: 'NADA',  syl1: 'NA', syl2: 'DA',  distractors: ['NO','DI','NA','DA','NU','DE'] },
-    { word: 'PATO',  syl1: 'PA', syl2: 'TO',  distractors: ['PI','TA','PA','TO','PU','TE'] },
-    { word: 'RODA',  syl1: 'RO', syl2: 'DA',  distractors: ['RA','DI','RO','DA','RU','DE'] },
-    { word: 'SACO',  syl1: 'SA', syl2: 'CO',  distractors: ['SO','CA','SA','CO','SI','CE'] },
-    { word: 'TELA',  syl1: 'TE', syl2: 'LA',  distractors: ['TA','LO','TE','LA','TI','LU'] },
-    { word: 'VELA',  syl1: 'VE', syl2: 'LA',  distractors: ['VA','LO','VE','LA','VI','LI'] },
-    { word: 'MULA',  syl1: 'MU', syl2: 'LA',  distractors: ['MA','LO','MU','LA','MI','LE'] },
-    { word: 'GALO',  syl1: 'GA', syl2: 'LO',  distractors: ['GO','LA','GA','LO','GI','LU'] },
-    { word: 'NETA',  syl1: 'NE', syl2: 'TA',  distractors: ['NA','TO','NE','TA','NO','TU'] },
-    { word: 'DEDO',  syl1: 'DE', syl2: 'DO',  distractors: ['DA','DI','DE','DO','DU','DE'] },
-    { word: 'FIGO',  syl1: 'FI', syl2: 'GO',  distractors: ['FA','GU','FI','GO','FO','GA'] },
-    { word: 'PELE',  syl1: 'PE', syl2: 'LE',  distractors: ['PA','LO','PE','LE','PI','LA'] },
-    { word: 'LOBA',  syl1: 'LO', syl2: 'BA',  distractors: ['LA','BI','LO','BA','LU','BE'] },
-    { word: 'MEMO',  syl1: 'ME', syl2: 'MO',  distractors: ['MA','MI','ME','MO','MU','MA'] },
-    { word: 'BICO',  syl1: 'BI', syl2: 'CO',  distractors: ['BA','CA','BI','CO','BU','CI'] },
-    { word: 'CAMA',  syl1: 'CA', syl2: 'MA',  distractors: ['CO','MI','CA','MA','CI','MU'] },
     { word: 'DATA',  syl1: 'DA', syl2: 'TA',  distractors: ['DI','TO','DA','TA','DO','TU'] },
     { word: 'FOTO',  syl1: 'FO', syl2: 'TO',  distractors: ['FA','TA','FO','TO','FI','TU'] },
-    { word: 'GEMA',  syl1: 'GE', syl2: 'MA',  distractors: ['GA','MI','GE','MA','GO','MU'] },
-    { word: 'HORA',  syl1: 'HO', syl2: 'RA',  distractors: ['HA','RO','HO','RA','HU','RI'] },
-    { word: 'JATO',  syl1: 'JA', syl2: 'TO',  distractors: ['JO','TA','JA','TO','JU','TI'] },
-    { word: 'KILO',  syl1: 'KI', syl2: 'LO',  distractors: ['KA','LA','KI','LO','KU','LI'] },
-    { word: 'LUTA',  syl1: 'LU', syl2: 'TA',  distractors: ['LA','TO','LU','TA','LO','TI'] },
-    { word: 'MATO',  syl1: 'MA', syl2: 'TO',  distractors: ['MI','TA','MA','TO','MO','TU'] },
-    { word: 'NOTA',  syl1: 'NO', syl2: 'TA',  distractors: ['NA','TO','NO','TA','NU','TI'] },
-    { word: 'PIPA',  syl1: 'PI', syl2: 'PA',  distractors: ['PA','PE','PI','PA','PO','PU'] },
-    { word: 'RATO',  syl1: 'RA', syl2: 'TO',  distractors: ['RO','TA','RA','TO','RI','TU'] },
-    { word: 'SOLA',  syl1: 'SO', syl2: 'LA',  distractors: ['SA','LO','SO','LA','SI','LI'] },
-    { word: 'TOCO',  syl1: 'TO', syl2: 'CO',  distractors: ['TA','CA','TO','CO','TU','CI'] },
-    { word: 'VASO',  syl1: 'VA', syl2: 'SO',  distractors: ['VO','SA','VA','SO','VI','SI'] },
-    { word: 'ZUMO',  syl1: 'ZU', syl2: 'MO',  distractors: ['ZA','MA','ZU','MO','ZO','MI'] },
-    { word: 'FURO',  syl1: 'FU', syl2: 'RO',  distractors: ['FA','RA','FU','RO','FO','RI'] },
-    { word: 'GOLA',  syl1: 'GO', syl2: 'LA',  distractors: ['GA','LO','GO','LA','GU','LI'] },
-    { word: 'HULA',  syl1: 'HU', syl2: 'LA',  distractors: ['HA','LO','HU','LA','HO','LI'] },
-    { word: 'JUBA',  syl1: 'JU', syl2: 'BA',  distractors: ['JA','BI','JU','BA','JO','BE'] }
+    { word: 'GOTA',  syl1: 'GO', syl2: 'TA',  distractors: ['GA','TI','GO','TA','GU','TE'] },
+    { word: 'LATA',  syl1: 'LA', syl2: 'TA',  distractors: ['LO','TE','LA','TA','LU','TI'] },
+    { word: 'NETO',  syl1: 'NE', syl2: 'TO',  distractors: ['NA','TA','NE','TO','NO','TU'] },
+    { word: 'PAGO',  syl1: 'PA', syl2: 'GO',  distractors: ['PO','GA','PA','GO','PE','GU'] },
+    { word: 'ROTA',  syl1: 'RO', syl2: 'TA',  distractors: ['RA','TI','RO','TA','RU','TE'] },
+    { word: 'SALA',  syl1: 'SA', syl2: 'LA',  distractors: ['SO','LE','SA','LA','SI','LO'] },
+    { word: 'SOPA',  syl1: 'SO', syl2: 'PA',  distractors: ['SA','PE','SO','PA','SE','PU'] },
+    { word: 'TELA',  syl1: 'TE', syl2: 'LA',  distractors: ['TA','LO','TE','LA','TI','LU'] },
+    { word: 'VELA',  syl1: 'VE', syl2: 'LA',  distractors: ['VA','LO','VE','LA','VI','LI'] },
+    { word: 'VIDA',  syl1: 'VI', syl2: 'DA',  distractors: ['VA','DO','VI','DA','VO','DE'] },
+    { word: 'ZERO',  syl1: 'ZE', syl2: 'RO',  distractors: ['ZA','RA','ZE','RO','ZO','RU'] },
+    { word: 'DEDO',  syl1: 'DE', syl2: 'DO',  distractors: ['DA','DI','DE','DO','DU','DE'] },
+    { word: 'LOJA',  syl1: 'LO', syl2: 'JA',  distractors: ['LA','JI','LO','JA','LU','JE'] },
+    { word: 'NOME',  syl1: 'NO', syl2: 'ME',  distractors: ['NA','MA','NO','ME','NU','MI'] },
+    { word: 'VOTO',  syl1: 'VO', syl2: 'TO',  distractors: ['VA','TA','VO','TO','VI','TU'] },
+    { word: 'MAPA',  syl1: 'MA', syl2: 'PA',  distractors: ['MI','PE','MA','PA','MO','PU'] },
+    { word: 'SUCO',  syl1: 'SU', syl2: 'CO',  distractors: ['SA','CA','SU','CO','SO','CI'] }
 ];
 
 var TOTAL = 10;
@@ -300,10 +282,83 @@ document.addEventListener('click', function(e) {
     }
 });
 
+var lettersList = ['b', 'c', 'd', 'f', 'g', 'j', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'z'];
+var currentLetterIdx = 0;
+
+function showLetter(letterKey) {
+    var key = (letterKey || 'b').toLowerCase();
+    var idx = lettersList.indexOf(key);
+    if (idx === -1) idx = 0;
+    currentLetterIdx = idx;
+
+    lettersList.forEach(function(l) {
+        var sec = document.getElementById('letra-' + l);
+        var btn = document.getElementById('btn-nav-' + l);
+        if (sec) {
+            sec.classList.remove('active');
+        }
+        if (btn) {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false');
+        }
+    });
+
+    var activeLetter = lettersList[currentLetterIdx];
+    var activeSec = document.getElementById('letra-' + activeLetter);
+    var activeBtn = document.getElementById('btn-nav-' + activeLetter);
+
+    if (activeSec) {
+        activeSec.classList.add('active');
+        var isFirst = (currentLetterIdx === 0);
+        var isLast = (currentLetterIdx === lettersList.length - 1);
+        var prevBtns = activeSec.querySelectorAll('.btn-step-prev');
+        var nextBtns = activeSec.querySelectorAll('.btn-step-next');
+        prevBtns.forEach(function(b) { b.disabled = isFirst; });
+        nextBtns.forEach(function(b) { b.disabled = isLast; });
+    }
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.setAttribute('aria-selected', 'true');
+        try {
+            activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } catch(e) {}
+    }
+
+    var navWrapper = document.getElementById('grade-letras');
+    if (navWrapper) {
+        var rect = navWrapper.getBoundingClientRect();
+        if (rect.top < 0 || rect.top > 120) {
+            navWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+}
+
+function nextLetter() {
+    if (currentLetterIdx < lettersList.length - 1) {
+        showLetter(lettersList[currentLetterIdx + 1]);
+    }
+}
+
+function prevLetter() {
+    if (currentLetterIdx > 0) {
+        showLetter(lettersList[currentLetterIdx - 1]);
+    }
+}
+
 window.speak = speak; window.playInstruction = playInstruction; window.playDemo = playDemo;
 window.playQuestionAudio = playQuestionAudio; window.playHelpExercise = playHelpExercise;
 window.nextQuestion = nextQuestion; window.restartExercise = restartExercise;
 window.salvarEVerOutras = salvarEVerOutras; window.toggleMenu = toggleMenu;
+window.showLetter = showLetter; window.nextLetter = nextLetter; window.prevLetter = prevLetter;
 
-if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', function() { initExercise(); verificarLicaoConcluida(); }); }
-else { initExercise(); verificarLicaoConcluida(); }
+if (document.readyState === 'loading') { 
+    document.addEventListener('DOMContentLoaded', function() { 
+        initExercise(); 
+        verificarLicaoConcluida(); 
+        showLetter('b');
+    }); 
+} else { 
+    initExercise(); 
+    verificarLicaoConcluida(); 
+    showLetter('b');
+}

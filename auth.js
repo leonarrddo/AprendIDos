@@ -82,9 +82,9 @@ export async function signInWithProvider(provider, redirectPath = 'index.html') 
     id: 'demo_' + Date.now(),
     email: `${provider}.demo@aprendidos.com.br`,
     name: mockName,
-    avatar: provider === 'google' 
-      ? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'
-      : 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
+    avatar: provider === 'google'
+      ? ''
+      : '',
     provider: provider
   };
 
@@ -159,7 +159,7 @@ export async function signInWithEmail(email, password, redirectPath = 'index.htm
  */
 export async function signOut(redirectPath = 'login.html') {
   if (supabase) {
-    try { await supabase.auth.signOut(); } catch (e) {}
+    try { await supabase.auth.signOut(); } catch (e) { }
   }
   localStorage.removeItem('aprendidos_usuario');
   window.location.href = redirectPath;
@@ -171,11 +171,11 @@ export async function signOut(redirectPath = 'login.html') {
 export async function saveLessonProgress(lessonId, data = {}) {
   const user = await getCurrentUser();
   const storageKey = `aprendidos_progresso_${user ? user.id : 'anon'}`;
-  
+
   let currentProgress = {};
   try {
     currentProgress = JSON.parse(localStorage.getItem(storageKey) || '{}');
-  } catch (e) {}
+  } catch (e) { }
 
   currentProgress[lessonId] = {
     completed: true,
@@ -183,23 +183,23 @@ export async function saveLessonProgress(lessonId, data = {}) {
     updatedAt: new Date().toISOString(),
     ...data
   };
-  
+
   try {
     localStorage.setItem(storageKey, JSON.stringify(currentProgress));
-  } catch (e) {}
+  } catch (e) { }
 
   // Grava também nas chaves globais e de anon para total interoperabilidade
   try {
     const legacy = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
     legacy[lessonId] = currentProgress[lessonId];
     localStorage.setItem('aprendidos_progresso', JSON.stringify(legacy));
-  } catch (e) {}
+  } catch (e) { }
 
   try {
     const anon = JSON.parse(localStorage.getItem('aprendidos_progresso_anon') || '{}');
     anon[lessonId] = currentProgress[lessonId];
     localStorage.setItem('aprendidos_progresso_anon', JSON.stringify(anon));
-  } catch (e) {}
+  } catch (e) { }
 
   if (supabase && user && !user.isDemo) {
     try {
@@ -210,7 +210,7 @@ export async function saveLessonProgress(lessonId, data = {}) {
         pontuacao: data.score ?? 10,
         atualizado_em: new Date().toISOString()
       }, { onConflict: 'user_id, licao_id' });
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return currentProgress;
@@ -222,21 +222,21 @@ export async function saveLessonProgress(lessonId, data = {}) {
 export async function getLessonProgress() {
   const user = await getCurrentUser();
   const storageKey = `aprendidos_progresso_${user ? user.id : 'anon'}`;
-  
+
   let progress = {};
   try {
     progress = JSON.parse(localStorage.getItem(storageKey) || '{}');
-  } catch (e) {}
+  } catch (e) { }
 
   // Fallback e mesclagem de chaves adicionais para não perder progresso
   try {
     const legacy = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
     progress = { ...legacy, ...progress };
-  } catch (e) {}
+  } catch (e) { }
   try {
     const anon = JSON.parse(localStorage.getItem('aprendidos_progresso_anon') || '{}');
     progress = { ...anon, ...progress };
-  } catch (e) {}
+  } catch (e) { }
 
   if (supabase && user && !user.isDemo) {
     try {
@@ -254,7 +254,7 @@ export async function getLessonProgress() {
           };
         });
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return progress;

@@ -131,15 +131,35 @@
         </a>
     </div>
     <div class="navbar-nav" role="menubar">
-        <a href="index.html" class="navbar-nav-item" role="menuitem"><i class="fas fa-home"></i><span>Início</span></a>
-        <a href="licoes.html" class="navbar-nav-item active" role="menuitem"><i class="fas fa-puzzle-piece"></i><span>Atividades</span></a>
+        <a href="index.html" class="navbar-nav-item" role="menuitem" aria-label="Início">
+            <i class="fas fa-home" aria-hidden="true"></i>
+            <span>Início</span>
+        </a>
+        <a href="licoes.html" class="navbar-nav-item" role="menuitem" aria-label="Módulos">
+            <i class="fas fa-book" aria-hidden="true"></i>
+            <span>Módulos</span>
+        </a>
+        <a href="licoes.html" class="navbar-nav-item active" role="menuitem" aria-current="page" aria-label="Atividades">
+            <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
+            <span>Atividades</span>
+        </a>
     </div>
     <button class="navbar-hamburger" aria-label="Abrir menu" aria-expanded="false" onclick="toggleMenu()">
         <i class="fas fa-bars"></i>
     </button>
     <div class="navbar-mobile-menu" id="mobileMenu">
-        <a href="index.html"><i class="fas fa-home"></i> Início</a>
-        <a href="licoes.html" class="active"><i class="fas fa-puzzle-piece"></i> Atividades</a>
+        <a href="index.html" role="menuitem">
+            <i class="fas fa-home" aria-hidden="true"></i>
+            Início
+        </a>
+        <a href="licoes.html" role="menuitem">
+            <i class="fas fa-book" aria-hidden="true"></i>
+            Módulos
+        </a>
+        <a href="licoes.html" class="active" role="menuitem" aria-current="page">
+            <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
+            Atividades
+        </a>
     </div>
 </nav>
 

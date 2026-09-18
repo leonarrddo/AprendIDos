@@ -5,7 +5,117 @@
  * ============================================================================
  */
 
-import { getCurrentUser, signOut, getLessonProgress } from './auth.js';
+// Funções de sessão universais (compatíveis com duplo-clique local file:// e servidores)
+async function getCurrentUser() {
+  if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.getCurrentUser) {
+    try { return await window.AprendIDosAuth.getCurrentUser(); } catch(e) {}
+  }
+  try {
+    const raw = localStorage.getItem('aprendidos_usuario');
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
+}
+
+async function signOut(redirectPath = 'login.html') {
+  if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.signOut) {
+    try { await window.AprendIDosAuth.signOut(redirectPath); return; } catch(e) {}
+  }
+  try { localStorage.removeItem('aprendidos_usuario'); } catch(e) {}
+  window.location.href = redirectPath;
+}
+
+const LESSON_KEYS = [
+  'letras',      // 0: As Letras
+  'vogais',      // 1: As Vogais
+  'consoantes',   // 2: Consoantes e Sons
+  'meunome',     // 3: Meu Nome
+  'silabas',     // 4: Sílabas
+  'palavras',    // 5: Palavras do Dia a Dia
+  'frases',      // 6: Frases Simples
+  'leituras',    // 7: Pequenas Leituras
+  'escrita'      // 8: Escrita
+];
+
+async function getLessonProgress() {
+  let progress = {};
+
+  // 1. Tenta via módulo de autenticação AprendIDosAuth se existir
+  if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.getLessonProgress) {
+    try {
+      const authProg = await window.AprendIDosAuth.getLessonProgress();
+      if (authProg && typeof authProg === 'object') {
+        progress = { ...progress, ...authProg };
+      }
+    } catch(e) {}
+  }
+
+  // 2. Busca nas chaves do LocalStorage (usuário logado, legado e anônimo)
+  try {
+    const user = await getCurrentUser();
+    const userKey = user && user.id ? `aprendidos_progresso_${user.id}` : null;
+    const keysToCheck = [
+      userKey,
+      'aprendidos_progresso',
+      'aprendidos_progresso_anon'
+    ].filter(Boolean);
+
+    for (const key of keysToCheck) {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === 'object') {
+            progress = { ...parsed, ...progress };
+          }
+        } catch(e) {}
+      }
+    }
+
+    // Se encontramos progresso e temos usuário logado, sincroniza na chave do usuário
+    if (userKey && Object.keys(progress).length > 0) {
+      try {
+        localStorage.setItem(userKey, JSON.stringify(progress));
+      } catch(e) {}
+    }
+  } catch(e) {
+    console.warn('Erro ao ler progresso local:', e);
+  }
+
+  return progress;
+}
+
+async function saveSingleLessonProgress(key, data = { completed: true, score: 10, total: 10 }) {
+  if (!key) return;
+  try {
+    const user = await getCurrentUser();
+    const userKey = user && user.id ? `aprendidos_progresso_${user.id}` : null;
+    const keysToUpdate = [userKey, 'aprendidos_progresso', 'aprendidos_progresso_anon'].filter(Boolean);
+
+    const record = {
+      completed: true,
+      score: data.score ?? 10,
+      total: data.total ?? 10,
+      updatedAt: new Date().toISOString(),
+      ...data
+    };
+
+    keysToUpdate.forEach(storageKey => {
+      try {
+        const curr = JSON.parse(localStorage.getItem(storageKey) || '{}');
+        curr[key] = record;
+        localStorage.setItem(storageKey, JSON.stringify(curr));
+      } catch(e) {}
+    });
+
+    if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.saveLessonProgress) {
+      try {
+        await window.AprendIDosAuth.saveLessonProgress(key, record);
+      } catch(e) {}
+    }
+  } catch(e) {
+    console.warn('Erro ao salvar progresso:', e);
+  }
+}
 
 /* ===== ESTADO DA APLICAÇÃO ===== */
 const TOTAL = 9;
@@ -70,25 +180,15 @@ async function loadUserProgress() {
 
   completedCount = 0;
 
-  if (cards.length > 0) {
-    // 1. As Letras
-    if (progress['letras']?.completed) {
-      markCardAsDone(cards[0], false);
+  cards.forEach((card, index) => {
+    const key = LESSON_KEYS[index];
+    if (key && progress[key]?.completed) {
+      markCardAsDone(card, false);
       completedCount++;
     } else {
-      resetCardToStart(cards[0]);
+      resetCardToStart(card);
     }
-
-    // 2. As Vogais
-    if (cards.length > 1) {
-      if (progress['vogais']?.completed) {
-        markCardAsDone(cards[1], false);
-        completedCount++;
-      } else {
-        resetCardToStart(cards[1]);
-      }
-    }
-  }
+  });
 
   updateProgress();
 }
@@ -177,16 +277,84 @@ if (grid) {
     const card = e.target.closest('.activity-card');
     if (!card) return;
 
-    const index = card.dataset.index;
+    const index = parseInt(card.dataset.index, 10);
     const title = card.querySelector('h3') ? card.querySelector('h3').textContent : '';
+    const isCompleted = card.dataset.completed === 'true';
 
-    // Se for a lição de Vogais (card index 1), abre a tela de vogais
-    if (index === '1' || title.toLowerCase().includes('vogais')) {
+    // Se for a lição de Letras (card index 0), abre a tela de letras (seja para iniciar ou para rever)
+    if (index === 0 || title.toLowerCase().includes('letras')) {
       e.preventDefault();
-      showToast('Abrindo atividade de Vogais...', 'book-open');
+      const toastMsg = isCompleted ? 'Abrindo lição de Letras para rever...' : 'Abrindo atividade de Letras...';
+      const toastIcon = isCompleted ? 'redo' : 'book-open';
+      showToast(toastMsg, toastIcon);
       setTimeout(() => {
-        window.location.href = 'vogais.html';
-      }, 200);
+        window.location.href = 'letras.html';
+      }, 250);
+      return;
+    }
+
+    // Se for a lição de Vogais (card index 1)
+    if (index === 1 || title.toLowerCase().includes('vogais')) {
+      e.preventDefault();
+      const toastMsg = isCompleted ? 'Abrindo lição de Vogais para rever...' : 'Abrindo atividade de Vogais...';
+      showToast(toastMsg, isCompleted ? 'redo' : 'book-open');
+      setTimeout(() => { window.location.href = 'vogais.html'; }, 250);
+      return;
+    }
+
+    // Se for Consoantes e Sons (index 2)
+    if (index === 2 || title.toLowerCase().includes('consoante')) {
+      e.preventDefault();
+      showToast(isCompleted ? 'Revisando Consoantes...' : 'Abrindo Consoantes e Sons...', isCompleted ? 'redo' : 'book-open');
+      setTimeout(() => { window.location.href = 'consoantes.html'; }, 250);
+      return;
+    }
+
+    // Se for Meu Nome (index 3)
+    if (index === 3 || title.toLowerCase().includes('nome')) {
+      e.preventDefault();
+      showToast(isCompleted ? 'Revisando Meu Nome...' : 'Abrindo Meu Nome...', isCompleted ? 'redo' : 'book-open');
+      setTimeout(() => { window.location.href = 'meunome.html'; }, 250);
+      return;
+    }
+
+    // Se for Sílabas (index 4)
+    if (index === 4 || title.toLowerCase().includes('sílaba') || title.toLowerCase().includes('silaba')) {
+      e.preventDefault();
+      showToast(isCompleted ? 'Revisando Sílabas...' : 'Abrindo Sílabas...', isCompleted ? 'redo' : 'book-open');
+      setTimeout(() => { window.location.href = 'silabas.html'; }, 250);
+      return;
+    }
+
+    // Se for Palavras do Dia a Dia (index 5)
+    if (index === 5 || title.toLowerCase().includes('palavras')) {
+      e.preventDefault();
+      showToast(isCompleted ? 'Revisando Palavras...' : 'Abrindo Palavras do Dia a Dia...', isCompleted ? 'redo' : 'book-open');
+      setTimeout(() => { window.location.href = 'palavras.html'; }, 250);
+      return;
+    }
+
+    // Se for Frases Simples (index 6)
+    if (index === 6 || title.toLowerCase().includes('frases')) {
+      e.preventDefault();
+      showToast(isCompleted ? 'Revisando Frases...' : 'Abrindo Frases Simples...', isCompleted ? 'redo' : 'book-open');
+      setTimeout(() => { window.location.href = 'frases.html'; }, 250);
+      return;
+    }
+
+    // Se for Pequenas Leituras (index 7)
+    if (index === 7 || title.toLowerCase().includes('leitura')) {
+      e.preventDefault();
+      showToast(isCompleted ? 'Revisando Leituras...' : 'Abrindo Pequenas Leituras...', isCompleted ? 'redo' : 'book-open');
+      setTimeout(() => { window.location.href = 'leituras.html'; }, 250);
+      return;
+    }
+
+    // Se for Escrita (index 8)
+    if (index === 8 || title.toLowerCase().includes('escrita')) {
+      e.preventDefault();
+      showToast(isCompleted ? 'Revisando Escrita...' : 'Abrindo Escrita...', isCompleted ? 'redo' : 'book-open');
+      setTimeout(() => { window.location.href = 'escrita.html'; }, 250);
       return;
     }
 
@@ -199,6 +367,10 @@ if (grid) {
       completedCount++;
       updateProgress();
       showToast('"' + title + '" concluída!', 'check-circle');
+      const key = LESSON_KEYS[index];
+      if (key) {
+        saveSingleLessonProgress(key, { completed: true, score: 10, total: 10 });
+      }
     } else if (action === 'review') {
       showToast('Revisando "' + title + '"...', 'redo');
     }

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AprendIDos — Frases Simples</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #FAF3E0; --bg-card: #F5DEB3; --white: #FFFFFF;
+            --fg: #3E2723; --fg-secondary: #5D4037; --muted: #8D6E63;
+            --green: #2E7D32; --green-light: #C8E6C9; --green-pale: #E8F5E9;
+            --green-dark: #1B5E20; --border: #C8E6C9;
+            --radius: 18px; --radius-sm: 12px;
+            --accent: #00695C;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 18px; scroll-behavior: smooth; }
+        body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--fg); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
+        .skip-link { position: absolute; top: -100%; left: 1rem; background: var(--green); color: #fff; padding: 0.8rem 1.4rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 1rem; z-index: 200; text-decoration: none; transition: top 0.2s; }
+        .skip-link:focus { top: 0.5rem; }
+        .navbar { background: var(--white); border-bottom: 3px solid var(--green); padding: 0.4rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+        .navbar-left { display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
+        .btn-back { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--bg); border: 2px solid var(--green-light); border-radius: var(--radius-sm); padding: 0.45rem 0.9rem; color: var(--green); font-size: 0.95rem; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+        .btn-back:hover { background: var(--green-pale); border-color: var(--green); }
+        .navbar-brand { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--fg); }
+        .brand-icon { width: 34px; height: 34px; background: var(--green); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.15rem; font-weight: 900; flex-shrink: 0; }
+        .navbar-brand span { font-size: 1.15rem; font-weight: 900; }
+        .navbar-nav { display: flex; align-items: center; gap: 0.5rem; list-style: none; }
+        .navbar-nav-item { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; text-decoration: none; color: var(--muted); padding: 0.7rem 1.2rem 0.6rem; border-radius: 10px; transition: all 0.2s; min-width: 108px; }
+        .navbar-nav-item i { font-size: 2.3rem; line-height: 1; }
+        .navbar-nav-item span { font-size: 1.05rem; font-weight: 800; }
+        .navbar-nav-item:hover, .navbar-nav-item.active { color: var(--green); background: var(--green-pale); }
+        .navbar-hamburger { display: none; background: none; border: 2px solid var(--green-light); border-radius: 8px; color: var(--green); font-size: 1.3rem; cursor: pointer; padding: 0.4rem 0.7rem; }
+        .navbar-mobile-menu { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--white); border-bottom: 3px solid var(--green); padding: 0.8rem 1.2rem; gap: 0.3rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); z-index: 99; }
+        .navbar-mobile-menu.open { display: flex; }
+        .navbar-mobile-menu a { display: flex; align-items: center; gap: 0.6rem; color: var(--muted); text-decoration: none; font-weight: 700; font-size: 1.2rem; padding: 1rem 1.2rem; border-radius: 8px; transition: all 0.2s; }
+        .navbar-mobile-menu a:hover, .navbar-mobile-menu a.active { color: var(--green); background: var(--green-pale); }
+        .container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 3rem; flex: 1; }
+        .activity-header { margin-bottom: 2rem; }
+        .activity-header h1 { font-size: 2rem; font-weight: 900; color: var(--fg); margin-bottom: 0.3rem; }
+        .activity-header .subtitle { font-size: 1.1rem; color: var(--fg-secondary); font-weight: 600; }
+        .instruction-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 1.8rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .instruction-card .instruction-text { flex: 1; }
+        .instruction-card .instruction-text p { font-size: 1.15rem; font-weight: 700; color: var(--fg); }
+        .instruction-card .instruction-text p+p { margin-top: 0.3rem; font-size: 1rem; color: var(--fg-secondary); font-weight: 600; }
+        .btn-play-instruction { flex-shrink: 0; width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--green); background: var(--green-pale); color: var(--green); font-size: 1.6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
+        .btn-play-instruction:hover, .btn-play-instruction.speaking { background: var(--green); color: #fff; }
+        .section-title { font-size: 1.4rem; font-weight: 800; color: var(--fg); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        .section-title i { color: var(--green); font-size: 1.2rem; }
+
+        /* DEMO */
+        .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
+        .demo-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 1.2rem 1rem; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+        .demo-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 4px 12px rgba(0,105,92,0.12); }
+        .demo-phrase { font-size: 1.2rem; font-weight: 800; color: var(--fg); }
+        .demo-hint { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+        .divider { border: none; height: 2px; background: var(--border); margin: 2rem 0 2.5rem; }
+
+        /* EXERCISE */
+        .exercise-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .progress-label { font-size: 1rem; font-weight: 700; color: var(--muted); text-align: center; margin-bottom: 0.4rem; }
+        .progress-bar-track { background: var(--green-light); border-radius: 99px; height: 14px; margin-bottom: 1.5rem; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.5s ease; width: 0%; }
+        .score-row { display: flex; align-items: center; justify-content: center; gap: 2rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
+        .score-item { display: flex; align-items: center; gap: 0.4rem; font-size: 1.05rem; font-weight: 700; color: var(--fg-secondary); }
+        .score-num { font-size: 1.4rem; font-weight: 900; min-width: 1.5ch; text-align: center; }
+        .score-item.hits .score-num { color: var(--green-dark); }
+        .score-item.misses .score-num { color: #C62828; }
+        .exercise-instruction { font-size: 1.2rem; font-weight: 800; color: var(--fg); text-align: center; margin-bottom: 1.2rem; }
+        .audio-row { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
+        .btn-audio-exercise { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.9rem 1.8rem; font-size: 1.1rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 10px rgba(46,125,50,0.25); }
+        .btn-audio-exercise:hover { background: var(--green-dark); }
+        .btn-audio-exercise.speaking { animation: pulse-green 0.9s ease infinite; }
+        .btn-help-exercise { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--green-light); background: var(--green-pale); color: var(--green); font-size: 1.1rem; cursor: pointer; transition: all 0.2s; }
+        .btn-help-exercise:hover { background: var(--green); color: #fff; }
+        .audio-hint { font-size: 0.95rem; color: var(--muted); font-weight: 600; }
+
+        /* SENTENCE SLOTS & TILES */
+        .sentence-slots { display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 2rem; min-height: 65px; }
+        .sentence-slot { min-width: 90px; height: 60px; padding: 0 1rem; border: 3px dashed #BDBDBD; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 800; background: var(--bg); color: var(--fg); }
+        .sentence-slot.filled { border-style: solid; border-color: var(--border); background: #fff; }
+        .sentence-slot.correct { border-color: var(--green); background: var(--green-pale); color: var(--green-dark); animation: pop-correct 0.35s ease; }
+        .sentence-slot.wrong { border-color: #EF9A9A; background: #FFF3F3; color: #C62828; animation: shake 0.4s ease; }
+
+        .word-tiles { display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .btn-word-tile { padding: 0.8rem 1.4rem; font-size: 1.3rem; font-weight: 900; font-family: 'Nunito', sans-serif; background: var(--white); border: 3px solid var(--border); border-radius: var(--radius-sm); color: var(--fg); cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        .btn-word-tile:hover:not(:disabled) { transform: translateY(-3px); border-color: var(--green); background: var(--green-pale); }
+        .btn-word-tile.used { opacity: 0.25; cursor: default; transform: none; border-color: #E0E0E0; }
+
+        @keyframes pop-correct { 0%{transform:scale(1)} 50%{transform:scale(1.04)} 100%{transform:scale(1)} }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-5px)} 40%{transform:translateX(5px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
+        @keyframes pulse-green { 0%,100%{box-shadow:0 0 0 0 rgba(46,125,50,0.3)} 50%{box-shadow:0 0 0 10px rgba(46,125,50,0)} }
+        @keyframes fade-up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+        .feedback-area { text-align: center; min-height: 3.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; }
+        .feedback-msg { font-size: 1.3rem; font-weight: 800; border-radius: var(--radius-sm); padding: 0.7rem 1.5rem; display: inline-flex; align-items: center; gap: 0.5rem; animation: fade-up 0.3s ease; }
+        .feedback-msg.success { background: var(--green-pale); color: var(--green-dark); border: 2px solid var(--green-light); }
+        .feedback-msg.error { background: #FFF8E1; color: #E65100; border: 2px solid #FFE0B2; }
+        .btn-next { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.85rem 2rem; font-size: 1.05rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
+        .btn-next:hover { background: var(--green-dark); }
+
+        /* COMPLETION */
+        .completion { text-align: center; padding: 2.5rem 1.5rem; display: none; }
+        .completion.visible { display: block; animation: fade-up 0.4s ease; }
+        .completion-icon { font-size: 3.5rem; color: var(--green); margin-bottom: 0.8rem; }
+        .completion h2 { font-size: 1.8rem; font-weight: 900; margin-bottom: 0.4rem; }
+        .completion p { font-size: 1.1rem; color: var(--fg-secondary); font-weight: 600; margin-bottom: 2rem; }
+        .completion-stats { display: flex; justify-content: center; gap: 2.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 2.5rem; font-weight: 900; line-height: 1; }
+        .stat-label { font-size: 0.95rem; font-weight: 700; color: var(--muted); margin-top: 0.2rem; }
+        .error-summary { background: #FFF8E1; border: 2px solid #FFE0B2; border-radius: var(--radius-sm); padding: 1.2rem 1.5rem; margin-bottom: 2rem; text-align: left; max-width: 480px; margin-left: auto; margin-right: auto; }
+        .error-summary h3 { font-size: 1.05rem; font-weight: 800; color: #E65100; margin-bottom: 0.6rem; }
+        .error-summary ul { list-style: none; padding: 0; }
+        .error-summary li { font-size: 1rem; font-weight: 700; color: var(--fg-secondary); padding: 0.25rem 0; }
+        .btn-restart { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 1rem 2.5rem; font-size: 1.1rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
+        .btn-restart:hover { background: var(--green-dark); }
+        .footer { background: var(--white); border-top: 2px solid var(--border); padding: 1.2rem 1.5rem; text-align: center; font-size: 0.9rem; color: var(--muted); font-weight: 600; margin-top: auto; }
+        .footer i { color: var(--green); }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+        @media (max-width: 768px) { .navbar-nav { display: none; } .navbar-hamburger { display: flex; align-items: center; justify-content: center; } }
+    </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Pular para o conteúdo</a>
+
+<nav class="navbar" role="navigation" aria-label="Navegação principal">
+    <div class="navbar-left">
+        <button onclick="history.back()" class="btn-back" aria-label="Voltar">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+        </button>
+        <a href="index.html" class="navbar-brand" aria-label="AprendIDos">
+            <div class="brand-icon" aria-hidden="true">A</div>
+            <span>AprendIDos</span>
+        </a>
+    </div>
+    <div class="navbar-nav" role="menubar">
+        <a href="index.html" class="navbar-nav-item" role="menuitem"><i class="fas fa-home"></i><span>Início</span></a>
+        <a href="licoes.html" class="navbar-nav-item active" role="menuitem"><i class="fas fa-puzzle-piece"></i><span>Atividades</span></a>
+    </div>
+    <button class="navbar-hamburger" aria-label="Abrir menu" aria-expanded="false" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="navbar-mobile-menu" id="mobileMenu">
+        <a href="index.html"><i class="fas fa-home"></i> Início</a>
+        <a href="licoes.html" class="active"><i class="fas fa-puzzle-piece"></i> Atividades</a>
+    </div>
+</nav>
+
+<main class="container" id="main-content">
+    <header class="activity-header">
+        <h1>Frases Simples</h1>
+        <p class="subtitle">Aprenda a juntar as palavras e formar frases com sentido.</p>
+    </header>
+
+    <div id="reviewBanner" style="display:none; align-items:center; gap:14px; background:#E8F5E9; border:2px solid #81C784; border-radius:16px; padding:14px 20px; margin-bottom:20px; color:#1B5E20; box-shadow:0 4px 12px rgba(46,125,50,0.10);">
+        <i class="fas fa-check-circle" style="font-size:1.8rem;color:#2E7D32;flex-shrink:0;"></i>
+        <div style="flex:1;">
+            <strong style="display:block;font-size:1.08rem;color:#1B5E20;margin-bottom:2px;">Lição Concluída — Modo de Revisão</strong>
+            <span id="reviewBannerText" style="font-size:0.95rem;color:#2E7D32;">Você já concluiu esta lição! Sinta-se à vontade para praticar novamente.</span>
+        </div>
+    </div>
+
+    <div class="instruction-card">
+        <div class="instruction-text">
+            <p>Junte as palavras na ordem certa para formar cada frase.</p>
+            <p>Ouça com atenção a frase falada e monte tocando nas palavras.</p>
+        </div>
+        <button class="btn-play-instruction" id="btnInstruction" aria-label="Ouvir instrução" onclick="playInstruction()">
+            <i class="fas fa-play"></i>
+        </button>
+    </div>
+
+    <!-- DEMO -->
+    <section aria-labelledby="title-demo">
+        <h2 class="section-title" id="title-demo">
+            <i class="fas fa-comment-dots"></i> Exemplos de Frases
+        </h2>
+        <div class="demo-grid">
+            <div class="demo-card" onclick="playDemo('A casa é bonita')" role="button" tabindex="0" aria-label="A casa é bonita">
+                <div class="demo-phrase">🏠 A CASA É BONITA</div>
+                <div class="demo-hint">Toque para ouvir</div>
+            </div>
+            <div class="demo-card" onclick="playDemo('O gato bebe leite')" role="button" tabindex="0" aria-label="O gato bebe leite">
+                <div class="demo-phrase">🐱 O GATO BEBE LEITE</div>
+                <div class="demo-hint">Toque para ouvir</div>
+            </div>
+            <div class="demo-card" onclick="playDemo('Eu gosto de café')" role="button" tabindex="0" aria-label="Eu gosto de café">
+                <div class="demo-phrase">☕ EU GOSTO DE CAFÉ</div>
+                <div class="demo-hint">Toque para ouvir</div>
+            </div>
+            <div class="demo-card" onclick="playDemo('A vovó faz bolo')" role="button" tabindex="0" aria-label="A vovó faz bolo">
+                <div class="demo-phrase">👵 A VOVÓ FAZ BOLO</div>
+                <div class="demo-hint">Toque para ouvir</div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- EXERCÍCIO -->
+    <section aria-labelledby="title-exercise">
+        <h2 class="section-title" id="title-exercise">
+            <i class="fas fa-pencil-alt"></i> Agora é sua vez
+        </h2>
+
+        <div id="exerciseLayout">
+            <div class="exercise-card">
+                <p class="progress-label" id="progressLabel">Frase 1 de 6</p>
+                <div class="progress-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressBar">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+                <div class="score-row">
+                    <div class="score-item hits"><i class="fas fa-check-circle" style="color:var(--green)"></i><span>Acertos:</span><span class="score-num" id="hitsCount">0</span></div>
+                    <div class="score-item misses"><i class="fas fa-times-circle" style="color:#C62828"></i><span>Erros:</span><span class="score-num" id="missesCount">0</span></div>
+                </div>
+
+                <p class="exercise-instruction">Ouça a frase e monte na ordem correta:</p>
+                <div class="audio-row">
+                    <button class="btn-audio-exercise" id="btnExerciseAudio" onclick="playQuestionAudio()" aria-label="Ouvir a frase">
+                        <i class="fas fa-volume-up"></i> Ouvir a frase
+                    </button>
+                    <button class="btn-help-exercise" id="btnHelpExercise" onclick="playHelpExercise()" title="Ouvir instrução">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <span class="audio-hint">Toque para ouvir</span>
+                </div>
+
+                <!-- SLOTS ONDE A FRASE É MONTADA -->
+                <div class="sentence-slots" id="sentenceSlots" aria-live="polite"></div>
+
+                <!-- PALAVRAS PARA CLICAR -->
+                <div class="word-tiles" id="wordTiles" role="group" aria-label="Palavras disponíveis para a frase"></div>
+
+                <div class="feedback-area" id="feedbackArea" aria-live="polite" aria-atomic="true"></div>
+            </div>
+        </div>
+
+        <div class="completion exercise-card" id="completionScreen">
+            <div class="completion-icon"><i class="fas fa-trophy"></i></div>
+            <h2>Parabéns! Você terminou!</h2>
+            <p id="completionMsg">Veja como você se saiu.</p>
+            <div class="completion-stats">
+                <div class="stat"><div class="stat-value" style="color:var(--green-dark)" id="finalHits">0</div><div class="stat-label">Acertos</div></div>
+                <div class="stat"><div class="stat-value" style="color:#C62828" id="finalMisses">0</div><div class="stat-label">Erros</div></div>
+                <div class="stat"><div class="stat-value" style="color:var(--green)" id="finalTotal">6</div><div class="stat-label">Total</div></div>
+            </div>
+            <div class="error-summary" id="errorSummary" style="display:none;">
+                <h3><i class="fas fa-exclamation-triangle"></i> Frases para revisar</h3>
+                <ul id="errorList"></ul>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;max-width:480px;margin:24px auto 0;">
+                <button type="button" id="btnSalvarEVerOutras" class="btn-restart" onclick="salvarEVerOutras(event)" style="background:var(--green);color:#fff;border:none;box-shadow:0 4px 14px rgba(46,125,50,0.3);">
+                    <i class="fas fa-check-circle"></i> Salvar e Ver Outras Lições
+                </button>
+                <button type="button" class="btn-restart" onclick="restartExercise()" style="background:#FAF3E0;color:#3E2723;border:2px solid #C8E6C9;">
+                    <i class="fas fa-redo"></i> Refazer atividade
+                </button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <i class="fas fa-seedling"></i> AprendIDos — Alfabetização para todos
+</footer>
+<div id="srAnnouncer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+<div vw class="enabled"><div vw-access-button class="active"></div><div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div></div>
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
+
+<script src="frases.js"></script>
+</body>
+</html>

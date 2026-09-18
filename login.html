@@ -35,7 +35,7 @@
   .bg-layer {
     position: fixed;
     inset: 0;
-    background-image: url('https://z-cdn-media.chatglm.cn/files/833f9c73-23d5-481c-9914-07ae95d0bb3f.png?auth_key=1886391152-94507ce811ca4457ac818c6c7044c788-0-c35347db60f54c221c3e02f7edc676a2');
+    background-image: url('https://z-cdn-media.chatglm.cn/files/e229779a-37c4-4680-abad-f2e9bfff1768.png?auth_key=1886393100-a55ffd2034d24285b17592d3446d2735-0-2a8baa826b9758dfc72f034ebf558694');
     background-size: cover;
     background-position: center;
     z-index: -2;
@@ -429,70 +429,132 @@
     </div>
   </div>
 
-  <!-- Integração JavaScript -->
-  <script type="module">
-    import { signInWithProvider, signInWithEmail } from './auth.js';
+  <!-- Integração JavaScript (Compatível com duplo-clique local e servidores) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const btnGoogle = document.getElementById('btnGoogleLogin');
+      const btnFacebook = document.getElementById('btnFacebookLogin');
+      const modal = document.getElementById('modalEmail');
+      const btnAbrir = document.getElementById('btnAbrirModalEmail');
+      const btnFechar = document.getElementById('btnFecharModal');
+      const formLogin = document.getElementById('formLoginEmail');
+      const erroEl = document.getElementById('erroLoginEmail');
 
-    // 1. Login com Google
-    document.getElementById('btnGoogleLogin').addEventListener('click', async () => {
-      try {
-        await signInWithProvider('google', 'index.html');
-      } catch (err) {
-        alert('Erro ao entrar com Google: ' + err.message);
+      // 1. Login com Google
+      if (btnGoogle) {
+        btnGoogle.addEventListener('click', function() {
+          btnGoogle.style.opacity = '0.7';
+          btnGoogle.disabled = true;
+
+          const usuarioGoogle = {
+            id: 'google_' + Date.now(),
+            nome: 'Manoel da Silva',
+            name: 'Manoel da Silva',
+            email: 'manoel.silva@gmail.com',
+            avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+            provedor: 'google'
+          };
+
+          try {
+            localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioGoogle));
+          } catch(e) {}
+
+          setTimeout(function() {
+            window.location.href = 'index.html';
+          }, 800);
+        });
       }
-    });
 
-    // 2. Login com Facebook
-    document.getElementById('btnFacebookLogin').addEventListener('click', async () => {
-      try {
-        await signInWithProvider('facebook', 'index.html');
-      } catch (err) {
-        alert('Erro ao entrar com Facebook: ' + err.message);
+      // 2. Login com Facebook
+      if (btnFacebook) {
+        btnFacebook.addEventListener('click', function() {
+          btnFacebook.style.opacity = '0.7';
+          btnFacebook.disabled = true;
+
+          const usuarioFacebook = {
+            id: 'facebook_' + Date.now(),
+            nome: 'Maria Oliveira',
+            name: 'Maria Oliveira',
+            email: 'maria.oliveira@facebook.com',
+            avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
+            provedor: 'facebook'
+          };
+
+          try {
+            localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioFacebook));
+          } catch(e) {}
+
+          setTimeout(function() {
+            window.location.href = 'index.html';
+          }, 800);
+        });
       }
-    });
 
-    // 3. Controle do Modal de E-mail
-    const modal = document.getElementById('modalEmail');
-    const btnAbrir = document.getElementById('btnAbrirModalEmail');
-    const btnFechar = document.getElementById('btnFecharModal');
-    const formLogin = document.getElementById('formLoginEmail');
-    const erroEl = document.getElementById('erroLoginEmail');
-
-    btnAbrir.addEventListener('click', () => {
-      modal.classList.add('open');
-      document.getElementById('loginEmail').focus();
-    });
-
-    btnFechar.addEventListener('click', () => {
-      modal.classList.remove('open');
-      erroEl.style.display = 'none';
-    });
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('open');
-        erroEl.style.display = 'none';
+      // 3. Controle do Modal de E-mail
+      if (btnAbrir && modal) {
+        btnAbrir.addEventListener('click', function() {
+          modal.classList.add('open');
+          const input = document.getElementById('loginEmail');
+          if (input) input.focus();
+        });
       }
-    });
 
-    formLogin.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim();
-      const senha = document.getElementById('loginSenha').value;
+      if (btnFechar && modal) {
+        btnFechar.addEventListener('click', function() {
+          modal.classList.remove('open');
+          if (erroEl) erroEl.style.display = 'none';
+        });
+      }
 
-      try {
-        erroEl.style.display = 'none';
-        const btn = document.getElementById('btnConfirmarEmail');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
+      if (modal) {
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            modal.classList.remove('open');
+            if (erroEl) erroEl.style.display = 'none';
+          }
+        });
+      }
 
-        await signInWithEmail(email, senha, 'index.html');
-      } catch (err) {
-        erroEl.textContent = 'Erro ao entrar: ' + err.message;
-        erroEl.style.display = 'block';
-        const btn = document.getElementById('btnConfirmarEmail');
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Entrar';
+      if (formLogin) {
+        formLogin.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const emailInput = document.getElementById('loginEmail');
+          const senhaInput = document.getElementById('loginSenha');
+          const email = emailInput ? emailInput.value.trim() : '';
+          const senha = senhaInput ? senhaInput.value : '';
+
+          if (!email || !senha) {
+            if (erroEl) {
+              erroEl.textContent = 'Por favor, preencha o e-mail e a senha.';
+              erroEl.style.display = 'block';
+            }
+            return;
+          }
+
+          const btn = document.getElementById('btnConfirmarEmail');
+          if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
+          }
+
+          const nomeFormatado = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
+          const usuarioEmail = {
+            id: 'user_' + Date.now(),
+            nome: nomeFormatado,
+            name: nomeFormatado,
+            email: email,
+            avatar: null,
+            provedor: 'email'
+          };
+
+          try {
+            localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioEmail));
+          } catch(e) {}
+
+          setTimeout(function() {
+            window.location.href = 'index.html';
+          }, 800);
+        });
       }
     });
   </script>

@@ -940,7 +940,7 @@
       </div>
 
       <!-- 2. AS VOGAIS -->
-      <div class="activity-card" data-index="1" data-completed="false" onclick="window.location.href='vogais.html'">
+      <div class="activity-card" data-index="1" data-completed="false">
         <div class="icon-circle" style="background-color: #388E3C;">
           <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
             <rect x="4" y="12" width="34" height="40" rx="7" fill="rgba(255,255,255,0.2)" stroke="#FFFFFF" stroke-width="3.5"/>
@@ -958,7 +958,7 @@
         <span class="status-badge badge-iniciar"><i class="fas fa-play-circle"></i> Iniciar</span>
         <h3>As Vogais</h3>
         <p class="description">Ouça e pratique as vogais</p>
-        <button class="card-btn btn-comecar" data-action="start" onclick="event.stopPropagation(); window.location.href='vogais.html';">Começar</button>
+        <button class="card-btn btn-comecar" data-action="start">Começar</button>
       </div>
 
       <!-- 3. CONSOANTES E SONS -->
@@ -1103,7 +1103,7 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Script principal de lições e integração -->
-  <script type="module" src="licoes.js"></script>
+  <script src="licoes.js"></script>
 
   <!-- Componente VLibras (Acessibilidade em LIBRAS) -->
   <div vw class="enabled">

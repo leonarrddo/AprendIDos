@@ -188,6 +188,19 @@ export async function saveLessonProgress(lessonId, data = {}) {
     localStorage.setItem(storageKey, JSON.stringify(currentProgress));
   } catch (e) {}
 
+  // Grava também nas chaves globais e de anon para total interoperabilidade
+  try {
+    const legacy = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
+    legacy[lessonId] = currentProgress[lessonId];
+    localStorage.setItem('aprendidos_progresso', JSON.stringify(legacy));
+  } catch (e) {}
+
+  try {
+    const anon = JSON.parse(localStorage.getItem('aprendidos_progresso_anon') || '{}');
+    anon[lessonId] = currentProgress[lessonId];
+    localStorage.setItem('aprendidos_progresso_anon', JSON.stringify(anon));
+  } catch (e) {}
+
   if (supabase && user && !user.isDemo) {
     try {
       await supabase.from('progresso_licoes').upsert({
@@ -213,6 +226,16 @@ export async function getLessonProgress() {
   let progress = {};
   try {
     progress = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  } catch (e) {}
+
+  // Fallback e mesclagem de chaves adicionais para não perder progresso
+  try {
+    const legacy = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
+    progress = { ...legacy, ...progress };
+  } catch (e) {}
+  try {
+    const anon = JSON.parse(localStorage.getItem('aprendidos_progresso_anon') || '{}');
+    progress = { ...anon, ...progress };
   } catch (e) {}
 
   if (supabase && user && !user.isDemo) {

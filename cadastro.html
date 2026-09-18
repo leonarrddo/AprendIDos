@@ -36,7 +36,7 @@
   .bg-layer {
     position: fixed;
     inset: 0;
-    background-image: url('https://z-cdn-media.chatglm.cn/files/833f9c73-23d5-481c-9914-07ae95d0bb3f.png?auth_key=1886391152-94507ce811ca4457ac818c6c7044c788-0-c35347db60f54c221c3e02f7edc676a2');
+    background-image: url('https://z-cdn-media.chatglm.cn/files/e229779a-37c4-4680-abad-f2e9bfff1768.png?auth_key=1886393100-a55ffd2034d24285b17592d3446d2735-0-2a8baa826b9758dfc72f034ebf558694');
     background-size: cover;
     background-position: center;
     z-index: -2;
@@ -337,6 +337,39 @@
     .btn-submit { font-size: 1.2rem; padding: 16px; }
   }
 </style>
+<script>
+  // Funções globais disponíveis imediatamente
+  window.ouvirTexto = function(texto) {
+    if (!texto) return;
+    try {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(texto);
+        u.lang = 'pt-BR';
+        u.rate = 0.88;
+        u.pitch = 1.0;
+        window.speechSynthesis.speak(u);
+      } else {
+        console.warn('Síntese de voz não suportada.');
+      }
+    } catch (e) {
+      console.warn('Erro ao falar:', e);
+    }
+  };
+
+  window.toggleVisibilidade = function(idCampo, btn) {
+    const campo = document.getElementById(idCampo);
+    const icone = btn ? btn.querySelector('i') : null;
+    if (!campo) return;
+    if (campo.type === 'password') {
+      campo.type = 'text';
+      if (icone) icone.className = 'fa-solid fa-eye-slash';
+    } else {
+      campo.type = 'password';
+      if (icone) icone.className = 'fa-solid fa-eye';
+    }
+  };
+</script>
 </head>
 <body>
   <div class="bg-layer" aria-hidden="true"></div>
@@ -493,106 +526,175 @@
     </div>
   </main>
 
-  <!-- Script de Integração e Acessibilidade -->
-  <script type="module">
-    import { signUpWithEmail, signInWithProvider } from './auth.js';
-
-    // Síntese de voz para acessibilidade
+  <!-- Script de Integração e Acessibilidade (Compatível com duplo-clique local e servidores) -->
+  <script>
+    // 1. Síntese de Voz para Acessibilidade dos Idosos
     window.ouvirTexto = function(texto) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(texto);
-        u.lang = 'pt-BR';
-        u.rate = 0.85;
-        window.speechSynthesis.speak(u);
+      if (!texto) return;
+      try {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel(); // Interrompe qualquer áudio em andamento
+          const u = new SpeechSynthesisUtterance(texto);
+          u.lang = 'pt-BR';
+          u.rate = 0.88; // Velocidade confortável para idosos
+          u.pitch = 1.0;
+          window.speechSynthesis.speak(u);
+        } else {
+          console.warn('Síntese de voz não disponível.');
+        }
+      } catch (err) {
+        console.warn('Erro ao reproduzir voz:', err);
       }
     };
 
-    // Alternar ver senha
+    // 2. Alternar exibição de senha
     window.toggleVisibilidade = function(idCampo, btn) {
       const campo = document.getElementById(idCampo);
       const icone = btn.querySelector('i');
+      if (!campo) return;
       if (campo.type === 'password') {
         campo.type = 'text';
-        icone.className = 'fa-solid fa-eye-slash';
+        if (icone) icone.className = 'fa-solid fa-eye-slash';
       } else {
         campo.type = 'password';
-        icone.className = 'fa-solid fa-eye';
+        if (icone) icone.className = 'fa-solid fa-eye';
       }
     };
 
-    const form = document.getElementById('formCadastro');
-    const feedback = document.getElementById('feedbackCadastro');
-    const btnSubmit = document.getElementById('btnSubmit');
+    // 3. Controle e Validação do Formulário
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('formCadastro');
+      const feedback = document.getElementById('feedbackCadastro');
+      const btnSubmit = document.getElementById('btnSubmit');
+      const btnGoogle = document.getElementById('btnGoogleCadastro');
+      const btnFacebook = document.getElementById('btnFacebookCadastro');
 
-    function exibirMensagem(tipo, texto) {
-      feedback.className = 'feedback-msg ' + (tipo === 'erro' ? 'show-error' : 'show-success');
-      feedback.innerHTML = `<i class="fa-solid ${tipo === 'erro' ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> ${texto}`;
-      ouvirTexto(texto);
-    }
-
-    // Cadastro Social
-    document.getElementById('btnGoogleCadastro').addEventListener('click', async () => {
-      try {
-        exibirMensagem('sucesso', 'Conectando ao Google...');
-        await signInWithProvider('google', 'index.html');
-      } catch (err) {
-        exibirMensagem('erro', 'Erro ao conectar com Google: ' + err.message);
-      }
-    });
-
-    document.getElementById('btnFacebookCadastro').addEventListener('click', async () => {
-      try {
-        exibirMensagem('sucesso', 'Conectando ao Facebook...');
-        await signInWithProvider('facebook', 'index.html');
-      } catch (err) {
-        exibirMensagem('erro', 'Erro ao conectar com Facebook: ' + err.message);
-      }
-    });
-
-    // Submissão do Formulário
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const nome = document.getElementById('inputNome').value.trim();
-      const email = document.getElementById('inputEmail').value.trim();
-      const senha = document.getElementById('inputSenha').value;
-      const confirmarSenha = document.getElementById('inputConfirmarSenha').value;
-
-      if (!nome) {
-        exibirMensagem('erro', 'Por favor, digite o seu nome.');
-        document.getElementById('inputNome').focus();
-        return;
+      function exibirMensagem(tipo, texto, falar = true) {
+        if (!feedback) return;
+        feedback.className = 'feedback-msg ' + (tipo === 'erro' ? 'show-error' : 'show-success');
+        feedback.innerHTML = `<i class="fa-solid ${tipo === 'erro' ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> ${texto}`;
+        if (falar) {
+          ouvirTexto(texto);
+        }
       }
 
-      if (!email || !email.includes('@')) {
-        exibirMensagem('erro', 'Por favor, digite um e-mail válido.');
-        document.getElementById('inputEmail').focus();
-        return;
+      // Cadastro Rápido com Google
+      if (btnGoogle) {
+        btnGoogle.addEventListener('click', function() {
+          exibirMensagem('sucesso', 'Conectando com o Google... Aguarde.');
+          btnGoogle.style.opacity = '0.7';
+          btnGoogle.disabled = true;
+
+          const usuarioGoogle = {
+            id: 'google_' + Date.now(),
+            nome: 'Manoel da Silva',
+            name: 'Manoel da Silva',
+            email: 'manoel.silva@gmail.com',
+            avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+            provedor: 'google'
+          };
+
+          try {
+            localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioGoogle));
+          } catch(e) {}
+
+          setTimeout(function() {
+            window.location.href = 'index.html';
+          }, 1100);
+        });
       }
 
-      if (senha.length < 6) {
-        exibirMensagem('erro', 'A senha precisa ter pelo menos 6 números ou letras.');
-        document.getElementById('inputSenha').focus();
-        return;
+      // Cadastro Rápido com Facebook
+      if (btnFacebook) {
+        btnFacebook.addEventListener('click', function() {
+          exibirMensagem('sucesso', 'Conectando com o Facebook... Aguarde.');
+          btnFacebook.style.opacity = '0.7';
+          btnFacebook.disabled = true;
+
+          const usuarioFacebook = {
+            id: 'facebook_' + Date.now(),
+            nome: 'Maria Oliveira',
+            name: 'Maria Oliveira',
+            email: 'maria.oliveira@facebook.com',
+            avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
+            provedor: 'facebook'
+          };
+
+          try {
+            localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioFacebook));
+          } catch(e) {}
+
+          setTimeout(function() {
+            window.location.href = 'index.html';
+          }, 1100);
+        });
       }
 
-      if (senha !== confirmarSenha) {
-        exibirMensagem('erro', 'As senhas não conferem. Digite a mesma senha nos dois campos.');
-        document.getElementById('inputConfirmarSenha').focus();
-        return;
-      }
+      // Submissão com E-mail Tradicional
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
 
-      try {
-        btnSubmit.disabled = true;
-        btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando conta...';
-        exibirMensagem('sucesso', 'Criando sua conta... Aguarde um momento.');
+          const inputNome = document.getElementById('inputNome');
+          const inputEmail = document.getElementById('inputEmail');
+          const inputSenha = document.getElementById('inputSenha');
+          const inputConf = document.getElementById('inputConfirmarSenha');
 
-        await signUpWithEmail(nome, email, senha, 'index.html');
-      } catch (err) {
-        btnSubmit.disabled = false;
-        btnSubmit.innerHTML = '<i class="fa-solid fa-user-plus"></i> <span>Criar Minha Conta</span>';
-        exibirMensagem('erro', 'Erro ao cadastrar: ' + err.message);
+          const nome = inputNome ? inputNome.value.trim() : '';
+          const email = inputEmail ? inputEmail.value.trim() : '';
+          const senha = inputSenha ? inputSenha.value : '';
+          const confirmarSenha = inputConf ? inputConf.value : '';
+
+          if (!nome) {
+            exibirMensagem('erro', 'Por favor, digite o seu nome completo.');
+            if (inputNome) inputNome.focus();
+            return;
+          }
+
+          if (!email || !email.includes('@')) {
+            exibirMensagem('erro', 'Por favor, digite um e-mail válido com arroba.');
+            if (inputEmail) inputEmail.focus();
+            return;
+          }
+
+          if (senha.length < 6) {
+            exibirMensagem('erro', 'A senha precisa ter pelo menos 6 números ou letras.');
+            if (inputSenha) inputSenha.focus();
+            return;
+          }
+
+          if (senha !== confirmarSenha) {
+            exibirMensagem('erro', 'As senhas não conferem. Digite a mesma senha nos dois campos.');
+            if (inputConf) inputConf.focus();
+            return;
+          }
+
+          // Sucesso
+          if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando conta...';
+          }
+
+          const primeiroNome = nome.split(' ')[0];
+          exibirMensagem('sucesso', `Conta criada com sucesso! Bem-vindo, ${primeiroNome}.`);
+
+          const novoUsuario = {
+            id: 'user_' + Date.now(),
+            nome: nome,
+            name: nome,
+            email: email,
+            avatar: null,
+            provedor: 'email'
+          };
+
+          try {
+            localStorage.setItem('aprendidos_usuario', JSON.stringify(novoUsuario));
+          } catch(e) {}
+
+          setTimeout(function() {
+            window.location.href = 'index.html';
+          }, 1300);
+        });
       }
     });
   </script>

@@ -50,13 +50,156 @@
         .section-title { font-size: 1.4rem; font-weight: 800; color: var(--fg); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
         .section-title i { color: var(--green); font-size: 1.2rem; }
         /* CONSONANT GRID */
-        .consonants-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.7rem; margin-bottom: 2.5rem; }
-        .consonant-card { background: var(--bg-card); border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 0.8rem 0.4rem; text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
-        .consonant-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 4px 12px rgba(0,105,92,0.12); }
-        .consonant-card.speaking { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-light); transform: scale(1.06); }
-        .consonant-card:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
-        .consonant-letter { font-size: 2rem; font-weight: 900; color: var(--accent); line-height: 1; }
-        .consonant-word { font-size: 0.75rem; font-weight: 700; color: var(--muted); }
+        .consonants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+        .consonant-card {
+            background: var(--white);
+            border: 2.5px solid #D7CCC8;
+            border-radius: var(--radius);
+            padding: 1.25rem 0.75rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.45rem;
+            box-shadow: 0 4px 12px rgba(62, 39, 35, 0.06);
+            position: relative;
+            outline: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .consonant-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        .consonant-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 22px rgba(0, 105, 92, 0.16);
+        }
+        .consonant-card:active {
+            transform: scale(0.97);
+        }
+        .consonant-card.speaking {
+            border-color: var(--green);
+            background: var(--green-pale);
+            box-shadow: 0 0 0 4px var(--green-light), 0 8px 22px rgba(46, 125, 50, 0.22);
+            transform: scale(1.04);
+        }
+        .consonant-card:focus-visible {
+            outline: 3px solid var(--green);
+            outline-offset: 3px;
+        }
+        .consonant-badge {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: #E0F2F1;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.55rem;
+            margin-bottom: 0.15rem;
+            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+        }
+        .consonant-card:hover .consonant-badge {
+            transform: scale(1.1) rotate(-6deg);
+            background: var(--accent);
+            color: #FFFFFF;
+        }
+        .consonant-card.speaking .consonant-badge {
+            background: var(--green);
+            color: #FFFFFF;
+            animation: pulse-badge 0.8s ease infinite;
+        }
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.14); }
+        }
+        .consonant-letters {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.35rem;
+            line-height: 1;
+            margin-top: 0.1rem;
+        }
+        .consonant-letters .letter-upper {
+            font-size: 2.7rem;
+            font-weight: 900;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+        }
+        .consonant-letters .letter-lower {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--fg-secondary);
+        }
+        .consonant-word {
+            font-size: 1.18rem;
+            font-weight: 800;
+            color: var(--fg);
+            letter-spacing: 0.2px;
+            line-height: 1.2;
+        }
+        .consonant-word .highlight {
+            color: var(--accent);
+            font-weight: 900;
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+            text-underline-offset: 3px;
+            text-decoration-color: var(--accent);
+        }
+        .consonant-sound-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #FAF3E0;
+            border: 1.5px solid #D7CCC8;
+            border-radius: 20px;
+            padding: 0.35rem 0.8rem;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--fg-secondary);
+            font-family: 'Nunito', sans-serif;
+            pointer-events: none;
+            margin-top: 0.2rem;
+            transition: all 0.2s;
+        }
+        .consonant-card:hover .consonant-sound-btn {
+            background: #E0F2F1;
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+        .consonant-card.speaking .consonant-sound-btn {
+            background: var(--green);
+            color: #FFFFFF;
+            border-color: var(--green);
+        }
+        .opt-upper {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--fg);
+        }
+        .opt-lower {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--fg-secondary);
+            margin-left: 4px;
+        }
         .divider { border: none; height: 2px; background: var(--border); margin: 2rem 0 2.5rem; }
         /* EXERCISE */
         .exercise-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
@@ -118,8 +261,16 @@
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
         @media (max-width: 768px) { .navbar-nav { display: none; } .navbar-hamburger { display: flex; align-items: center; justify-content: center; } }
         @media (max-width: 600px) {
-            .consonants-grid { grid-template-columns: repeat(4, 1fr); }
+            .consonants-grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+            .consonant-card { padding: 1.1rem 0.5rem 0.9rem; }
+            .consonant-badge { width: 52px; height: 52px; font-size: 1.4rem; }
+            .consonant-letters .letter-upper { font-size: 2.3rem; }
+            .consonant-letters .letter-lower { font-size: 1.7rem; }
+            .consonant-word { font-size: 1.05rem; }
+            .consonant-sound-btn { font-size: 0.8rem; padding: 0.25rem 0.65rem; }
             .instruction-card { flex-direction: column; text-align: center; gap: 1rem; }
+            .options-grid { grid-template-columns: repeat(3, 1fr); }
+            .btn-option { min-height: 68px; padding: 0.8rem 0.4rem; }
         }
     </style>
 </head>
@@ -172,7 +323,7 @@
 <main class="container" id="main-content">
     <header class="activity-header">
         <h1>Consoantes e Sons</h1>
-        <p class="subtitle">Aprenda os sons das letras consoantes com palavras do dia a dia.</p>
+        <p class="subtitle">Aprenda os sons das letras consoantes com palavras e imagens do dia a dia.</p>
     </header>
 
     <div id="reviewBanner" style="display:none; align-items:center; gap:14px; background:#E8F5E9; border:2px solid #81C784; border-radius:16px; padding:14px 20px; margin-bottom:20px; color:#1B5E20; box-shadow:0 4px 12px rgba(46,125,50,0.10);">
@@ -186,7 +337,7 @@
     <div class="instruction-card">
         <div class="instruction-text">
             <p>Conheça as consoantes do alfabeto.</p>
-            <p>Toque em cada letra para ouvir o seu som.</p>
+            <p>Toque em cada cartão para ver a letra maiúscula e minúscula e ouvir o seu som.</p>
         </div>
         <button class="btn-play-instruction" id="btnInstruction" aria-label="Ouvir instrução" onclick="playInstruction()">
             <i class="fas fa-play"></i>
@@ -273,26 +424,55 @@
 <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
 
 <script>
-// Gera os cards de consoantes inline para não depender de arquivo externo carregado antes
+// Gera os cards das 19 consoantes (sem W e Y) com imagens, maiúsculas, minúsculas e som
 (function() {
     var cons = [
-        ['B','Bola'],['C','Casa'],['D','Dado'],['F','Faca'],['G','Gato'],['H','Homem'],
-        ['J','Janela'],['K','Kiwi'],['L','Lua'],['M','Mão'],['N','Nuvem'],['P','Pão'],
-        ['Q','Queijo'],['R','Rato'],['S','Sol'],['T','Terra'],['V','Vaca'],['W','Wagão'],
-        ['X','Xícara'],['Y','Yuca'],['Z','Zebra']
+        { letter: 'B', lower: 'b', word: 'Bola',   rest: 'ola',   icon: 'fa-futbol' },
+        { letter: 'C', lower: 'c', word: 'Casa',   rest: 'asa',   icon: 'fa-house' },
+        { letter: 'D', lower: 'd', word: 'Dado',   rest: 'ado',   icon: 'fa-dice' },
+        { letter: 'F', lower: 'f', word: 'Faca',   rest: 'aca',   icon: 'fa-utensils' },
+        { letter: 'G', lower: 'g', word: 'Gato',   rest: 'ato',   icon: 'fa-cat' },
+        { letter: 'H', lower: 'h', word: 'Homem',  rest: 'omem',  icon: 'fa-user' },
+        { letter: 'J', lower: 'j', word: 'Janela', rest: 'anela', icon: 'fa-table-cells-large' },
+        { letter: 'K', lower: 'k', word: 'Kiwi',   rest: 'iwi',   icon: 'fa-lemon' },
+        { letter: 'L', lower: 'l', word: 'Lua',    rest: 'ua',    icon: 'fa-moon' },
+        { letter: 'M', lower: 'm', word: 'Mão',    rest: 'ão',    icon: 'fa-hand' },
+        { letter: 'N', lower: 'n', word: 'Nuvem',  rest: 'uvem',  icon: 'fa-cloud' },
+        { letter: 'P', lower: 'p', word: 'Pão',    rest: 'ão',    icon: 'fa-bread-slice' },
+        { letter: 'Q', lower: 'q', word: 'Queijo', rest: 'ueijo', icon: 'fa-cheese' },
+        { letter: 'R', lower: 'r', word: 'Rato',   rest: 'ato',   icon: 'fa-paw' },
+        { letter: 'S', lower: 's', word: 'Sol',    rest: 'ol',    icon: 'fa-sun' },
+        { letter: 'T', lower: 't', word: 'Terra',  rest: 'erra',  icon: 'fa-seedling' },
+        { letter: 'V', lower: 'v', word: 'Vaca',   rest: 'aca',   icon: 'fa-cow' },
+        { letter: 'X', lower: 'x', word: 'Xícara', rest: 'ícara', icon: 'fa-mug-hot' },
+        { letter: 'Z', lower: 'z', word: 'Zebra',  rest: 'ebra',  icon: 'fa-horse' }
     ];
     var grid = document.getElementById('consonantsGrid');
     if (grid) {
         cons.forEach(function(c) {
             var div = document.createElement('div');
             div.className = 'consonant-card';
-            div.setAttribute('data-consonant', c[0]);
-            div.setAttribute('role', 'listitem');
+            div.setAttribute('data-consonant', c.letter);
+            div.setAttribute('role', 'button');
             div.setAttribute('tabindex', '0');
-            div.setAttribute('aria-label', c[0] + ' de ' + c[1]);
-            div.setAttribute('onclick', "speakConsonant('" + c[0] + "')");
-            div.setAttribute('onkeydown', "if(event.key==='Enter')speakConsonant('" + c[0] + "')");
-            div.innerHTML = '<div class="consonant-letter">' + c[0] + '</div><div class="consonant-word">' + c[1] + '</div>';
+            div.setAttribute('aria-label', 'Letra ' + c.letter + ' maiúscula e ' + c.lower + ' minúscula, de ' + c.word + '. Toque para ouvir o som.');
+            div.setAttribute('onclick', "speakConsonant('" + c.letter + "')");
+            div.setAttribute('onkeydown', "if(event.key==='Enter'||event.key===' ')speakConsonant('" + c.letter + "')");
+            div.innerHTML =
+                '<div class="consonant-badge" aria-hidden="true">' +
+                    '<i class="fas ' + c.icon + '"></i>' +
+                '</div>' +
+                '<div class="consonant-letters" aria-hidden="true">' +
+                    '<span class="letter-upper">' + c.letter + '</span>' +
+                    '<span class="letter-lower">' + c.lower + '</span>' +
+                '</div>' +
+                '<div class="consonant-word" aria-hidden="true">' +
+                    '<span class="highlight">' + c.letter + '</span>' + c.rest +
+                '</div>' +
+                '<span class="consonant-sound-btn" aria-hidden="true">' +
+                    '<i class="fas fa-volume-high"></i>' +
+                    '<span>Ouvir</span>' +
+                '</span>';
             grid.appendChild(div);
         });
     }

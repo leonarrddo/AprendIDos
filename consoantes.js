@@ -4,47 +4,47 @@
  */
 
 var consonantData = {
-    B: { letter: 'B', word: 'Bola',     speech: 'B. B de Bola.' },
-    C: { letter: 'C', word: 'Casa',     speech: 'C. C de Casa.' },
-    D: { letter: 'D', word: 'Dado',     speech: 'D. D de Dado.' },
-    F: { letter: 'F', word: 'Faca',     speech: 'F. F de Faca.' },
-    G: { letter: 'G', word: 'Gato',     speech: 'G. G de Gato.' },
-    H: { letter: 'H', word: 'Homem',    speech: 'H. H de Homem.' },
-    J: { letter: 'J', word: 'Janela',   speech: 'J. J de Janela.' },
-    K: { letter: 'K', word: 'Kiwi',     speech: 'K. K de Kiwi.' },
-    L: { letter: 'L', word: 'Lua',      speech: 'L. L de Lua.' },
-    M: { letter: 'M', word: 'Mao',      speech: 'M. M de Mão.' },
-    N: { letter: 'N', word: 'Nuvem',    speech: 'N. N de Nuvem.' },
-    P: { letter: 'P', word: 'Pao',      speech: 'P. P de Pão.' },
-    Q: { letter: 'Q', word: 'Queijo',   speech: 'Q. Q de Queijo.' },
-    R: { letter: 'R', word: 'Rato',     speech: 'R. R de Rato.' },
-    S: { letter: 'S', word: 'Sol',      speech: 'S. S de Sol.' },
-    T: { letter: 'T', word: 'Terra',    speech: 'T. T de Terra.' },
-    V: { letter: 'V', word: 'Vaca',     speech: 'V. V de Vaca.' },
-    W: { letter: 'W', word: 'Wagon',    speech: 'W. W de Vagão.' },
-    X: { letter: 'X', word: 'Xicara',   speech: 'X. X de Xícara.' },
-    Y: { letter: 'Y', word: 'Yuca',     speech: 'Y. Y de Yuca.' },
-    Z: { letter: 'Z', word: 'Zebra',    speech: 'Z. Z de Zebra.' }
+    B: { letter: 'B', lower: 'b', word: 'Bola',   speech: 'B. B de Bola.',   icon: 'fa-futbol' },
+    C: { letter: 'C', lower: 'c', word: 'Casa',   speech: 'C. C de Casa.',   icon: 'fa-house' },
+    D: { letter: 'D', lower: 'd', word: 'Dado',   speech: 'D. D de Dado.',   icon: 'fa-dice' },
+    F: { letter: 'F', lower: 'f', word: 'Faca',   speech: 'F. F de Faca.',   icon: 'fa-utensils' },
+    G: { letter: 'G', lower: 'g', word: 'Gato',   speech: 'G. G de Gato.',   icon: 'fa-cat' },
+    H: { letter: 'H', lower: 'h', word: 'Homem',  speech: 'H. H de Homem.',  icon: 'fa-user' },
+    J: { letter: 'J', lower: 'j', word: 'Janela', speech: 'J. J de Janela.', icon: 'fa-table-cells-large' },
+    K: { letter: 'K', lower: 'k', word: 'Kiwi',   speech: 'K. K de Kiwi.',   icon: 'fa-lemon' },
+    L: { letter: 'L', lower: 'l', word: 'Lua',    speech: 'L. L de Lua.',    icon: 'fa-moon' },
+    M: { letter: 'M', lower: 'm', word: 'Mão',    speech: 'M. M de Mão.',    icon: 'fa-hand' },
+    N: { letter: 'N', lower: 'n', word: 'Nuvem',  speech: 'N. N de Nuvem.',  icon: 'fa-cloud' },
+    P: { letter: 'P', lower: 'p', word: 'Pão',    speech: 'P. P de Pão.',    icon: 'fa-bread-slice' },
+    Q: { letter: 'Q', lower: 'q', word: 'Queijo', speech: 'Q. Q de Queijo.', icon: 'fa-cheese' },
+    R: { letter: 'R', lower: 'r', word: 'Rato',   speech: 'R. R de Rato.',   icon: 'fa-paw' },
+    S: { letter: 'S', lower: 's', word: 'Sol',    speech: 'S. S de Sol.',    icon: 'fa-sun' },
+    T: { letter: 'T', lower: 't', word: 'Terra',  speech: 'T. T de Terra.',  icon: 'fa-seedling' },
+    V: { letter: 'V', lower: 'v', word: 'Vaca',   speech: 'V. V de Vaca.',   icon: 'fa-cow' },
+    X: { letter: 'X', lower: 'x', word: 'Xícara', speech: 'X. X de Xícara.', icon: 'fa-mug-hot' },
+    Z: { letter: 'Z', lower: 'z', word: 'Zebra',  speech: 'Z. Z de Zebra.',  icon: 'fa-horse' }
 };
 
 var wordBank = [
     { word: 'Bola',    consonant: 'B' }, { word: 'Barco',   consonant: 'B' }, { word: 'Boneca',  consonant: 'B' },
     { word: 'Casa',    consonant: 'C' }, { word: 'Cama',    consonant: 'C' }, { word: 'Cadeira', consonant: 'C' },
     { word: 'Dado',    consonant: 'D' }, { word: 'Dente',   consonant: 'D' }, { word: 'Doce',    consonant: 'D' },
-    { word: 'Faca',    consonant: 'F' }, { word: 'Flor',    consonant: 'F' }, { word: 'Fogao',   consonant: 'F' },
+    { word: 'Faca',    consonant: 'F' }, { word: 'Flor',    consonant: 'F' }, { word: 'Fogão',   consonant: 'F' },
     { word: 'Gato',    consonant: 'G' }, { word: 'Galinha', consonant: 'G' }, { word: 'Goiaba',  consonant: 'G' },
+    { word: 'Homem',   consonant: 'H' }, { word: 'Horta',   consonant: 'H' }, { word: 'Hotel',   consonant: 'H' },
     { word: 'Janela',  consonant: 'J' }, { word: 'Jardim',  consonant: 'J' }, { word: 'Jogo',    consonant: 'J' },
-    { word: 'Lua',     consonant: 'L' }, { word: 'Livro',   consonant: 'L' }, { word: 'Lapis',   consonant: 'L' },
+    { word: 'Kiwi',    consonant: 'K' }, { word: 'Kombi',   consonant: 'K' },
+    { word: 'Lua',     consonant: 'L' }, { word: 'Livro',   consonant: 'L' }, { word: 'Lápis',   consonant: 'L' },
     { word: 'Mesa',    consonant: 'M' }, { word: 'Milho',   consonant: 'M' }, { word: 'Mala',    consonant: 'M' },
     { word: 'Nuvem',   consonant: 'N' }, { word: 'Nariz',   consonant: 'N' }, { word: 'Ninho',   consonant: 'N' },
     { word: 'Pato',    consonant: 'P' }, { word: 'Pedra',   consonant: 'P' }, { word: 'Peixe',   consonant: 'P' },
+    { word: 'Queijo',  consonant: 'Q' }, { word: 'Quarto',  consonant: 'Q' }, { word: 'Queda',   consonant: 'Q' },
     { word: 'Rato',    consonant: 'R' }, { word: 'Roupa',   consonant: 'R' }, { word: 'Rua',     consonant: 'R' },
     { word: 'Sol',     consonant: 'S' }, { word: 'Sapato',  consonant: 'S' }, { word: 'Sopa',    consonant: 'S' },
     { word: 'Terra',   consonant: 'T' }, { word: 'Telhado', consonant: 'T' }, { word: 'Tomate',  consonant: 'T' },
     { word: 'Vaca',    consonant: 'V' }, { word: 'Vela',    consonant: 'V' }, { word: 'Vidro',   consonant: 'V' },
     { word: 'Xale',    consonant: 'X' }, { word: 'Xeque',   consonant: 'X' }, { word: 'Xerife',  consonant: 'X' },
-    { word: 'Zebra',   consonant: 'Z' }, { word: 'Zinco',   consonant: 'Z' }, { word: 'Zona',    consonant: 'Z' },
-    { word: 'Queijo',  consonant: 'Q' }, { word: 'Quarto',  consonant: 'Q' }, { word: 'Queda',   consonant: 'Q' }
+    { word: 'Zebra',   consonant: 'Z' }, { word: 'Zinco',   consonant: 'Z' }, { word: 'Zona',    consonant: 'Z' }
 ];
 
 var consonantKeys = Object.keys(consonantData);
@@ -155,8 +155,8 @@ function loadQuestion() {
             var btn = document.createElement('button');
             btn.className = 'btn-option';
             btn.setAttribute('data-consonant', c);
-            btn.setAttribute('aria-label', 'Letra ' + c);
-            btn.textContent = c;
+            btn.setAttribute('aria-label', 'Letra ' + c + ' maiúscula e minúscula ' + c.toLowerCase());
+            btn.innerHTML = '<span class="opt-upper">' + c + '</span><span class="opt-lower">' + c.toLowerCase() + '</span>';
             btn.onclick = function() { checkAnswer(c); };
             optCont.appendChild(btn);
         });

@@ -13,188 +13,32 @@
 // DADOS DO ALFABETO — 26 Letras com Palavras Familiares do Cotidiano Brasileiro
 // ============================================================================
 var alphabetData = {
-    A: {
-        upper: 'A', lower: 'a',
-        word: 'Avião',
-        simpleName: 'A de Avião',
-        speech: 'A. A de Avião.',
-        isSpecial: false
-    },
-    B: {
-        upper: 'B', lower: 'b',
-        word: 'Bola',
-        simpleName: 'B de Bola',
-        speech: 'B. B de Bola.',
-        isSpecial: false
-    },
-    C: {
-        upper: 'C', lower: 'c',
-        word: 'Casa',
-        simpleName: 'C de Casa',
-        speech: 'C. C de Casa.',
-        isSpecial: false
-    },
-    D: {
-        upper: 'D', lower: 'd',
-        word: 'Dado',
-        simpleName: 'D de Dado',
-        speech: 'D. D de Dado.',
-        isSpecial: false
-    },
-    E: {
-        upper: 'E', lower: 'e',
-        word: 'Estrela',
-        simpleName: 'E de Estrela',
-        speech: 'E. E de Estrela.',
-        isSpecial: false
-    },
-    F: {
-        upper: 'F', lower: 'f',
-        word: 'Faca',
-        simpleName: 'F de Faca',
-        speech: 'F. F de Faca.',
-        isSpecial: false
-    },
-    G: {
-        upper: 'G', lower: 'g',
-        word: 'Gato',
-        simpleName: 'G de Gato',
-        speech: 'G. G de Gato.',
-        isSpecial: false
-    },
-    H: {
-        upper: 'H', lower: 'h',
-        word: 'Horta',
-        simpleName: 'H de Horta',
-        speech: 'H. H de Horta.',
-        isSpecial: false
-    },
-    I: {
-        upper: 'I', lower: 'i',
-        word: 'Ilha',
-        simpleName: 'I de Ilha',
-        speech: 'I. I de Ilha.',
-        isSpecial: false
-    },
-    J: {
-        upper: 'J', lower: 'j',
-        word: 'Janela',
-        simpleName: 'J de Janela',
-        speech: 'J. J de Janela.',
-        isSpecial: false
-    },
-    K: {
-        upper: 'K', lower: 'k',
-        word: 'Letra K',
-        simpleName: 'Letra K',
-        speech: 'Esta é a letra K. Ela aparece em nomes de pessoas e palavras especiais.',
-        isSpecial: true
-    },
-    L: {
-        upper: 'L', lower: 'l',
-        word: 'Leite',
-        simpleName: 'L de Leite',
-        speech: 'L. L de Leite.',
-        isSpecial: false
-    },
-    M: {
-        upper: 'M', lower: 'm',
-        word: 'Mala',
-        simpleName: 'M de Mala',
-        speech: 'M. M de Mala.',
-        isSpecial: false
-    },
-    N: {
-        upper: 'N', lower: 'n',
-        word: 'Navio',
-        simpleName: 'N de Navio',
-        speech: 'N. N de Navio.',
-        isSpecial: false
-    },
-    O: {
-        upper: 'O', lower: 'o',
-        word: 'Ovo',
-        simpleName: 'O de Ovo',
-        speech: 'O. O de Ovo.',
-        isSpecial: false
-    },
-    P: {
-        upper: 'P', lower: 'p',
-        word: 'Pato',
-        simpleName: 'P de Pato',
-        speech: 'P. P de Pato.',
-        isSpecial: false
-    },
-    Q: {
-        upper: 'Q', lower: 'q',
-        word: 'Queijo',
-        simpleName: 'Q de Queijo',
-        speech: 'Q. Q de Queijo.',
-        isSpecial: false
-    },
-    R: {
-        upper: 'R', lower: 'r',
-        word: 'Rato',
-        simpleName: 'R de Rato',
-        speech: 'R. R de Rato.',
-        isSpecial: false
-    },
-    S: {
-        upper: 'S', lower: 's',
-        word: 'Sapo',
-        simpleName: 'S de Sapo',
-        speech: 'S. S de Sapo.',
-        isSpecial: false
-    },
-    T: {
-        upper: 'T', lower: 't',
-        word: 'Tatu',
-        simpleName: 'T de Tatu',
-        speech: 'T. T de Tatu.',
-        isSpecial: false
-    },
-    U: {
-        upper: 'U', lower: 'u',
-        word: 'Uva',
-        simpleName: 'U de Uva',
-        speech: 'U. U de Uva.',
-        isSpecial: false
-    },
-    V: {
-        upper: 'V', lower: 'v',
-        word: 'Vaca',
-        simpleName: 'V de Vaca',
-        speech: 'V. V de Vaca.',
-        isSpecial: false
-    },
-    W: {
-        upper: 'W', lower: 'w',
-        word: 'Letra W',
-        simpleName: 'Letra W',
-        speech: 'Esta é a letra W. Ela é especial e aparece em nomes de pessoas.',
-        isSpecial: true
-    },
-    X: {
-        upper: 'X', lower: 'x',
-        word: 'Xícara',
-        simpleName: 'X de Xícara',
-        speech: 'X. X de Xícara.',
-        isSpecial: false
-    },
-    Y: {
-        upper: 'Y', lower: 'y',
-        word: 'Letra Y',
-        simpleName: 'Letra Y',
-        speech: 'Esta é a letra Y. Ela é especial e aparece em nomes como Yasmin e Yuri.',
-        isSpecial: true
-    },
-    Z: {
-        upper: 'Z', lower: 'z',
-        word: 'Zebra',
-        simpleName: 'Z de Zebra',
-        speech: 'Z. Z de Zebra.',
-        isSpecial: false
-    }
+    A: { upper: 'A', lower: 'a', word: 'Avião',   simpleName: 'A de Avião', speech: 'A. A de Avião.', type: 'vowel',     icon: 'fa-plane' },
+    B: { upper: 'B', lower: 'b', word: 'Bola',    simpleName: 'B de Bola',  speech: 'B. B de Bola.',  type: 'consonant', icon: 'fa-futbol' },
+    C: { upper: 'C', lower: 'c', word: 'Casa',    simpleName: 'C de Casa',  speech: 'C. C de Casa.',  type: 'consonant', icon: 'fa-house' },
+    D: { upper: 'D', lower: 'd', word: 'Dado',    simpleName: 'D de Dado',  speech: 'D. D de Dado.',  type: 'consonant', icon: 'fa-dice' },
+    E: { upper: 'E', lower: 'e', word: 'Estrela', simpleName: 'E de Estrela', speech: 'E. E de Estrela.', type: 'vowel',  icon: 'fa-star' },
+    F: { upper: 'F', lower: 'f', word: 'Faca',    simpleName: 'F de Faca',  speech: 'F. F de Faca.',  type: 'consonant', icon: 'fa-utensils' },
+    G: { upper: 'G', lower: 'g', word: 'Gato',    simpleName: 'G de Gato',  speech: 'G. G de Gato.',  type: 'consonant', icon: 'fa-cat' },
+    H: { upper: 'H', lower: 'h', word: 'Horta',   simpleName: 'H de Horta', speech: 'H. H de Horta.', type: 'consonant', icon: 'fa-seedling' },
+    I: { upper: 'I', lower: 'i', word: 'Ilha',    simpleName: 'I de Ilha',  speech: 'I. I de Ilha.',  type: 'vowel',     icon: 'fa-umbrella-beach' },
+    J: { upper: 'J', lower: 'j', word: 'Janela',  simpleName: 'J de Janela', speech: 'J. J de Janela.', type: 'consonant', icon: 'fa-table-cells-large' },
+    K: { upper: 'K', lower: 'k', word: 'Kiwi',    simpleName: 'K de Kiwi',  speech: 'K. K de Kiwi.',  type: 'consonant', icon: 'fa-lemon' },
+    L: { upper: 'L', lower: 'l', word: 'Leite',   simpleName: 'L de Leite', speech: 'L. L de Leite.', type: 'consonant', icon: 'fa-glass-water' },
+    M: { upper: 'M', lower: 'm', word: 'Mala',    simpleName: 'M de Mala',  speech: 'M. M de Mala.',  type: 'consonant', icon: 'fa-suitcase' },
+    N: { upper: 'N', lower: 'n', word: 'Navio',   simpleName: 'N de Navio', speech: 'N. N de Navio.', type: 'consonant', icon: 'fa-ship' },
+    O: { upper: 'O', lower: 'o', word: 'Ovo',     simpleName: 'O de Ovo',   speech: 'O. O de Ovo.',   type: 'vowel',     icon: 'fa-egg' },
+    P: { upper: 'P', lower: 'p', word: 'Pato',    simpleName: 'P de Pato',  speech: 'P. P de Pato.',  type: 'consonant', icon: 'fa-feather' },
+    Q: { upper: 'Q', lower: 'q', word: 'Queijo',  simpleName: 'Q de Queijo', speech: 'Q. Q de Queijo.', type: 'consonant', icon: 'fa-cheese' },
+    R: { upper: 'R', lower: 'r', word: 'Rato',    simpleName: 'R de Rato',  speech: 'R. R de Rato.',  type: 'consonant', icon: 'fa-paw' },
+    S: { upper: 'S', lower: 's', word: 'Sapo',    simpleName: 'S de Sapo',  speech: 'S. S de Sapo.',  type: 'consonant', icon: 'fa-frog' },
+    T: { upper: 'T', lower: 't', word: 'Tatu',    simpleName: 'T de Tatu',  speech: 'T. T de Tatu.',  type: 'consonant', icon: 'fa-gem' },
+    U: { upper: 'U', lower: 'u', word: 'Uva',     simpleName: 'U de Uva',   speech: 'U. U de Uva.',   type: 'vowel',     icon: 'fa-leaf' },
+    V: { upper: 'V', lower: 'v', word: 'Vaca',    simpleName: 'V de Vaca',  speech: 'V. V de Vaca.',  type: 'consonant', icon: 'fa-cow' },
+    W: { upper: 'W', lower: 'w', word: 'Wafer',   simpleName: 'W de Wafer', speech: 'W. W de Wafer.', type: 'consonant', icon: 'fa-cookie-bite' },
+    X: { upper: 'X', lower: 'x', word: 'Xícara',  simpleName: 'X de Xícara', speech: 'X. X de Xícara.', type: 'consonant', icon: 'fa-mug-hot' },
+    Y: { upper: 'Y', lower: 'y', word: 'Yoga',    simpleName: 'Y de Yoga',  speech: 'Y. Y de Yoga.',  type: 'consonant', icon: 'fa-heart' },
+    Z: { upper: 'Z', lower: 'z', word: 'Zebra',   simpleName: 'Z de Zebra', speech: 'Z. Z de Zebra.', type: 'consonant', icon: 'fa-horse' }
 };
 
 // ============================================================================
@@ -336,8 +180,8 @@ var TOTAL_QUESTIONS = 8; // 2 de cada tipo por rodada
 
 // Banco de dados para geração das perguntas
 var letterKeys = Object.keys(alphabetData);
-// Letras com objetos cotidianos (exclui K, W, Y para perguntas de imagem de objetos)
-var commonLetterKeys = ['B','C','D','F','G','J','L','M','N','P','Q','R','S','T','V','X','Z','A','E','I','O','U'];
+// Letras com objetos cotidianos (inclui todas as 26 letras com palavras familiares)
+var commonLetterKeys = ['B','C','D','F','G','J','L','M','N','P','Q','R','S','T','V','X','Z','A','E','I','O','U','K','W','Y'];
 
 function buildQuestionBank() {
     var qList = [];
@@ -493,7 +337,11 @@ function loadQuestion() {
             btn.className = 'btn-option';
             btn.setAttribute('data-val', opt);
             btn.setAttribute('aria-label', 'Letra ' + opt);
-            btn.innerHTML = opt;
+            if (opt.length === 1 && opt === opt.toUpperCase()) {
+                btn.innerHTML = '<span class="opt-upper">' + opt + '</span><span class="opt-lower">' + opt.toLowerCase() + '</span>';
+            } else {
+                btn.innerHTML = '<span class="opt-lower" style="font-size:2.2rem;font-weight:900;">' + opt + '</span>';
+            }
             btn.onclick = function() { checkAnswer(opt); };
             optsContainer.appendChild(btn);
         });
@@ -822,7 +670,7 @@ function getSvgForLetter(letter) {
         H: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 48 L25 68 L55 68 L60 48 Z" fill="#8D6E63" stroke="#4E342E" stroke-width="3"/><ellipse cx="40" cy="48" rx="20" ry="6" fill="#A1887F" stroke="#4E342E" stroke-width="2"/><path d="M40 48 C30 35 25 22 38 18 C45 25 41 38 40 48 Z" fill="#4CAF50" stroke="#2E7D32" stroke-width="2.5"/><path d="M40 48 C50 35 55 22 42 18 C35 25 39 38 40 48 Z" fill="#81C784" stroke="#2E7D32" stroke-width="2.5"/></svg>',
         I: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="56" rx="26" ry="10" fill="#FFF59D" stroke="#FBC02D" stroke-width="2.5"/><path d="M40 56 Q38 38 42 24" stroke="#795548" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M42 24 Q30 14 20 20" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M42 24 Q54 14 60 20" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M42 24 Q42 10 38 8" stroke="#388E3C" stroke-width="3" stroke-linecap="round" fill="none"/><circle cx="64" cy="18" r="6" fill="#FDD835"/></svg>',
         J: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="16" width="44" height="48" rx="4" fill="#BBDEFB" stroke="#1565C0" stroke-width="3"/><line x1="40" y1="16" x2="40" y2="64" stroke="#1565C0" stroke-width="3"/><line x1="18" y1="40" x2="62" y2="40" stroke="#1565C0" stroke-width="3"/><rect x="14" y="62" width="52" height="6" rx="2" fill="#90CAF9" stroke="#1565C0" stroke-width="2"/><path d="M48 24 L56 32" stroke="#E3F2FD" stroke-width="2"/></svg>',
-        K: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="28" fill="#E1BEE7" stroke="#7B1FA2" stroke-width="3"/><text x="40" y="52" font-family="Nunito, sans-serif" font-size="34" font-weight="900" fill="#4A148C" text-anchor="middle">K</text></svg>',
+        K: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="28" fill="#81C784" stroke="#2E7D32" stroke-width="3"/><ellipse cx="40" cy="40" rx="16" ry="16" fill="#A5D6A7"/><circle cx="40" cy="40" r="6" fill="#FFF59D"/><circle cx="34" cy="34" r="1.5" fill="#1B5E20"/><circle cx="46" cy="34" r="1.5" fill="#1B5E20"/><circle cx="34" cy="46" r="1.5" fill="#1B5E20"/><circle cx="46" cy="46" r="1.5" fill="#1B5E20"/></svg>',
         L: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="24" y="24" width="32" height="44" rx="4" fill="#E3F2FD" stroke="#1976D2" stroke-width="3"/><rect x="22" y="18" width="36" height="8" rx="2" fill="#90CAF9" stroke="#1976D2" stroke-width="2.5"/><ellipse cx="40" cy="46" rx="10" ry="12" fill="#FFFFFF" stroke="#42A5F5" stroke-width="2"/><text x="40" y="52" font-family="Nunito, sans-serif" font-size="12" font-weight="900" fill="#1976D2" text-anchor="middle">LEITE</text></svg>',
         M: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="16" y="26" width="48" height="38" rx="6" fill="#8D6E63" stroke="#4E342E" stroke-width="3"/><path d="M32 26 L32 16 C32 14 48 14 48 16 L48 26" stroke="#4E342E" stroke-width="3" fill="none"/><line x1="28" y1="26" x2="28" y2="64" stroke="#4E342E" stroke-width="2.5"/><line x1="52" y1="26" x2="52" y2="64" stroke="#4E342E" stroke-width="2.5"/><rect x="37" y="42" width="6" height="6" rx="1" fill="#FFD54F" stroke="#4E342E" stroke-width="1.5"/></svg>',
         N: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 48 L22 66 L58 66 L68 48 Z" fill="#E53935" stroke="#B71C1C" stroke-width="3"/><rect x="30" y="28" width="20" height="20" fill="#FFFFFF" stroke="#455A64" stroke-width="2.5"/><rect x="36" y="14" width="8" height="14" fill="#FB8C00" stroke="#E65100" stroke-width="2"/><path d="M6 68 Q20 62 40 68 Q60 74 74 68" stroke="#1E88E5" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
@@ -834,13 +682,145 @@ function getSvgForLetter(letter) {
         T: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 52 C18 28 62 28 62 52 Z" fill="#A1887F" stroke="#5D4037" stroke-width="3"/><path d="M30 36 C30 30 50 30 50 36" stroke="#4E342E" stroke-width="2" fill="none"/><path d="M24 44 C24 38 56 38 56 44" stroke="#4E342E" stroke-width="2" fill="none"/><ellipse cx="64" cy="48" rx="6" ry="4" fill="#A1887F" stroke="#5D4037" stroke-width="2"/><circle cx="65" cy="46" r="1.5" fill="#3E2723"/><path d="M16 52 L10 55" stroke="#5D4037" stroke-width="2.5" stroke-linecap="round"/></svg>',
         U: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M40 16 L40 24 M36 20 C42 16 46 20 50 18" stroke="#33691E" stroke-width="3" stroke-linecap="round"/><circle cx="34" cy="30" r="7" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/><circle cx="46" cy="30" r="7" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/><circle cx="28" cy="42" r="7" fill="#8E24AA" stroke="#4A148C" stroke-width="2"/><circle cx="40" cy="42" r="7" fill="#8E24AA" stroke="#4A148C" stroke-width="2"/><circle cx="52" cy="42" r="7" fill="#8E24AA" stroke="#4A148C" stroke-width="2"/><circle cx="34" cy="54" r="7" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/><circle cx="46" cy="54" r="7" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/><circle cx="40" cy="65" r="7" fill="#6A1B9A" stroke="#4A148C" stroke-width="2"/></svg>',
         V: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="44" rx="22" ry="18" fill="#FFFFFF" stroke="#3E2723" stroke-width="3"/><ellipse cx="40" cy="52" rx="14" ry="10" fill="#FFCDD2" stroke="#E57373" stroke-width="2"/><circle cx="32" cy="36" r="3" fill="#3E2723"/><circle cx="48" cy="36" r="3" fill="#3E2723"/><path d="M22 26 L16 16 C16 16 26 22 24 28 Z" fill="#B0BEC5" stroke="#37474F" stroke-width="2"/><path d="M58 26 L64 16 C64 16 54 22 56 28 Z" fill="#B0BEC5" stroke="#37474F" stroke-width="2"/><circle cx="36" cy="52" r="1.5" fill="#C2185B"/><circle cx="44" cy="52" r="1.5" fill="#C2185B"/></svg>',
-        W: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="28" fill="#C5CAE9" stroke="#303F9F" stroke-width="3"/><text x="40" y="52" font-family="Nunito, sans-serif" font-size="30" font-weight="900" fill="#1A237E" text-anchor="middle">W</text></svg>',
+        W: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="24" width="44" height="32" rx="5" fill="#FFE082" stroke="#FF8F00" stroke-width="3"/><line x1="18" y1="34" x2="62" y2="34" stroke="#FFA000" stroke-width="1.8"/><line x1="18" y1="44" x2="62" y2="44" stroke="#FFA000" stroke-width="1.8"/><line x1="32" y1="24" x2="32" y2="56" stroke="#FFA000" stroke-width="1.8"/><line x1="48" y1="24" x2="48" y2="56" stroke="#FFA000" stroke-width="1.8"/></svg>',
         X: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="30" width="34" height="28" rx="4" fill="#FFFFFF" stroke="#4E342E" stroke-width="3"/><path d="M52 36 C60 36 62 48 52 50" stroke="#4E342E" stroke-width="3" fill="none"/><ellipse cx="35" cy="62" rx="24" ry="5" fill="#D7CCC8" stroke="#4E342E" stroke-width="2"/><path d="M26 22 Q29 16 26 12" stroke="#8D6E63" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M35 22 Q38 16 35 12" stroke="#8D6E63" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M44 22 Q47 16 44 12" stroke="#8D6E63" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
-        Y: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="28" fill="#FFF9C4" stroke="#FBC02D" stroke-width="3"/><text x="40" y="52" font-family="Nunito, sans-serif" font-size="34" font-weight="900" fill="#F57F17" text-anchor="middle">Y</text></svg>',
+        Y: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="28" fill="#F8BBD0" stroke="#C2185B" stroke-width="3"/><circle cx="40" cy="28" r="5" fill="#880E4F"/><path d="M30 46 C34 38 46 38 50 46" stroke="#880E4F" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="28" cy="46" r="3" fill="#880E4F"/><circle cx="52" cy="46" r="3" fill="#880E4F"/></svg>',
         Z: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="26" fill="#FFFFFF" stroke="#212121" stroke-width="3"/><path d="M20 34 L32 37 M20 44 L34 44 M22 52 L36 49" stroke="#212121" stroke-width="3" stroke-linecap="round"/><path d="M60 34 L48 37 M60 44 L46 44 M58 52 L44 49" stroke="#212121" stroke-width="3" stroke-linecap="round"/><circle cx="34" cy="28" r="3" fill="#212121"/><circle cx="46" cy="28" r="3" fill="#212121"/></svg>'
     };
 
     return svgs[letter] || svgs.A;
+}
+
+// ============================================================================
+// GERAÇÃO DINÂMICA DOS CARDS, FILTRAGEM E LEITURA GUIADA DO ALFABETO
+// ============================================================================
+var currentAlphabetFilter = 'all';
+var autoplayActive = false;
+var autoplayIndex = 0;
+var autoplayTimer = null;
+
+function renderAlphabetCards(filter) {
+    filter = filter || currentAlphabetFilter || 'all';
+    currentAlphabetFilter = filter;
+    var grid = document.getElementById('lettersGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    var keys = Object.keys(alphabetData);
+    keys.forEach(function(k) {
+        var item = alphabetData[k];
+        if (filter === 'vowels' && item.type !== 'vowel') return;
+        if (filter === 'consonants' && item.type !== 'consonant') return;
+
+        var isVowel = item.type === 'vowel';
+        var typeLabel = isVowel ? 'Vogal' : 'Consoante';
+        var card = document.createElement('div');
+        card.className = 'letter-card';
+        card.setAttribute('data-letter', k);
+        card.setAttribute('data-type', item.type);
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', 'Letra ' + k + ' maiúscula e ' + item.lower + ' minúscula, de ' + item.word + '. É uma ' + typeLabel + '. Toque para ouvir o som.');
+        card.setAttribute('onclick', "speakLetter('" + k + "')");
+        card.setAttribute('onkeydown', "if(event.key==='Enter'||event.key===' ')speakLetter('" + k + "')");
+
+        card.innerHTML =
+            '<span class="letter-tag ' + item.type + '" aria-hidden="true">' + typeLabel + '</span>' +
+            '<div class="letter-badge-icon" aria-hidden="true">' +
+                '<i class="fas ' + item.icon + '"></i>' +
+            '</div>' +
+            '<div class="letter-letters" aria-hidden="true">' +
+                '<span class="letter-upper">' + item.upper + '</span>' +
+                '<span class="letter-lower">' + item.lower + '</span>' +
+            '</div>' +
+            '<div class="letter-word" aria-hidden="true">' +
+                '<span class="highlight">' + item.upper + '</span> de ' + item.word +
+            '</div>' +
+            '<span class="letter-sound-pill" aria-hidden="true">' +
+                '<i class="fas fa-volume-high"></i>' +
+                '<span>Ouvir</span>' +
+            '</span>';
+
+        grid.appendChild(card);
+    });
+}
+
+function filterAlphabet(type) {
+    if (autoplayActive) stopAutoplay();
+    document.querySelectorAll('.filter-tab').forEach(function(tab) {
+        var isActive = tab.getAttribute('data-filter') === type;
+        tab.classList.toggle('active', isActive);
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    renderAlphabetCards(type);
+    var label = type === 'all'
+        ? 'Exibindo todas as 26 letras do alfabeto.'
+        : type === 'vowels'
+        ? 'Exibindo as 5 vogais: A, E, I, O, U.'
+        : 'Exibindo as 21 consoantes do alfabeto.';
+    announceSR(label);
+}
+
+function togglePlayAllLetters() {
+    if (autoplayActive) {
+        stopAutoplay();
+    } else {
+        startAutoplay();
+    }
+}
+
+function startAutoplay() {
+    autoplayActive = true;
+    autoplayIndex = 0;
+    var btn = document.getElementById('btnPlayAll');
+    if (btn) {
+        btn.classList.add('playing');
+        btn.innerHTML = '<i class="fas fa-pause"></i> Pausar Alfabeto';
+        btn.setAttribute('aria-label', 'Pausar leitura guiada do alfabeto');
+    }
+    playNextAutoplayLetter();
+}
+
+function stopAutoplay() {
+    autoplayActive = false;
+    if (autoplayTimer) { clearTimeout(autoplayTimer); autoplayTimer = null; }
+    stopAllAudio();
+    document.querySelectorAll('.letter-card.speaking').forEach(function(c) { c.classList.remove('speaking'); });
+    var btn = document.getElementById('btnPlayAll');
+    if (btn) {
+        btn.classList.remove('playing');
+        btn.innerHTML = '<i class="fas fa-play"></i> Ouvir o Alfabeto Completo';
+        btn.setAttribute('aria-label', 'Ouvir o alfabeto completo de A até Z');
+    }
+}
+
+function playNextAutoplayLetter() {
+    if (!autoplayActive) return;
+    var cards = document.querySelectorAll('.letter-card');
+    if (autoplayIndex >= cards.length) {
+        stopAutoplay();
+        speak('Parabéns! Você ouviu todas as letras selecionadas.');
+        return;
+    }
+    var card = cards[autoplayIndex];
+    var letter = card.getAttribute('data-letter');
+    var item = alphabetData[letter];
+    if (!item) {
+        autoplayIndex++;
+        playNextAutoplayLetter();
+        return;
+    }
+
+    document.querySelectorAll('.letter-card.speaking').forEach(function(c) { c.classList.remove('speaking'); });
+    card.classList.add('speaking');
+    try { card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch(e) {}
+
+    speak(item.speech, function() {
+        if (card) card.classList.remove('speaking');
+        if (!autoplayActive) return;
+        autoplayIndex++;
+        autoplayTimer = setTimeout(playNextAutoplayLetter, 650);
+    });
 }
 
 // Expõe no escopo global (window) para compatibilidade completa
@@ -856,14 +836,19 @@ window.salvarProgressoLetras = salvarProgressoLetras;
 window.salvarEVerOutras = salvarEVerOutras;
 window.toggleMenu = toggleMenu;
 window.getSvgForLetter = getSvgForLetter;
+window.renderAlphabetCards = renderAlphabetCards;
+window.filterAlphabet = filterAlphabet;
+window.togglePlayAllLetters = togglePlayAllLetters;
 
 // Inicialização automática ao carregar a página
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
+        renderAlphabetCards('all');
         initExercise();
         verificarLicaoConcluida();
     });
 } else {
+    renderAlphabetCards('all');
     initExercise();
     verificarLicaoConcluida();
 }

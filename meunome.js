@@ -90,6 +90,12 @@ function showNameAnalysis(name) {
         '<span style="color:#00695C"><strong>' + consonants.length + '</strong> consoantes (' + (consonants.join(', ') || '—') + ')</span></p>';
     info.style.display = 'block';
 
+    var writingSec = document.getElementById('writingSection');
+    if (writingSec) {
+        writingSec.style.display = 'block';
+        setTimeout(function() { initWritingCanvas(name); }, 80);
+    }
+
     var exSection = document.getElementById('exerciseSection');
     if (exSection) exSection.style.display = 'block';
     startExercise(name);
@@ -262,6 +268,8 @@ function verificarLicaoConcluida() {
 function restartExercise() {
     var comp = document.getElementById('completionScreen'); if (comp) comp.classList.remove('visible');
     var exSection = document.getElementById('exerciseSection'); if (exSection) exSection.style.display = 'none';
+    var writingSec = document.getElementById('writingSection'); if (writingSec) writingSec.style.display = 'none';
+    clearWritingCanvas();
     var display = document.getElementById('nameDisplay'); if (display) { display.innerHTML = ''; display.style.display = 'none'; }
     var info = document.getElementById('nameInfo'); if (info) { info.innerHTML = ''; info.style.display = 'none'; }
     var input = document.getElementById('nameInput'); if (input) input.value = '';
@@ -281,10 +289,311 @@ document.addEventListener('click', function(e) {
     }
 });
 
+// ============================================================
+// TOUCH WRITING / CALIGRAFIA E ASSINATURA DIGITAL
+// ============================================================
+var writingCanvas = null;
+var writingCtx = null;
+var isDrawing = false;
+var writingMode = 'trace'; // 'trace' (cobrir letras) ou 'free' (assinatura livre)
+var penColor = '#1565C0';
+var penWidth = 5.5;
+var strokes = []; // array of { points: [{x, y}, ...], color: string, width: number }
+var currentStroke = null;
+var canvasInitialised = false;
+var lastPoint = null;
+
+function initWritingCanvas(name) {
+    writingCanvas = document.getElementById('writingCanvas');
+    if (!writingCanvas) return;
+    writingCtx = writingCanvas.getContext('2d');
+    
+    setupCanvasResolution();
+    redrawWritingCanvas();
+    
+    if (!canvasInitialised) {
+        attachCanvasEvents();
+        window.addEventListener('resize', handleCanvasResize);
+        canvasInitialised = true;
+    }
+}
+
+function setupCanvasResolution() {
+    if (!writingCanvas) return;
+    var container = writingCanvas.parentElement;
+    var rect = container.getBoundingClientRect();
+    var width = Math.floor(rect.width) || 600;
+    var height = 270;
+    
+    var dpr = window.devicePixelRatio || 1;
+    writingCanvas.width = width * dpr;
+    writingCanvas.height = height * dpr;
+    writingCanvas.style.width = width + 'px';
+    writingCanvas.style.height = height + 'px';
+    
+    if (writingCtx.resetTransform) {
+        writingCtx.resetTransform();
+    }
+    writingCtx.scale(dpr, dpr);
+}
+
+function handleCanvasResize() {
+    if (!writingCanvas || writingCanvas.offsetParent === null) return;
+    setupCanvasResolution();
+    redrawWritingCanvas();
+}
+
+function drawBackgroundGuides() {
+    if (!writingCanvas || !writingCtx) return;
+    var width = parseFloat(writingCanvas.style.width) || 600;
+    var height = parseFloat(writingCanvas.style.height) || 270;
+    
+    // Fundo branco limpo
+    writingCtx.fillStyle = '#FFFFFF';
+    writingCtx.fillRect(0, 0, width, height);
+    
+    // Pautas (estilo caderno de caligrafia)
+    var topLine = height * 0.25;
+    var midLine = height * 0.50;
+    var baseline = height * 0.75;
+    
+    // Linha de topo (guia suave)
+    writingCtx.save();
+    writingCtx.beginPath();
+    writingCtx.strokeStyle = '#ECEFF1';
+    writingCtx.lineWidth = 1.5;
+    writingCtx.setLineDash([4, 4]);
+    writingCtx.moveTo(16, topLine);
+    writingCtx.lineTo(width - 16, topLine);
+    writingCtx.stroke();
+    
+    // Linha intermediária (guia das minúsculas/meio)
+    writingCtx.beginPath();
+    writingCtx.strokeStyle = '#CFD8DC';
+    writingCtx.lineWidth = 1.5;
+    writingCtx.setLineDash([6, 6]);
+    writingCtx.moveTo(16, midLine);
+    writingCtx.lineTo(width - 16, midLine);
+    writingCtx.stroke();
+    writingCtx.restore();
+    
+    // Linha de base (onde as letras se apoiam - verde claro forte)
+    writingCtx.beginPath();
+    writingCtx.strokeStyle = '#81C784';
+    writingCtx.lineWidth = 2.5;
+    writingCtx.moveTo(16, baseline);
+    writingCtx.lineTo(width - 16, baseline);
+    writingCtx.stroke();
+    
+    if (writingMode === 'trace' && currentName) {
+        // Modo Cobrir Letras: desenha o nome em letras claras e pontilhadas para passar por cima
+        writingCtx.save();
+        var baseFontSize = 64;
+        writingCtx.font = 'bold ' + baseFontSize + 'px Nunito, sans-serif';
+        var textWidth = writingCtx.measureText(currentName).width;
+        var maxW = width - 60;
+        if (textWidth > maxW && textWidth > 0) {
+            baseFontSize = Math.max(26, Math.floor(baseFontSize * (maxW / textWidth)));
+            writingCtx.font = 'bold ' + baseFontSize + 'px Nunito, sans-serif';
+        }
+        
+        writingCtx.textAlign = 'center';
+        writingCtx.textBaseline = 'alphabetic';
+        
+        // Letra preenchida verde clarinho
+        writingCtx.fillStyle = 'rgba(46, 125, 50, 0.22)';
+        writingCtx.fillText(currentName, width / 2, baseline);
+        
+        // Contorno pontilhado suave para orientar o traçado
+        writingCtx.strokeStyle = 'rgba(46, 125, 50, 0.50)';
+        writingCtx.lineWidth = 1.8;
+        writingCtx.setLineDash([4, 4]);
+        writingCtx.strokeText(currentName, width / 2, baseline);
+        writingCtx.restore();
+    } else if (writingMode === 'free') {
+        // Modo Assinatura Livre: mostra indicação de assinatura de documento
+        writingCtx.save();
+        writingCtx.fillStyle = '#8D6E63';
+        writingCtx.font = 'bold 15px Nunito, sans-serif';
+        writingCtx.textAlign = 'left';
+        writingCtx.textBaseline = 'bottom';
+        writingCtx.fillText('✍️ Linha de Assinatura (Documento / RG):', 20, baseline - 10);
+        writingCtx.restore();
+    }
+}
+
+function redrawWritingCanvas() {
+    if (!writingCanvas || !writingCtx) return;
+    drawBackgroundGuides();
+    
+    // Redesenha todos os traços do usuário
+    strokes.forEach(function(stroke) {
+        if (!stroke.points || stroke.points.length < 2) return;
+        writingCtx.save();
+        writingCtx.strokeStyle = stroke.color;
+        writingCtx.lineWidth = stroke.width;
+        writingCtx.lineCap = 'round';
+        writingCtx.lineJoin = 'round';
+        writingCtx.beginPath();
+        writingCtx.moveTo(stroke.points[0].x, stroke.points[0].y);
+        for (var i = 1; i < stroke.points.length; i++) {
+            writingCtx.lineTo(stroke.points[i].x, stroke.points[i].y);
+        }
+        writingCtx.stroke();
+        writingCtx.restore();
+    });
+}
+
+function getCanvasCoordinates(e) {
+    var rect = writingCanvas.getBoundingClientRect();
+    return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
+}
+
+function attachCanvasEvents() {
+    if (!writingCanvas) return;
+    
+    writingCanvas.addEventListener('pointerdown', function(e) {
+        e.preventDefault();
+        try { writingCanvas.setPointerCapture(e.pointerId); } catch(err) {}
+        
+        var pt = getCanvasCoordinates(e);
+        isDrawing = true;
+        currentStroke = {
+            color: penColor,
+            width: penWidth,
+            points: [pt]
+        };
+        lastPoint = pt;
+        
+        var hint = document.getElementById('canvasHint');
+        if (hint) hint.style.opacity = '0';
+    });
+    
+    writingCanvas.addEventListener('pointermove', function(e) {
+        if (!isDrawing || !currentStroke) return;
+        e.preventDefault();
+        var pt = getCanvasCoordinates(e);
+        currentStroke.points.push(pt);
+        
+        writingCtx.save();
+        writingCtx.strokeStyle = penColor;
+        writingCtx.lineWidth = penWidth;
+        writingCtx.lineCap = 'round';
+        writingCtx.lineJoin = 'round';
+        writingCtx.beginPath();
+        writingCtx.moveTo(lastPoint.x, lastPoint.y);
+        writingCtx.lineTo(pt.x, pt.y);
+        writingCtx.stroke();
+        writingCtx.restore();
+        
+        lastPoint = pt;
+    });
+    
+    function endStroke(e) {
+        if (!isDrawing) return;
+        isDrawing = false;
+        try { writingCanvas.releasePointerCapture(e.pointerId); } catch(err) {}
+        if (currentStroke && currentStroke.points.length > 1) {
+            strokes.push(currentStroke);
+        }
+        currentStroke = null;
+        lastPoint = null;
+    }
+    
+    writingCanvas.addEventListener('pointerup', endStroke);
+    writingCanvas.addEventListener('pointercancel', endStroke);
+}
+
+function setWritingMode(mode) {
+    writingMode = mode;
+    var btnTrace = document.getElementById('btnModeTrace');
+    var btnFree = document.getElementById('btnModeFree');
+    if (btnTrace && btnFree) {
+        if (mode === 'trace') {
+            btnTrace.classList.add('active');
+            btnFree.classList.remove('active');
+        } else {
+            btnFree.classList.add('active');
+            btnTrace.classList.remove('active');
+        }
+    }
+    redrawWritingCanvas();
+    speakWritingHint();
+}
+
+function setPenColor(color, btn) {
+    penColor = color;
+    document.querySelectorAll('.color-dot').forEach(function(el) { el.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+}
+
+function clearWritingCanvas() {
+    strokes = [];
+    currentStroke = null;
+    redrawWritingCanvas();
+    var hint = document.getElementById('canvasHint');
+    if (hint) hint.style.opacity = '1';
+    var fb = document.getElementById('writingFeedback');
+    if (fb) fb.style.display = 'none';
+}
+
+function speakWritingHint() {
+    var msg = (writingMode === 'trace')
+        ? 'Passe a ponta do seu dedo sobre as letras verdes para treinar a escrita do seu nome.'
+        : 'Assine ou escreva o seu nome livremente em cima da linha, igual a um documento do cartório ou RG.';
+    speak(msg);
+}
+
+function confirmWritingSuccess() {
+    var fb = document.getElementById('writingFeedback');
+    if (fb) fb.style.display = 'inline-flex';
+    speak('Que caligrafia bonita! Você está de parabéns treinando a escrita do seu nome!');
+    try {
+        var btn = document.getElementById('btnConfirmWriting');
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-check"></i> Treino salvo!';
+            setTimeout(function() {
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Ficou lindo! Salvar treino';
+            }, 3000);
+        }
+    } catch(e) {}
+}
+
+function prefillUserName() {
+    var input = document.getElementById('nameInput');
+    if (!input || (input.value && input.value.trim())) return;
+    try {
+        var raw = localStorage.getItem('aprendidos_usuario');
+        if (raw) {
+            var u = JSON.parse(raw);
+            var name = u.nome || u.name || '';
+            if (name) {
+                var firstName = name.trim().split(' ')[0];
+                input.value = firstName.toUpperCase();
+            }
+        }
+    } catch(e) {}
+}
+
 window.speak = speak; window.playInstruction = playInstruction; window.analyzeName = analyzeName;
 window.speakName = speakName; window.speakNameSpelled = speakNameSpelled;
 window.pickLetter = pickLetter; window.renderExercise = renderExercise;
 window.salvarEVerOutras = salvarEVerOutras; window.restartExercise = restartExercise; window.toggleMenu = toggleMenu;
 
-if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', verificarLicaoConcluida); }
-else { verificarLicaoConcluida(); }
+window.initWritingCanvas = initWritingCanvas;
+window.setWritingMode = setWritingMode;
+window.setPenColor = setPenColor;
+window.clearWritingCanvas = clearWritingCanvas;
+window.speakWritingHint = speakWritingHint;
+window.confirmWritingSuccess = confirmWritingSuccess;
+
+function initPage() {
+    verificarLicaoConcluida();
+    prefillUserName();
+}
+
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initPage); }
+else { initPage(); }

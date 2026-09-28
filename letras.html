@@ -325,120 +325,334 @@
         }
         .section-title i { color: var(--green); font-size: 1.3rem; }
 
+        /* ===== CONTROLES DINÂMICOS DO ALFABETO ===== */
+        .alphabet-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.6rem;
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.9rem 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .filter-tabs {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 99px;
+            padding: 0.55rem 1.15rem;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: var(--fg-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--green);
+            color: var(--green-dark);
+            transform: translateY(-1px);
+        }
+
+        .filter-tab.active {
+            background: var(--green);
+            color: #FFFFFF;
+            border-color: var(--green-dark);
+            box-shadow: 0 3px 10px rgba(46,125,50,0.25);
+        }
+
+        .btn-autoplay-alphabet {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, #2E7D32, #1B5E20);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 99px;
+            padding: 0.65rem 1.4rem;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 3px 12px rgba(46,125,50,0.25);
+            transition: all 0.22s ease;
+        }
+
+        .btn-autoplay-alphabet:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(46,125,50,0.35);
+        }
+
+        .btn-autoplay-alphabet.playing {
+            background: linear-gradient(135deg, #D84315, #BF360C);
+            animation: pulse-orange 1s ease infinite;
+        }
+
+        @keyframes pulse-orange {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(216,67,21,0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(216,67,21,0); }
+        }
+
+        /* ===== GRADE DE LETRAS ===== */
         .letters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
-            gap: 1.1rem;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.15rem;
             margin-bottom: 2.5rem;
         }
 
         .letter-card {
-            background: var(--bg-card);
-            border: 3px solid var(--border);
+            background: var(--white);
+            border: 2.5px solid #D7CCC8;
             border-radius: var(--radius);
-            padding: 1.2rem 0.5rem 1rem;
+            padding: 1.25rem 0.75rem 1rem;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+            box-shadow: 0 4px 12px rgba(62, 39, 35, 0.06);
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.35rem;
+            gap: 0.45rem;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
+
+        .letter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #2E7D32, #66BB6A);
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+
+        .letter-card[data-type="vowel"]::before {
+            background: linear-gradient(90deg, #E65100, #FFA726);
+        }
+
         .letter-card:hover {
             transform: translateY(-4px);
             border-color: var(--green);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.09);
+            box-shadow: 0 8px 24px rgba(46,125,50,0.18);
         }
+
+        .letter-card[data-type="vowel"]:hover {
+            border-color: #E65100;
+            box-shadow: 0 8px 24px rgba(230,81,0,0.18);
+        }
+
+        .letter-card:active {
+            transform: scale(0.97);
+        }
+
+        .letter-card.speaking {
+            border-color: var(--green);
+            box-shadow: 0 0 0 4px var(--green-light), 0 8px 22px rgba(46,125,50,0.22);
+            transform: scale(1.05);
+            background: var(--green-pale);
+        }
+
+        .letter-card[data-type="vowel"].speaking {
+            border-color: #E65100;
+            background: #FFF3E0;
+            box-shadow: 0 0 0 4px #FFE0B2, 0 8px 22px rgba(230,81,0,0.22);
+        }
+
         .letter-card:focus-visible {
             outline: 3px solid var(--green);
             outline-offset: 3px;
         }
-        .letter-card.speaking {
-            border-color: var(--green);
-            box-shadow: 0 0 0 4px var(--green-light), 0 6px 18px rgba(46,125,50,0.18);
-            transform: scale(1.04);
-            background: #FFFDE7;
+
+        .letter-tag {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.2rem 0.6rem;
+            border-radius: 99px;
+            margin-bottom: 0.1rem;
         }
 
-        .letter-header {
+        .letter-tag.vowel {
+            background: #FFF3E0;
+            color: #E65100;
+            border: 1px solid #FFE0B2;
+        }
+
+        .letter-tag.consonant {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border: 1px solid #C8E6C9;
+        }
+
+        .letter-badge-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: #E8F5E9;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.55rem;
+            margin-bottom: 0.15rem;
+            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+        }
+
+        .letter-card[data-type="vowel"] .letter-badge-icon {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .letter-card:hover .letter-badge-icon {
+            transform: scale(1.1) rotate(-6deg);
+            background: var(--green);
+            color: #FFFFFF;
+        }
+
+        .letter-card[data-type="vowel"]:hover .letter-badge-icon {
+            background: #E65100;
+            color: #FFFFFF;
+        }
+
+        .letter-card.speaking .letter-badge-icon {
+            background: var(--green);
+            color: #FFFFFF;
+            animation: pulse-badge 0.8s ease infinite;
+        }
+
+        .letter-card[data-type="vowel"].speaking .letter-badge-icon {
+            background: #E65100;
+            color: #FFFFFF;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.14); }
+        }
+
+        .letter-letters {
             display: flex;
             align-items: baseline;
             justify-content: center;
-            gap: 0.3rem;
+            gap: 0.35rem;
             line-height: 1;
+            margin-top: 0.1rem;
         }
-        .letter-upper {
-            font-size: 2.5rem;
+
+        .letter-letters .letter-upper {
+            font-size: 2.7rem;
             font-weight: 900;
             color: var(--green-dark);
+            letter-spacing: -0.5px;
         }
-        .letter-lower {
-            font-size: 1.7rem;
+
+        .letter-card[data-type="vowel"] .letter-letters .letter-upper {
+            color: #BF360C;
+        }
+
+        .letter-letters .letter-lower {
+            font-size: 2rem;
             font-weight: 800;
             color: var(--fg-secondary);
         }
 
-        .letter-illustration {
-            width: 72px;
-            height: 72px;
-            margin: 0.2rem 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .letter-illustration svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .letter-example {
-            font-size: 0.95rem;
+        .letter-word {
+            font-size: 1.15rem;
             font-weight: 800;
             color: var(--fg);
+            letter-spacing: 0.2px;
             line-height: 1.25;
             min-height: 2.3rem;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .letter-example .highlight {
+
+        .letter-word .highlight {
             font-weight: 900;
             color: var(--green-dark);
             text-decoration: underline;
-            text-decoration-thickness: 2.5px;
-            text-underline-offset: 2px;
+            text-decoration-thickness: 3px;
+            text-underline-offset: 3px;
             text-decoration-color: var(--green-dark);
-            margin-right: 3px;
         }
 
-        .letter-sound-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px solid var(--green-light);
-            background: var(--white);
-            color: var(--green);
-            font-size: 1.1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            margin-top: 0.2rem;
-            flex-shrink: 0;
+        .letter-card[data-type="vowel"] .letter-word .highlight {
+            color: #BF360C;
+            text-decoration-color: #BF360C;
         }
-        .letter-sound-btn:hover {
-            background: var(--green);
-            color: #fff;
+
+        .letter-sound-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #FAF3E0;
+            border: 1.5px solid #D7CCC8;
+            border-radius: 20px;
+            padding: 0.35rem 0.8rem;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--fg-secondary);
+            font-family: 'Nunito', sans-serif;
+            pointer-events: none;
+            margin-top: 0.2rem;
+            transition: all 0.2s;
+        }
+
+        .letter-card:hover .letter-sound-pill {
+            background: var(--green-pale);
+            color: var(--green-dark);
             border-color: var(--green);
         }
-        .letter-sound-btn:focus-visible {
-            outline: 3px solid var(--green);
-            outline-offset: 2px;
+
+        .letter-card[data-type="vowel"]:hover .letter-sound-pill {
+            background: #FFE0B2;
+            color: #BF360C;
+            border-color: #E65100;
+        }
+
+        .letter-card.speaking .letter-sound-pill {
+            background: var(--green);
+            color: #FFFFFF;
+            border-color: var(--green);
+        }
+
+        .letter-card[data-type="vowel"].speaking .letter-sound-pill {
+            background: #E65100;
+            color: #FFFFFF;
+            border-color: #E65100;
+        }
+
+        .opt-upper {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--fg);
+        }
+        .opt-lower {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--fg-secondary);
+            margin-left: 4px;
         }
 
         /* ===== DIVISOR ===== */
@@ -887,7 +1101,10 @@
         @media (max-width: 768px) {
             .navbar-nav { display: none; }
             .navbar-hamburger { display: flex; align-items: center; justify-content: center; }
-            .letters-grid { grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
+            .alphabet-toolbar { flex-direction: column; align-items: stretch; gap: 0.8rem; padding: 0.8rem 1rem; }
+            .filter-tabs { justify-content: center; }
+            .btn-autoplay-alphabet { justify-content: center; }
+            .letters-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.8rem; }
             .options-grid { gap: 0.8rem; }
             .btn-option { font-size: 2rem; min-height: 80px; }
         }
@@ -895,10 +1112,12 @@
             html { font-size: 16px; }
             .activity-header h1 { font-size: 1.7rem; }
             .letters-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-            .letter-card { padding: 1rem 0.4rem; }
-            .letter-upper { font-size: 2.2rem; }
-            .letter-lower { font-size: 1.5rem; }
-            .letter-illustration { width: 60px; height: 60px; }
+            .letter-card { padding: 1.1rem 0.5rem 0.9rem; }
+            .letter-badge-icon { width: 52px; height: 52px; font-size: 1.4rem; }
+            .letter-letters .letter-upper { font-size: 2.3rem; }
+            .letter-letters .letter-lower { font-size: 1.7rem; }
+            .letter-word { font-size: 1.05rem; }
+            .letter-sound-pill { font-size: 0.8rem; padding: 0.25rem 0.65rem; }
             .exercise-card { padding: 1.5rem 1rem; }
             .instruction-card { flex-direction: column; text-align: center; gap: 1rem; }
             .options-grid { gap: 0.6rem; }
@@ -1018,527 +1237,26 @@
             O Alfabeto de A até Z
         </h2>
 
-        <div class="letters-grid" role="list">
-
-            <!-- A — Avião -->
-            <div class="letter-card" data-letter="A" role="listitem" tabindex="0"
-                 aria-label="Letra A, A de Avião" onclick="speakLetter('A')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('A')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">A</span><span class="letter-lower">a</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <ellipse cx="40" cy="38" rx="28" ry="9" fill="#FFCCBC" stroke="#D84315" stroke-width="2.5"/>
-                        <path d="M30 33 L40 14 L50 33" fill="#FFAB91" stroke="#D84315" stroke-width="2.5" stroke-linejoin="round"/>
-                        <path d="M32 43 L40 58 L48 43" fill="#FFAB91" stroke="#D84315" stroke-width="2.5" stroke-linejoin="round"/>
-                        <rect x="60" y="22" width="5" height="18" rx="2" fill="#FFAB91" stroke="#D84315" stroke-width="2"/>
-                        <circle cx="22" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                        <circle cx="34" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                        <circle cx="46" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">A</span> de Avião</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra A" onclick="event.stopPropagation(); speakLetter('A')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+        <!-- BARRA DINÂMICA DE CONTROLES E FILTROS -->
+        <div class="alphabet-toolbar">
+            <div class="filter-tabs" role="tablist" aria-label="Filtrar letras do alfabeto">
+                <button type="button" class="filter-tab active" data-filter="all" onclick="filterAlphabet('all')" role="tab" aria-selected="true">
+                    <i class="fas fa-border-all"></i> Todas (26)
+                </button>
+                <button type="button" class="filter-tab" data-filter="vowels" onclick="filterAlphabet('vowels')" role="tab" aria-selected="false">
+                    <i class="fas fa-star"></i> Vogais (5)
+                </button>
+                <button type="button" class="filter-tab" data-filter="consonants" onclick="filterAlphabet('consonants')" role="tab" aria-selected="false">
+                    <i class="fas fa-shapes"></i> Consoantes (21)
                 </button>
             </div>
+            <button type="button" class="btn-autoplay-alphabet" id="btnPlayAll" onclick="togglePlayAllLetters()" aria-label="Ouvir o alfabeto completo de A até Z">
+                <i class="fas fa-play"></i> Ouvir o Alfabeto Completo
+            </button>
+        </div>
 
-            <!-- B — Bola -->
-            <div class="letter-card" data-letter="B" role="listitem" tabindex="0"
-                 aria-label="Letra B, B de Bola" onclick="speakLetter('B')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('B')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">B</span><span class="letter-lower">b</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="40" cy="40" r="30" fill="#FFFFFF" stroke="#2E7D32" stroke-width="3"/>
-                        <path d="M40 26 L48 33 L45 43 L35 43 L32 33 Z" fill="#2E7D32"/>
-                        <path d="M40 26 L40 10 M48 33 L64 24 M45 43 L58 56 M35 43 L22 56 M32 33 L16 24" stroke="#2E7D32" stroke-width="2.5"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">B</span> de Bola</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra B" onclick="event.stopPropagation(); speakLetter('B')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- C — Casa -->
-            <div class="letter-card" data-letter="C" role="listitem" tabindex="0"
-                 aria-label="Letra C, C de Casa" onclick="speakLetter('C')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('C')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">C</span><span class="letter-lower">c</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 40 L40 18 L64 40 Z" fill="#D84315" stroke="#BF360C" stroke-width="3" stroke-linejoin="round"/>
-                        <rect x="22" y="38" width="36" height="30" rx="3" fill="#FFE0B2" stroke="#BF360C" stroke-width="3"/>
-                        <rect x="34" y="48" width="12" height="20" rx="2" fill="#8D6E63" stroke="#5D4037" stroke-width="2"/>
-                        <circle cx="42" cy="58" r="1.5" fill="#FFE082"/>
-                        <rect x="44" y="42" width="10" height="10" rx="1" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">C</span> de Casa</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra C" onclick="event.stopPropagation(); speakLetter('C')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- D — Dado -->
-            <div class="letter-card" data-letter="D" role="listitem" tabindex="0"
-                 aria-label="Letra D, D de Dado" onclick="speakLetter('D')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('D')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">D</span><span class="letter-lower">d</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="15" y="15" width="50" height="50" rx="10" fill="#FFFFFF" stroke="#C2185B" stroke-width="3.5"/>
-                        <circle cx="28" cy="28" r="4.5" fill="#C2185B"/>
-                        <circle cx="52" cy="28" r="4.5" fill="#C2185B"/>
-                        <circle cx="40" cy="40" r="4.5" fill="#C2185B"/>
-                        <circle cx="28" cy="52" r="4.5" fill="#C2185B"/>
-                        <circle cx="52" cy="52" r="4.5" fill="#C2185B"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">D</span> de Dado</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra D" onclick="event.stopPropagation(); speakLetter('D')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- E — Estrela -->
-            <div class="letter-card" data-letter="E" role="listitem" tabindex="0"
-                 aria-label="Letra E, E de Estrela" onclick="speakLetter('E')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('E')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">E</span><span class="letter-lower">e</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M40 12 L48 30 L67 31 L52 43 L57 62 L40 50 L23 62 L28 43 L13 31 L32 30 Z" fill="#FBC02D" stroke="#F57F17" stroke-width="3" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">E</span> de Estrela</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra E" onclick="event.stopPropagation(); speakLetter('E')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- F — Faca -->
-            <div class="letter-card" data-letter="F" role="listitem" tabindex="0"
-                 aria-label="Letra F, F de Faca" onclick="speakLetter('F')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('F')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">F</span><span class="letter-lower">f</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 25 L50 25 C62 25 65 38 48 40 L20 40 Z" fill="#CFD8DC" stroke="#455A64" stroke-width="2.5"/>
-                        <rect x="10" y="27" width="16" height="11" rx="2" fill="#795548" stroke="#4E342E" stroke-width="2.5"/>
-                        <circle cx="15" cy="32" r="1.5" fill="#FFF"/>
-                        <circle cx="21" cy="32" r="1.5" fill="#FFF"/>
-                        <path d="M22 55 L58 55" stroke="#B0BEC5" stroke-width="2" stroke-dasharray="3 3"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">F</span> de Faca</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra F" onclick="event.stopPropagation(); speakLetter('F')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- G — Gato -->
-            <div class="letter-card" data-letter="G" role="listitem" tabindex="0"
-                 aria-label="Letra G, G de Gato" onclick="speakLetter('G')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('G')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">G</span><span class="letter-lower">g</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="40" cy="44" r="24" fill="#FFE082" stroke="#F57C00" stroke-width="3"/>
-                        <path d="M22 30 L30 14 L36 28 Z" fill="#FFA726" stroke="#F57C00" stroke-width="2.5"/>
-                        <path d="M58 30 L50 14 L44 28 Z" fill="#FFA726" stroke="#F57C00" stroke-width="2.5"/>
-                        <circle cx="32" cy="40" r="3.5" fill="#3E2723"/>
-                        <circle cx="48" cy="40" r="3.5" fill="#3E2723"/>
-                        <ellipse cx="40" cy="48" rx="3.5" ry="2.5" fill="#E91E63"/>
-                        <path d="M37 50 Q40 55 43 50" stroke="#3E2723" stroke-width="2" fill="none"/>
-                        <line x1="16" y1="44" x2="28" y2="46" stroke="#3E2723" stroke-width="1.8"/>
-                        <line x1="16" y1="49" x2="28" y2="49" stroke="#3E2723" stroke-width="1.8"/>
-                        <line x1="52" y1="46" x2="64" y2="44" stroke="#3E2723" stroke-width="1.8"/>
-                        <line x1="52" y1="49" x2="64" y2="49" stroke="#3E2723" stroke-width="1.8"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">G</span> de Gato</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra G" onclick="event.stopPropagation(); speakLetter('G')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- H — Horta -->
-            <div class="letter-card" data-letter="H" role="listitem" tabindex="0"
-                 aria-label="Letra H, H de Horta" onclick="speakLetter('H')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('H')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">H</span><span class="letter-lower">h</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 48 L25 68 L55 68 L60 48 Z" fill="#8D6E63" stroke="#4E342E" stroke-width="3"/>
-                        <ellipse cx="40" cy="48" rx="20" ry="6" fill="#A1887F" stroke="#4E342E" stroke-width="2"/>
-                        <path d="M40 48 C30 35 25 22 38 18 C45 25 41 38 40 48 Z" fill="#4CAF50" stroke="#2E7D32" stroke-width="2.5"/>
-                        <path d="M40 48 C50 35 55 22 42 18 C35 25 39 38 40 48 Z" fill="#81C784" stroke="#2E7D32" stroke-width="2.5"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">H</span> de Horta</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra H" onclick="event.stopPropagation(); speakLetter('H')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- I — Ilha -->
-            <div class="letter-card" data-letter="I" role="listitem" tabindex="0"
-                 aria-label="Letra I, I de Ilha" onclick="speakLetter('I')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('I')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">I</span><span class="letter-lower">i</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <ellipse cx="40" cy="56" rx="26" ry="10" fill="#FFF59D" stroke="#FBC02D" stroke-width="2.5"/>
-                        <path d="M40 56 Q38 38 42 24" stroke="#795548" stroke-width="4" stroke-linecap="round" fill="none"/>
-                        <path d="M42 24 Q30 14 20 20" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" fill="none"/>
-                        <path d="M42 24 Q54 14 60 20" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" fill="none"/>
-                        <path d="M42 24 Q42 10 38 8" stroke="#388E3C" stroke-width="3" stroke-linecap="round" fill="none"/>
-                        <circle cx="64" cy="18" r="6" fill="#FDD835"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">I</span> de Ilha</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra I" onclick="event.stopPropagation(); speakLetter('I')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- J — Janela -->
-            <div class="letter-card" data-letter="J" role="listitem" tabindex="0"
-                 aria-label="Letra J, J de Janela" onclick="speakLetter('J')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('J')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">J</span><span class="letter-lower">j</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="18" y="16" width="44" height="48" rx="4" fill="#BBDEFB" stroke="#1565C0" stroke-width="3"/>
-                        <line x1="40" y1="16" x2="40" y2="64" stroke="#1565C0" stroke-width="3"/>
-                        <line x1="18" y1="40" x2="62" y2="40" stroke="#1565C0" stroke-width="3"/>
-                        <rect x="14" y="62" width="52" height="6" rx="2" fill="#90CAF9" stroke="#1565C0" stroke-width="2"/>
-                        <path d="M48 24 L56 32" stroke="#E3F2FD" stroke-width="2"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">J</span> de Janela</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra J" onclick="event.stopPropagation(); speakLetter('J')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- K — Letra K -->
-            <div class="letter-card" data-letter="K" role="listitem" tabindex="0"
-                 aria-label="Letra K" onclick="speakLetter('K')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('K')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">K</span><span class="letter-lower">k</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="40" cy="40" r="28" fill="#E1BEE7" stroke="#7B1FA2" stroke-width="3"/>
-                        <text x="40" y="52" font-family="Nunito, sans-serif" font-size="34" font-weight="900" fill="#4A148C" text-anchor="middle">K</text>
-                    </svg>
-                </div>
-                <div class="letter-example">Letra <span class="highlight">K</span></div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra K" onclick="event.stopPropagation(); speakLetter('K')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- L — Leite -->
-            <div class="letter-card" data-letter="L" role="listitem" tabindex="0"
-                 aria-label="Letra L, L de Leite" onclick="speakLetter('L')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('L')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">L</span><span class="letter-lower">l</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="24" y="24" width="32" height="44" rx="4" fill="#E3F2FD" stroke="#1976D2" stroke-width="3"/>
-                        <rect x="22" y="18" width="36" height="8" rx="2" fill="#90CAF9" stroke="#1976D2" stroke-width="2.5"/>
-                        <ellipse cx="40" cy="46" rx="10" ry="12" fill="#FFFFFF" stroke="#42A5F5" stroke-width="2"/>
-                        <text x="40" y="52" font-family="Nunito, sans-serif" font-size="11" font-weight="900" fill="#1976D2" text-anchor="middle">LEITE</text>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">L</span> de Leite</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra L" onclick="event.stopPropagation(); speakLetter('L')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- M — Mala -->
-            <div class="letter-card" data-letter="M" role="listitem" tabindex="0"
-                 aria-label="Letra M, M de Mala" onclick="speakLetter('M')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('M')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">M</span><span class="letter-lower">m</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="16" y="26" width="48" height="38" rx="6" fill="#8D6E63" stroke="#4E342E" stroke-width="3"/>
-                        <path d="M32 26 L32 16 C32 14 48 14 48 16 L48 26" stroke="#4E342E" stroke-width="3" fill="none"/>
-                        <line x1="28" y1="26" x2="28" y2="64" stroke="#4E342E" stroke-width="2.5"/>
-                        <line x1="52" y1="26" x2="52" y2="64" stroke="#4E342E" stroke-width="2.5"/>
-                        <rect x="37" y="42" width="6" height="6" rx="1" fill="#FFD54F" stroke="#4E342E" stroke-width="1.5"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">M</span> de Mala</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra M" onclick="event.stopPropagation(); speakLetter('M')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- N — Navio -->
-            <div class="letter-card" data-letter="N" role="listitem" tabindex="0"
-                 aria-label="Letra N, N de Navio" onclick="speakLetter('N')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('N')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">N</span><span class="letter-lower">n</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 48 L22 66 L58 66 L68 48 Z" fill="#E53935" stroke="#B71C1C" stroke-width="3"/>
-                        <rect x="30" y="28" width="20" height="20" fill="#FFFFFF" stroke="#455A64" stroke-width="2.5"/>
-                        <rect x="36" y="14" width="8" height="14" fill="#FB8C00" stroke="#E65100" stroke-width="2"/>
-                        <path d="M6 68 Q20 62 40 68 Q60 74 74 68" stroke="#1E88E5" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">N</span> de Navio</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra N" onclick="event.stopPropagation(); speakLetter('N')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- O — Ovo -->
-            <div class="letter-card" data-letter="O" role="listitem" tabindex="0"
-                 aria-label="Letra O, O de Ovo" onclick="speakLetter('O')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('O')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">O</span><span class="letter-lower">o</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <ellipse cx="40" cy="42" rx="22" ry="28" fill="#FFF9C4" stroke="#FBC02D" stroke-width="3.5"/>
-                        <ellipse cx="34" cy="32" rx="5" ry="8" fill="#FFFFFF" opacity="0.6"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">O</span> de Ovo</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra O" onclick="event.stopPropagation(); speakLetter('O')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- P — Pato -->
-            <div class="letter-card" data-letter="P" role="listitem" tabindex="0"
-                 aria-label="Letra P, P de Pato" onclick="speakLetter('P')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('P')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">P</span><span class="letter-lower">p</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <ellipse cx="36" cy="48" rx="20" ry="14" fill="#FFEB3B" stroke="#F57F17" stroke-width="3"/>
-                        <circle cx="50" cy="34" r="12" fill="#FFEB3B" stroke="#F57F17" stroke-width="3"/>
-                        <path d="M58 34 L72 37 L58 42 Z" fill="#FF9800" stroke="#E65100" stroke-width="2"/>
-                        <circle cx="52" cy="31" r="2.5" fill="#3E2723"/>
-                        <path d="M10 64 Q26 58 46 64 Q66 70 76 64" stroke="#29B6F6" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">P</span> de Pato</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra P" onclick="event.stopPropagation(); speakLetter('P')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- Q — Queijo -->
-            <div class="letter-card" data-letter="Q" role="listitem" tabindex="0"
-                 aria-label="Letra Q, Q de Queijo" onclick="speakLetter('Q')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('Q')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">Q</span><span class="letter-lower">q</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M14 54 L66 54 L54 22 Z" fill="#FDD835" stroke="#F57F17" stroke-width="3" stroke-linejoin="round"/>
-                        <ellipse cx="30" cy="44" rx="4" ry="4" fill="#FBC02D"/>
-                        <ellipse cx="46" cy="42" rx="3.5" ry="3.5" fill="#FBC02D"/>
-                        <ellipse cx="38" cy="32" rx="3" ry="3" fill="#FBC02D"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">Q</span> de Queijo</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra Q" onclick="event.stopPropagation(); speakLetter('Q')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- R — Rato -->
-            <div class="letter-card" data-letter="R" role="listitem" tabindex="0"
-                 aria-label="Letra R, R de Rato" onclick="speakLetter('R')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('R')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">R</span><span class="letter-lower">r</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <ellipse cx="40" cy="46" rx="20" ry="15" fill="#B0BEC5" stroke="#455A64" stroke-width="3"/>
-                        <circle cx="28" cy="32" r="8" fill="#CFD8DC" stroke="#455A64" stroke-width="2.5"/>
-                        <circle cx="46" cy="32" r="8" fill="#CFD8DC" stroke="#455A64" stroke-width="2.5"/>
-                        <circle cx="34" cy="42" r="2.5" fill="#212121"/>
-                        <ellipse cx="22" cy="48" rx="3" ry="2.5" fill="#E91E63"/>
-                        <path d="M58 50 Q72 52 74 40" stroke="#455A64" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">R</span> de Rato</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra R" onclick="event.stopPropagation(); speakLetter('R')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- S — Sapo -->
-            <div class="letter-card" data-letter="S" role="listitem" tabindex="0"
-                 aria-label="Letra S, S de Sapo" onclick="speakLetter('S')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('S')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">S</span><span class="letter-lower">s</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <ellipse cx="40" cy="48" rx="24" ry="18" fill="#81C784" stroke="#2E7D32" stroke-width="3"/>
-                        <circle cx="28" cy="30" r="9" fill="#81C784" stroke="#2E7D32" stroke-width="3"/>
-                        <circle cx="52" cy="30" r="9" fill="#81C784" stroke="#2E7D32" stroke-width="3"/>
-                        <circle cx="28" cy="30" r="3.5" fill="#1B5E20"/>
-                        <circle cx="52" cy="30" r="3.5" fill="#1B5E20"/>
-                        <path d="M28 50 Q40 60 52 50" stroke="#1B5E20" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">S</span> de Sapo</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra S" onclick="event.stopPropagation(); speakLetter('S')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- T — Tatu -->
-            <div class="letter-card" data-letter="T" role="listitem" tabindex="0"
-                 aria-label="Letra T, T de Tatu" onclick="speakLetter('T')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('T')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">T</span><span class="letter-lower">t</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 52 C18 28 62 28 62 52 Z" fill="#A1887F" stroke="#5D4037" stroke-width="3"/>
-                        <path d="M30 36 C30 30 50 30 50 36" stroke="#4E342E" stroke-width="2" fill="none"/>
-                        <path d="M24 44 C24 38 56 38 56 44" stroke="#4E342E" stroke-width="2" fill="none"/>
-                        <ellipse cx="64" cy="48" rx="6" ry="4" fill="#A1887F" stroke="#5D4037" stroke-width="2"/>
-                        <circle cx="65" cy="46" r="1.5" fill="#3E2723"/>
-                        <path d="M16 52 L10 55" stroke="#5D4037" stroke-width="2.5" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">T</span> de Tatu</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra T" onclick="event.stopPropagation(); speakLetter('T')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- U — Uva -->
-            <div class="letter-card" data-letter="U" role="listitem" tabindex="0"
-                 aria-label="Letra U, U de Uva" onclick="speakLetter('U')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('U')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">U</span><span class="letter-lower">u</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M40 16 L40 24 M36 20 C42 16 46 20 50 18" stroke="#33691E" stroke-width="3" stroke-linecap="round"/>
-                        <circle cx="34" cy="30" r="7" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/>
-                        <circle cx="46" cy="30" r="7" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/>
-                        <circle cx="28" cy="42" r="7" fill="#8E24AA" stroke="#4A148C" stroke-width="2"/>
-                        <circle cx="40" cy="42" r="7" fill="#8E24AA" stroke="#4A148C" stroke-width="2"/>
-                        <circle cx="52" cy="42" r="7" fill="#8E24AA" stroke="#4A148C" stroke-width="2"/>
-                        <circle cx="34" cy="54" r="7" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/>
-                        <circle cx="46" cy="54" r="7" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/>
-                        <circle cx="40" cy="65" r="7" fill="#6A1B9A" stroke="#4A148C" stroke-width="2"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">U</span> de Uva</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra U" onclick="event.stopPropagation(); speakLetter('U')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- V — Vaca -->
-            <div class="letter-card" data-letter="V" role="listitem" tabindex="0"
-                 aria-label="Letra V, V de Vaca" onclick="speakLetter('V')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('V')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">V</span><span class="letter-lower">v</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <ellipse cx="40" cy="44" rx="22" ry="18" fill="#FFFFFF" stroke="#3E2723" stroke-width="3"/>
-                        <ellipse cx="40" cy="52" rx="14" ry="10" fill="#FFCDD2" stroke="#E57373" stroke-width="2"/>
-                        <circle cx="32" cy="36" r="3" fill="#3E2723"/>
-                        <circle cx="48" cy="36" r="3" fill="#3E2723"/>
-                        <path d="M22 26 L16 16 C16 16 26 22 24 28 Z" fill="#B0BEC5" stroke="#37474F" stroke-width="2"/>
-                        <path d="M58 26 L64 16 C64 16 54 22 56 28 Z" fill="#B0BEC5" stroke="#37474F" stroke-width="2"/>
-                        <circle cx="36" cy="52" r="1.5" fill="#C2185B"/>
-                        <circle cx="44" cy="52" r="1.5" fill="#C2185B"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">V</span> de Vaca</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra V" onclick="event.stopPropagation(); speakLetter('V')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- W — Letra W -->
-            <div class="letter-card" data-letter="W" role="listitem" tabindex="0"
-                 aria-label="Letra W" onclick="speakLetter('W')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('W')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">W</span><span class="letter-lower">w</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="40" cy="40" r="28" fill="#C5CAE9" stroke="#303F9F" stroke-width="3"/>
-                        <text x="40" y="52" font-family="Nunito, sans-serif" font-size="30" font-weight="900" fill="#1A237E" text-anchor="middle">W</text>
-                    </svg>
-                </div>
-                <div class="letter-example">Letra <span class="highlight">W</span></div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra W" onclick="event.stopPropagation(); speakLetter('W')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- X — Xícara -->
-            <div class="letter-card" data-letter="X" role="listitem" tabindex="0"
-                 aria-label="Letra X, X de Xícara" onclick="speakLetter('X')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('X')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">X</span><span class="letter-lower">x</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="18" y="30" width="34" height="28" rx="4" fill="#FFFFFF" stroke="#4E342E" stroke-width="3"/>
-                        <path d="M52 36 C60 36 62 48 52 50" stroke="#4E342E" stroke-width="3" fill="none"/>
-                        <ellipse cx="35" cy="62" rx="24" ry="5" fill="#D7CCC8" stroke="#4E342E" stroke-width="2"/>
-                        <path d="M26 22 Q29 16 26 12" stroke="#8D6E63" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <path d="M35 22 Q38 16 35 12" stroke="#8D6E63" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <path d="M44 22 Q47 16 44 12" stroke="#8D6E63" stroke-width="2" fill="none" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">X</span> de Xícara</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra X" onclick="event.stopPropagation(); speakLetter('X')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- Y — Letra Y -->
-            <div class="letter-card" data-letter="Y" role="listitem" tabindex="0"
-                 aria-label="Letra Y" onclick="speakLetter('Y')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('Y')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">Y</span><span class="letter-lower">y</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="40" cy="40" r="28" fill="#FFF9C4" stroke="#FBC02D" stroke-width="3"/>
-                        <text x="40" y="52" font-family="Nunito, sans-serif" font-size="34" font-weight="900" fill="#F57F17" text-anchor="middle">Y</text>
-                    </svg>
-                </div>
-                <div class="letter-example">Letra <span class="highlight">Y</span></div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra Y" onclick="event.stopPropagation(); speakLetter('Y')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <!-- Z — Zebra -->
-            <div class="letter-card" data-letter="Z" role="listitem" tabindex="0"
-                 aria-label="Letra Z, Z de Zebra" onclick="speakLetter('Z')"
-                 onkeydown="if(event.key==='Enter'||event.key===' ')speakLetter('Z')">
-                <div class="letter-header" aria-hidden="true"><span class="letter-upper">Z</span><span class="letter-lower">z</span></div>
-                <div class="letter-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="40" cy="40" r="26" fill="#FFFFFF" stroke="#212121" stroke-width="3"/>
-                        <path d="M20 34 L32 37 M20 44 L34 44 M22 52 L36 49" stroke="#212121" stroke-width="3" stroke-linecap="round"/>
-                        <path d="M60 34 L48 37 M60 44 L46 44 M58 52 L44 49" stroke="#212121" stroke-width="3" stroke-linecap="round"/>
-                        <circle cx="34" cy="28" r="3" fill="#212121"/>
-                        <circle cx="46" cy="28" r="3" fill="#212121"/>
-                    </svg>
-                </div>
-                <div class="letter-example"><span class="highlight">Z</span> de Zebra</div>
-                <button class="letter-sound-btn" aria-label="Ouvir a letra Z" onclick="event.stopPropagation(); speakLetter('Z')">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-
+        <div class="letters-grid" id="lettersGrid" role="list">
+            <!-- Gerado dinamicamente com todas as 26 letras -->
         </div>
     </section>
 

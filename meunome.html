@@ -96,6 +96,188 @@
         .btn-restart { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 1rem 2.5rem; font-size: 1.1rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
         .btn-restart:hover { background: var(--green-dark); }
 
+        /* SEÇÃO DE ESCRITA TOUCH (CALIGRAFIA E ASSINATURA) */
+        .writing-section {
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+        }
+        .writing-header {
+            margin-bottom: 1.2rem;
+        }
+        .writing-sub {
+            font-size: 1.05rem;
+            color: var(--fg-secondary);
+            font-weight: 600;
+        }
+        .writing-controls-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            background: var(--bg);
+            padding: 0.8rem 1.2rem;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            margin-bottom: 1rem;
+        }
+        .mode-toggles {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .btn-mode {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            border: 2px solid var(--border);
+            background: var(--white);
+            color: var(--fg-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-mode:hover {
+            border-color: var(--green);
+            color: var(--green);
+        }
+        .btn-mode.active {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green-dark);
+            box-shadow: 0 2px 8px rgba(46,125,50,0.25);
+        }
+        .pen-colors {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .pen-label {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--fg-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .color-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 2px #ccc;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .color-dot:hover {
+            transform: scale(1.15);
+        }
+        .color-dot.active {
+            transform: scale(1.15);
+            box-shadow: 0 0 0 3px var(--green);
+        }
+        .writing-actions-top {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .btn-action-sm {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: var(--white);
+            color: var(--fg);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-action-sm:hover {
+            background: var(--green-pale);
+            border-color: var(--green);
+        }
+        .btn-clear {
+            color: #C62828;
+            border-color: #FFCDD2;
+        }
+        .btn-clear:hover {
+            background: #FFEBEE;
+            border-color: #E53935;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            background: #FFFFFF;
+            border: 3px solid #B0BEC5;
+            border-radius: var(--radius);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .canvas-wrapper:focus-within {
+            border-color: var(--green);
+        }
+        .writing-canvas {
+            display: block;
+            width: 100%;
+            height: 270px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+        .canvas-hint-overlay {
+            position: absolute;
+            bottom: 10px;
+            right: 14px;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: opacity 0.3s;
+        }
+        .writing-footer-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .writing-feedback {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--green-dark);
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--green-pale);
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--green-light);
+            animation: fade-up 0.3s ease;
+        }
+
         .footer { background: var(--white); border-top: 2px solid var(--border); padding: 1.2rem 1.5rem; text-align: center; font-size: 0.9rem; color: var(--muted); font-weight: 600; margin-top: auto; }
         .footer i { color: var(--green); }
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -198,7 +380,62 @@
         </div>
     </section>
 
-    <!-- SEÇÃO 2: EXERCÍCIO DE MONTAR O NOME -->
+    <!-- SEÇÃO 2: TREINO DE ESCRITA TOUCH (CALIGRAFIA E ASSINATURA) -->
+    <section class="card-box writing-section" id="writingSection" style="display:none;" aria-labelledby="title-writing">
+        <div class="writing-header">
+            <h2 class="section-title" id="title-writing">
+                <i class="fas fa-pen-fancy"></i> Treinar a Escrita com o Dedo ou Caneta
+            </h2>
+            <p class="writing-sub">Passe a ponta do dedo no quadro abaixo. Você pode cobrir as letras pontilhadas ou treinar a sua assinatura livre!</p>
+        </div>
+
+        <div class="writing-controls-bar">
+            <div class="mode-toggles" role="group" aria-label="Modo de escrita">
+                <button type="button" class="btn-mode active" id="btnModeTrace" onclick="setWritingMode('trace')">
+                    <i class="fas fa-font"></i> Cobrir Letras
+                </button>
+                <button type="button" class="btn-mode" id="btnModeFree" onclick="setWritingMode('free')">
+                    <i class="fas fa-signature"></i> Assinatura Livre
+                </button>
+            </div>
+            
+            <div class="pen-colors" role="group" aria-label="Cor da caneta">
+                <span class="pen-label"><i class="fas fa-paint-brush"></i> Cor:</span>
+                <button type="button" class="color-dot active" style="background-color:#1565C0;" onclick="setPenColor('#1565C0', this)" aria-label="Caneta Azul" title="Caneta Azul"></button>
+                <button type="button" class="color-dot" style="background-color:#212121;" onclick="setPenColor('#212121', this)" aria-label="Caneta Preta" title="Caneta Preta"></button>
+                <button type="button" class="color-dot" style="background-color:#2E7D32;" onclick="setPenColor('#2E7D32', this)" aria-label="Caneta Verde" title="Caneta Verde"></button>
+            </div>
+
+            <div class="writing-actions-top">
+                <button type="button" class="btn-action-sm btn-clear" onclick="clearWritingCanvas()" aria-label="Apagar e começar de novo">
+                    <i class="fas fa-eraser"></i> Apagar
+                </button>
+                <button type="button" class="btn-action-sm btn-audio-write" onclick="speakWritingHint()" aria-label="Ouvir instrução de escrita">
+                    <i class="fas fa-volume-up"></i> Ouvir instrução
+                </button>
+            </div>
+        </div>
+
+        <!-- QUADRO DE ESCRITA / CANVAS -->
+        <div class="canvas-wrapper" id="canvasWrapper">
+            <canvas id="writingCanvas" class="writing-canvas" aria-label="Quadro interativo para escrever seu nome com o dedo ou mouse"></canvas>
+            <div class="canvas-hint-overlay" id="canvasHint">
+                <i class="fas fa-hand-pointer"></i> Passe o dedo na linha para escrever
+            </div>
+        </div>
+
+        <div class="writing-footer-actions">
+            <div class="writing-feedback" id="writingFeedback">
+                <i class="fas fa-star" style="color:#FBC02D;"></i>
+                <span>Que caligrafia bonita! Parabéns pelo treino!</span>
+            </div>
+            <button type="button" class="btn-action" id="btnConfirmWriting" onclick="confirmWritingSuccess()" style="margin-left:auto;">
+                <i class="fas fa-check-circle"></i> Ficou lindo! Salvar treino
+            </button>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 3: EXERCÍCIO DE MONTAR O NOME -->
     <section class="card-box" id="exerciseSection" style="display:none;" aria-labelledby="title-exercise">
         <h2 class="section-title" id="title-exercise">
             <i class="fas fa-puzzle-piece"></i> Monte o seu nome

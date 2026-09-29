@@ -311,7 +311,14 @@ var evalDebounceTimer = null;
 var currentEvalScore = 0;
 var currentEvalStars = 0;
 var currentEvalText = '';
-var letterStatusMap = []; // [{ char, index, coverage, completed }]
+var letterStatusMap = []; // [{ char, nameIndex, score, coverage, passed, ... }]
+
+// Sistema pedagógico de tentativas por letra
+// { '0': 2, '1': 1, ... } — chave = nameIndex, valor = tentativas falhas
+var letterAttempts = {};
+
+// Letra que está sendo destacada no momento (índice em letterStatusMap)
+var highlightedLetterIdx = -1;
 
 // Dicas pedagógicas de como traçar cada letra
 var letterTraceTips = {
@@ -513,28 +520,82 @@ function drawBackgroundGuides() {
 function drawArrowGuide(m) {
     writingCtx.save();
     writingCtx.setLineDash([]);
-    var arrowY = m.y1 + 4;
-    var arrowX = m.centerX;
     
-    // Ponto verde indicador de início do traçado
+    // Obtém o traçado real da letra para mostrar o ponto inicial correto
+    var scaledStrokes = (typeof getScaledStrokesForLetter === 'function')
+        ? getScaledStrokesForLetter(m.char, m)
+        : null;
+    
+    var startX, startY, dirDX, dirDY;
+    
+    if (scaledStrokes && scaledStrokes.length > 0 && scaledStrokes[0].length >= 2) {
+        // Usa o ponto real de início do primeiro stroke
+        startX = scaledStrokes[0][0].x;
+        startY = scaledStrokes[0][0].y;
+        // Direção inicial: vetor do ponto 0 ao ponto 1
+        var p1 = scaledStrokes[0][0];
+        var p2 = scaledStrokes[0][1];
+        dirDX = p2.x - p1.x;
+        dirDY = p2.y - p1.y;
+    } else {
+        // Fallback: topo central
+        startX = m.centerX;
+        startY = m.y1 + 4;
+        dirDX = 0; dirDY = 1;
+    }
+    
+    var len = Math.sqrt(dirDX * dirDX + dirDY * dirDY);
+    if (len > 0) { dirDX /= len; dirDY /= len; }
+    
+    // Ponto verde de início
     writingCtx.beginPath();
-    writingCtx.arc(arrowX, arrowY, 4.5, 0, Math.PI * 2);
+    writingCtx.arc(startX, startY, 5, 0, Math.PI * 2);
     writingCtx.fillStyle = '#2E7D32';
     writingCtx.fill();
     writingCtx.strokeStyle = '#FFFFFF';
     writingCtx.lineWidth = 1.5;
     writingCtx.stroke();
     
-    // Pequena setinha apontando para baixo
+    // Seta de direção inicial (aponta na direção do primeiro movimento)
+    var arrowLen = 12;
+    var ex = startX + dirDX * arrowLen;
+    var ey = startY + dirDY * arrowLen;
     writingCtx.beginPath();
     writingCtx.strokeStyle = '#2E7D32';
     writingCtx.lineWidth = 2;
-    writingCtx.moveTo(arrowX, arrowY + 6);
-    writingCtx.lineTo(arrowX, arrowY + 14);
-    writingCtx.lineTo(arrowX - 3, arrowY + 11);
-    writingCtx.moveTo(arrowX, arrowY + 14);
-    writingCtx.lineTo(arrowX + 3, arrowY + 11);
+    writingCtx.moveTo(startX, startY);
+    writingCtx.lineTo(ex, ey);
+    // Pontinha da seta
+    var angle = Math.atan2(dirDY, dirDX);
+    writingCtx.lineTo(
+        ex - 5 * Math.cos(angle - 0.5),
+        ey - 5 * Math.sin(angle - 0.5)
+    );
+    writingCtx.moveTo(ex, ey);
+    writingCtx.lineTo(
+        ex - 5 * Math.cos(angle + 0.5),
+        ey - 5 * Math.sin(angle + 0.5)
+    );
     writingCtx.stroke();
+    
+    // Numeração de strokes (quando há mais de 1 stroke)
+    if (scaledStrokes && scaledStrokes.length > 1) {
+        writingCtx.font = 'bold 10px Nunito, sans-serif';
+        writingCtx.textAlign = 'center';
+        writingCtx.textBaseline = 'middle';
+        for (var si = 0; si < Math.min(scaledStrokes.length, 4); si++) {
+            if (!scaledStrokes[si] || scaledStrokes[si].length === 0) continue;
+            var sx = scaledStrokes[si][0].x;
+            var sy = scaledStrokes[si][0].y;
+            writingCtx.beginPath();
+            writingCtx.arc(sx, sy, 7, 0, Math.PI * 2);
+            writingCtx.fillStyle = 'rgba(46, 125, 50, 0.85)';
+            writingCtx.fill();
+            writingCtx.fillStyle = '#FFFFFF';
+            writingCtx.fillText(String(si + 1), sx, sy);
+        }
+    }
+    
     writingCtx.restore();
 }
 
@@ -661,21 +722,22 @@ function renderLetterTracker() {
     
     tracker.innerHTML = '';
     var letters = currentName.replace(/\s/g, '').split('');
+    letterAttempts = {};
     letterStatusMap = letters.map(function(ch, idx) {
-        return { char: ch, index: idx, coverage: 0, completed: false };
+        return { char: ch, nameIndex: idx, score: 0, coverage: 0, passed: false };
     });
     
     letterStatusMap.forEach(function(item) {
         var chip = document.createElement('button');
         chip.type = 'button';
         chip.className = 'tracker-chip';
-        chip.id = 'trackerChip_' + item.index;
+        chip.id = 'trackerChip_' + item.nameIndex;
         chip.setAttribute('aria-label', 'Letra ' + item.char + '. Toque para ouvir dica.');
-        chip.onclick = function() { speakLetterTip(item.char); };
+        chip.onclick = (function(c) { return function() { speakLetterTip(c); }; })(item.char);
         
         chip.innerHTML = 
             '<span class="chip-char">' + item.char + '</span>' +
-            '<span class="chip-status" id="chipStatus_' + item.index + '"><i class="fas fa-pen"></i> 0%</span>';
+            '<span class="chip-status" id="chipStatus_' + item.nameIndex + '"><i class="fas fa-pen"></i></span>';
         
         tracker.appendChild(chip);
     });
@@ -689,6 +751,11 @@ function speakLetterTip(char) {
     speak(tip);
 }
 
+// ============================================================
+// NOVA AVALIAÇÃO MULTICRITÉRIO
+// Usa LETTER_PATHS de letter-paths.js para avaliação real do traçado
+// ============================================================
+
 function evaluateWriting(isManual) {
     if (!writingCanvas) return;
     
@@ -698,171 +765,87 @@ function evaluateWriting(isManual) {
     }
     
     var metrics = getLetterMetrics();
-    if (metrics.length === 0 || strokes.length === 0) {
+    if (metrics.length === 0) {
         updateEvaluationUI(0, 0, 'Passe o dedo cobrindo as letras pontilhadas. O sistema avaliará sua caligrafia automaticamente!', 'info');
         return;
     }
     
-    // Coleta todos os pontos desenhados pelo usuário com interpolação suave
-    var userPoints = [];
-    strokes.forEach(function(st) {
-        if (!st.points || st.points.length === 0) return;
-        userPoints.push(st.points[0]);
-        for (var i = 1; i < st.points.length; i++) {
-            var p1 = st.points[i - 1], p2 = st.points[i];
-            var dx = p2.x - p1.x, dy = p2.y - p1.y;
-            var dist = Math.sqrt(dx * dx + dy * dy);
-            var steps = Math.max(1, Math.floor(dist / 5));
-            for (var s = 1; s <= steps; s++) {
-                userPoints.push({
-                    x: p1.x + (dx * s) / steps,
-                    y: p1.y + (dy * s) / steps
-                });
-            }
-        }
-    });
-    
-    if (userPoints.length < 5) {
+    if (strokes.length === 0) {
         updateEvaluationUI(0, 0, 'Passe o dedo com firmeza por cima das letras pontilhadas.', 'info');
         return;
     }
     
-    // Canvas offscreen para amostrar pixels ideais de cada letra
-    var offCanvas = document.createElement('canvas');
-    var offCtx = offCanvas.getContext('2d');
-    var cWidth = parseFloat(writingCanvas.style.width) || 600;
-    var cHeight = parseFloat(writingCanvas.style.height) || 270;
-    offCanvas.width = cWidth;
-    offCanvas.height = cHeight;
-    
-    var completedLettersCount = 0;
-    var totalCoverageSum = 0;
-    var toleranceDist = 20; // tolerância generosa para o toque na tela
-    var toleranceSq = toleranceDist * toleranceDist;
+    var completedCount = 0;
+    var totalScoreSum = 0;
     
     metrics.forEach(function(m, idx) {
-        // Amostra a letra individualmente no offscreen canvas
-        offCtx.clearRect(0, 0, cWidth, cHeight);
-        offCtx.font = 'bold ' + m.fontSize + 'px Nunito, sans-serif';
-        offCtx.textBaseline = 'alphabetic';
-        offCtx.textAlign = 'left';
-        offCtx.fillStyle = '#000000';
-        offCtx.fillText(m.char, m.x1, m.baseline);
+        // Bônus de tolerância para letras com muitas tentativas falhas
+        var attempts = letterAttempts[idx] || 0;
+        var bonus = attempts * WRITING_EVALUATION_CONFIG.attemptToleranceBonus;
         
-        // Pega os pixels da letra dentro de sua bounding box
-        var bx1 = Math.max(0, Math.floor(m.x1 - 4));
-        var by1 = Math.max(0, Math.floor(m.y1 - 4));
-        var bw = Math.min(cWidth - bx1, Math.ceil(m.width + 8));
-        var bh = Math.min(cHeight - by1, Math.ceil((m.y2 - m.y1) + 8));
+        var result = evaluateLetter(m.char, m, strokes, bonus);
         
-        var targetPoints = [];
-        if (bw > 0 && bh > 0) {
-            var imgData = offCtx.getImageData(bx1, by1, bw, bh);
-            var data = imgData.data;
-            var sampleStep = 4; // amostragem veloz a cada 4 pixels
-            for (var y = 0; y < bh; y += sampleStep) {
-                for (var x = 0; x < bw; x += sampleStep) {
-                    var alphaIndex = (y * bw + x) * 4 + 3;
-                    if (data[alphaIndex] > 40) {
-                        targetPoints.push({ x: bx1 + x, y: by1 + y });
-                    }
-                }
-            }
+        // Atualiza o mapa de status (usa nameIndex como chave única)
+        if (letterStatusMap[idx]) {
+            letterStatusMap[idx].score    = result.score;
+            letterStatusMap[idx].coverage = result.coverage;
+            letterStatusMap[idx].passed   = result.passed;
+            letterStatusMap[idx].result   = result;
         }
         
-        // Filtra pontos do usuário na vizinhança da letra para velocidade
-        var localUserPts = userPoints.filter(function(p) {
-            return p.x >= m.x1 - 25 && p.x <= m.x2 + 25 && p.y >= m.y1 - 25 && p.y <= m.y2 + 25;
-        });
-        
-        var coveredCount = 0;
-        if (targetPoints.length > 0 && localUserPts.length > 0) {
-            targetPoints.forEach(function(tp) {
-                for (var u = 0; u < localUserPts.length; u++) {
-                    var dxx = tp.x - localUserPts[u].x;
-                    var dyy = tp.y - localUserPts[u].y;
-                    if (dxx * dxx + dyy * dyy <= toleranceSq) {
-                        coveredCount++;
-                        break;
-                    }
-                }
-            });
-        }
-        
-        var covPercent = (targetPoints.length > 0) 
-            ? Math.min(100, Math.round((coveredCount / targetPoints.length) * 100))
-            : 0;
-        
-        var isDone = covPercent >= 55;
-        if (isDone) completedLettersCount++;
-        totalCoverageSum += covPercent;
+        if (result.passed) completedCount++;
+        totalScoreSum += result.score;
         
         // Atualiza chip da letra
-        var chip = document.getElementById('trackerChip_' + idx);
-        var chipStatus = document.getElementById('chipStatus_' + idx);
+        var chip       = document.getElementById('trackerChip_'  + idx);
+        var chipStatus = document.getElementById('chipStatus_'   + idx);
         if (chip && chipStatus) {
-            if (isDone) {
+            chip.classList.remove('completed', 'partial');
+            if (result.passed) {
                 chip.classList.add('completed');
-                chip.classList.remove('partial');
-                chipStatus.innerHTML = '<i class="fas fa-check"></i> ' + covPercent + '%';
-            } else if (covPercent > 20) {
+                chipStatus.innerHTML = '<i class="fas fa-check"></i>';
+            } else if (result.score >= 30 || result.coverage >= 30) {
                 chip.classList.add('partial');
-                chip.classList.remove('completed');
-                chipStatus.innerHTML = '<i class="fas fa-pencil-alt"></i> ' + covPercent + '%';
+                chipStatus.innerHTML = '<i class="fas fa-pencil-alt"></i>';
             } else {
-                chip.classList.remove('completed', 'partial');
-                chipStatus.innerHTML = '<i class="fas fa-pen"></i> ' + covPercent + '%';
+                chipStatus.innerHTML = '<i class="fas fa-pen"></i>';
             }
         }
     });
     
-    var avgCoverage = Math.round(totalCoverageSum / metrics.length);
+    var avgScore = Math.round(totalScoreSum / Math.max(metrics.length, 1));
+    
     var countEl = document.getElementById('trackerProgressCount');
-    if (countEl) countEl.textContent = completedLettersCount + ' de ' + metrics.length;
+    if (countEl) countEl.textContent = completedCount + ' de ' + metrics.length;
     
-    // Penalidade suave por rabiscos muito fora das letras
-    var firstX = metrics[0].x1 - 40;
-    var lastX = metrics[metrics.length - 1].x2 + 40;
-    var topY = metrics[0].y1 - 35;
-    var botY = metrics[0].y2 + 35;
-    var outsidePoints = userPoints.filter(function(p) {
-        return p.x < firstX || p.x > lastX || p.y < topY || p.y > botY;
-    });
-    var strayRatio = outsidePoints.length / userPoints.length;
-    var cleanMultiplier = Math.max(0.7, 1 - (strayRatio * 0.45));
+    // Feedback pedagógico (sem linguagem negativa)
+    var stars = 0, feedbackMsg = '', statusClass = 'info';
+    var allPassed = (completedCount === metrics.length);
+    var partialRatio = completedCount / Math.max(metrics.length, 1);
     
-    var finalScore = Math.min(100, Math.round(avgCoverage * cleanMultiplier));
-    
-    // Classificação por estrelas e feedback pedagógico
-    var stars = 0;
-    var feedbackMsg = '';
-    var statusClass = 'info';
-    
-    if (finalScore >= 80 && completedLettersCount === metrics.length) {
+    if (allPassed && avgScore >= 75) {
         stars = 3;
         statusClass = 'success';
-        feedbackMsg = 'Excelente caligrafia! Você cobriu todas as letras do seu nome (' + currentName + ') com precisão!';
-    } else if (finalScore >= 60 || completedLettersCount >= Math.ceil(metrics.length * 0.75)) {
+        feedbackMsg = 'Muito bem! Você escreveu o seu nome ' + currentName + ' com ótimo traçado!';
+    } else if (allPassed || (partialRatio >= 0.75 && avgScore >= 55)) {
         stars = 2;
         statusClass = 'partial';
-        var missingCount = metrics.length - completedLettersCount;
-        feedbackMsg = 'Muito bom! Você já cobriu ' + completedLettersCount + ' letras. ' + 
-            (missingCount > 0 ? ('Faltam apenas ' + missingCount + ' letra(s) para completar perfeitamente!') : 'Quase perfeito!');
-    } else if (finalScore >= 25 || completedLettersCount > 0) {
+        var faltam = metrics.length - completedCount;
+        feedbackMsg = faltam > 0
+            ? 'Você está quase lá! Vamos completar ' + faltam + ' letra(s) que ainda precisam de treino.'
+            : 'Ótimo trabalho! O traçado do seu nome está muito bom.';
+    } else if (partialRatio >= 0.4 || avgScore >= 35) {
         stars = 1;
         statusClass = 'partial';
-        feedbackMsg = 'Bom começo! Você já cobriu partes do nome. Passe o dedo devagar cobrindo as letras que ainda faltam!';
+        feedbackMsg = 'Bom começo! Passe o dedo devagar seguindo cada letra com cuidado.';
     } else {
         stars = 0;
         statusClass = 'info';
-        feedbackMsg = 'Passe a ponta do seu dedo bem por cima das linhas pontilhadas de cada letra.';
+        feedbackMsg = 'Passe a ponta do dedo bem por cima das letras pontilhadas.';
     }
     
-    updateEvaluationUI(finalScore, stars, feedbackMsg, statusClass);
-    
-    if (isManual) {
-        speak(feedbackMsg);
-    }
+    updateEvaluationUI(avgScore, stars, feedbackMsg, statusClass);
+    if (isManual) speak(feedbackMsg);
 }
 
 function evaluateFreeSignature(isManual) {
@@ -950,8 +933,12 @@ function speakCurrentEvaluation() {
 }
 
 // ============================================================
-// DEMONSTRAÇÃO ANIMADA DE CALIGRAFIA
+// DEMONSTRAÇÃO ANIMADA DE CALIGRAFIA (usa LETTER_PATHS reais)
 // ============================================================
+
+// Índice da letra sendo destacada durante a demo
+var demoCurrentLetterIdx = -1;
+
 function playWritingDemo() {
     if (isDemoPlaying) {
         stopWritingDemo();
@@ -963,73 +950,71 @@ function playWritingDemo() {
         return;
     }
     
+    var metrics = getLetterMetrics();
+    if (metrics.length === 0) {
+        speak('Digite um nome primeiro.');
+        return;
+    }
+    
     isDemoPlaying = true;
     var btn = document.getElementById('btnDemoTrace');
     var textEl = document.getElementById('btnDemoText');
     if (btn) btn.classList.add('active');
     if (textEl) textEl.textContent = 'Parar demonstração';
     
-    speak('Observe o traçado da caneta para cobrir as letras do seu nome.');
+    // Garante que o demoState do letter-paths.js está limpo
+    if (typeof stopDemo === 'function') stopDemo();
     
-    var metrics = getLetterMetrics();
-    if (metrics.length === 0) return;
+    // Fala introdução
+    speak('Observe como escrevemos o seu nome.');
     
-    var currentLetterIdx = 0;
-    var animStep = 0;
-    var totalStepsPerLetter = 40;
-    
-    function stepAnim() {
+    // Espera a fala iniciar antes de animar
+    setTimeout(function() {
         if (!isDemoPlaying) return;
         
-        var m = metrics[currentLetterIdx];
-        if (!m) {
-            stopWritingDemo();
-            speak('Agora é a sua vez! Passe o seu dedo nas letras.');
-            return;
-        }
-        
-        redrawWritingCanvas();
-        
-        // Desenha caneta animada e traço guia temporário
-        var t = animStep / totalStepsPerLetter;
-        var curX = m.x1 + (m.width * t);
-        var curY = m.y1 + ((m.y2 - m.y1) * Math.sin(t * Math.PI));
-        
-        writingCtx.save();
-        // Rastro dourado sutil
-        writingCtx.strokeStyle = 'rgba(255, 179, 0, 0.75)';
-        writingCtx.lineWidth = 6;
-        writingCtx.lineCap = 'round';
-        writingCtx.beginPath();
-        writingCtx.moveTo(m.x1, m.y1 + 10);
-        writingCtx.lineTo(curX, curY);
-        writingCtx.stroke();
-        
-        // Ponta da caneta mágica
-        writingCtx.beginPath();
-        writingCtx.arc(curX, curY, 9, 0, Math.PI * 2);
-        writingCtx.fillStyle = '#FF8F00';
-        writingCtx.fill();
-        writingCtx.strokeStyle = '#FFFFFF';
-        writingCtx.lineWidth = 2.5;
-        writingCtx.stroke();
-        writingCtx.restore();
-        
-        animStep++;
-        if (animStep > totalStepsPerLetter) {
-            animStep = 0;
-            currentLetterIdx++;
-        }
-        
-        demoTimer = setTimeout(stepAnim, 30);
-    }
-    
-    stepAnim();
+        runLetterDemo({
+            ctx: writingCtx,
+            letterMetrics: metrics,
+            getBackground: function() {
+                redrawWritingCanvas();
+                // Destaca apenas a letra atual
+                if (demoCurrentLetterIdx >= 0 && demoCurrentLetterIdx < metrics.length) {
+                    var m = metrics[demoCurrentLetterIdx];
+                    writingCtx.save();
+                    writingCtx.font = 'bold ' + m.fontSize + 'px Nunito, sans-serif';
+                    writingCtx.textBaseline = 'alphabetic';
+                    writingCtx.textAlign = 'left';
+                    // Destaque levemente mais forte na letra atual
+                    writingCtx.fillStyle = 'rgba(46, 125, 50, 0.35)';
+                    writingCtx.fillText(m.char, m.x1, m.baseline);
+                    writingCtx.restore();
+                }
+            },
+            onLetterStart: function(m, idx) {
+                demoCurrentLetterIdx = idx;
+            },
+            onLetterEnd: function(m, idx) {
+                // pausa visual breve — a letra fica completa por um instante
+            },
+            onComplete: function() {
+                demoCurrentLetterIdx = -1;
+                stopWritingDemo();
+                speak('Agora é a sua vez. Passe o dedo seguindo as letras.');
+            },
+            strokeSpeedMs: 1200,
+            pauseBetweenStrokes: 320,
+            pauseBetweenLetters: 900
+        });
+    }, 1400);
 }
 
 function stopWritingDemo() {
     isDemoPlaying = false;
-    if (demoTimer) clearTimeout(demoTimer);
+    demoCurrentLetterIdx = -1;
+    // Para animações do letter-paths.js
+    if (typeof stopDemo === 'function') stopDemo();
+    // Para timers legados
+    if (demoTimer) { clearTimeout(demoTimer); demoTimer = null; }
     var btn = document.getElementById('btnDemoTrace');
     var textEl = document.getElementById('btnDemoText');
     if (btn) btn.classList.remove('active');
@@ -1089,12 +1074,80 @@ function speakWritingHint() {
 }
 
 function confirmWritingSuccess() {
+    // Faz avaliação completa antes de salvar
     evaluateWriting(false);
-    var scoreMsg = currentEvalScore >= 75
-        ? 'Que caligrafia bonita! Você obteve ' + currentEvalScore + '% de precisão!'
-        : 'Treino de escrita registrado com sucesso!';
-    speak(scoreMsg);
     
+    if (writingMode === 'free') {
+        // Modo livre: salva diretamente
+        speak('Treino de assinatura livre salvo com sucesso!');
+        _markWritingSaved();
+        return;
+    }
+    
+    // Modo trace: verifica se letras essenciais foram concluídas
+    var metrics = getLetterMetrics();
+    var totalLetters = metrics.length;
+    var passedLetters = letterStatusMap.filter(function(s) { return s.passed; }).length;
+    
+    // Considera salvo se pelo menos 70% das letras passaram
+    var minPassed = Math.ceil(totalLetters * 0.70);
+    
+    if (passedLetters >= minPassed || totalLetters === 0) {
+        var scoreMsg = currentEvalScore >= 75
+            ? 'Muito bem! O seu treino de caligrafia foi salvo!'
+            : 'Treino de escrita registrado! Continue praticando para melhorar.';
+        speak(scoreMsg);
+        _markWritingSaved();
+    } else {
+        // Ainda há letras que precisam de atenção
+        var faltam = totalLetters - passedLetters;
+        var msg = 'Você está quase lá! Vamos terminar ' + faltam + ' letra(s) que ainda precisam de treino.';
+        speak(msg);
+        
+        // Identifica e destaca a próxima letra pendente
+        var nextPending = letterStatusMap.find(function(s) { return !s.passed; });
+        if (nextPending) {
+            // Incrementa tentativas desta letra
+            letterAttempts[nextPending.nameIndex] = (letterAttempts[nextPending.nameIndex] || 0) + 1;
+            var attempts = letterAttempts[nextPending.nameIndex];
+            
+            // Feedback progressivo
+            if (attempts === 1) {
+                setTimeout(function() {
+                    speak('Vamos tentar mais uma vez. Passe o dedo devagar seguindo a linha da letra ' + nextPending.char + '.');
+                }, 2200);
+            } else if (attempts === 2) {
+                // Destaca a letra visualmente
+                _highlightNextPendingLetter(nextPending.nameIndex);
+                setTimeout(function() {
+                    speak('Olhe o ponto verde. Comece por aí e siga com o dedo devagar.');
+                }, 2200);
+            } else {
+                // Terceira tentativa: oferece demo automático
+                _highlightNextPendingLetter(nextPending.nameIndex);
+                setTimeout(function() {
+                    speak('Que tal ver como se escreve esta letra? Vou mostrar agora.');
+                    setTimeout(function() { playWritingDemo(); }, 2000);
+                }, 2200);
+            }
+            
+            // Scroll para o chip da letra
+            var chip = document.getElementById('trackerChip_' + nextPending.nameIndex);
+            if (chip) { chip.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+        }
+        
+        // Atualiza UI sem desbloquear
+        var btn = document.getElementById('btnConfirmWriting');
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Continue treinando';
+            setTimeout(function() {
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Salvar Treino';
+            }, 3500);
+        }
+    }
+}
+
+function _markWritingSaved() {
     try {
         var btn = document.getElementById('btnConfirmWriting');
         if (btn) {
@@ -1104,6 +1157,17 @@ function confirmWritingSuccess() {
             }, 3000);
         }
     } catch(e) {}
+}
+
+function _highlightNextPendingLetter(nameIndex) {
+    // Pulsa o chip da letra para chamar atenção
+    var chip = document.getElementById('trackerChip_' + nameIndex);
+    if (!chip) return;
+    chip.style.transition = 'box-shadow 0.2s';
+    chip.style.boxShadow = '0 0 0 4px #FF8F00, 0 0 16px rgba(255,143,0,0.5)';
+    setTimeout(function() {
+        if (chip) chip.style.boxShadow = '';
+    }, 3000);
 }
 
 function prefillUserName() {
@@ -1140,6 +1204,19 @@ window.stopWritingDemo = stopWritingDemo;
 window.toggleDirectionArrows = toggleDirectionArrows;
 window.speakCurrentEvaluation = speakCurrentEvaluation;
 window.speakLetterTip = speakLetterTip;
+window._markWritingSaved = _markWritingSaved;
+window._highlightNextPendingLetter = _highlightNextPendingLetter;
+
+// Polyfill Array.find para navegadores antigos
+if (!Array.prototype.find) {
+    Array.prototype.find = function(predicate) {
+        for (var i = 0; i < this.length; i++) {
+            if (predicate(this[i], i, this)) return this[i];
+        }
+        return undefined;
+    };
+}
+
 
 function initPage() {
     verificarLicaoConcluida();

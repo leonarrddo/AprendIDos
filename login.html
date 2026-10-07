@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
 <title>AprendIDos — Entrar na plataforma</title>
+<script>
+  // Proteção defensiva contra Clickjacking (Frame-busting)
+  if (window.top !== window.self) {
+    try { window.top.location = window.self.location; } catch (e) { }
+  }
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -362,6 +371,11 @@
       Aprender hoje, transformar sempre.
     </h1>
 
+    <!-- Notificação de E-mail Confirmado -->
+    <div id="alertaConfirmado" style="display: none; background: #E8F5E9; border: 2px solid var(--verde); color: #1B5E20; padding: 14px 18px; border-radius: 18px; font-weight: 800; font-size: 1.1rem; text-align: center; margin-top: 18px; max-width: 440px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+      <i class="fa-solid fa-circle-check" style="font-size: 1.3rem; margin-right: 6px;"></i> E-mail confirmado com sucesso! Agora você já pode entrar.
+    </div>
+
     <div class="botoes" role="group" aria-label="Opções de login">
       <!-- Botão Google -->
       <button class="btn btn-google" id="btnGoogleLogin" type="button" aria-label="Entrar com Google">
@@ -429,9 +443,12 @@
     </div>
   </div>
 
-  <!-- Integração JavaScript (Compatível com duplo-clique local e servidores) -->
+  <!-- Módulo de Autenticação Supabase -->
+  <script type="module" src="auth.js"></script>
+
+  <!-- Integração JavaScript -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', async function() {
       const btnGoogle = document.getElementById('btnGoogleLogin');
       const btnFacebook = document.getElementById('btnFacebookLogin');
       const modal = document.getElementById('modalEmail');
@@ -439,54 +456,52 @@
       const btnFechar = document.getElementById('btnFecharModal');
       const formLogin = document.getElementById('formLoginEmail');
       const erroEl = document.getElementById('erroLoginEmail');
+      const alertaConfirmado = document.getElementById('alertaConfirmado');
+
+      // Verifica se o usuário chegou através do link de confirmação de e-mail
+      const urlParams = new URLSearchParams(window.location.search);
+      const isConfirmado = urlParams.get('confirmado') === 'true' || window.location.hash.includes('access_token');
+
+      if (isConfirmado && alertaConfirmado) {
+        alertaConfirmado.style.display = 'block';
+        if (modal) {
+          modal.classList.add('open');
+          const input = document.getElementById('loginEmail');
+          if (input) input.focus();
+        }
+      }
 
       // 1. Login com Google
       if (btnGoogle) {
-        btnGoogle.addEventListener('click', function() {
-          btnGoogle.style.opacity = '0.7';
+        btnGoogle.addEventListener('click', async function() {
           btnGoogle.disabled = true;
-
-          const usuarioGoogle = {
-            id: 'google_' + Date.now(),
-            nome: 'Manoel da Silva',
-            name: 'Manoel da Silva',
-            email: 'manoel.silva@gmail.com',
-            avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
-            provedor: 'google'
-          };
-
           try {
-            localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioGoogle));
-          } catch(e) {}
-
-          setTimeout(function() {
-            window.location.href = 'index.html';
-          }, 800);
+            if (window.AprendIDosAuth && window.AprendIDosAuth.signInWithProvider) {
+              await window.AprendIDosAuth.signInWithProvider('google', 'index.html');
+            } else {
+              window.location.href = 'index.html';
+            }
+          } catch (e) {
+            alert('Erro ao conectar com o Google: ' + e.message);
+            btnGoogle.disabled = false;
+          }
         });
       }
 
       // 2. Login com Facebook
       if (btnFacebook) {
-        btnFacebook.addEventListener('click', function() {
-          btnFacebook.style.opacity = '0.7';
+        btnFacebook.addEventListener('click', async function() {
           btnFacebook.disabled = true;
-
-          const usuarioFacebook = {
-            id: 'facebook_' + Date.now(),
-            nome: 'Maria Oliveira',
-            name: 'Maria Oliveira',
-            email: 'maria.oliveira@facebook.com',
-            avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
-            provedor: 'facebook'
-          };
-
           try {
-            localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioFacebook));
-          } catch(e) {}
-
-          setTimeout(function() {
-            window.location.href = 'index.html';
-          }, 800);
+            if (window.AprendIDosAuth && window.AprendIDosAuth.signInWithProvider) {
+              await window.AprendIDosAuth.signInWithProvider('facebook', 'index.html');
+            } else {
+              window.location.href = 'index.html';
+            }
+          } catch (e) {
+            alert('Erro ao conectar com o Facebook: ' + e.message);
+            btnFacebook.disabled = false;
+          }
         });
       }
 
@@ -515,8 +530,9 @@
         });
       }
 
+      // 4. Submissão do Login com E-mail e Senha no Supabase
       if (formLogin) {
-        formLogin.addEventListener('submit', function(e) {
+        formLogin.addEventListener('submit', async function(e) {
           e.preventDefault();
           const emailInput = document.getElementById('loginEmail');
           const senhaInput = document.getElementById('loginSenha');
@@ -525,7 +541,7 @@
 
           if (!email || !senha) {
             if (erroEl) {
-              erroEl.textContent = 'Por favor, preencha o e-mail e a senha.';
+              erroEl.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Por favor, preencha o e-mail e a senha.';
               erroEl.style.display = 'block';
             }
             return;
@@ -537,23 +553,60 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
           }
 
-          const nomeFormatado = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
-          const usuarioEmail = {
-            id: 'user_' + Date.now(),
-            nome: nomeFormatado,
-            name: nomeFormatado,
-            email: email,
-            avatar: null,
-            provedor: 'email'
-          };
-
           try {
-            localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioEmail));
-          } catch(e) {}
+            if (window.AprendIDosAuth && window.AprendIDosAuth.signInWithEmail) {
+              await window.AprendIDosAuth.signInWithEmail(email, senha, 'index.html');
+            } else {
+              await new Promise(r => setTimeout(r, 600));
+              if (window.AprendIDosAuth && window.AprendIDosAuth.signInWithEmail) {
+                await window.AprendIDosAuth.signInWithEmail(email, senha, 'index.html');
+              } else {
+                window.location.href = 'index.html';
+              }
+            }
+          } catch (err) {
+            console.error('Erro login:', err);
+            if (erroEl) {
+              if (err.code === 'email_not_confirmed') {
+                erroEl.innerHTML = `
+                  <div style="line-height: 1.4;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> <strong>E-mail não confirmado!</strong><br>
+                    Verifique sua caixa de entrada e confirme o link de ativação.<br>
+                    <button type="button" id="btnReenviarLoginEmail" style="margin-top: 8px; background: #ffffff; border: 1px solid var(--erro); color: var(--erro); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: 700;">
+                      <i class="fa-solid fa-rotate-right"></i> Reenviar e-mail de confirmação
+                    </button>
+                    <span id="msgReenvioLogin" style="display: block; margin-top: 4px; color: var(--verde);"></span>
+                  </div>
+                `;
+                erroEl.style.display = 'block';
 
-          setTimeout(function() {
-            window.location.href = 'index.html';
-          }, 800);
+                const btnReenviar = document.getElementById('btnReenviarLoginEmail');
+                if (btnReenviar) {
+                  btnReenviar.addEventListener('click', async function() {
+                    btnReenviar.disabled = true;
+                    btnReenviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Reenviando...';
+                    try {
+                      await window.AprendIDosAuth.resendConfirmationEmail(email);
+                      const msg = document.getElementById('msgReenvioLogin');
+                      if (msg) msg.textContent = 'Link reenviado com sucesso!';
+                    } catch (e) {
+                      alert('Erro ao reenviar: ' + e.message);
+                    } finally {
+                      btnReenviar.disabled = false;
+                      btnReenviar.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Reenviar';
+                    }
+                  });
+                }
+              } else {
+                erroEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${err.message || 'Erro ao realizar login.'}`;
+                erroEl.style.display = 'block';
+              }
+            }
+            if (btn) {
+              btn.disabled = false;
+              btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Entrar';
+            }
+          }
         });
       }
     });

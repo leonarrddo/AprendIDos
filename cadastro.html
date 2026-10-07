@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
 <title>AprendIDos — Criar minha conta</title>
+<script>
+  // Proteção defensiva contra Clickjacking (Frame-busting)
+  if (window.top !== window.self) {
+    try { window.top.location = window.self.location; } catch (e) { }
+  }
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -518,32 +527,57 @@
 
       </form>
 
+      <!-- Card de Sucesso: Confirmação de E-mail Necessária -->
+      <div id="boxConfirmacaoEmail" style="display: none; text-align: center; padding: 24px 16px; background: #F4F0FF; border: 2px solid var(--roxo); border-radius: 22px; margin-top: 10px;">
+        <div style="font-size: 3.5rem; color: var(--roxo); margin-bottom: 12px;">
+          <i class="fa-solid fa-envelope-circle-check"></i>
+        </div>
+        <h2 style="font-family: 'Fredoka', sans-serif; font-size: 1.7rem; color: var(--roxo-escuro); margin-bottom: 8px;">Quase pronto! Confirme seu e-mail</h2>
+        <p style="font-size: 1.15rem; color: var(--texto); line-height: 1.5; margin-bottom: 14px;">
+          Enviamos um link de confirmação para:<br>
+          <strong id="emailDestinoConfirmacao" style="color: var(--roxo); font-size: 1.25rem; word-break: break-all;"></strong>
+        </p>
+        <p style="font-size: 1.05rem; color: var(--texto-suave); margin-bottom: 22px; line-height: 1.4;">
+          Abra o seu e-mail e clique no link de confirmação para ativar sua conta. Depois disso, você já poderá entrar no AprendIDos!
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <a href="login.html" class="btn-submit" style="text-decoration: none; margin-top: 0; padding: 14px 26px; font-size: 1.15rem; width: auto;">
+            <i class="fa-solid fa-right-to-bracket"></i> Ir para o Login
+          </a>
+          <button type="button" id="btnReenviarConfirmacao" style="background: #ffffff; border: 2px solid var(--roxo); color: var(--roxo); padding: 14px 22px; border-radius: 18px; font-weight: 800; cursor: pointer; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-rotate-right"></i> Reenviar e-mail
+          </button>
+        </div>
+        <div id="msgReenvio" style="margin-top: 14px; font-weight: 700; font-size: 0.95rem; display: none;"></div>
+      </div>
+
       <!-- Rodapé do Card -->
-      <div class="footer-card">
+      <div class="footer-card" id="footerCardCadastro">
         <p>Já tem uma conta cadastrada? <a href="login.html" class="link-login">Entrar agora</a></p>
       </div>
 
     </div>
   </main>
 
-  <!-- Script de Integração e Acessibilidade (Compatível com duplo-clique local e servidores) -->
+  <!-- Módulo de Autenticação Supabase -->
+  <script type="module" src="auth.js"></script>
+
+  <!-- Script de Integração e Acessibilidade -->
   <script>
     // 1. Síntese de Voz para Acessibilidade dos Idosos
     window.ouvirTexto = function(texto) {
       if (!texto) return;
       try {
         if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel(); // Interrompe qualquer áudio em andamento
+          window.speechSynthesis.cancel();
           const u = new SpeechSynthesisUtterance(texto);
           u.lang = 'pt-BR';
-          u.rate = 0.88; // Velocidade confortável para idosos
+          u.rate = 0.88;
           u.pitch = 1.0;
           window.speechSynthesis.speak(u);
-        } else {
-          console.warn('Síntese de voz não disponível.');
         }
       } catch (err) {
-        console.warn('Erro ao reproduzir voz:', err);
+        console.warn('Erro voz:', err);
       }
     };
 
@@ -561,13 +595,22 @@
       }
     };
 
-    // 3. Controle e Validação do Formulário
+    // 3. Controle e Validação do Formulário com Supabase
     document.addEventListener('DOMContentLoaded', function() {
       const form = document.getElementById('formCadastro');
       const feedback = document.getElementById('feedbackCadastro');
       const btnSubmit = document.getElementById('btnSubmit');
       const btnGoogle = document.getElementById('btnGoogleCadastro');
       const btnFacebook = document.getElementById('btnFacebookCadastro');
+      const boxConfirmacao = document.getElementById('boxConfirmacaoEmail');
+      const emailDestinoEl = document.getElementById('emailDestinoConfirmacao');
+      const btnReenviar = document.getElementById('btnReenviarConfirmacao');
+      const msgReenvio = document.getElementById('msgReenvio');
+      const areaSocial = document.querySelector('.social-buttons');
+      const divisor = document.querySelector('.divisor');
+      const headerCard = document.querySelector('.header-card');
+
+      let emailCadastradoAtual = '';
 
       function exibirMensagem(tipo, texto, falar = true) {
         if (!feedback) return;
@@ -578,61 +621,74 @@
         }
       }
 
-      // Cadastro Rápido com Google
+      // Cadastro com Google
       if (btnGoogle) {
-        btnGoogle.addEventListener('click', function() {
+        btnGoogle.addEventListener('click', async function() {
           exibirMensagem('sucesso', 'Conectando com o Google... Aguarde.');
-          btnGoogle.style.opacity = '0.7';
           btnGoogle.disabled = true;
-
-          const usuarioGoogle = {
-            id: 'google_' + Date.now(),
-            nome: 'Manoel da Silva',
-            name: 'Manoel da Silva',
-            email: 'manoel.silva@gmail.com',
-            avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
-            provedor: 'google'
-          };
-
           try {
-            localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioGoogle));
-          } catch(e) {}
-
-          setTimeout(function() {
-            window.location.href = 'index.html';
-          }, 1100);
+            if (window.AprendIDosAuth && window.AprendIDosAuth.signInWithProvider) {
+              await window.AprendIDosAuth.signInWithProvider('google', 'index.html');
+            } else {
+              window.location.href = 'index.html';
+            }
+          } catch (e) {
+            exibirMensagem('erro', 'Erro ao conectar com o Google: ' + e.message);
+            btnGoogle.disabled = false;
+          }
         });
       }
 
-      // Cadastro Rápido com Facebook
+      // Cadastro com Facebook
       if (btnFacebook) {
-        btnFacebook.addEventListener('click', function() {
+        btnFacebook.addEventListener('click', async function() {
           exibirMensagem('sucesso', 'Conectando com o Facebook... Aguarde.');
-          btnFacebook.style.opacity = '0.7';
           btnFacebook.disabled = true;
-
-          const usuarioFacebook = {
-            id: 'facebook_' + Date.now(),
-            nome: 'Maria Oliveira',
-            name: 'Maria Oliveira',
-            email: 'maria.oliveira@facebook.com',
-            avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
-            provedor: 'facebook'
-          };
-
           try {
-            localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioFacebook));
-          } catch(e) {}
-
-          setTimeout(function() {
-            window.location.href = 'index.html';
-          }, 1100);
+            if (window.AprendIDosAuth && window.AprendIDosAuth.signInWithProvider) {
+              await window.AprendIDosAuth.signInWithProvider('facebook', 'index.html');
+            } else {
+              window.location.href = 'index.html';
+            }
+          } catch (e) {
+            exibirMensagem('erro', 'Erro ao conectar com o Facebook: ' + e.message);
+            btnFacebook.disabled = false;
+          }
         });
       }
 
-      // Submissão com E-mail Tradicional
+      // Reenvio de Confirmação
+      if (btnReenviar) {
+        btnReenviar.addEventListener('click', async function() {
+          if (!emailCadastradoAtual) return;
+          btnReenviar.disabled = true;
+          btnReenviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Reenviando...';
+          try {
+            if (window.AprendIDosAuth && window.AprendIDosAuth.resendConfirmationEmail) {
+              await window.AprendIDosAuth.resendConfirmationEmail(emailCadastradoAtual);
+            }
+            if (msgReenvio) {
+              msgReenvio.style.display = 'block';
+              msgReenvio.style.color = 'var(--verde)';
+              msgReenvio.textContent = '✅ Novo link enviado! Verifique seu e-mail.';
+            }
+            ouvirTexto('Novo link de confirmação enviado para o seu e-mail.');
+          } catch (err) {
+            if (msgReenvio) {
+              msgReenvio.style.display = 'block';
+              msgReenvio.style.color = 'var(--erro)';
+              msgReenvio.textContent = 'Erro ao reenviar: ' + err.message;
+            }
+          } finally {
+            btnReenviar.disabled = false;
+            btnReenviar.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Reenviar e-mail';
+          }
+        });
+      }
+
+      // Submissão com E-mail Tradicional via Supabase
       if (form) {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', async function(e) {
           e.preventDefault();
 
           const inputNome = document.getElementById('inputNome');
@@ -669,31 +725,66 @@
             return;
           }
 
-          // Sucesso
           if (btnSubmit) {
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando conta...';
           }
 
-          const primeiroNome = nome.split(' ')[0];
-          exibirMensagem('sucesso', `Conta criada com sucesso! Bem-vindo, ${primeiroNome}.`);
-
-          const novoUsuario = {
-            id: 'user_' + Date.now(),
-            nome: nome,
-            name: nome,
-            email: email,
-            avatar: null,
-            provedor: 'email'
-          };
-
           try {
-            localStorage.setItem('aprendidos_usuario', JSON.stringify(novoUsuario));
-          } catch(e) {}
+            emailCadastradoAtual = email;
+            let resultado = null;
 
-          setTimeout(function() {
-            window.location.href = 'index.html';
-          }, 1300);
+            if (window.AprendIDosAuth && window.AprendIDosAuth.signUpWithEmail) {
+              resultado = await window.AprendIDosAuth.signUpWithEmail(nome, email, senha);
+            } else {
+              // Aguarda carregamento do auth se ainda não montou
+              await new Promise(r => setTimeout(r, 600));
+              if (window.AprendIDosAuth && window.AprendIDosAuth.signUpWithEmail) {
+                resultado = await window.AprendIDosAuth.signUpWithEmail(nome, email, senha);
+              }
+            }
+
+            // Se o Supabase exigir confirmação de e-mail:
+            if (resultado && resultado.emailConfirmationRequired) {
+              form.style.display = 'none';
+              if (areaSocial) areaSocial.style.display = 'none';
+              if (divisor) divisor.style.display = 'none';
+              if (headerCard) {
+                const sub = headerCard.querySelector('.subtitulo-cadastro');
+                if (sub) sub.style.display = 'none';
+              }
+              if (emailDestinoEl) emailDestinoEl.textContent = email;
+              if (boxConfirmacao) boxConfirmacao.style.display = 'block';
+
+              ouvirTexto('Cadastro realizado com sucesso! Enviamos um link de confirmação para o seu e-mail. Por favor, confirme antes de entrar.');
+              return;
+            }
+
+            // Se não exigir confirmação (já entrou direto):
+            const primeiroNome = nome.split(' ')[0];
+            exibirMensagem('sucesso', `Conta criada com sucesso! Bem-vindo, ${primeiroNome}.`);
+            setTimeout(function() {
+              window.location.href = 'index.html';
+            }, 1200);
+
+          } catch (err) {
+            console.error('Erro cadastro:', err);
+            const msgErro = err.message || 'Erro ao realizar cadastro.';
+            // Se o e-mail já existir, exibe link direto para login
+            if (msgErro.includes('já está cadastrado')) {
+              if (feedback) {
+                feedback.className = 'feedback-msg show-error';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${msgErro} <a href="login.html" style="color:inherit;font-weight:800;text-decoration:underline;">Ir para o Login →</a>`;
+              }
+              ouvirTexto(msgErro + ' Vá até a tela de login para entrar.');
+            } else {
+              exibirMensagem('erro', msgErro);
+            }
+            if (btnSubmit) {
+              btnSubmit.disabled = false;
+              btnSubmit.innerHTML = '<i class="fa-solid fa-user-plus" aria-hidden="true"></i> <span>Criar Minha Conta</span>';
+            }
+          }
         });
       }
     });

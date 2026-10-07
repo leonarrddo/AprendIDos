@@ -67,14 +67,25 @@ function showNameAnalysis(name) {
     var info = document.getElementById('nameInfo');
     if (!display || !info) return;
 
-    var html = '';
+    // Sanitiza e limpa nós anteriores de forma segura (mitigação XSS)
+    display.replaceChildren();
+
     for (var i = 0; i < name.length; i++) {
         var ch = name[i];
-        if (ch === ' ') { html += '<span class="name-space"> </span>'; continue; }
+        if (ch === ' ') {
+            var spaceSpan = document.createElement('span');
+            spaceSpan.className = 'name-space';
+            spaceSpan.textContent = ' ';
+            display.appendChild(spaceSpan);
+            continue;
+        }
         var isVowel = vowelSet.includes(ch);
-        html += '<span class="name-letter ' + (isVowel ? 'vowel' : 'consonant') + '" title="' + (isVowel ? 'Vogal' : 'Consoante') + '">' + ch + '</span>';
+        var letterSpan = document.createElement('span');
+        letterSpan.className = 'name-letter ' + (isVowel ? 'vowel' : 'consonant');
+        letterSpan.title = isVowel ? 'Vogal' : 'Consoante';
+        letterSpan.textContent = ch;
+        display.appendChild(letterSpan);
     }
-    display.innerHTML = html;
     display.style.display = 'flex';
 
     var vowels = [], consonants = [];
@@ -84,10 +95,32 @@ function showNameAnalysis(name) {
         if (vowelSet.includes(c)) vowels.push(c);
         else consonants.push(c);
     }
-    info.innerHTML =
-        '<p><strong>' + name.length + '</strong> letras no total &nbsp;|&nbsp; ' +
-        '<span style="color:#2E7D32"><strong>' + vowels.length + '</strong> vogais (' + (vowels.join(', ') || '—') + ')</span> &nbsp;|&nbsp; ' +
-        '<span style="color:#00695C"><strong>' + consonants.length + '</strong> consoantes (' + (consonants.join(', ') || '—') + ')</span></p>';
+
+    info.replaceChildren();
+    var pInfo = document.createElement('p');
+
+    var sTotal = document.createElement('strong');
+    sTotal.textContent = String(name.length);
+    pInfo.appendChild(sTotal);
+    pInfo.appendChild(document.createTextNode(' letras no total \u00A0|\u00A0 '));
+
+    var spanVowels = document.createElement('span');
+    spanVowels.style.color = '#2E7D32';
+    var strongV = document.createElement('strong');
+    strongV.textContent = String(vowels.length);
+    spanVowels.appendChild(strongV);
+    spanVowels.appendChild(document.createTextNode(' vogais (' + (vowels.join(', ') || '—') + ') \u00A0|\u00A0 '));
+    pInfo.appendChild(spanVowels);
+
+    var spanCons = document.createElement('span');
+    spanCons.style.color = '#00695C';
+    var strongC = document.createElement('strong');
+    strongC.textContent = String(consonants.length);
+    spanCons.appendChild(strongC);
+    spanCons.appendChild(document.createTextNode(' consoantes (' + (consonants.join(', ') || '—') + ')'));
+    pInfo.appendChild(spanCons);
+
+    info.appendChild(pInfo);
     info.style.display = 'block';
 
     var writingSec = document.getElementById('writingSection');

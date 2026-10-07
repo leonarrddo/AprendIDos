@@ -15,7 +15,7 @@
  */
 
 export const SUPABASE_URL = 'https://ggptdxmsrsfrpvntlfja.supabase.co';
-export const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_AQUI';
+export const SUPABASE_ANON_KEY = 'sb_publishable_WhPJRUu_34b1bePFS9pLqg_t5NadHx6';
 
 // Detecta se o usuário já inseriu as credenciais reais do Supabase
 export const isSupabaseConfigured = () => {

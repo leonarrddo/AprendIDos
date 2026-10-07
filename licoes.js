@@ -151,7 +151,15 @@ async function initUserSession() {
     if (greetingEl) greetingEl.textContent = `Olá, ${firstName}! Vamos aprender?`;
 
     if (user.avatar && avatarEl) {
-      avatarEl.innerHTML = `<img src="${user.avatar}" alt="${user.name}" style="width:100%;height:100%;object-fit:cover;">`;
+      avatarEl.replaceChildren();
+      // Validação defensiva de esquema de URL para mitigar XSS via javascript:
+      if (/^(https?:|\/|data:image\/)/i.test(user.avatar)) {
+        const img = document.createElement('img');
+        img.src = user.avatar;
+        img.alt = user.name ? String(user.name) : 'Foto do perfil';
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+        avatarEl.appendChild(img);
+      }
     }
   } else {
     if (userNameEl) userNameEl.textContent = 'Aprendiz';

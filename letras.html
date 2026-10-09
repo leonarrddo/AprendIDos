@@ -594,6 +594,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 0.45rem;
         }
 
         .letter-word .highlight {
@@ -649,6 +650,516 @@
             background: #E65100;
             color: #FFFFFF;
             border-color: #E65100;
+        }
+
+        /* ===== THUMBNAIL DA CARTILHA NOS CARDS ===== */
+        .letter-card-thumb-wrap {
+            width: 72px;
+            height: 72px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid #C8E6C9;
+            background: #FFFFFF;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 0.15rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .letter-card-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .letter-cartilha-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: #E8F5E9;
+            color: #1B5E20;
+            border: 1.5px solid #A5D6A7;
+            font-size: 0.76rem;
+            font-weight: 800;
+            padding: 0.2rem 0.55rem;
+            border-radius: 99px;
+            margin-top: 0.15rem;
+        }
+
+        .letter-cartilha-badge i {
+            color: #2E7D32;
+        }
+
+        .btn-open-cartilha {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, #1B5E20, #2E7D32);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 99px;
+            padding: 0.65rem 1.4rem;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 3px 12px rgba(46,125,50,0.25);
+            transition: all 0.22s ease;
+        }
+
+        .btn-open-cartilha:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(46,125,50,0.35);
+        }
+
+        .btn-open-cartilha:active {
+            transform: scale(0.97);
+        }
+
+        /* ===== MODAL CARTILHA CAMINHO SUAVE ===== */
+        .cartilha-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .cartilha-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cartilha-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(46, 30, 20, 0.78);
+            backdrop-filter: blur(4px);
+        }
+
+        .cartilha-dialog {
+            position: relative;
+            background: #FFFDF8;
+            border-radius: 24px;
+            border: 3.5px solid var(--green);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+            width: 100%;
+            max-width: 960px;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: modal-pop 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modal-pop {
+            from { transform: scale(0.92) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .cartilha-header {
+            background: #FAF3E0;
+            border-bottom: 2px solid #E0D5C1;
+            padding: 1rem 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .cartilha-header-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .cartilha-badge {
+            font-size: 0.85rem;
+            font-weight: 800;
+            padding: 0.3rem 0.8rem;
+            border-radius: 99px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cartilha-badge.vowel {
+            background: #FFE0B2;
+            color: #E65100;
+            border: 1.5px solid #FFB74D;
+        }
+
+        .cartilha-badge.consonant {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border: 1.5px solid #A5D6A7;
+        }
+
+        .cartilha-title {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: #3E2723;
+        }
+
+        .cartilha-btn-close {
+            background: #FFFFFF;
+            border: 2px solid #D7CCC8;
+            color: #5D4037;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
+            padding: 0.5rem 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
+        }
+
+        .cartilha-btn-close:hover {
+            background: #FFEBEE;
+            color: #C62828;
+            border-color: #EF9A9A;
+        }
+
+        .cartilha-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr 1.15fr;
+            gap: 1.8rem;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .cartilha-body {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+                padding: 1rem;
+            }
+        }
+
+        .cartilha-image-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .cartilha-img-wrapper {
+            width: 100%;
+            max-width: 380px;
+            background: #FFFFFF;
+            border: 3px solid #D7CCC8;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(62,39,35,0.12);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 380px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cartilha-img-wrapper:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 30px rgba(46,125,50,0.2);
+        }
+
+        .cartilha-img {
+            width: 100%;
+            height: auto;
+            max-height: 480px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .cartilha-placeholder {
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .cartilha-placeholder-svg {
+            width: 140px;
+            height: 140px;
+        }
+
+        .cartilha-placeholder-text {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #5D4037;
+        }
+
+        .cartilha-image-hint {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #6D4C41;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-align: center;
+        }
+
+        .cartilha-info-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .cartilha-letters-display {
+            background: #FAF3E0;
+            border: 2px solid #E0D5C1;
+            border-radius: 16px;
+            padding: 0.9rem 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .cartilha-big-upper {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #2E7D32;
+            line-height: 1;
+        }
+
+        .cartilha-big-lower {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #5D4037;
+            line-height: 1;
+        }
+
+        .cartilha-word-tag {
+            margin-left: auto;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #3E2723;
+            background: #FFFFFF;
+            padding: 0.4rem 1rem;
+            border-radius: 12px;
+            border: 2px solid #C8E6C9;
+        }
+
+        .cartilha-phrase-box {
+            background: #E8F5E9;
+            border: 2.5px solid #81C784;
+            border-radius: 16px;
+            padding: 1.1rem 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cartilha-phrase-box:hover {
+            background: #C8E6C9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(46,125,50,0.18);
+        }
+
+        .cartilha-phrase-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #2E7D32;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .cartilha-phrase-label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #1B5E20;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cartilha-phrase-quote {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #1B5E20;
+            line-height: 1.3;
+            margin-top: 0.1rem;
+        }
+
+        .cartilha-words-section {
+            background: #FFFFFF;
+            border: 2px solid #E0D5C1;
+            border-radius: 16px;
+            padding: 1.1rem 1.3rem;
+        }
+
+        .cartilha-words-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .cartilha-words-title {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #3E2723;
+        }
+
+        .cartilha-words-hint {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #795548;
+        }
+
+        .cartilha-words-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+
+        .cartilha-word-pill {
+            background: #FCE4EC;
+            border: 2px solid #F8BBD0;
+            color: #880E4F;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            padding: 0.55rem 1.1rem;
+            border-radius: 99px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s ease;
+            min-height: 46px;
+        }
+
+        .cartilha-word-pill:hover {
+            background: #AD1457;
+            color: #FFFFFF;
+            border-color: #880E4F;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(136,14,79,0.25);
+        }
+
+        .cartilha-word-pill.speaking {
+            background: #AD1457;
+            color: #FFFFFF;
+            animation: pulse-word 0.7s infinite alternate;
+        }
+
+        @keyframes pulse-word {
+            from { transform: scale(1); }
+            to { transform: scale(1.08); }
+        }
+
+        .cartilha-audio-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .cartilha-btn-audio-main {
+            width: 100%;
+            min-height: 56px;
+            background: linear-gradient(135deg, #2E7D32, #1B5E20);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 16px;
+            padding: 0.9rem 1.4rem;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            box-shadow: 0 6px 18px rgba(46,125,50,0.3);
+            transition: all 0.22s ease;
+        }
+
+        .cartilha-btn-audio-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(46,125,50,0.4);
+        }
+
+        .cartilha-btn-audio-main.speaking {
+            animation: pulse-green 1s infinite;
+        }
+
+        .cartilha-footer {
+            background: #FAF3E0;
+            border-top: 2px solid #E0D5C1;
+            padding: 0.9rem 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .cartilha-nav-btn {
+            min-height: 52px;
+            padding: 0.8rem 1.4rem;
+            border-radius: 14px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.2s ease;
+        }
+
+        .cartilha-nav-btn.prev {
+            background: #FFFFFF;
+            border: 2px solid #A5D6A7;
+            color: #1B5E20;
+        }
+
+        .cartilha-nav-btn.prev:hover {
+            background: #E8F5E9;
+            transform: translateX(-3px);
+        }
+
+        .cartilha-nav-btn.next {
+            background: #2E7D32;
+            border: 2px solid #1B5E20;
+            color: #FFFFFF;
+        }
+
+        .cartilha-nav-btn.next:hover {
+            background: #1B5E20;
+            transform: translateX(3px);
+            box-shadow: 0 4px 14px rgba(46,125,50,0.3);
+        }
+
+        .cartilha-step-indicator {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #3E2723;
         }
 
         .opt-upper {
@@ -1258,9 +1769,14 @@
                     <i class="fas fa-shapes"></i> Consoantes (21)
                 </button>
             </div>
-            <button type="button" class="btn-autoplay-alphabet" id="btnPlayAll" onclick="togglePlayAllLetters()" aria-label="Ouvir o alfabeto completo de A até Z">
-                <i class="fas fa-play"></i> Ouvir o Alfabeto Completo
-            </button>
+            <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                <button type="button" class="btn-open-cartilha" onclick="abrirCartilha('A')" aria-label="Abrir a Cartilha Ilustrada da Letra A">
+                    <i class="fas fa-book-open"></i> Ver Cartilha Ilustrada
+                </button>
+                <button type="button" class="btn-autoplay-alphabet" id="btnPlayAll" onclick="togglePlayAllLetters()" aria-label="Ouvir o alfabeto completo de A até Z">
+                    <i class="fas fa-play"></i> Ouvir o Alfabeto Completo
+                </button>
+            </div>
         </div>
 
         <div class="letters-grid" id="lettersGrid" role="list">
@@ -1365,6 +1881,84 @@
                     <i class="fas fa-redo" aria-hidden="true"></i>
                     Refazer atividades
                 </button>
+            </div>
+        </div>
+
+        <!-- MODAL CARTILHA ILUSTRADA (CAMINHO SUAVE) -->
+        <div id="cartilhaModal" class="cartilha-modal" role="dialog" aria-modal="true" aria-labelledby="cartilhaModalTitle" hidden>
+            <div class="cartilha-backdrop" onclick="fecharCartilha()"></div>
+            <div class="cartilha-dialog" role="document">
+                <div class="cartilha-header">
+                    <div class="cartilha-header-title-wrap">
+                        <span class="cartilha-badge" id="cartilhaTipoLetra">Vogal</span>
+                        <h2 id="cartilhaModalTitle" class="cartilha-title">Cartilha Ilustrada — Letra A</h2>
+                    </div>
+                    <button type="button" class="cartilha-btn-close" onclick="fecharCartilha()" aria-label="Fechar cartilha (ou aperte Esc)">
+                        <i class="fas fa-times" aria-hidden="true"></i> Fechar
+                    </button>
+                </div>
+
+                <div class="cartilha-body">
+                    <div class="cartilha-image-col">
+                        <div class="cartilha-img-wrapper" id="cartilhaImgWrapper" onclick="tocarFraseCartilha()" title="Toque para ouvir a frase da lição" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')tocarFraseCartilha()">
+                            <img id="cartilhaImage" src="" alt="Página da cartilha da letra" class="cartilha-img" />
+                            <div id="cartilhaPlaceholder" class="cartilha-placeholder" style="display:none;">
+                                <div id="cartilhaPlaceholderSvgWrap" class="cartilha-placeholder-svg"></div>
+                                <p id="cartilhaPlaceholderText" class="cartilha-placeholder-text">Ilustração da letra</p>
+                            </div>
+                        </div>
+                        <div class="cartilha-image-hint">
+                            <i class="fas fa-hand-pointer" aria-hidden="true"></i> Toque na imagem ou nos botões ao lado para ouvir
+                        </div>
+                    </div>
+
+                    <div class="cartilha-info-col">
+                        <div class="cartilha-letters-display">
+                            <span class="cartilha-big-upper" id="cartilhaBigUpper">A</span>
+                            <span class="cartilha-big-lower" id="cartilhaBigLower">a</span>
+                            <span class="cartilha-word-tag" id="cartilhaWordTag">Abelha</span>
+                        </div>
+
+                        <div class="cartilha-phrase-box" id="cartilhaPhraseBox" onclick="tocarFraseCartilha()" role="button" tabindex="0" aria-label="Ouvir a frase da lição" onkeydown="if(event.key==='Enter'||event.key===' ')tocarFraseCartilha()">
+                            <div class="cartilha-phrase-icon" aria-hidden="true">
+                                <i class="fas fa-volume-high"></i>
+                            </div>
+                            <div class="cartilha-phrase-text">
+                                <span class="cartilha-phrase-label">Frase da lição:</span>
+                                <p id="cartilhaPhraseText" class="cartilha-phrase-quote">"A abelha faz mel."</p>
+                            </div>
+                        </div>
+
+                        <div class="cartilha-words-section">
+                            <div class="cartilha-words-header">
+                                <span class="cartilha-words-title"><i class="fas fa-book-open" aria-hidden="true"></i> Palavras com esta letra:</span>
+                                <span class="cartilha-words-hint">Toque na palavra para ouvir</span>
+                            </div>
+                            <div class="cartilha-words-grid" id="cartilhaWordsGrid" role="group" aria-label="Palavras da lição">
+                                <!-- Preenchido dinamicamente via JS -->
+                            </div>
+                        </div>
+
+                        <div class="cartilha-audio-actions">
+                            <button type="button" class="cartilha-btn-audio-main" id="btnCartilhaAudioCompleto" onclick="tocarAudioCompletoCartilha()" aria-label="Ouvir toda a página devagar">
+                                <i class="fas fa-volume-high" aria-hidden="true"></i>
+                                <span>Ouvir toda a página devagar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cartilha-footer">
+                    <button type="button" class="cartilha-nav-btn prev" id="btnCartilhaPrev" onclick="cartilhaAnterior()" aria-label="Ver letra anterior">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> Letra Anterior
+                    </button>
+                    <div class="cartilha-step-indicator" id="cartilhaCounter" aria-live="polite">
+                        Letra 1 de 26
+                    </div>
+                    <button type="button" class="cartilha-nav-btn next" id="btnCartilhaNext" onclick="cartilhaProxima()" aria-label="Ver próxima letra">
+                        Próxima Letra <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
         </div>
 

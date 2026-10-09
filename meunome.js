@@ -21,11 +21,24 @@ function speak(text, onEnd) {
     var url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
     var audio = new Audio(url);
     currentAudio = audio;
-    var ok = false;
+
+    // Flag compartilhado: garante que o fallback nativo seja chamado NO MÁXIMO UMA VEZ,
+    // independente de 'onerror' e '.catch()' dispararem ao mesmo tempo (condição de corrida)
+    var usedFallback = false;
+    function fallback() {
+        if (usedFallback) return;
+        usedFallback = true;
+        speakNativo(text, onEnd);
+    }
+
     audio.onended = function() { if (onEnd) onEnd(); };
-    audio.onerror = function() { if (!ok) speakNativo(text, onEnd); };
+    audio.onerror = function() { fallback(); };
+
     var p = audio.play();
-    if (p) p.then(function() { ok = true; }).catch(function() { speakNativo(text, onEnd); });
+    if (p) {
+        p.then(function() { /* Google TTS tocou com sucesso — não faz nada */ })
+         .catch(function() { fallback(); });
+    }
 }
 
 function speakNativo(text, onEnd) {
@@ -167,6 +180,7 @@ function shuffle(arr) {
 }
 
 function startExercise(name) {
+    // O exercício usa o nome SEM espaços para montagem de letras
     exerciseName = name.replace(/\s/g, '');
     round = 0; correct = 0; misses = 0; attempts = 0;
     assembled = [];
@@ -210,7 +224,11 @@ function renderExercise() {
     }
 
     var roundLabel = document.getElementById('roundLabel');
-    if (roundLabel) roundLabel.textContent = 'Tente montar: ' + exerciseName;
+    if (roundLabel) {
+        // Mostra o nome completo (com espaço) mas com os espaços representados
+        var displayName = currentName.split('').map(function(c) { return c === ' ' ? ' _ ' : c; }).join('');
+        roundLabel.textContent = 'Tente montar: ' + exerciseName;
+    }
 }
 
 function pickLetter(ch, btn) {
@@ -901,29 +919,35 @@ function evaluateFreeSignature(isManual) {
             if (p.x > maxX) maxX = p.x;
             if (p.y < minY) minY = p.y;
             if (p.y > maxY) maxY = p.y;
-            if (Math.abs(p.y - baseline) < 60) ptsNearBaseline++;
+            if (Math.abs(p.y - baseline) < 55) ptsNearBaseline++;
         });
     });
     
     var spanX = maxX - minX;
     var ratioNear = ptsNearBaseline / Math.max(1, totalPts);
     
+    // Critérios endurecidos para evitar nota alta em rabisco
     var score = 0, stars = 0, msg = '', sClass = 'info';
-    if (totalPts >= 35 && spanX >= 120 && ratioNear >= 0.5) {
-        score = 95;
+    if (totalPts >= 80 && spanX >= 200 && ratioNear >= 0.65) {
+        score = 90;
         stars = 3;
         sClass = 'success';
         msg = 'Assinatura excelente! Traçado contínuo, firme e bem posicionado na linha de documento!';
-    } else if (totalPts >= 15 && spanX >= 60) {
-        score = 65;
+    } else if (totalPts >= 40 && spanX >= 100 && ratioNear >= 0.45) {
+        score = 58;
         stars = 2;
         sClass = 'partial';
-        msg = 'Boa assinatura! Tente assinar com um traço contínuo bem em cima da linha verde.';
-    } else {
-        score = 30;
+        msg = 'Boa assinatura! Tente assinar com um traço mais longo, bem em cima da linha verde.';
+    } else if (totalPts >= 15 && spanX >= 50) {
+        score = 28;
         stars = 1;
         sClass = 'info';
-        msg = 'Continue treinando sua assinatura livre em cima da linha guia.';
+        msg = 'Continue treinando. Assine com firmeza, passando o dedo de ponta a ponta da linha guia.';
+    } else {
+        score = 10;
+        stars = 0;
+        sClass = 'info';
+        msg = 'Que tal tentar novamente? Passe o dedo firmemente de um lado ao outro da linha guia.';
     }
     
     updateEvaluationUI(score, stars, msg, sClass);
@@ -972,6 +996,9 @@ function speakCurrentEvaluation() {
 // Índice da letra sendo destacada durante a demo
 var demoCurrentLetterIdx = -1;
 
+// Traços já desenhados pelo demo (acumulados para persistência visual)
+var demoDrawnStrokes = [];
+
 function playWritingDemo() {
     if (isDemoPlaying) {
         stopWritingDemo();
@@ -990,6 +1017,7 @@ function playWritingDemo() {
     }
     
     isDemoPlaying = true;
+    demoDrawnStrokes = []; // Limpa o acumulador de traços do demo
     var btn = document.getElementById('btnDemoTrace');
     var textEl = document.getElementById('btnDemoText');
     if (btn) btn.classList.add('active');
@@ -1009,18 +1037,42 @@ function playWritingDemo() {
             ctx: writingCtx,
             letterMetrics: metrics,
             getBackground: function() {
+                // Redesenha o fundo (letras pontilhadas)
                 redrawWritingCanvas();
-                // Destaca apenas a letra atual
+                
+                // Redesenha todos os traços já feitos pela demo (persistência)
+                demoDrawnStrokes.forEach(function(dStroke) {
+                    if (!dStroke || dStroke.length < 2) return;
+                    writingCtx.save();
+                    writingCtx.strokeStyle = '#1565C0';
+                    writingCtx.lineWidth = 5.5;
+                    writingCtx.lineCap = 'round';
+                    writingCtx.lineJoin = 'round';
+                    writingCtx.beginPath();
+                    writingCtx.moveTo(dStroke[0].x, dStroke[0].y);
+                    for (var di = 1; di < dStroke.length; di++) {
+                        writingCtx.lineTo(dStroke[di].x, dStroke[di].y);
+                    }
+                    writingCtx.stroke();
+                    writingCtx.restore();
+                });
+                
+                // Destaca apenas a letra atual com sombra mais forte
                 if (demoCurrentLetterIdx >= 0 && demoCurrentLetterIdx < metrics.length) {
                     var m = metrics[demoCurrentLetterIdx];
                     writingCtx.save();
                     writingCtx.font = 'bold ' + m.fontSize + 'px Nunito, sans-serif';
                     writingCtx.textBaseline = 'alphabetic';
                     writingCtx.textAlign = 'left';
-                    // Destaque levemente mais forte na letra atual
                     writingCtx.fillStyle = 'rgba(46, 125, 50, 0.35)';
                     writingCtx.fillText(m.char, m.x1, m.baseline);
                     writingCtx.restore();
+                }
+            },
+            onStrokeComplete: function(strokePoints) {
+                // Acumula cada traço completado para manter na tela
+                if (strokePoints && strokePoints.length >= 2) {
+                    demoDrawnStrokes.push(strokePoints.slice());
                 }
             },
             onLetterStart: function(m, idx) {
@@ -1031,8 +1083,12 @@ function playWritingDemo() {
             },
             onComplete: function() {
                 demoCurrentLetterIdx = -1;
-                stopWritingDemo();
-                speak('Agora é a sua vez. Passe o dedo seguindo as letras.');
+                // Mantém os traços visíveis por 2 segundos e depois limpa
+                setTimeout(function() {
+                    demoDrawnStrokes = [];
+                    stopWritingDemo();
+                    speak('Agora é a sua vez. Passe o dedo seguindo as letras.');
+                }, 2000);
             },
             strokeSpeedMs: 1200,
             pauseBetweenStrokes: 320,

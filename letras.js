@@ -13,32 +13,188 @@
 // DADOS DO ALFABETO — 26 Letras com Palavras Familiares do Cotidiano Brasileiro
 // ============================================================================
 var alphabetData = {
-    A: { upper: 'A', lower: 'a', word: 'Avião',   simpleName: 'A de Avião', speech: 'A. A de Avião.', type: 'vowel',     icon: 'fa-plane' },
-    B: { upper: 'B', lower: 'b', word: 'Bola',    simpleName: 'B de Bola',  speech: 'B. B de Bola.',  type: 'consonant', icon: 'fa-futbol' },
-    C: { upper: 'C', lower: 'c', word: 'Casa',    simpleName: 'C de Casa',  speech: 'C. C de Casa.',  type: 'consonant', icon: 'fa-house' },
-    D: { upper: 'D', lower: 'd', word: 'Dado',    simpleName: 'D de Dado',  speech: 'D. D de Dado.',  type: 'consonant', icon: 'fa-dice' },
-    E: { upper: 'E', lower: 'e', word: 'Estrela', simpleName: 'E de Estrela', speech: 'E. E de Estrela.', type: 'vowel',  icon: 'fa-star' },
-    F: { upper: 'F', lower: 'f', word: 'Faca',    simpleName: 'F de Faca',  speech: 'F. F de Faca.',  type: 'consonant', icon: 'fa-utensils' },
-    G: { upper: 'G', lower: 'g', word: 'Gato',    simpleName: 'G de Gato',  speech: 'G. G de Gato.',  type: 'consonant', icon: 'fa-cat' },
-    H: { upper: 'H', lower: 'h', word: 'Horta',   simpleName: 'H de Horta', speech: 'H. H de Horta.', type: 'consonant', icon: 'fa-seedling' },
-    I: { upper: 'I', lower: 'i', word: 'Ilha',    simpleName: 'I de Ilha',  speech: 'I. I de Ilha.',  type: 'vowel',     icon: 'fa-umbrella-beach' },
-    J: { upper: 'J', lower: 'j', word: 'Janela',  simpleName: 'J de Janela', speech: 'J. J de Janela.', type: 'consonant', icon: 'fa-table-cells-large' },
-    K: { upper: 'K', lower: 'k', word: 'Kiwi',    simpleName: 'K de Kiwi',  speech: 'K. K de Kiwi.',  type: 'consonant', icon: 'fa-lemon' },
-    L: { upper: 'L', lower: 'l', word: 'Leite',   simpleName: 'L de Leite', speech: 'L. L de Leite.', type: 'consonant', icon: 'fa-glass-water' },
-    M: { upper: 'M', lower: 'm', word: 'Mala',    simpleName: 'M de Mala',  speech: 'M. M de Mala.',  type: 'consonant', icon: 'fa-suitcase' },
-    N: { upper: 'N', lower: 'n', word: 'Navio',   simpleName: 'N de Navio', speech: 'N. N de Navio.', type: 'consonant', icon: 'fa-ship' },
-    O: { upper: 'O', lower: 'o', word: 'Ovo',     simpleName: 'O de Ovo',   speech: 'O. O de Ovo.',   type: 'vowel',     icon: 'fa-egg' },
-    P: { upper: 'P', lower: 'p', word: 'Pato',    simpleName: 'P de Pato',  speech: 'P. P de Pato.',  type: 'consonant', icon: 'fa-feather' },
-    Q: { upper: 'Q', lower: 'q', word: 'Queijo',  simpleName: 'Q de Queijo', speech: 'Q. Q de Queijo.', type: 'consonant', icon: 'fa-cheese' },
-    R: { upper: 'R', lower: 'r', word: 'Rato',    simpleName: 'R de Rato',  speech: 'R. R de Rato.',  type: 'consonant', icon: 'fa-paw' },
-    S: { upper: 'S', lower: 's', word: 'Sapo',    simpleName: 'S de Sapo',  speech: 'S. S de Sapo.',  type: 'consonant', icon: 'fa-frog' },
-    T: { upper: 'T', lower: 't', word: 'Tatu',    simpleName: 'T de Tatu',  speech: 'T. T de Tatu.',  type: 'consonant', icon: 'fa-gem' },
-    U: { upper: 'U', lower: 'u', word: 'Uva',     simpleName: 'U de Uva',   speech: 'U. U de Uva.',   type: 'vowel',     icon: 'fa-leaf' },
-    V: { upper: 'V', lower: 'v', word: 'Vaca',    simpleName: 'V de Vaca',  speech: 'V. V de Vaca.',  type: 'consonant', icon: 'fa-cow' },
-    W: { upper: 'W', lower: 'w', word: 'Wafer',   simpleName: 'W de Wafer', speech: 'W. W de Wafer.', type: 'consonant', icon: 'fa-cookie-bite' },
-    X: { upper: 'X', lower: 'x', word: 'Xícara',  simpleName: 'X de Xícara', speech: 'X. X de Xícara.', type: 'consonant', icon: 'fa-mug-hot' },
-    Y: { upper: 'Y', lower: 'y', word: 'Yoga',    simpleName: 'Y de Yoga',  speech: 'Y. Y de Yoga.',  type: 'consonant', icon: 'fa-heart' },
-    Z: { upper: 'Z', lower: 'z', word: 'Zebra',   simpleName: 'Z de Zebra', speech: 'Z. Z de Zebra.', type: 'consonant', icon: 'fa-horse' }
+    A: {
+        upper: 'A', lower: 'a', word: 'Abelha', simpleName: 'A de Abelha', type: 'vowel', icon: 'fa-bug',
+        phrase: 'A abelha faz mel.',
+        words: ['açaí', 'anel', 'avó', 'amigo', 'amor', 'asa', 'água', 'arara', 'agulha'],
+        imageSrc: 'imagenscartilha/a.png', hasCustomImage: true,
+        speech: 'Letra A. A de Abelha. A abelha faz mel.'
+    },
+    B: {
+        upper: 'B', lower: 'b', word: 'Bola', simpleName: 'B de Bola', type: 'consonant', icon: 'fa-futbol',
+        phrase: 'A bola é colorida.',
+        words: ['bola', 'balão', 'bala', 'bico', 'boneca', 'baixo', 'berço', 'bule', 'bolo'],
+        imageSrc: 'imagenscartilha/b.png', hasCustomImage: true,
+        speech: 'Letra B. B de Bola. A bola é colorida.'
+    },
+    C: {
+        upper: 'C', lower: 'c', word: 'Casa', simpleName: 'C de Casa', type: 'consonant', icon: 'fa-house',
+        phrase: 'A casa é o meu lar.',
+        words: ['casa', 'copo', 'cavalo', 'cobra', 'cabelo', 'caneta', 'coelho', 'caderno', 'café'],
+        imageSrc: 'imagenscartilha/c.png', hasCustomImage: true,
+        speech: 'Letra C. C de Casa. A casa é o meu lar.'
+    },
+    D: {
+        upper: 'D', lower: 'd', word: 'Dado', simpleName: 'D de Dado', type: 'consonant', icon: 'fa-dice',
+        phrase: 'O dado é divertido.',
+        words: ['dado', 'dedo', 'dia', 'doce', 'dente', 'dama', 'dinheiro', 'dúvida'],
+        imageSrc: 'imagenscartilha/d.png', hasCustomImage: true,
+        speech: 'Letra D. D de Dado. O dado é divertido.'
+    },
+    E: {
+        upper: 'E', lower: 'e', word: 'Escada', simpleName: 'E de Escada', type: 'vowel', icon: 'fa-star',
+        phrase: 'A escada nos ajuda a subir.',
+        words: ['escada', 'escola', 'elefante', 'espelho', 'estrela', 'escova'],
+        imageSrc: 'imagenscartilha/e.png', hasCustomImage: false,
+        speech: 'Letra E. E de Escada. A escada nos ajuda a subir.'
+    },
+    F: {
+        upper: 'F', lower: 'f', word: 'Faca', simpleName: 'F de Faca', type: 'consonant', icon: 'fa-utensils',
+        phrase: 'A faca é afiada.',
+        words: ['faca', 'fada', 'fogo', 'fita', 'foca', 'fundo', 'família', 'futebol'],
+        imageSrc: 'imagenscartilha/f.png', hasCustomImage: true,
+        speech: 'Letra F. F de Faca. A faca é afiada.'
+    },
+    G: {
+        upper: 'G', lower: 'g', word: 'Gato', simpleName: 'G de Gato', type: 'consonant', icon: 'fa-cat',
+        phrase: 'O gato dorme.',
+        words: ['gato', 'garrafa', 'geladeira', 'gema', 'girafa', 'grama', 'galinha', 'geleia', 'gemada'],
+        imageSrc: 'imagenscartilha/g.png', hasCustomImage: true,
+        speech: 'Letra G. G de Gato. O gato dorme.'
+    },
+    H: {
+        upper: 'H', lower: 'h', word: 'Homem', simpleName: 'H de Homem', type: 'consonant', icon: 'fa-user',
+        phrase: 'A letra H é de homem.',
+        words: ['homem', 'hotel', 'história', 'hora', 'honra', 'helicóptero', 'hábito', 'harpa'],
+        imageSrc: 'imagenscartilha/h.png', hasCustomImage: true,
+        speech: 'Letra H. H de Homem. A letra H é de homem.'
+    },
+    I: {
+        upper: 'I', lower: 'i', word: 'Igreja', simpleName: 'I de Igreja', type: 'vowel', icon: 'fa-church',
+        phrase: 'A letra I é de igreja.',
+        words: ['igreja', 'isopor', 'internet', 'ilha', 'inverno', 'irmão', 'imagem', 'instrumento'],
+        imageSrc: 'imagenscartilha/i.png', hasCustomImage: true,
+        speech: 'Letra I. I de Igreja. A letra I é de igreja.'
+    },
+    J: {
+        upper: 'J', lower: 'j', word: 'Jacaré', simpleName: 'J de Jacaré', type: 'consonant', icon: 'fa-table-cells-large',
+        phrase: 'O jacaré é grande.',
+        words: ['jacaré', 'jogo', 'joaninha', 'janela', 'jardim', 'juntos', 'jaca', 'jeito'],
+        imageSrc: 'imagenscartilha/j.png', hasCustomImage: true,
+        speech: 'Letra J. J de Jacaré. O jacaré é grande.'
+    },
+    K: {
+        upper: 'K', lower: 'k', word: 'Kiwi', simpleName: 'K de Kiwi', type: 'consonant', icon: 'fa-lemon',
+        phrase: 'O kiwi é gostoso.',
+        words: ['kiwi', 'kart', 'ketchup', 'karatê'],
+        imageSrc: 'imagenscartilha/k.png', hasCustomImage: false,
+        speech: 'Letra K. K de Kiwi. O kiwi é gostoso.'
+    },
+    L: {
+        upper: 'L', lower: 'l', word: 'Leite', simpleName: 'L de Leite', type: 'consonant', icon: 'fa-glass-water',
+        phrase: 'O leite é quentinho.',
+        words: ['leite', 'lua', 'lápis', 'livro', 'limão', 'laranja'],
+        imageSrc: 'imagenscartilha/l.png', hasCustomImage: false,
+        speech: 'Letra L. L de Leite. O leite é quentinho.'
+    },
+    M: {
+        upper: 'M', lower: 'm', word: 'Mala', simpleName: 'M de Mala', type: 'consonant', icon: 'fa-suitcase',
+        phrase: 'A mala é de viagem.',
+        words: ['mala', 'macaco', 'mão', 'mesa', 'mel', 'mãe'],
+        imageSrc: 'imagenscartilha/m.png', hasCustomImage: false,
+        speech: 'Letra M. M de Mala. A mala é de viagem.'
+    },
+    N: {
+        upper: 'N', lower: 'n', word: 'Navio', simpleName: 'N de Navio', type: 'consonant', icon: 'fa-ship',
+        phrase: 'O navio navega no mar.',
+        words: ['navio', 'nuvem', 'noite', 'ninho', 'nariz', 'neve'],
+        imageSrc: 'imagenscartilha/n.png', hasCustomImage: false,
+        speech: 'Letra N. N de Navio. O navio navega no mar.'
+    },
+    O: {
+        upper: 'O', lower: 'o', word: 'Ovo', simpleName: 'O de Ovo', type: 'vowel', icon: 'fa-egg',
+        phrase: 'O ovo é nutritivo.',
+        words: ['ovo', 'olho', 'orelha', 'onça', 'ouro', 'óculos'],
+        imageSrc: 'imagenscartilha/o.png', hasCustomImage: false,
+        speech: 'Letra O. O de Ovo. O ovo é nutritivo.'
+    },
+    P: {
+        upper: 'P', lower: 'p', word: 'Pato', simpleName: 'P de Pato', type: 'consonant', icon: 'fa-feather',
+        phrase: 'O pato nada no lago.',
+        words: ['pato', 'pipa', 'pão', 'peixe', 'porta', 'panela'],
+        imageSrc: 'imagenscartilha/p.png', hasCustomImage: false,
+        speech: 'Letra P. P de Pato. O pato nada no lago.'
+    },
+    Q: {
+        upper: 'Q', lower: 'q', word: 'Queijo', simpleName: 'Q de Queijo', type: 'consonant', icon: 'fa-cheese',
+        phrase: 'O queijo é saboroso.',
+        words: ['queijo', 'quadro', 'quiabo', 'quarto', 'queda'],
+        imageSrc: 'imagenscartilha/q.png', hasCustomImage: false,
+        speech: 'Letra Q. Q de Queijo. O queijo é saboroso.'
+    },
+    R: {
+        upper: 'R', lower: 'r', word: 'Rato', simpleName: 'R de Rato', type: 'consonant', icon: 'fa-paw',
+        phrase: 'O rato corre depressa.',
+        words: ['rato', 'rio', 'rua', 'relógio', 'roupa', 'rosa'],
+        imageSrc: 'imagenscartilha/r.png', hasCustomImage: false,
+        speech: 'Letra R. R de Rato. O rato corre depressa.'
+    },
+    S: {
+        upper: 'S', lower: 's', word: 'Sapo', simpleName: 'S de Sapo', type: 'consonant', icon: 'fa-frog',
+        phrase: 'O sapo pula na lagoa.',
+        words: ['sapo', 'sol', 'sola', 'sabão', 'sopa', 'sino'],
+        imageSrc: 'imagenscartilha/s.png', hasCustomImage: false,
+        speech: 'Letra S. S de Sapo. O sapo pula na lagoa.'
+    },
+    T: {
+        upper: 'T', lower: 't', word: 'Tatu', simpleName: 'T de Tatu', type: 'consonant', icon: 'fa-gem',
+        phrase: 'O tatu cava a terra.',
+        words: ['tatu', 'teto', 'tijolo', 'tomate', 'trem', 'tapete'],
+        imageSrc: 'imagenscartilha/t.png', hasCustomImage: false,
+        speech: 'Letra T. T de Tatu. O tatu cava a terra.'
+    },
+    U: {
+        upper: 'U', lower: 'u', word: 'Uva', simpleName: 'U de Uva', type: 'vowel', icon: 'fa-leaf',
+        phrase: 'A uva é docinha.',
+        words: ['uva', 'urso', 'unha', 'um', 'urubu'],
+        imageSrc: 'imagenscartilha/u.png', hasCustomImage: false,
+        speech: 'Letra U. U de Uva. A uva é docinha.'
+    },
+    V: {
+        upper: 'V', lower: 'v', word: 'Vaca', simpleName: 'V de Vaca', type: 'consonant', icon: 'fa-cow',
+        phrase: 'A vaca dá leite.',
+        words: ['vaca', 'vela', 'vento', 'vidro', 'violão', 'vila'],
+        imageSrc: 'imagenscartilha/v.png', hasCustomImage: false,
+        speech: 'Letra V. V de Vaca. A vaca dá leite.'
+    },
+    W: {
+        upper: 'W', lower: 'w', word: 'Wafer', simpleName: 'W de Wafer', type: 'consonant', icon: 'fa-cookie-bite',
+        phrase: 'O wafer é crocante.',
+        words: ['wafer', 'web', 'wi-fi', 'windsurf'],
+        imageSrc: 'imagenscartilha/w.png', hasCustomImage: false,
+        speech: 'Letra W. W de Wafer. O wafer é crocante.'
+    },
+    X: {
+        upper: 'X', lower: 'x', word: 'Xícara', simpleName: 'X de Xícara', type: 'consonant', icon: 'fa-mug-hot',
+        phrase: 'A xícara tem café quentinho.',
+        words: ['xícara', 'xale', 'xadrez', 'xarope', 'xaxim'],
+        imageSrc: 'imagenscartilha/x.png', hasCustomImage: false,
+        speech: 'Letra X. X de Xícara. A xícara tem café quentinho.'
+    },
+    Y: {
+        upper: 'Y', lower: 'y', word: 'Yoga', simpleName: 'Y de Yoga', type: 'consonant', icon: 'fa-heart',
+        phrase: 'O yoga traz paz e saúde.',
+        words: ['yoga', 'yakisoba', 'youtube'],
+        imageSrc: 'imagenscartilha/y.png', hasCustomImage: false,
+        speech: 'Letra Y. Y de Yoga. O yoga traz paz e saúde.'
+    },
+    Z: {
+        upper: 'Z', lower: 'z', word: 'Zebra', simpleName: 'Z de Zebra', type: 'consonant', icon: 'fa-horse',
+        phrase: 'A zebra é listrada.',
+        words: ['zebra', 'zero', 'zíper', 'zumbido', 'zona'],
+        imageSrc: 'imagenscartilha/z.png', hasCustomImage: false,
+        speech: 'Letra Z. Z de Zebra. A zebra é listrada.'
+    }
 };
 
 // ============================================================================
@@ -237,6 +393,10 @@ function buildQuestionBank() {
         var distractors3 = shuffle(letterKeys.filter(function(x) { return x !== target3; })).slice(0, 2);
         var options3 = shuffle([target3, distractors3[0], distractors3[1]]);
 
+        var promptMedia = item3.hasCustomImage
+            ? '<img src="' + item3.imageSrc + '" class="prompt-cartilha-img" alt="' + item3.word + '" style="max-height:140px;width:auto;object-fit:contain;border-radius:12px;margin:0 auto 8px;display:block;box-shadow:0 4px 12px rgba(0,0,0,0.1);">'
+            : getSvgForLetter(target3);
+
         qList.push({
             type: 3,
             stageLabel: 'Passo 3 de 4: Letra e imagem',
@@ -246,7 +406,7 @@ function buildQuestionBank() {
             correctAnswer: target3,
             options: options3,
             svgLetter: target3,
-            displayPrompt: '<div class="prompt-image-wrap">' + getSvgForLetter(target3) + '<span class="prompt-image-name">' + item3.word + '</span></div>',
+            displayPrompt: '<div class="prompt-image-wrap">' + promptMedia + '<span class="prompt-image-name">' + item3.word + '</span></div>',
             referenceName: item3.word + ' (Letra ' + target3 + ')'
         });
     }
@@ -720,26 +880,32 @@ function renderAlphabetCards(filter) {
         card.setAttribute('data-type', item.type);
         card.setAttribute('role', 'button');
         card.setAttribute('tabindex', '0');
-        card.setAttribute('aria-label', 'Letra ' + k + ' maiúscula e ' + item.lower + ' minúscula, de ' + item.word + '. É uma ' + typeLabel + '. Toque para ouvir o som.');
-        card.setAttribute('onclick', "speakLetter('" + k + "')");
-        card.setAttribute('onkeydown', "if(event.key==='Enter'||event.key===' ')speakLetter('" + k + "')");
+        card.setAttribute('aria-label', 'Letra ' + k + ' maiúscula e ' + item.lower + ' minúscula, de ' + item.word + '. É uma ' + typeLabel + '. Toque para abrir a cartilha ilustrada.');
+        card.setAttribute('onclick', "abrirCartilha('" + k + "')");
+        card.setAttribute('onkeydown', "if(event.key==='Enter'||event.key===' ')abrirCartilha('" + k + "')");
+
+        var mediaHtml = item.hasCustomImage
+            ? '<div class="letter-card-thumb-wrap" aria-hidden="true">' +
+                '<img src="' + item.imageSrc + '" alt="" class="letter-card-thumb" loading="lazy">' +
+              '</div>'
+            : '<div class="letter-badge-icon" aria-hidden="true">' +
+                '<i class="fas ' + item.icon + '"></i>' +
+              '</div>';
 
         card.innerHTML =
             '<span class="letter-tag ' + item.type + '" aria-hidden="true">' + typeLabel + '</span>' +
-            '<div class="letter-badge-icon" aria-hidden="true">' +
-                '<i class="fas ' + item.icon + '"></i>' +
-            '</div>' +
+            mediaHtml +
             '<div class="letter-letters" aria-hidden="true">' +
                 '<span class="letter-upper">' + item.upper + '</span>' +
                 '<span class="letter-lower">' + item.lower + '</span>' +
             '</div>' +
             '<div class="letter-word" aria-hidden="true">' +
-                '<span class="highlight">' + item.upper + '</span> de ' + item.word +
+                '<span class="highlight">' + item.upper + '</span>' +
+                '<span class="letter-word-rest">de ' + item.word + '</span>' +
             '</div>' +
-            '<span class="letter-sound-pill" aria-hidden="true">' +
-                '<i class="fas fa-volume-high"></i>' +
-                '<span>Ouvir</span>' +
-            '</span>';
+            '<div class="letter-cartilha-badge" aria-hidden="true">' +
+                '<i class="fas fa-book-open"></i> <span>Ver Cartilha</span>' +
+            '</div>';
 
         grid.appendChild(card);
     });
@@ -775,10 +941,13 @@ function startAutoplay() {
     var btn = document.getElementById('btnPlayAll');
     if (btn) {
         btn.classList.add('playing');
-        btn.innerHTML = '<i class="fas fa-pause"></i> Pausar Alfabeto';
-        btn.setAttribute('aria-label', 'Pausar leitura guiada do alfabeto');
+        btn.innerHTML = '<i class="fas fa-stop"></i> Parar Leitura';
+        btn.setAttribute('aria-label', 'Parar leitura automática do alfabeto');
     }
-    playNextAutoplayLetter();
+    speak('Iniciando leitura guiada do alfabeto.', function() {
+        if (!autoplayActive) return;
+        setTimeout(playNextAutoplayLetter, 450);
+    });
 }
 
 function stopAutoplay() {
@@ -823,6 +992,237 @@ function playNextAutoplayLetter() {
     });
 }
 
+// ============================================================================
+// VISOR INTERATIVO DA CARTILHA (ESTILO CAMINHO SUAVE)
+// Desenvolvido com foco no idoso: letras grandes, áudio pausado e apoio visual.
+// ============================================================================
+var cartilhaKeys = Object.keys(alphabetData);
+var cartilhaCurrentIndex = 0;
+var lastFocusedElementBeforeModal = null;
+
+function abrirCartilha(letter) {
+    if (!letter) letter = 'A';
+    var idx = cartilhaKeys.indexOf(letter.toUpperCase());
+    if (idx === -1) idx = 0;
+    cartilhaCurrentIndex = idx;
+
+    lastFocusedElementBeforeModal = document.activeElement;
+
+    var modal = document.getElementById('cartilhaModal');
+    if (!modal) return;
+
+    modal.removeAttribute('hidden');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    renderCartilhaCurrent();
+
+    // Sincroniza parâmetro da URL sem recarregar a página (?letra=A)
+    try {
+        var url = new URL(window.location.href);
+        url.searchParams.set('letra', cartilhaKeys[cartilhaCurrentIndex]);
+        window.history.replaceState({ letra: cartilhaKeys[cartilhaCurrentIndex] }, '', url.toString());
+    } catch (e) {}
+
+    // Foca no botão de fechar para acessibilidade
+    var closeBtn = modal.querySelector('.cartilha-btn-close');
+    if (closeBtn) closeBtn.focus();
+}
+
+function fecharCartilha() {
+    stopAllAudio();
+    var modal = document.getElementById('cartilhaModal');
+    if (!modal) return;
+
+    modal.classList.remove('active');
+    modal.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+
+    // Limpa parâmetro da URL de forma limpa
+    try {
+        var url = new URL(window.location.href);
+        url.searchParams.delete('letra');
+        window.history.replaceState({}, '', url.pathname);
+    } catch (e) {}
+
+    if (lastFocusedElementBeforeModal && typeof lastFocusedElementBeforeModal.focus === 'function') {
+        lastFocusedElementBeforeModal.focus();
+    }
+}
+
+function renderCartilhaCurrent() {
+    var letter = cartilhaKeys[cartilhaCurrentIndex];
+    var item = alphabetData[letter];
+    if (!item) return;
+
+    // Atualiza cabeçalho
+    var title = document.getElementById('cartilhaModalTitle');
+    if (title) title.textContent = 'Cartilha Ilustrada — Letra ' + letter;
+
+    var badge = document.getElementById('cartilhaTipoLetra');
+    if (badge) {
+        badge.className = 'cartilha-badge ' + item.type;
+        badge.textContent = item.type === 'vowel' ? 'Vogal' : 'Consoante';
+    }
+
+    // Atualiza imagem ou placeholder (defensivo com fallback automático)
+    var img = document.getElementById('cartilhaImage');
+    var placeholder = document.getElementById('cartilhaPlaceholder');
+    var svgWrap = document.getElementById('cartilhaPlaceholderSvgWrap');
+    var placeholderText = document.getElementById('cartilhaPlaceholderText');
+
+    if (item.hasCustomImage) {
+        if (img) {
+            img.style.display = 'block';
+            img.src = item.imageSrc;
+            img.alt = 'Página da Cartilha Caminho Suave da letra ' + letter + ' de ' + item.word;
+            img.onerror = function() {
+                img.style.display = 'none';
+                if (placeholder) {
+                    placeholder.style.display = 'flex';
+                    if (svgWrap) svgWrap.innerHTML = getSvgForLetter(letter);
+                    if (placeholderText) placeholderText.textContent = item.word + ' (Letra ' + letter + ')';
+                }
+            };
+        }
+        if (placeholder) placeholder.style.display = 'none';
+    } else {
+        if (img) img.style.display = 'none';
+        if (placeholder) {
+            placeholder.style.display = 'flex';
+            if (svgWrap) svgWrap.innerHTML = getSvgForLetter(letter);
+            if (placeholderText) placeholderText.textContent = item.word + ' (Letra ' + letter + ')';
+        }
+    }
+
+    // Letras gigantes e palavra
+    var bigUpper = document.getElementById('cartilhaBigUpper');
+    if (bigUpper) bigUpper.textContent = item.upper;
+
+    var bigLower = document.getElementById('cartilhaBigLower');
+    if (bigLower) bigLower.textContent = item.lower;
+
+    var wordTag = document.getElementById('cartilhaWordTag');
+    if (wordTag) wordTag.textContent = item.word;
+
+    // Frase da lição
+    var phraseQuote = document.getElementById('cartilhaPhraseText');
+    if (phraseQuote) phraseQuote.textContent = '"' + item.phrase + '"';
+
+    // Grid de palavras da lição
+    var wordsGrid = document.getElementById('cartilhaWordsGrid');
+    if (wordsGrid) {
+        wordsGrid.innerHTML = '';
+        if (item.words && item.words.length > 0) {
+            item.words.forEach(function(w) {
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'cartilha-word-pill';
+                btn.setAttribute('aria-label', 'Ouvir a palavra ' + w);
+                btn.innerHTML = '<i class="fas fa-volume-high" aria-hidden="true"></i> <span>' + w + '</span>';
+                btn.onclick = function() { tocarPalavraCartilha(w, btn); };
+                wordsGrid.appendChild(btn);
+            });
+        }
+    }
+
+    // Contador e botões de navegação
+    var counter = document.getElementById('cartilhaCounter');
+    if (counter) counter.textContent = 'Letra ' + (cartilhaCurrentIndex + 1) + ' de ' + cartilhaKeys.length;
+
+    var btnPrev = document.getElementById('btnCartilhaPrev');
+    if (btnPrev) {
+        btnPrev.disabled = (cartilhaCurrentIndex === 0);
+        btnPrev.style.opacity = (cartilhaCurrentIndex === 0) ? '0.45' : '1';
+        btnPrev.style.cursor = (cartilhaCurrentIndex === 0) ? 'not-allowed' : 'pointer';
+    }
+
+    var btnNext = document.getElementById('btnCartilhaNext');
+    if (btnNext) {
+        btnNext.disabled = (cartilhaCurrentIndex === cartilhaKeys.length - 1);
+        btnNext.style.opacity = (cartilhaCurrentIndex === cartilhaKeys.length - 1) ? '0.45' : '1';
+        btnNext.style.cursor = (cartilhaCurrentIndex === cartilhaKeys.length - 1) ? 'not-allowed' : 'pointer';
+    }
+
+    // Atualiza URL
+    try {
+        var url = new URL(window.location.href);
+        url.searchParams.set('letra', letter);
+        window.history.replaceState({ letra: letter }, '', url.toString());
+    } catch (e) {}
+
+    // Anúncio acessível para leitores de tela
+    announceSR('Exibindo cartilha da letra ' + letter + ' de ' + item.word);
+}
+
+function cartilhaProxima() {
+    if (cartilhaCurrentIndex < cartilhaKeys.length - 1) {
+        cartilhaCurrentIndex++;
+        renderCartilhaCurrent();
+        tocarFraseCartilha();
+    }
+}
+
+function cartilhaAnterior() {
+    if (cartilhaCurrentIndex > 0) {
+        cartilhaCurrentIndex--;
+        renderCartilhaCurrent();
+        tocarFraseCartilha();
+    }
+}
+
+function tocarFraseCartilha() {
+    var letter = cartilhaKeys[cartilhaCurrentIndex];
+    var item = alphabetData[letter];
+    if (!item) return;
+
+    var box = document.getElementById('cartilhaPhraseBox');
+    if (box) box.classList.add('speaking');
+
+    speak(item.phrase, function() {
+        if (box) box.classList.remove('speaking');
+    });
+}
+
+function tocarPalavraCartilha(palavra, btn) {
+    if (btn) btn.classList.add('speaking');
+    speak(palavra, function() {
+        if (btn) btn.classList.remove('speaking');
+    });
+}
+
+function tocarAudioCompletoCartilha() {
+    var letter = cartilhaKeys[cartilhaCurrentIndex];
+    var item = alphabetData[letter];
+    if (!item) return;
+
+    var btn = document.getElementById('btnCartilhaAudioCompleto');
+    if (btn) btn.classList.add('speaking');
+
+    var texto = 'Letra ' + letter + '. ' + item.upper + ' de ' + item.word + '. ' + item.phrase;
+    if (item.words && item.words.length > 0) {
+        texto += '. Palavras com ' + letter + ': ' + item.words.slice(0, 6).join(', ') + '.';
+    }
+
+    speak(texto, function() {
+        if (btn) btn.classList.remove('speaking');
+    });
+}
+
+// Teclado para acessibilidade: Setas passam página e Esc fecha modal
+document.addEventListener('keydown', function(e) {
+    var modal = document.getElementById('cartilhaModal');
+    if (!modal || modal.hasAttribute('hidden') || !modal.classList.contains('active')) return;
+
+    if (e.key === 'Escape') {
+        fecharCartilha();
+    } else if (e.key === 'ArrowRight') {
+        cartilhaProxima();
+    } else if (e.key === 'ArrowLeft') {
+        cartilhaAnterior();
+    }
+});
+
 // Expõe no escopo global (window) para compatibilidade completa
 window.speak = speak;
 window.speakLetter = speakLetter;
@@ -839,16 +1239,32 @@ window.getSvgForLetter = getSvgForLetter;
 window.renderAlphabetCards = renderAlphabetCards;
 window.filterAlphabet = filterAlphabet;
 window.togglePlayAllLetters = togglePlayAllLetters;
+window.abrirCartilha = abrirCartilha;
+window.fecharCartilha = fecharCartilha;
+window.cartilhaProxima = cartilhaProxima;
+window.cartilhaAnterior = cartilhaAnterior;
+window.tocarFraseCartilha = tocarFraseCartilha;
+window.tocarPalavraCartilha = tocarPalavraCartilha;
+window.tocarAudioCompletoCartilha = tocarAudioCompletoCartilha;
 
 // Inicialização automática ao carregar a página
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-        renderAlphabetCards('all');
-        initExercise();
-        verificarLicaoConcluida();
-    });
-} else {
+function inicializarPaginaLetras() {
     renderAlphabetCards('all');
     initExercise();
     verificarLicaoConcluida();
+
+    // Se houver parâmetro ?letra=X na URL, abre automaticamente a cartilha daquela letra
+    try {
+        var urlParams = new URLSearchParams(window.location.search);
+        var paramLetra = urlParams.get('letra');
+        if (paramLetra) {
+            abrirCartilha(paramLetra);
+        }
+    } catch (e) {}
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inicializarPaginaLetras);
+} else {
+    inicializarPaginaLetras();
 }

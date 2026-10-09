@@ -26,44 +26,46 @@ var WRITING_DEBUG = false;
 // ============================================================
 var WRITING_EVALUATION_CONFIG = {
     // Pontuação mínima composta (0-100) para aprovação
-    minScore: 52,
+    // Aumentada para exigir mais precisão e evitar notas altas em rabiscos
+    minScore: 68,
 
     // Cobertura mínima do traçado esperado (0-100)
-    minCoverage: 45,
+    minCoverage: 62,
 
     // Precisão espacial mínima: % de pontos do usuário próximos ao traçado (0-100)
-    minSpatialAccuracy: 40,
+    minSpatialAccuracy: 55,
 
     // Fração máxima de pontos fora do traçado (0-1) — acima disso penaliza
-    maxOutsideRatio: 0.60,
+    // Reduzida: rabiscos com >38% de pontos fora são penalizados pesadamente
+    maxOutsideRatio: 0.38,
 
     // Razão máxima comprimento_usuário / comprimento_esperado
-    // acima disso = rabisco excessivo
-    maxLengthRatio: 4.5,
+    // Reduzida: rabiscos muito longos são penalizados (rabisco = ratio alto)
+    maxLengthRatio: 2.2,
 
     // Corredor de tolerância: multiplicador do fontSize da letra
-    // Ex: fontSize 60 * 0.22 = ~13px de tolerância ao redor do traçado
-    pathToleranceFactor: 0.22,
+    // Reduzido: menos tolerância ao redor do traçado exigido
+    pathToleranceFactor: 0.18,
 
     // Pesos da pontuação composta (devem somar 1.0)
-    weightCoverage:         0.32,
-    weightSpatialAccuracy:  0.28,
+    weightCoverage:         0.30,
+    weightSpatialAccuracy:  0.32,
     weightOrder:            0.18,
     weightDirection:        0.10,
-    weightStrokeCompletion: 0.12,
+    weightStrokeCompletion: 0.10,
 
     // Tolerância de ordem: quanto (0-1) do caminho o ponto pode regredir sem penalidade
-    orderRegressionTolerance: 0.18,
+    orderRegressionTolerance: 0.15,
 
     // Número mínimo de pontos para que um stroke seja considerado válido
-    minPointsPerStroke: 3,
+    minPointsPerStroke: 4,
 
     // Distância mínima (px) entre pontos consecutivos do usuário (filtra ruído)
     sampleMinDistance: 4,
 
     // Bônus de tolerância por tentativa adicional (multiplicador)
     // A cada tentativa falha, tolerância cresce por esse fator (máx maxAttemptBonus)
-    attemptToleranceBonus: 0.08,
+    attemptToleranceBonus: 0.06,
 
     // Número máximo de tentativas em que o bônus de tolerância cresce
     maxAttemptBonus: 3
@@ -940,6 +942,7 @@ function runLetterDemo(params) {
     var onLetterStart   = params.onLetterStart   || function() {};
     var onLetterEnd     = params.onLetterEnd     || function() {};
     var onComplete      = params.onComplete      || function() {};
+    var onStrokeComplete = params.onStrokeComplete || function() {};
     var strokeSpeedMs   = params.strokeSpeedMs   || 1100;
     var pauseStrokes    = params.pauseBetweenStrokes || 350;
     var pauseLetters    = params.pauseBetweenLetters || 900;
@@ -972,6 +975,8 @@ function runLetterDemo(params) {
             }
             var stroke = scaledStrokes[strokeIdx++];
             animateSingleStroke(ctx, stroke, getBackground, function() {
+                // Notifica que este stroke foi completado, passando os pontos
+                onStrokeComplete(stroke);
                 demoTimeout(nextStroke, pauseStrokes);
             }, strokeSpeedMs);
         }

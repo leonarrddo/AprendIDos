@@ -5,6 +5,80 @@
  * ============================================================================
  */
 
+/* ===== BOTÃO DE ÁUDIO DAS LIÇÕES ===== */
+let _licaoUtterance = null;
+let _licaoBtnAtivo = null;
+
+function falarLicao(btn, event) {
+  // Impede que o clique propague para o card (que navegaria para outra página)
+  if (event) { event.stopPropagation(); event.preventDefault(); }
+
+  const texto = btn.dataset.audio || '';
+  if (!texto) return;
+
+  // Cancela fala anterior e reseta botão anterior
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+  if (_licaoBtnAtivo && _licaoBtnAtivo !== btn) {
+    _pararBtnOuvir(_licaoBtnAtivo);
+  }
+
+  // Se este botão já está falando, para
+  if (btn.classList.contains('speaking')) {
+    _pararBtnOuvir(btn);
+    _licaoBtnAtivo = null;
+    return;
+  }
+
+  // Ativa visual de "speaking"
+  _ativarBtnOuvir(btn);
+  _licaoBtnAtivo = btn;
+
+  // Usa Web Speech API
+  if (!window.speechSynthesis) {
+    console.warn('speechSynthesis não disponível neste navegador.');
+    _pararBtnOuvir(btn);
+    return;
+  }
+
+  const utter = new SpeechSynthesisUtterance(texto);
+  utter.lang = 'pt-BR';
+  utter.rate = 0.82;   // voz calma e pausada para idosos
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+
+  // Tenta selecionar voz em português
+  const vozes = window.speechSynthesis.getVoices();
+  const vozPT = vozes.find(v => v.lang === 'pt-BR') || vozes.find(v => v.lang.startsWith('pt'));
+  if (vozPT) utter.voice = vozPT;
+
+  utter.onend = () => { _pararBtnOuvir(btn); _licaoBtnAtivo = null; };
+  utter.onerror = () => { _pararBtnOuvir(btn); _licaoBtnAtivo = null; };
+
+  _licaoUtterance = utter;
+  window.speechSynthesis.speak(utter);
+}
+
+function _ativarBtnOuvir(btn) {
+  btn.classList.add('speaking');
+  const label = btn.querySelector('.ouvir-label');
+  if (label) label.textContent = 'Toque para parar';
+}
+
+function _pararBtnOuvir(btn) {
+  btn.classList.remove('speaking');
+  const label = btn.querySelector('.ouvir-label');
+  if (label) label.textContent = 'Ouvir o que vou aprender';
+}
+
+// Garante que as vozes estejam carregadas (Chrome carrega assincronamente)
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = function() {
+    window.speechSynthesis.getVoices(); // força cache
+  };
+}
+
 // Funções de sessão universais (compatíveis com duplo-clique local file:// e servidores)
 async function getCurrentUser() {
   if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.getCurrentUser) {

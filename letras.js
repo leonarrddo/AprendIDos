@@ -43,10 +43,10 @@ var alphabetData = {
     },
     E: {
         upper: 'E', lower: 'e', word: 'Escada', simpleName: 'E de Escada', type: 'vowel', icon: 'fa-star',
-        phrase: 'A escada nos ajuda a subir.',
-        words: ['escada', 'escola', 'elefante', 'espelho', 'estrela', 'escova'],
-        imageSrc: 'imagenscartilha/e.png', hasCustomImage: false,
-        speech: 'Letra E. E de Escada. A escada nos ajuda a subir.'
+        phrase: 'A escada é alta.',
+        words: ['escada', 'escola', 'esperto', 'elefante', 'espelho', 'esquilo', 'estrela', 'escova', 'enfeite'],
+        imageSrc: 'imagenscartilha/e.png', hasCustomImage: true,
+        speech: 'Letra E. E de Escada. A escada é alta.'
     },
     F: {
         upper: 'F', lower: 'f', word: 'Faca', simpleName: 'F de Faca', type: 'consonant', icon: 'fa-utensils',
@@ -91,95 +91,95 @@ var alphabetData = {
         speech: 'Letra K. K de Kiwi. O kiwi é gostoso.'
     },
     L: {
-        upper: 'L', lower: 'l', word: 'Leite', simpleName: 'L de Leite', type: 'consonant', icon: 'fa-glass-water',
-        phrase: 'O leite é quentinho.',
-        words: ['leite', 'lua', 'lápis', 'livro', 'limão', 'laranja'],
-        imageSrc: 'imagenscartilha/l.png', hasCustomImage: false,
-        speech: 'Letra L. L de Leite. O leite é quentinho.'
+        upper: 'L', lower: 'l', word: 'Lua', simpleName: 'L de Lua', type: 'consonant', icon: 'fa-moon',
+        phrase: 'A lua é bonita.',
+        words: ['lua', 'lápis', 'leão', 'lago', 'livro', 'lombo', 'lima', 'lata', 'leite'],
+        imageSrc: 'imagenscartilha/l.png', hasCustomImage: true,
+        speech: 'Letra L. L de Lua. A lua é bonita.'
     },
     M: {
-        upper: 'M', lower: 'm', word: 'Mala', simpleName: 'M de Mala', type: 'consonant', icon: 'fa-suitcase',
-        phrase: 'A mala é de viagem.',
-        words: ['mala', 'macaco', 'mão', 'mesa', 'mel', 'mãe'],
-        imageSrc: 'imagenscartilha/m.png', hasCustomImage: false,
-        speech: 'Letra M. M de Mala. A mala é de viagem.'
+        upper: 'M', lower: 'm', word: 'Mulher', simpleName: 'M de Mulher', type: 'consonant', icon: 'fa-person-dress',
+        phrase: 'A mulher é especial.',
+        words: ['mala', 'mesa', 'macaco', 'mão', 'mar', 'melancia', 'mãe', 'meia', 'moto'],
+        imageSrc: 'imagenscartilha/m.png', hasCustomImage: true,
+        speech: 'Letra M. M de Mulher. A mulher é especial.'
     },
     N: {
         upper: 'N', lower: 'n', word: 'Navio', simpleName: 'N de Navio', type: 'consonant', icon: 'fa-ship',
-        phrase: 'O navio navega no mar.',
-        words: ['navio', 'nuvem', 'noite', 'ninho', 'nariz', 'neve'],
-        imageSrc: 'imagenscartilha/n.png', hasCustomImage: false,
-        speech: 'Letra N. N de Navio. O navio navega no mar.'
+        phrase: 'O navio é grande.',
+        words: ['navio', 'nuvem', 'ninho', 'noite', 'norte', 'número', 'nada', 'nome', 'nariz'],
+        imageSrc: 'imagenscartilha/n.png', hasCustomImage: true,
+        speech: 'Letra N. N de Navio. O navio é grande.'
     },
     O: {
         upper: 'O', lower: 'o', word: 'Ovo', simpleName: 'O de Ovo', type: 'vowel', icon: 'fa-egg',
         phrase: 'O ovo é nutritivo.',
-        words: ['ovo', 'olho', 'orelha', 'onça', 'ouro', 'óculos'],
-        imageSrc: 'imagenscartilha/o.png', hasCustomImage: false,
+        words: ['ovo', 'ovelha', 'onça', 'oito', 'olho', 'orelha', 'onda', 'ouro', 'outono'],
+        imageSrc: 'imagenscartilha/o.png', hasCustomImage: true,
         speech: 'Letra O. O de Ovo. O ovo é nutritivo.'
     },
     P: {
         upper: 'P', lower: 'p', word: 'Pato', simpleName: 'P de Pato', type: 'consonant', icon: 'fa-feather',
-        phrase: 'O pato nada no lago.',
-        words: ['pato', 'pipa', 'pão', 'peixe', 'porta', 'panela'],
-        imageSrc: 'imagenscartilha/p.png', hasCustomImage: false,
-        speech: 'Letra P. P de Pato. O pato nada no lago.'
+        phrase: 'O pato é simpático.',
+        words: ['pato', 'pão', 'peixe', 'pipa', 'porta', 'pipoca', 'pijama', 'pote', 'pulga'],
+        imageSrc: 'imagenscartilha/p.png', hasCustomImage: true,
+        speech: 'Letra P. P de Pato. O pato é simpático.'
     },
     Q: {
         upper: 'Q', lower: 'q', word: 'Queijo', simpleName: 'Q de Queijo', type: 'consonant', icon: 'fa-cheese',
-        phrase: 'O queijo é saboroso.',
-        words: ['queijo', 'quadro', 'quiabo', 'quarto', 'queda'],
-        imageSrc: 'imagenscartilha/q.png', hasCustomImage: false,
-        speech: 'Letra Q. Q de Queijo. O queijo é saboroso.'
+        phrase: 'O queijo é delicioso.',
+        words: ['queijo', 'quadro', 'quase', 'quilo', 'quina', 'quente', 'quati', 'queixo', 'quinta'],
+        imageSrc: 'imagenscartilha/q.png', hasCustomImage: true,
+        speech: 'Letra Q. Q de Queijo. O queijo é delicioso.'
     },
     R: {
         upper: 'R', lower: 'r', word: 'Rato', simpleName: 'R de Rato', type: 'consonant', icon: 'fa-paw',
-        phrase: 'O rato corre depressa.',
-        words: ['rato', 'rio', 'rua', 'relógio', 'roupa', 'rosa'],
-        imageSrc: 'imagenscartilha/r.png', hasCustomImage: false,
-        speech: 'Letra R. R de Rato. O rato corre depressa.'
+        phrase: 'O rato é esperto.',
+        words: ['rato', 'rede', 'rio', 'roda', 'rima', 'roupa', 'relógio', 'raposa', 'rua'],
+        imageSrc: 'imagenscartilha/r.png', hasCustomImage: true,
+        speech: 'Letra R. R de Rato. O rato é esperto.'
     },
     S: {
         upper: 'S', lower: 's', word: 'Sapo', simpleName: 'S de Sapo', type: 'consonant', icon: 'fa-frog',
-        phrase: 'O sapo pula na lagoa.',
-        words: ['sapo', 'sol', 'sola', 'sabão', 'sopa', 'sino'],
-        imageSrc: 'imagenscartilha/s.png', hasCustomImage: false,
-        speech: 'Letra S. S de Sapo. O sapo pula na lagoa.'
+        phrase: 'O sapo é saltitante.',
+        words: ['sapo', 'sol', 'saia', 'sino', 'seda', 'sabonete', 'suco', 'sorvete'],
+        imageSrc: 'imagenscartilha/s.png', hasCustomImage: true,
+        speech: 'Letra S. S de Sapo. O sapo é saltitante.'
     },
     T: {
-        upper: 'T', lower: 't', word: 'Tatu', simpleName: 'T de Tatu', type: 'consonant', icon: 'fa-gem',
-        phrase: 'O tatu cava a terra.',
-        words: ['tatu', 'teto', 'tijolo', 'tomate', 'trem', 'tapete'],
-        imageSrc: 'imagenscartilha/t.png', hasCustomImage: false,
-        speech: 'Letra T. T de Tatu. O tatu cava a terra.'
+        upper: 'T', lower: 't', word: 'Tomate', simpleName: 'T de Tomate', type: 'consonant', icon: 'fa-apple-whole',
+        phrase: 'O tomate é saudável.',
+        words: ['tomate', 'tela', 'tigre', 'trem', 'tijolo', 'tesoura', 'touro', 'tarde', 'tapete'],
+        imageSrc: 'imagenscartilha/t.png', hasCustomImage: true,
+        speech: 'Letra T. T de Tomate. O tomate é saudável.'
     },
     U: {
         upper: 'U', lower: 'u', word: 'Uva', simpleName: 'U de Uva', type: 'vowel', icon: 'fa-leaf',
-        phrase: 'A uva é docinha.',
-        words: ['uva', 'urso', 'unha', 'um', 'urubu'],
-        imageSrc: 'imagenscartilha/u.png', hasCustomImage: false,
-        speech: 'Letra U. U de Uva. A uva é docinha.'
+        phrase: 'A uva é saborosa.',
+        words: ['uva', 'urso', 'união', 'unha', 'urna', 'uniforme', 'urubu', 'urina', 'urucum'],
+        imageSrc: 'imagenscartilha/u.png', hasCustomImage: true,
+        speech: 'Letra U. U de Uva. A uva é saborosa.'
     },
     V: {
         upper: 'V', lower: 'v', word: 'Vaca', simpleName: 'V de Vaca', type: 'consonant', icon: 'fa-cow',
-        phrase: 'A vaca dá leite.',
-        words: ['vaca', 'vela', 'vento', 'vidro', 'violão', 'vila'],
-        imageSrc: 'imagenscartilha/v.png', hasCustomImage: false,
-        speech: 'Letra V. V de Vaca. A vaca dá leite.'
+        phrase: 'A vaca é tranquila.',
+        words: ['vaca', 'vela', 'vovô', 'viola', 'vento', 'vinho', 'violão', 'vassoura', 'vermelho'],
+        imageSrc: 'imagenscartilha/v.png', hasCustomImage: true,
+        speech: 'Letra V. V de Vaca. A vaca é tranquila.'
     },
     W: {
-        upper: 'W', lower: 'w', word: 'Wafer', simpleName: 'W de Wafer', type: 'consonant', icon: 'fa-cookie-bite',
-        phrase: 'O wafer é crocante.',
-        words: ['wafer', 'web', 'wi-fi', 'windsurf'],
-        imageSrc: 'imagenscartilha/w.png', hasCustomImage: false,
-        speech: 'Letra W. W de Wafer. O wafer é crocante.'
+        upper: 'W', lower: 'w', word: 'WhatsApp', simpleName: 'W de WhatsApp', type: 'consonant', icon: 'fa-comment-dots',
+        phrase: 'O WhatsApp é prático.',
+        words: ['whatsapp', 'whisky', 'waffle', 'wi-fi', 'workshop', 'wolverine', 'walkie-talkie', 'web'],
+        imageSrc: 'imagenscartilha/w.png', hasCustomImage: true,
+        speech: 'Letra W. W de WhatsApp. O WhatsApp é prático.'
     },
     X: {
-        upper: 'X', lower: 'x', word: 'Xícara', simpleName: 'X de Xícara', type: 'consonant', icon: 'fa-mug-hot',
-        phrase: 'A xícara tem café quentinho.',
-        words: ['xícara', 'xale', 'xadrez', 'xarope', 'xaxim'],
-        imageSrc: 'imagenscartilha/x.png', hasCustomImage: false,
-        speech: 'Letra X. X de Xícara. A xícara tem café quentinho.'
+        upper: 'X', lower: 'x', word: 'Xadrez', simpleName: 'X de Xadrez', type: 'consonant', icon: 'fa-chess-board',
+        phrase: 'O xadrez é divertido.',
+        words: ['xadrez', 'xícara', 'xilofone', 'xarope', 'xampu', 'xbox', 'xale', 'xerife', 'xenofobia'],
+        imageSrc: 'imagenscartilha/x.png', hasCustomImage: true,
+        speech: 'Letra X. X de Xadrez. O xadrez é divertido.'
     },
     Y: {
         upper: 'Y', lower: 'y', word: 'Yoga', simpleName: 'Y de Yoga', type: 'consonant', icon: 'fa-heart',
@@ -190,10 +190,10 @@ var alphabetData = {
     },
     Z: {
         upper: 'Z', lower: 'z', word: 'Zebra', simpleName: 'Z de Zebra', type: 'consonant', icon: 'fa-horse',
-        phrase: 'A zebra é listrada.',
-        words: ['zebra', 'zero', 'zíper', 'zumbido', 'zona'],
-        imageSrc: 'imagenscartilha/z.png', hasCustomImage: false,
-        speech: 'Letra Z. Z de Zebra. A zebra é listrada.'
+        phrase: 'A zebra é linda.',
+        words: ['zebra', 'zangão', 'zero', 'zíper', 'zumbi', 'zoológico', 'zente', 'zangado', 'zelador'],
+        imageSrc: 'imagenscartilha/z.png', hasCustomImage: true,
+        speech: 'Letra Z. Z de Zebra. A zebra é linda.'
     }
 };
 

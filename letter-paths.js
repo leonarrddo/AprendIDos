@@ -766,7 +766,16 @@ function evaluateLetter(ch, m, userStrokes, attemptBonus) {
         directionScore  * cfg.weightDirection +
         completionScore * cfg.weightStrokeCompletion;
 
-    var finalScore = Math.min(100, Math.round(rawScore));
+    // Fator de comprimento: rabiscos e traços excessivamente longos derrubam a nota proporcionalmente
+    var lengthFactor = Math.max(0, lengthScore / 100);
+
+    // Fator de dispersão: se o usuário espalhou pontos fora do traçado da letra, penaliza pesadamente
+    var outsideFactor = (outsideRatio > cfg.maxOutsideRatio)
+        ? Math.max(0, 1 - (outsideRatio - cfg.maxOutsideRatio) * 2.5)
+        : 1.0;
+
+    var calculatedScore = Math.round(rawScore * lengthFactor * outsideFactor);
+    var finalScore = Math.min(100, Math.max(0, calculatedScore));
 
     // Todos os critérios mínimos devem ser satisfeitos
     var minCov = cfg.minCoverage * bonusFactor;
@@ -776,7 +785,18 @@ function evaluateLetter(ch, m, userStrokes, attemptBonus) {
         coverage >= minCov &&
         spatialAccuracy >= minAcc &&
         outsideRatio <= cfg.maxOutsideRatio &&
-        lengthScore > 0;
+        lengthScore >= 35;
+
+    // Proteção estrita: se a letra NÃO passou, sua pontuação não pode inflar a média geral
+    if (!passed) {
+        if (lengthScore < 35 || outsideRatio > 0.45) {
+            // Rabisco evidente ou pintura do quadro: nota máxima de 15%
+            finalScore = Math.min(finalScore, 15);
+        } else {
+            // Tentativa válida porém incompleta: nota máxima de 42%
+            finalScore = Math.min(finalScore, 42);
+        }
+    }
 
     if (WRITING_DEBUG) {
         console.group('Avaliacao letra: ' + ch);

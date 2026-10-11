@@ -215,19 +215,37 @@ function renderExercise() {
 
     if (assembledEl) {
         assembledEl.innerHTML = '';
-        for (var i = 0; i < target.length; i++) {
-            var slot = document.createElement('div');
-            slot.className = 'name-slot';
-            slot.setAttribute('data-pos', i);
-            assembledEl.appendChild(slot);
-        }
+        var words = currentName.split(/\s+/).filter(Boolean);
+        var globalSlotIdx = 0;
+
+        words.forEach(function(word, wIdx) {
+            var wordGroup = document.createElement('div');
+            wordGroup.className = 'assembled-word-group';
+
+            for (var c = 0; c < word.length; c++) {
+                var slot = document.createElement('div');
+                slot.className = 'name-slot';
+                slot.setAttribute('data-pos', globalSlotIdx);
+                wordGroup.appendChild(slot);
+                globalSlotIdx++;
+            }
+            assembledEl.appendChild(wordGroup);
+
+            // Se houver mais palavras no nome, adiciona um separador de espaço bem visível
+            if (wIdx < words.length - 1) {
+                var spaceDivider = document.createElement('div');
+                spaceDivider.className = 'name-slot-space';
+                spaceDivider.setAttribute('aria-label', 'Espaço entre palavras');
+                spaceDivider.innerHTML = '<span class="space-symbol" title="Espaço"></span>';
+                assembledEl.appendChild(spaceDivider);
+            }
+        });
     }
 
     var roundLabel = document.getElementById('roundLabel');
     if (roundLabel) {
-        // Mostra o nome completo (com espaço) mas com os espaços representados
-        var displayName = currentName.split('').map(function(c) { return c === ' ' ? ' _ ' : c; }).join('');
-        roundLabel.textContent = 'Tente montar: ' + exerciseName;
+        // Exibe o nome completo preservando e destacando os espaços reais (ex: "MARIA FERNANDA")
+        roundLabel.innerHTML = 'Tente montar: <span class="target-name-display">' + currentName + '</span>';
     }
 }
 
@@ -254,12 +272,12 @@ function checkBuilt() {
     var fb = document.getElementById('exerciseFeedback');
     if (isCorrect) {
         correct++;
-        if (fb) fb.innerHTML = '<div class="feedback-msg success"><i class="fas fa-check-circle"></i> Muito bem! Você montou seu nome!</div>';
-        speak('Muito bem! Você montou seu nome: ' + exerciseName);
+        if (fb) fb.innerHTML = '<div class="feedback-msg success"><i class="fas fa-check-circle"></i> Muito bem! Você montou seu nome: <strong>' + currentName + '</strong>!</div>';
+        speak('Muito bem! Você montou seu nome: ' + currentName);
         setTimeout(function() { showCompletion(); }, 1200);
     } else {
         misses++;
-        if (fb) fb.innerHTML = '<div class="feedback-msg error"><i class="fas fa-redo"></i> Tente novamente!</div>' +
+        if (fb) fb.innerHTML = '<div class="feedback-msg error"><i class="fas fa-redo"></i> Tente novamente! Tente montar: <strong>' + currentName + '</strong></div>' +
             '<button class="btn-next" onclick="renderExercise()" aria-label="Tentar novamente"><i class="fas fa-redo"></i> Tentar de novo</button>';
         speak('Tente novamente.');
     }
@@ -418,12 +436,117 @@ function initWritingCanvas(name) {
     }
 }
 
+function getCanvasLayout(width, name) {
+    if (!name || !name.trim()) {
+        return {
+            lines: [{ text: '', lineIndex: 0, baseline: 240, fontSize: 80 }],
+            height: 340,
+            fontSize: 80
+        };
+    }
+    
+    var trimmed = name.trim();
+    var words = trimmed.split(/\s+/).filter(Boolean);
+    var maxW = Math.max(260, width - 60);
+    
+    // Testa se o nome completo cabe em 1 única linha com uma fonte grande e confortável (>= 60px)
+    var testCtx = writingCtx || (writingCanvas ? writingCanvas.getContext('2d') : null);
+    var fullWidthAt65 = 9999;
+    if (testCtx) {
+        testCtx.save();
+        testCtx.font = 'bold 65px Nunito, sans-serif';
+        fullWidthAt65 = testCtx.measureText(trimmed).width;
+        testCtx.restore();
+    }
+    
+    // Quebra em linhas separadas se houver 2+ palavras e o nome for longo ou não couber grande em 1 linha
+    var shouldSplitLines = (words.length >= 2) && (fullWidthAt65 > maxW || words.length > 2 || trimmed.length >= 10);
+    
+    if (!shouldSplitLines) {
+        // 1 Única Linha com letras amplas
+        var baseFontSize = 90;
+        if (testCtx) {
+            testCtx.save();
+            testCtx.font = 'bold ' + baseFontSize + 'px Nunito, sans-serif';
+            var tw = testCtx.measureText(trimmed).width;
+            if (tw > maxW && tw > 0) {
+                baseFontSize = Math.max(46, Math.floor(baseFontSize * (maxW / tw)));
+            }
+            testCtx.restore();
+        }
+        
+        var height1 = Math.max(340, Math.round(baseFontSize * 3.6));
+        var base1 = Math.round(height1 * 0.72);
+        
+        return {
+            lines: [{ text: trimmed, lineIndex: 0, baseline: base1, fontSize: baseFontSize }],
+            height: height1,
+            fontSize: baseFontSize
+        };
+    } else {
+        // Múltiplas Linhas para nomes compostos (ex: "MARIA FERNANDA" -> cada palavra grande e nítida)
+        var lineGroups = [];
+        if (words.length === 2) {
+            lineGroups = [words[0], words[1]];
+        } else if (words.length === 3) {
+            if (words[1].length <= 3) {
+                lineGroups = [words[0], words[1] + ' ' + words[2]];
+            } else {
+                lineGroups = [words[0] + ' ' + words[1], words[2]];
+            }
+        } else {
+            var half = Math.ceil(words.length / 2);
+            lineGroups = [words.slice(0, half).join(' '), words.slice(half).join(' ')];
+        }
+        
+        // Calcula a melhor fonte possível para cada linha
+        var lineFontSizes = lineGroups.map(function(lineText) {
+            var fSize = 84;
+            if (testCtx) {
+                testCtx.save();
+                testCtx.font = 'bold ' + fSize + 'px Nunito, sans-serif';
+                var w = testCtx.measureText(lineText).width;
+                if (w > maxW && w > 0) {
+                    fSize = Math.max(48, Math.floor(fSize * (maxW / w)));
+                }
+                testCtx.restore();
+            }
+            return fSize;
+        });
+        
+        // Fonte uniforme entre as linhas para harmonia visual
+        var commonFontSize = Math.min(lineFontSizes[0], lineFontSizes[1]);
+        var lineHeight = Math.max(225, Math.round(commonFontSize * 2.75));
+        var totalHeight = Math.max(500, lineHeight * lineGroups.length + 30);
+        
+        var lines = [];
+        for (var li = 0; li < lineGroups.length; li++) {
+            var lText = lineGroups[li];
+            var base = Math.round((li + 0.78) * lineHeight);
+            lines.push({
+                text: lText,
+                lineIndex: li,
+                baseline: base,
+                fontSize: commonFontSize
+            });
+        }
+        
+        return {
+            lines: lines,
+            height: totalHeight,
+            fontSize: commonFontSize
+        };
+    }
+}
+
 function setupCanvasResolution() {
     if (!writingCanvas) return;
     var container = writingCanvas.parentElement;
     var rect = container.getBoundingClientRect();
     var width = Math.floor(rect.width) || 600;
-    var height = 270;
+    
+    var layout = getCanvasLayout(width, currentName);
+    var height = layout.height;
     
     var dpr = window.devicePixelRatio || 1;
     writingCanvas.width = width * dpr;
@@ -446,44 +569,42 @@ function handleCanvasResize() {
 function getLetterMetrics() {
     if (!writingCanvas || !currentName) return [];
     var width = parseFloat(writingCanvas.style.width) || 600;
-    var height = parseFloat(writingCanvas.style.height) || 270;
-    var baseline = height * 0.75;
-    
-    var baseFontSize = 64;
-    var maxW = width - 60;
+    var layout = getCanvasLayout(width, currentName);
+    var list = [];
+    var globalCharIdx = 0;
     
     writingCtx.save();
-    writingCtx.font = 'bold ' + baseFontSize + 'px Nunito, sans-serif';
-    var textWidth = writingCtx.measureText(currentName).width;
-    if (textWidth > maxW && textWidth > 0) {
-        baseFontSize = Math.max(26, Math.floor(baseFontSize * (maxW / textWidth)));
-        writingCtx.font = 'bold ' + baseFontSize + 'px Nunito, sans-serif';
-        textWidth = writingCtx.measureText(currentName).width;
-    }
     
-    var startX = (width - textWidth) / 2;
-    var curX = startX;
-    var list = [];
-    
-    for (var i = 0; i < currentName.length; i++) {
-        var ch = currentName[i];
-        var chW = writingCtx.measureText(ch).width;
-        if (ch !== ' ') {
-            list.push({
-                char: ch,
-                index: i,
-                x1: curX,
-                x2: curX + chW,
-                width: chW,
-                centerX: curX + chW / 2,
-                y1: baseline - baseFontSize * 0.95,
-                y2: baseline + baseFontSize * 0.15,
-                baseline: baseline,
-                fontSize: baseFontSize
-            });
+    layout.lines.forEach(function(lineObj) {
+        writingCtx.font = 'bold ' + lineObj.fontSize + 'px Nunito, sans-serif';
+        var textWidth = writingCtx.measureText(lineObj.text).width;
+        var startX = Math.max(20, (width - textWidth) / 2);
+        var curX = startX;
+        
+        for (var i = 0; i < lineObj.text.length; i++) {
+            var ch = lineObj.text[i];
+            var chW = writingCtx.measureText(ch).width;
+            
+            if (ch !== ' ') {
+                list.push({
+                    char: ch,
+                    index: globalCharIdx,
+                    x1: curX,
+                    x2: curX + chW,
+                    width: chW,
+                    centerX: curX + chW / 2,
+                    y1: lineObj.baseline - lineObj.fontSize * 0.95,
+                    y2: lineObj.baseline + lineObj.fontSize * 0.15,
+                    baseline: lineObj.baseline,
+                    fontSize: lineObj.fontSize,
+                    line: lineObj.lineIndex || 0
+                });
+                globalCharIdx++;
+            }
+            curX += chW;
         }
-        curX += chW;
-    }
+    });
+    
     writingCtx.restore();
     return list;
 }
@@ -491,66 +612,95 @@ function getLetterMetrics() {
 function drawBackgroundGuides() {
     if (!writingCanvas || !writingCtx) return;
     var width = parseFloat(writingCanvas.style.width) || 600;
-    var height = parseFloat(writingCanvas.style.height) || 270;
+    var height = parseFloat(writingCanvas.style.height) || 340;
     
     // Fundo branco limpo
     writingCtx.fillStyle = '#FFFFFF';
     writingCtx.fillRect(0, 0, width, height);
     
-    // Pautas (estilo caderno de caligrafia)
-    var topLine = height * 0.25;
-    var midLine = height * 0.50;
-    var baseline = height * 0.75;
+    var layout = getCanvasLayout(width, currentName);
     
-    // Linha de topo (guia suave)
-    writingCtx.save();
-    writingCtx.beginPath();
-    writingCtx.strokeStyle = '#ECEFF1';
-    writingCtx.lineWidth = 1.5;
-    writingCtx.setLineDash([4, 4]);
-    writingCtx.moveTo(16, topLine);
-    writingCtx.lineTo(width - 16, topLine);
-    writingCtx.stroke();
-    
-    // Linha intermediária (guia das minúsculas/meio)
-    writingCtx.beginPath();
-    writingCtx.strokeStyle = '#CFD8DC';
-    writingCtx.lineWidth = 1.5;
-    writingCtx.setLineDash([6, 6]);
-    writingCtx.moveTo(16, midLine);
-    writingCtx.lineTo(width - 16, midLine);
-    writingCtx.stroke();
-    writingCtx.restore();
-    
-    // Linha de base (onde as letras se apoiam - verde claro forte)
-    writingCtx.beginPath();
-    writingCtx.strokeStyle = '#81C784';
-    writingCtx.lineWidth = 2.5;
-    writingCtx.moveTo(16, baseline);
-    writingCtx.lineTo(width - 16, baseline);
-    writingCtx.stroke();
+    // Desenha pautas para cada linha (estilo caderno de caligrafia do Caminho Suave)
+    layout.lines.forEach(function(lineObj) {
+        var base = lineObj.baseline;
+        var top = base - lineObj.fontSize * 0.95;
+        var mid = base - lineObj.fontSize * 0.48;
+        
+        writingCtx.save();
+        // Linha de topo suave
+        writingCtx.beginPath();
+        writingCtx.strokeStyle = '#ECEFF1';
+        writingCtx.lineWidth = 1.6;
+        writingCtx.setLineDash([4, 4]);
+        writingCtx.moveTo(16, top);
+        writingCtx.lineTo(width - 16, top);
+        writingCtx.stroke();
+        
+        // Linha intermediária (guia das minúsculas/meio)
+        writingCtx.beginPath();
+        writingCtx.strokeStyle = '#CFD8DC';
+        writingCtx.lineWidth = 1.8;
+        writingCtx.setLineDash([6, 6]);
+        writingCtx.moveTo(16, mid);
+        writingCtx.lineTo(width - 16, mid);
+        writingCtx.stroke();
+        
+        // Linha de base principal (onde as letras se apoiam - verde nítido e firme)
+        writingCtx.beginPath();
+        writingCtx.strokeStyle = '#388E3C';
+        writingCtx.lineWidth = 3.0;
+        writingCtx.setLineDash([]);
+        writingCtx.moveTo(16, base);
+        writingCtx.lineTo(width - 16, base);
+        writingCtx.stroke();
+        writingCtx.restore();
+    });
     
     if (writingMode === 'trace' && currentName) {
         var metrics = getLetterMetrics();
         if (metrics.length === 0) return;
-        var fontSize = metrics[0].fontSize;
         
         writingCtx.save();
-        writingCtx.font = 'bold ' + fontSize + 'px Nunito, sans-serif';
         writingCtx.textBaseline = 'alphabetic';
         writingCtx.textAlign = 'left';
         
-        // Letra preenchida verde clarinho + contorno pontilhado
         metrics.forEach(function(m) {
-            writingCtx.fillStyle = 'rgba(46, 125, 50, 0.20)';
+            writingCtx.font = 'bold ' + m.fontSize + 'px Nunito, sans-serif';
+            
+            // 1. Fundo do cartão da letra (estilo bloco pedagógico para idosos enxergarem com facilidade)
+            var padX = Math.max(3, m.fontSize * 0.04);
+            var cardX = m.x1 - padX;
+            var cardY = m.y1 - 3;
+            var cardW = m.width + padX * 2;
+            var cardH = (m.y2 - m.y1) + 6;
+            
+            writingCtx.save();
+            writingCtx.fillStyle = 'rgba(232, 245, 233, 0.60)'; // verde claro com bom contraste
+            writingCtx.strokeStyle = 'rgba(165, 214, 167, 0.50)';
+            writingCtx.lineWidth = 1.2;
+            writingCtx.setLineDash([]);
+            if (writingCtx.roundRect) {
+                writingCtx.beginPath();
+                writingCtx.roundRect(cardX, cardY, cardW, cardH, 8);
+                writingCtx.fill();
+                writingCtx.stroke();
+            } else {
+                writingCtx.fillRect(cardX, cardY, cardW, cardH);
+                writingCtx.strokeRect(cardX, cardY, cardW, cardH);
+            }
+            writingCtx.restore();
+            
+            // 2. Silhueta sólida da letra com alto contraste (fundo visível para baixa visão)
+            writingCtx.fillStyle = 'rgba(46, 125, 50, 0.32)';
             writingCtx.fillText(m.char, m.x1, m.baseline);
             
-            writingCtx.strokeStyle = 'rgba(46, 125, 50, 0.55)';
-            writingCtx.lineWidth = 1.8;
-            writingCtx.setLineDash([4, 4]);
+            // 3. Contorno pontilhado forte e escuro
+            writingCtx.strokeStyle = '#1B5E20';
+            writingCtx.lineWidth = Math.max(2.8, m.fontSize * 0.045);
+            writingCtx.setLineDash([6, 5]);
             writingCtx.strokeText(m.char, m.x1, m.baseline);
             
-            // Setas de direção pedagógica (quando ativadas)
+            // 4. Setas e pontos de direção pedagógica (quando ativadas)
             if (showDirectionArrows) {
                 drawArrowGuide(m);
             }
@@ -558,12 +708,20 @@ function drawBackgroundGuides() {
         writingCtx.restore();
     } else if (writingMode === 'free') {
         // Modo Assinatura Livre: linha de documento
+        var baseFree = height * 0.72;
         writingCtx.save();
+        writingCtx.strokeStyle = '#2E7D32';
+        writingCtx.lineWidth = 3;
+        writingCtx.beginPath();
+        writingCtx.moveTo(20, baseFree);
+        writingCtx.lineTo(width - 20, baseFree);
+        writingCtx.stroke();
+        
         writingCtx.fillStyle = '#8D6E63';
-        writingCtx.font = 'bold 15px Nunito, sans-serif';
+        writingCtx.font = 'bold 16px Nunito, sans-serif';
         writingCtx.textAlign = 'left';
         writingCtx.textBaseline = 'bottom';
-        writingCtx.fillText('✍️ Linha de Assinatura Oficial (Documento / RG):', 20, baseline - 10);
+        writingCtx.fillText('✍️ Linha de Assinatura Oficial (Documento / RG):', 24, baseFree - 12);
         writingCtx.restore();
     }
 }
@@ -826,17 +984,74 @@ function evaluateWriting(isManual) {
         return;
     }
     
+    // ============================================================
+    // DETECÇÃO GLOBAL DE PINTURA / RABISCO DO QUADRO
+    // Analisa se o usuário rabiscou caoticamente ou cobriu o quadro
+    // ============================================================
+    var totalUserLength = 0;
+    var totalUserPoints = 0;
+    strokes.forEach(function(st) {
+        if (!st || !st.points) return;
+        totalUserPoints += st.points.length;
+        for (var p = 1; p < st.points.length; p++) {
+            var dx = st.points[p].x - st.points[p - 1].x;
+            var dy = st.points[p].y - st.points[p - 1].y;
+            totalUserLength += Math.sqrt(dx * dx + dy * dy);
+        }
+    });
+    
+    // Comprimento total esperado para escrever as letras do nome
+    var totalExpectedLength = 0;
+    metrics.forEach(function(m) {
+        var scaled = (typeof getScaledStrokesForLetter === 'function')
+            ? getScaledStrokesForLetter(m.char, m) : null;
+        if (scaled && scaled.length > 0) {
+            scaled.forEach(function(s) {
+                for (var k = 1; k < s.length; k++) {
+                    var sx = s[k].x - s[k - 1].x;
+                    var sy = s[k].y - s[k - 1].y;
+                    totalExpectedLength += Math.sqrt(sx * sx + sy * sy);
+                }
+            });
+        } else {
+            totalExpectedLength += (m.width + (m.y2 - m.y1)) * 2;
+        }
+    });
+    
+    // Contagem de pontos que caem completamente fora de qualquer letra
+    var pointsOutsideAllLetters = 0;
+    strokes.forEach(function(st) {
+        if (!st || !st.points) return;
+        st.points.forEach(function(pt) {
+            var nearAny = false;
+            for (var mi = 0; mi < metrics.length; mi++) {
+                var m = metrics[mi];
+                var pad = m.fontSize * 0.35;
+                if (pt.x >= m.x1 - pad && pt.x <= m.x2 + pad &&
+                    pt.y >= m.y1 - pad && pt.y <= m.y2 + pad) {
+                    nearAny = true;
+                    break;
+                }
+            }
+            if (!nearAny) pointsOutsideAllLetters++;
+        });
+    });
+    
+    var outsideGlobalRatio = pointsOutsideAllLetters / Math.max(1, totalUserPoints);
+    var lengthRatioGlobal = totalUserLength / Math.max(20, totalExpectedLength);
+    
+    // Se desenhou mais de 2.5x o necessário OU espalhou mais de 38% dos traços fora das letras
+    var isSevereScribble = (lengthRatioGlobal > 2.5) || (outsideGlobalRatio > 0.38 && totalUserPoints > 40);
+    
     var completedCount = 0;
     var totalScoreSum = 0;
     
     metrics.forEach(function(m, idx) {
-        // Bônus de tolerância para letras com muitas tentativas falhas
         var attempts = letterAttempts[idx] || 0;
         var bonus = attempts * WRITING_EVALUATION_CONFIG.attemptToleranceBonus;
         
         var result = evaluateLetter(m.char, m, strokes, bonus);
         
-        // Atualiza o mapa de status (usa nameIndex como chave única)
         if (letterStatusMap[idx]) {
             letterStatusMap[idx].score    = result.score;
             letterStatusMap[idx].coverage = result.coverage;
@@ -844,7 +1059,9 @@ function evaluateWriting(isManual) {
             letterStatusMap[idx].result   = result;
         }
         
-        if (result.passed) completedCount++;
+        if (result.passed && !isSevereScribble) {
+            completedCount++;
+        }
         totalScoreSum += result.score;
         
         // Atualiza chip da letra
@@ -852,10 +1069,10 @@ function evaluateWriting(isManual) {
         var chipStatus = document.getElementById('chipStatus_'   + idx);
         if (chip && chipStatus) {
             chip.classList.remove('completed', 'partial');
-            if (result.passed) {
+            if (result.passed && !isSevereScribble) {
                 chip.classList.add('completed');
                 chipStatus.innerHTML = '<i class="fas fa-check"></i>';
-            } else if (result.score >= 30 || result.coverage >= 30) {
+            } else if (!isSevereScribble && (result.score >= 32 || result.coverage >= 35)) {
                 chip.classList.add('partial');
                 chipStatus.innerHTML = '<i class="fas fa-pencil-alt"></i>';
             } else {
@@ -866,10 +1083,26 @@ function evaluateWriting(isManual) {
     
     var avgScore = Math.round(totalScoreSum / Math.max(metrics.length, 1));
     
+    // Proteção contra pintura indiscriminada do quadro
+    if (isSevereScribble) {
+        var scribbleScore = Math.min(10, Math.max(2, Math.round(avgScore * 0.15)));
+        var scribbleMsg = 'Percebemos muitos traços e rabiscos no quadro. Para treinar sua caligrafia, passe o dedo com cuidado, apenas por cima das linhas pontilhadas de cada letra.';
+        var countEl = document.getElementById('trackerProgressCount');
+        if (countEl) countEl.textContent = '0 de ' + metrics.length;
+        updateEvaluationUI(scribbleScore, 0, scribbleMsg, 'info');
+        if (isManual) speak(scribbleMsg);
+        return;
+    }
+    
+    // Se nenhuma letra foi aprovada com precisão real, a nota média não pode ser aprovativa
+    if (completedCount === 0) {
+        avgScore = Math.min(avgScore, 25);
+    }
+    
     var countEl = document.getElementById('trackerProgressCount');
     if (countEl) countEl.textContent = completedCount + ' de ' + metrics.length;
     
-    // Feedback pedagógico (sem linguagem negativa)
+    // Feedback pedagógico construtivo
     var stars = 0, feedbackMsg = '', statusClass = 'info';
     var allPassed = (completedCount === metrics.length);
     var partialRatio = completedCount / Math.max(metrics.length, 1);
@@ -878,21 +1111,21 @@ function evaluateWriting(isManual) {
         stars = 3;
         statusClass = 'success';
         feedbackMsg = 'Muito bem! Você escreveu o seu nome ' + currentName + ' com ótimo traçado!';
-    } else if (allPassed || (partialRatio >= 0.75 && avgScore >= 55)) {
+    } else if (allPassed || (partialRatio >= 0.70 && avgScore >= 55)) {
         stars = 2;
         statusClass = 'partial';
         var faltam = metrics.length - completedCount;
         feedbackMsg = faltam > 0
             ? 'Você está quase lá! Vamos completar ' + faltam + ' letra(s) que ainda precisam de treino.'
             : 'Ótimo trabalho! O traçado do seu nome está muito bom.';
-    } else if (partialRatio >= 0.4 || avgScore >= 35) {
+    } else if (partialRatio >= 0.35 || (completedCount > 0 && avgScore >= 35)) {
         stars = 1;
         statusClass = 'partial';
         feedbackMsg = 'Bom começo! Passe o dedo devagar seguindo cada letra com cuidado.';
     } else {
         stars = 0;
         statusClass = 'info';
-        feedbackMsg = 'Passe a ponta do dedo bem por cima das letras pontilhadas.';
+        feedbackMsg = 'Passe a ponta do dedo bem por cima das linhas pontilhadas de cada letra.';
     }
     
     updateEvaluationUI(avgScore, stars, feedbackMsg, statusClass);
@@ -907,8 +1140,8 @@ function evaluateFreeSignature(isManual) {
     
     var totalPts = 0;
     var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-    var height = parseFloat(writingCanvas.style.height) || 270;
-    var baseline = height * 0.75;
+    var height = parseFloat(writingCanvas.style.height) || 340;
+    var baseline = height * 0.72;
     var ptsNearBaseline = 0;
     
     strokes.forEach(function(st) {
@@ -919,14 +1152,23 @@ function evaluateFreeSignature(isManual) {
             if (p.x > maxX) maxX = p.x;
             if (p.y < minY) minY = p.y;
             if (p.y > maxY) maxY = p.y;
-            if (Math.abs(p.y - baseline) < 55) ptsNearBaseline++;
+            if (Math.abs(p.y - baseline) < 65) ptsNearBaseline++;
         });
     });
     
     var spanX = maxX - minX;
+    var spanY = maxY - minY;
     var ratioNear = ptsNearBaseline / Math.max(1, totalPts);
     
-    // Critérios endurecidos para evitar nota alta em rabisco
+    // Se cobriu a altura inteira do canvas de cima a baixo com rabiscos
+    var isCanvasPainted = (spanY > height * 0.75 && totalPts > 90 && ratioNear < 0.42);
+    if (isCanvasPainted) {
+        updateEvaluationUI(8, 0, 'Percebemos muitos traços pelo quadro todo. Tente assinar com calma em cima da linha verde.', 'info');
+        if (isManual) speak('Percebemos muitos traços pelo quadro todo. Tente assinar com calma em cima da linha verde.');
+        return;
+    }
+    
+    // Critérios para assinatura livre
     var score = 0, stars = 0, msg = '', sClass = 'info';
     if (totalPts >= 80 && spanX >= 200 && ratioNear >= 0.65) {
         score = 90;

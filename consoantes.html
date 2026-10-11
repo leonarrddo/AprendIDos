@@ -16,59 +16,298 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg: #FAF3E0; --bg-card: #F5DEB3; --white: #FFFFFF;
-            --fg: #3E2723; --fg-secondary: #5D4037; --muted: #8D6E63;
-            --green: #2E7D32; --green-light: #C8E6C9; --green-pale: #E8F5E9;
-            --green-dark: #1B5E20; --border: #C8E6C9;
-            --radius: 18px; --radius-sm: 12px;
+            --bg: #FAF3E0;
+            --bg-card: #F5DEB3;
+            --white: #FFFFFF;
+            --fg: #3E2723;
+            --fg-secondary: #5D4037;
+            --muted: #8D6E63;
+            --green: #2E7D32;
+            --green-light: #C8E6C9;
+            --green-pale: #E8F5E9;
+            --green-dark: #1B5E20;
+            --border: #C8E6C9;
+            --radius: 18px;
+            --radius-sm: 12px;
             --accent: #00695C;
         }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { font-size: 18px; scroll-behavior: smooth; }
-        body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--fg); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
-        .skip-link { position: absolute; top: -100%; left: 1rem; background: var(--green); color: #fff; padding: 0.8rem 1.4rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 1rem; z-index: 200; text-decoration: none; transition: top 0.2s; }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 1rem;
+            background: var(--green);
+            color: #fff;
+            padding: 0.8rem 1.4rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 1rem;
+            z-index: 200;
+            text-decoration: none;
+            transition: top 0.2s;
+        }
         .skip-link:focus { top: 0.5rem; }
-        .navbar { background: var(--white); border-bottom: 3px solid var(--green); padding: 0.4rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
-        .navbar-left { display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
-        .btn-back { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--bg); border: 2px solid var(--green-light); border-radius: var(--radius-sm); padding: 0.45rem 0.9rem; color: var(--green); font-size: 0.95rem; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; text-decoration: none; }
-        .btn-back:hover { background: var(--green-pale); border-color: var(--green); }
-        .navbar-brand { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--fg); }
-        .brand-icon { width: 34px; height: 34px; background: var(--green); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.15rem; font-weight: 900; flex-shrink: 0; }
-        .navbar-brand span { font-size: 1.15rem; font-weight: 900; }
-        .navbar-nav { display: flex; align-items: center; gap: 0.5rem; list-style: none; }
-        .navbar-nav-item { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; text-decoration: none; color: var(--muted); padding: 0.7rem 1.2rem 0.6rem; border-radius: 10px; transition: all 0.2s; min-width: 108px; }
-        .navbar-nav-item i { font-size: 2.3rem; line-height: 1; }
-        .navbar-nav-item span { font-size: 1.05rem; font-weight: 800; }
-        .navbar-nav-item:hover, .navbar-nav-item.active { color: var(--green); background: var(--green-pale); }
-        .navbar-hamburger { display: none; background: none; border: 2px solid var(--green-light); border-radius: 8px; color: var(--green); font-size: 1.3rem; cursor: pointer; padding: 0.4rem 0.7rem; }
-        .navbar-mobile-menu { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--white); border-bottom: 3px solid var(--green); padding: 0.8rem 1.2rem; gap: 0.3rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); z-index: 99; }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: var(--white);
+            border-bottom: 3px solid var(--green);
+            padding: 0.4rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--bg);
+            border: 2px solid var(--green-light);
+            border-radius: var(--radius-sm);
+            padding: 0.45rem 0.9rem;
+            color: var(--green);
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .btn-back:hover {
+            background: var(--green-pale);
+            border-color: var(--green);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--fg);
+        }
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+            background: var(--green);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.15rem;
+            font-weight: 900;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+        .navbar-brand:hover .brand-icon {
+            transform: rotate(-8deg) scale(1.08);
+        }
+        .navbar-brand span {
+            font-size: 1.15rem;
+            font-weight: 900;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .navbar-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            text-decoration: none;
+            color: var(--muted);
+            padding: 0.7rem 1.2rem 0.6rem;
+            border-radius: 10px;
+            transition: all 0.2s;
+            min-width: 108px;
+        }
+        .navbar-nav-item i {
+            font-size: 2.3rem;
+            line-height: 1;
+        }
+        .navbar-nav-item span {
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+        .navbar-nav-item:hover, .navbar-nav-item.active {
+            color: var(--green);
+            background: var(--green-pale);
+        }
+
+        .navbar-hamburger {
+            display: none;
+            background: none;
+            border: 2px solid var(--green-light);
+            border-radius: 8px;
+            color: var(--green);
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 0.4rem 0.7rem;
+        }
+
+        .navbar-mobile-menu {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-bottom: 3px solid var(--green);
+            padding: 0.8rem 1.2rem;
+            gap: 0.3rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            z-index: 99;
+        }
         .navbar-mobile-menu.open { display: flex; }
-        .navbar-mobile-menu a { display: flex; align-items: center; gap: 0.6rem; color: var(--muted); text-decoration: none; font-weight: 700; font-size: 1.2rem; padding: 1rem 1.2rem; border-radius: 8px; transition: all 0.2s; }
-        .navbar-mobile-menu a:hover, .navbar-mobile-menu a.active { color: var(--green); background: var(--green-pale); }
-        .container { max-width: 1060px; margin: 0 auto; padding: 2rem 1.5rem 3rem; flex: 1; }
+        .navbar-mobile-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .navbar-mobile-menu a:hover, .navbar-mobile-menu a.active {
+            color: var(--green);
+            background: var(--green-pale);
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+            flex: 1;
+            width: 100%;
+        }
+
         .activity-header { margin-bottom: 2rem; }
-        .activity-header h1 { font-size: 2rem; font-weight: 900; color: var(--fg); margin-bottom: 0.3rem; }
-        .activity-header .subtitle { font-size: 1.1rem; color: var(--fg-secondary); font-weight: 600; }
-        .instruction-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 1.8rem; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .activity-header h1 {
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: var(--fg);
+            margin-bottom: 0.3rem;
+        }
+        .activity-header .subtitle {
+            font-size: 1.15rem;
+            color: var(--fg-secondary);
+            font-weight: 600;
+        }
+
+        /* ===== INSTRUÇÃO ===== */
+        .instruction-card {
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
         .instruction-card .instruction-text { flex: 1; }
-        .instruction-card .instruction-text p { font-size: 1.15rem; font-weight: 700; color: var(--fg); }
-        .instruction-card .instruction-text p+p { margin-top: 0.3rem; font-size: 1rem; color: var(--fg-secondary); font-weight: 600; }
-        .btn-play-instruction { flex-shrink: 0; width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--green); background: var(--green-pale); color: var(--green); font-size: 1.6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
-        .btn-play-instruction:hover, .btn-play-instruction.speaking { background: var(--green); color: #fff; }
-        .section-title { font-size: 1.4rem; font-weight: 800; color: var(--fg); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
-        .section-title i { color: var(--green); font-size: 1.2rem; }
-        /* CONSONANT GRID */
+        .instruction-card .instruction-text p {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--fg);
+        }
+        .instruction-card .instruction-text p + p {
+            margin-top: 0.35rem;
+            font-size: 1.05rem;
+            color: var(--fg-secondary);
+            font-weight: 600;
+        }
+
+        .btn-play-instruction {
+            flex-shrink: 0;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 3px solid var(--green);
+            background: var(--green-pale);
+            color: var(--green);
+            font-size: 1.7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s;
+        }
+        .btn-play-instruction:hover, .btn-play-instruction.speaking {
+            background: var(--green);
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .section-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--fg);
+            margin-bottom: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .section-title i { color: var(--green); font-size: 1.3rem; }
+
+        /* ===== GRADE DE CONSOANTES (DESIGN ACESSÍVEL E CLARO) ===== */
         .consonants-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1.1rem;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.15rem;
             margin-bottom: 2.5rem;
         }
+
         .consonant-card {
             background: var(--white);
             border: 2.5px solid #D7CCC8;
             border-radius: var(--radius);
-            padding: 1.25rem 0.75rem 1rem;
+            padding: 1.1rem 0.9rem 1rem;
             text-align: center;
             cursor: pointer;
             transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
@@ -82,6 +321,7 @@
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
+
         .consonant-card::before {
             content: '';
             position: absolute;
@@ -89,196 +329,818 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, var(--accent), var(--green));
+            background: linear-gradient(90deg, #1B5E20, #2E7D32, #66BB6A);
             border-radius: var(--radius) var(--radius) 0 0;
         }
+
         .consonant-card:hover {
             transform: translateY(-4px);
-            border-color: var(--accent);
-            box-shadow: 0 8px 22px rgba(0, 105, 92, 0.16);
+            border-color: var(--green);
+            box-shadow: 0 10px 24px rgba(46, 125, 50, 0.18);
         }
+
         .consonant-card:active {
             transform: scale(0.97);
         }
+
         .consonant-card.speaking {
             border-color: var(--green);
             background: var(--green-pale);
             box-shadow: 0 0 0 4px var(--green-light), 0 8px 22px rgba(46, 125, 50, 0.22);
             transform: scale(1.04);
         }
+
         .consonant-card:focus-visible {
             outline: 3px solid var(--green);
             outline-offset: 3px;
         }
-        .consonant-badge {
-            width: 58px;
-            height: 58px;
-            border-radius: 50%;
-            background: #E0F2F1;
-            color: var(--accent);
+
+        /* Top row with Letters + Thumbnail side-by-side */
+        .consonant-card-header {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.55rem;
-            margin-bottom: 0.15rem;
-            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.2rem 0;
         }
-        .consonant-card:hover .consonant-badge {
-            transform: scale(1.1) rotate(-6deg);
-            background: var(--accent);
-            color: #FFFFFF;
-        }
-        .consonant-card.speaking .consonant-badge {
-            background: var(--green);
-            color: #FFFFFF;
-            animation: pulse-badge 0.8s ease infinite;
-        }
-        @keyframes pulse-badge {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.14); }
-        }
+
         .consonant-letters {
             display: flex;
             align-items: baseline;
             justify-content: center;
-            gap: 0.35rem;
+            gap: 0.25rem;
             line-height: 1;
-            margin-top: 0.1rem;
         }
+
         .consonant-letters .letter-upper {
-            font-size: 2.7rem;
+            font-size: 2.8rem;
             font-weight: 900;
-            color: var(--accent);
+            color: var(--green-dark);
             letter-spacing: -0.5px;
         }
+
         .consonant-letters .letter-lower {
             font-size: 2rem;
             font-weight: 800;
             color: var(--fg-secondary);
         }
+
+        .consonant-card-thumb-wrap {
+            width: 64px;
+            height: 64px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid #C8E6C9;
+            background: #FFFFFF;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.22s ease;
+        }
+
+        .consonant-card:hover .consonant-card-thumb-wrap {
+            transform: scale(1.08) rotate(-3deg);
+            border-color: var(--green);
+        }
+
+        .consonant-card-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .consonant-badge-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 14px;
+            background: #E8F5E9;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            border: 2px solid #C8E6C9;
+            flex-shrink: 0;
+            transition: transform 0.22s ease;
+        }
+
+        .consonant-card:hover .consonant-badge-icon {
+            transform: scale(1.08) rotate(-3deg);
+            background: var(--green);
+            color: #FFFFFF;
+        }
+
         .consonant-word {
             font-size: 1.18rem;
             font-weight: 800;
             color: var(--fg);
             letter-spacing: 0.2px;
-            line-height: 1.2;
+            line-height: 1.25;
+            margin-top: 0.1rem;
         }
+
         .consonant-word .highlight {
-            color: var(--accent);
+            color: var(--green-dark);
             font-weight: 900;
             text-decoration: underline;
             text-decoration-thickness: 3px;
             text-underline-offset: 3px;
-            text-decoration-color: var(--accent);
+            text-decoration-color: var(--green-dark);
         }
-        .consonant-sound-btn {
+
+        .consonant-cartilha-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            background: #FAF3E0;
-            border: 1.5px solid #D7CCC8;
-            border-radius: 20px;
-            padding: 0.35rem 0.8rem;
-            font-size: 0.88rem;
+            background: #E8F5E9;
+            color: #1B5E20;
+            border: 1.5px solid #A5D6A7;
+            font-size: 0.82rem;
             font-weight: 800;
-            color: var(--fg-secondary);
-            font-family: 'Nunito', sans-serif;
-            pointer-events: none;
-            margin-top: 0.2rem;
-            transition: all 0.2s;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            margin-top: 0.15rem;
+            transition: all 0.2s ease;
         }
-        .consonant-card:hover .consonant-sound-btn {
-            background: #E0F2F1;
-            color: var(--accent);
-            border-color: var(--accent);
-        }
-        .consonant-card.speaking .consonant-sound-btn {
+
+        .consonant-card:hover .consonant-cartilha-badge {
             background: var(--green);
             color: #FFFFFF;
-            border-color: var(--green);
+            border-color: var(--green-dark);
         }
-        .opt-upper {
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--fg);
-        }
-        .opt-lower {
-            font-size: 1.45rem;
-            font-weight: 700;
-            color: var(--fg-secondary);
-            margin-left: 4px;
-        }
+
         .divider { border: none; height: 2px; background: var(--border); margin: 2rem 0 2.5rem; }
-        /* EXERCISE */
-        .exercise-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
-        .progress-label { font-size: 1rem; font-weight: 700; color: var(--muted); text-align: center; margin-bottom: 0.4rem; }
-        .progress-bar-track { background: var(--green-light); border-radius: 99px; height: 14px; margin-bottom: 1.5rem; overflow: hidden; }
-        .progress-bar-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.5s ease; width: 0%; }
-        .score-row { display: flex; align-items: center; justify-content: center; gap: 2rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
-        .score-item { display: flex; align-items: center; gap: 0.4rem; font-size: 1.05rem; font-weight: 700; color: var(--fg-secondary); }
-        .score-num { font-size: 1.4rem; font-weight: 900; min-width: 1.5ch; text-align: center; }
+
+        /* ===== EXERCÍCIO ===== */
+        .exercise-card {
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .progress-label {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--muted);
+            text-align: center;
+            margin-bottom: 0.4rem;
+        }
+        .progress-bar-track {
+            background: var(--green-light);
+            border-radius: 99px;
+            height: 14px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--green);
+            border-radius: 99px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        .score-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.8rem;
+            flex-wrap: wrap;
+        }
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--fg-secondary);
+        }
+        .score-num {
+            font-size: 1.5rem;
+            font-weight: 900;
+            min-width: 1.5ch;
+            text-align: center;
+        }
         .score-item.hits .score-num { color: var(--green-dark); }
         .score-item.misses .score-num { color: #C62828; }
-        .exercise-instruction { font-size: 1.15rem; font-weight: 700; color: var(--fg); text-align: center; margin-bottom: 1.2rem; }
-        .audio-row { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-        .btn-audio-exercise { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.9rem 1.8rem; font-size: 1.1rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 10px rgba(46,125,50,0.25); }
-        .btn-audio-exercise:hover { background: var(--green-dark); }
+
+        .exercise-instruction {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--fg);
+            text-align: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .audio-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .btn-audio-exercise {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: var(--green);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 0.95rem 1.9rem;
+            font-size: 1.15rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 10px rgba(46,125,50,0.25);
+        }
+        .btn-audio-exercise:hover { background: var(--green-dark); transform: translateY(-2px); }
         .btn-audio-exercise.speaking { animation: pulse-green 0.9s ease infinite; }
-        .btn-help-exercise { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--green-light); background: var(--green-pale); color: var(--green); font-size: 1.1rem; cursor: pointer; transition: all 0.2s; }
-        .btn-help-exercise:hover, .btn-help-exercise.speaking { background: var(--green); color: #fff; border-color: var(--green); }
-        .audio-hint { font-size: 0.95rem; color: var(--muted); font-weight: 600; }
+
+        .btn-help-exercise {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--green-light);
+            background: var(--green-pale);
+            color: var(--green);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-help-exercise:hover, .btn-help-exercise.speaking {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green);
+        }
+        .audio-hint { font-size: 1rem; color: var(--muted); font-weight: 700; }
+
         .question-area { text-align: center; margin-bottom: 1.8rem; }
-        .question-label { font-size: 1.1rem; font-weight: 700; color: var(--fg-secondary); }
-        .question-word { font-size: 2rem; font-weight: 900; color: var(--fg); display: block; margin-top: 0.2rem; }
-        .options-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
-        .btn-option { display: flex; align-items: center; justify-content: center; background: var(--bg); border: 3px solid var(--border); border-radius: var(--radius-sm); padding: 1.1rem 0.5rem; font-size: 1.8rem; font-weight: 900; font-family: 'Nunito', sans-serif; color: var(--fg); cursor: pointer; transition: all 0.2s; min-height: 76px; }
-        .btn-option:hover:not(:disabled) { border-color: var(--accent); background: #E0F2F1; transform: translateY(-2px); }
+        .question-label { font-size: 1.2rem; font-weight: 700; color: var(--fg-secondary); }
+        .question-word {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--fg);
+            display: block;
+            margin-top: 0.3rem;
+            letter-spacing: 0.5px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.9rem;
+            margin-bottom: 1.4rem;
+        }
+        .btn-option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            border: 3px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1.1rem 0.5rem;
+            font-size: 1.8rem;
+            font-weight: 900;
+            font-family: 'Nunito', sans-serif;
+            color: var(--fg);
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 80px;
+        }
+        .btn-option:hover:not(:disabled) {
+            border-color: var(--green);
+            background: #E8F5E9;
+            transform: translateY(-2px);
+        }
         .btn-option:disabled { cursor: default; opacity: 0.65; }
-        .btn-option.correct { border-color: var(--green); background: var(--green-pale); color: var(--green-dark); opacity: 1 !important; animation: pop-correct 0.35s ease; }
-        .btn-option.wrong { border-color: #EF9A9A; background: #FFF3F3; color: #C62828; opacity: 1 !important; animation: shake 0.4s ease; }
+        .btn-option.correct {
+            border-color: var(--green);
+            background: var(--green-pale);
+            color: var(--green-dark);
+            opacity: 1 !important;
+            animation: pop-correct 0.35s ease;
+        }
+        .btn-option.wrong {
+            border-color: #EF9A9A;
+            background: #FFF3F3;
+            color: #C62828;
+            opacity: 1 !important;
+            animation: shake 0.4s ease;
+        }
+
+        .opt-upper { font-size: 2.1rem; font-weight: 900; color: var(--fg); }
+        .opt-lower { font-size: 1.55rem; font-weight: 700; color: var(--fg-secondary); margin-left: 5px; }
+
         @keyframes pop-correct { 0%{transform:scale(1)} 50%{transform:scale(1.07)} 100%{transform:scale(1)} }
         @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-5px)} 40%{transform:translateX(5px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
-        @keyframes pulse-green { 0%,100%{box-shadow:0 0 0 0 rgba(46,125,50,0.3)} 50%{box-shadow:0 0 0 10px rgba(46,125,50,0)} }
+        @keyframes pulse-green { 0%,100%{box-shadow:0 0 0 0 rgba(46,125,50,0.35)} 50%{box-shadow:0 0 0 12px rgba(46,125,50,0)} }
         @keyframes fade-up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-        .feedback-area { text-align: center; min-height: 3.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; }
-        .feedback-msg { font-size: 1.3rem; font-weight: 800; border-radius: var(--radius-sm); padding: 0.7rem 1.5rem; display: inline-flex; align-items: center; gap: 0.5rem; animation: fade-up 0.3s ease; }
-        .feedback-msg.success { background: var(--green-pale); color: var(--green-dark); border: 2px solid var(--green-light); }
-        .feedback-msg.error { background: #FFF8E1; color: #E65100; border: 2px solid #FFE0B2; }
-        .btn-next { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.85rem 2rem; font-size: 1.05rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
-        .btn-next:hover { background: var(--green-dark); }
-        /* COMPLETION */
+
+        .feedback-area {
+            text-align: center;
+            min-height: 3.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+        .feedback-msg {
+            font-size: 1.35rem;
+            font-weight: 800;
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1.6rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            animation: fade-up 0.3s ease;
+        }
+        .feedback-msg.success {
+            background: var(--green-pale);
+            color: var(--green-dark);
+            border: 2px solid var(--green-light);
+        }
+        .feedback-msg.error {
+            background: #FFF8E1;
+            color: #E65100;
+            border: 2px solid #FFE0B2;
+        }
+
+        .btn-next {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: var(--green);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 0.9rem 2.2rem;
+            font-size: 1.15rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 10px rgba(46,125,50,0.25);
+        }
+        .btn-next:hover { background: var(--green-dark); transform: translateY(-2px); }
+
+        /* ===== TELA DE CONCLUSÃO ===== */
         .completion { text-align: center; padding: 2.5rem 1.5rem; display: none; }
         .completion.visible { display: block; animation: fade-up 0.4s ease; }
-        .completion-icon { font-size: 3.5rem; color: var(--green); margin-bottom: 0.8rem; }
-        .completion h2 { font-size: 1.8rem; font-weight: 900; margin-bottom: 0.4rem; }
-        .completion p { font-size: 1.1rem; color: var(--fg-secondary); font-weight: 600; margin-bottom: 2rem; }
+        .completion-icon { font-size: 3.8rem; color: var(--green); margin-bottom: 0.8rem; }
+        .completion h2 { font-size: 2rem; font-weight: 900; margin-bottom: 0.4rem; }
+        .completion p { font-size: 1.2rem; color: var(--fg-secondary); font-weight: 600; margin-bottom: 2rem; }
         .completion-stats { display: flex; justify-content: center; gap: 2.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
         .stat { text-align: center; }
-        .stat-value { font-size: 2.5rem; font-weight: 900; line-height: 1; }
-        .stat-label { font-size: 0.95rem; font-weight: 700; color: var(--muted); margin-top: 0.2rem; }
-        .error-summary { background: #FFF8E1; border: 2px solid #FFE0B2; border-radius: var(--radius-sm); padding: 1.2rem 1.5rem; margin-bottom: 2rem; text-align: left; max-width: 480px; margin-left: auto; margin-right: auto; }
-        .error-summary h3 { font-size: 1.05rem; font-weight: 800; color: #E65100; margin-bottom: 0.6rem; }
+        .stat-value { font-size: 2.6rem; font-weight: 900; line-height: 1; }
+        .stat-label { font-size: 1rem; font-weight: 800; color: var(--muted); margin-top: 0.2rem; }
+
+        .error-summary {
+            background: #FFF8E1;
+            border: 2px solid #FFE0B2;
+            border-radius: var(--radius-sm);
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .error-summary h3 { font-size: 1.1rem; font-weight: 800; color: #E65100; margin-bottom: 0.6rem; }
         .error-summary ul { list-style: none; padding: 0; }
-        .error-summary li { font-size: 1rem; font-weight: 700; color: var(--fg-secondary); padding: 0.25rem 0; }
+        .error-summary li { font-size: 1.05rem; font-weight: 700; color: var(--fg-secondary); padding: 0.3rem 0; border-bottom: 1px dashed #FFE0B2; }
         .wrong-answer { color: #C62828; text-decoration: line-through; font-weight: 800; }
         .correct-answer { color: var(--green-dark); font-weight: 900; }
-        .btn-restart { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 1rem 2.5rem; font-size: 1.1rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
+
+        .btn-restart {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            background: var(--green);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 1rem 2.5rem;
+            font-size: 1.15rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
         .btn-restart:hover { background: var(--green-dark); }
-        .footer { background: var(--white); border-top: 2px solid var(--border); padding: 1.2rem 1.5rem; text-align: center; font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+
+        /* ===== MODAL CARTILHA ILUSTRADA (ESTILO CAMINHO SUAVE) ===== */
+        .cartilha-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+        .cartilha-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .cartilha-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(46, 30, 20, 0.78);
+            backdrop-filter: blur(4px);
+        }
+        .cartilha-dialog {
+            position: relative;
+            background: #FFFDF8;
+            border-radius: 24px;
+            border: 3.5px solid var(--green);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+            width: 100%;
+            max-width: 960px;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: modal-pop 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes modal-pop {
+            from { transform: scale(0.92) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .cartilha-header {
+            background: #FAF3E0;
+            border-bottom: 2px solid #E0D5C1;
+            padding: 1rem 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+        .cartilha-header-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .cartilha-badge {
+            font-size: 0.85rem;
+            font-weight: 800;
+            padding: 0.3rem 0.8rem;
+            border-radius: 99px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #E8F5E9;
+            color: #2E7D32;
+            border: 1.5px solid #A5D6A7;
+        }
+        .cartilha-title {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: #3E2723;
+        }
+        .cartilha-btn-close {
+            background: #FFFFFF;
+            border: 2px solid #D7CCC8;
+            color: #5D4037;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
+            padding: 0.5rem 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
+        }
+        .cartilha-btn-close:hover {
+            background: #FFEBEE;
+            color: #C62828;
+            border-color: #EF9A9A;
+        }
+        .cartilha-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr 1.15fr;
+            gap: 1.8rem;
+            align-items: start;
+        }
+        .cartilha-image-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .cartilha-img-wrapper {
+            width: 100%;
+            max-width: 380px;
+            background: #FFFFFF;
+            border: 3px solid #D7CCC8;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(62,39,35,0.12);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 380px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cartilha-img-wrapper:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 30px rgba(46,125,50,0.2);
+        }
+        .cartilha-img {
+            width: 100%;
+            height: auto;
+            max-height: 480px;
+            object-fit: contain;
+            display: block;
+        }
+        .cartilha-placeholder {
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .cartilha-placeholder-svg {
+            width: 140px;
+            height: 140px;
+        }
+        .cartilha-placeholder-text {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #5D4037;
+        }
+        .cartilha-image-hint {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #6D4C41;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-align: center;
+        }
+        .cartilha-info-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .cartilha-letters-display {
+            background: #FAF3E0;
+            border: 2px solid #E0D5C1;
+            border-radius: 16px;
+            padding: 0.9rem 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .cartilha-big-upper {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #2E7D32;
+            line-height: 1;
+        }
+        .cartilha-big-lower {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #5D4037;
+            line-height: 1;
+        }
+        .cartilha-word-tag {
+            margin-left: auto;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #3E2723;
+            background: #FFFFFF;
+            padding: 0.4rem 1rem;
+            border-radius: 12px;
+            border: 2px solid #C8E6C9;
+        }
+        .cartilha-phrase-box {
+            background: #E8F5E9;
+            border: 2.5px solid #81C784;
+            border-radius: 16px;
+            padding: 1.1rem 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .cartilha-phrase-box:hover {
+            background: #C8E6C9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(46,125,50,0.18);
+        }
+        .cartilha-phrase-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #2E7D32;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        .cartilha-phrase-label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #1B5E20;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .cartilha-phrase-quote {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #1B5E20;
+            line-height: 1.3;
+            margin-top: 0.1rem;
+        }
+        .cartilha-words-section {
+            background: #FFFFFF;
+            border: 2px solid #E0D5C1;
+            border-radius: 16px;
+            padding: 1.1rem 1.3rem;
+        }
+        .cartilha-words-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+        .cartilha-words-title {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #3E2723;
+        }
+        .cartilha-words-hint {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #795548;
+        }
+        .cartilha-words-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+        .cartilha-word-pill {
+            background: #E8F5E9;
+            border: 2px solid #C8E6C9;
+            color: #1B5E20;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            padding: 0.55rem 1.1rem;
+            border-radius: 99px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        .cartilha-word-pill:hover {
+            background: #C8E6C9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(46,125,50,0.2);
+        }
+        .cartilha-word-pill.speaking {
+            background: #2E7D32;
+            color: #FFFFFF;
+            animation: pulse-green 0.8s ease infinite;
+        }
+        .cartilha-audio-actions {
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: center;
+        }
+        .cartilha-btn-audio-main {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, #1B5E20, #2E7D32);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 99px;
+            padding: 0.85rem 1.8rem;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(46,125,50,0.3);
+            transition: all 0.22s ease;
+            width: 100%;
+            justify-content: center;
+        }
+        .cartilha-btn-audio-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(46,125,50,0.4);
+        }
+        .cartilha-btn-audio-main.speaking {
+            animation: pulse-green 0.9s ease infinite;
+        }
+        .cartilha-footer {
+            background: #FAF3E0;
+            border-top: 2px solid #E0D5C1;
+            padding: 1rem 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .cartilha-nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #FFFFFF;
+            border: 2px solid #D7CCC8;
+            color: #3E2723;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
+            padding: 0.55rem 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cartilha-nav-btn:hover:not(:disabled) {
+            background: #E8F5E9;
+            border-color: #2E7D32;
+            color: #1B5E20;
+        }
+        .cartilha-step-indicator {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #5D4037;
+        }
+
+        .footer {
+            background: var(--white);
+            border-top: 2px solid var(--border);
+            padding: 1.2rem 1.5rem;
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
         .footer i { color: var(--green); }
-        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-        @media (max-width: 768px) { .navbar-nav { display: none; } .navbar-hamburger { display: flex; align-items: center; justify-content: center; } }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-nav { display: none; }
+            .navbar-hamburger { display: flex; align-items: center; justify-content: center; }
+            .cartilha-body {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+                padding: 1rem;
+            }
+        }
         @media (max-width: 600px) {
             .consonants-grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
-            .consonant-card { padding: 1.1rem 0.5rem 0.9rem; }
-            .consonant-badge { width: 52px; height: 52px; font-size: 1.4rem; }
+            .consonant-card { padding: 1rem 0.5rem 0.85rem; }
+            .consonant-card-thumb-wrap, .consonant-badge-icon { width: 54px; height: 54px; }
             .consonant-letters .letter-upper { font-size: 2.3rem; }
             .consonant-letters .letter-lower { font-size: 1.7rem; }
             .consonant-word { font-size: 1.05rem; }
-            .consonant-sound-btn { font-size: 0.8rem; padding: 0.25rem 0.65rem; }
             .instruction-card { flex-direction: column; text-align: center; gap: 1rem; }
             .options-grid { grid-template-columns: repeat(3, 1fr); }
-            .btn-option { min-height: 68px; padding: 0.8rem 0.4rem; }
+            .btn-option { min-height: 70px; padding: 0.8rem 0.4rem; }
+            .cartilha-footer { justify-content: center; }
         }
     </style>
 </head>
@@ -331,7 +1193,7 @@
 <main class="container" id="main-content">
     <header class="activity-header">
         <h1>Consoantes e Sons</h1>
-        <p class="subtitle">Aprenda os sons das letras consoantes com palavras e imagens do dia a dia.</p>
+        <p class="subtitle">Aprenda os sons das letras consoantes com palavras e imagens da Cartilha Ilustrada.</p>
     </header>
 
     <div id="reviewBanner" style="display:none; align-items:center; gap:14px; background:#E8F5E9; border:2px solid #81C784; border-radius:16px; padding:14px 20px; margin-bottom:20px; color:#1B5E20; box-shadow:0 4px 12px rgba(46,125,50,0.10);">
@@ -344,20 +1206,20 @@
 
     <div class="instruction-card">
         <div class="instruction-text">
-            <p>Conheça as consoantes do alfabeto.</p>
-            <p>Toque em cada cartão para ver a letra maiúscula e minúscula e ouvir o seu som.</p>
+            <p>Conheça as 21 consoantes do alfabeto.</p>
+            <p>Toque em cada cartão para ver a imagem da cartilha, maiúscula e minúscula e ouvir a leitura completa.</p>
         </div>
         <button class="btn-play-instruction" id="btnInstruction" aria-label="Ouvir instrução" onclick="playInstruction()">
-            <i class="fas fa-play"></i>
+            <i class="fas fa-play" aria-hidden="true"></i>
         </button>
     </div>
 
     <section aria-labelledby="title-consonants">
         <h2 class="section-title" id="title-consonants">
-            <i class="fas fa-star"></i> Conheça as Consoantes
+            <i class="fas fa-star" aria-hidden="true"></i> Conheça as Consoantes
         </h2>
         <div class="consonants-grid" role="list" id="consonantsGrid">
-            <!-- Gerado por JS abaixo para manter o HTML limpo -->
+            <!-- Gerado dinamicamente por consoantes.js com a letra e a foto lado a lado -->
         </div>
     </section>
 
@@ -365,7 +1227,7 @@
 
     <section aria-labelledby="title-exercise">
         <h2 class="section-title" id="title-exercise">
-            <i class="fas fa-pencil-alt"></i> Agora é sua vez
+            <i class="fas fa-pencil-alt" aria-hidden="true"></i> Agora é sua vez
         </h2>
 
         <div id="exerciseLayout">
@@ -381,10 +1243,10 @@
                 <p class="exercise-instruction">Escolha a <strong>primeira consoante</strong> da palavra.</p>
                 <div class="audio-row">
                     <button class="btn-audio-exercise" id="btnExerciseAudio" onclick="playQuestionAudio()" aria-label="Ouvir a palavra">
-                        <i class="fas fa-volume-up"></i> Ouvir a palavra
+                        <i class="fas fa-volume-up" aria-hidden="true"></i> Ouvir a palavra
                     </button>
-                    <button class="btn-help-exercise" id="btnHelpExercise" onclick="playHelpExercise()" title="Ouvir instrução">
-                        <i class="fas fa-play"></i>
+                    <button class="btn-help-exercise" id="btnHelpExercise" onclick="playHelpExercise()" title="Ouvir instrução" aria-label="Ouvir instrução da pergunta">
+                        <i class="fas fa-play" aria-hidden="true"></i>
                     </button>
                     <span class="audio-hint">Toque para ouvir</span>
                 </div>
@@ -398,7 +1260,7 @@
         </div>
 
         <div class="completion" id="completionScreen">
-            <div class="completion-icon"><i class="fas fa-trophy"></i></div>
+            <div class="completion-icon"><i class="fas fa-trophy" aria-hidden="true"></i></div>
             <h2>Parabéns! Você terminou!</h2>
             <p id="completionMsg">Veja como você se saiu.</p>
             <div class="completion-stats">
@@ -407,85 +1269,107 @@
                 <div class="stat"><div class="stat-value" style="color:var(--green)" id="finalTotal">0</div><div class="stat-label">Total</div></div>
             </div>
             <div class="error-summary" id="errorSummary" style="display:none;">
-                <h3><i class="fas fa-exclamation-triangle"></i> Palavras para revisar</h3>
+                <h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Palavras para revisar</h3>
                 <ul id="errorList"></ul>
             </div>
             <div style="display:flex;flex-direction:column;gap:14px;max-width:480px;margin:24px auto 0;">
                 <button type="button" id="btnSalvarEVerOutras" class="btn-restart" onclick="salvarEVerOutras(event)" style="background:var(--green);color:#fff;border:none;box-shadow:0 4px 14px rgba(46,125,50,0.3);">
-                    <i class="fas fa-check-circle"></i> Salvar e Ver Outras Lições
+                    <i class="fas fa-check-circle" aria-hidden="true"></i> Salvar e Ver Outras Lições
                 </button>
                 <button type="button" class="btn-restart" onclick="restartExercise()" style="background:#FAF3E0;color:#3E2723;border:2px solid #C8E6C9;">
-                    <i class="fas fa-redo"></i> Refazer atividade
+                    <i class="fas fa-redo" aria-hidden="true"></i> Refazer atividade
                 </button>
             </div>
         </div>
     </section>
+
+    <!-- MODAL CARTILHA ILUSTRADA (ESTILO CAMINHO SUAVE) -->
+    <div id="cartilhaModal" class="cartilha-modal" role="dialog" aria-modal="true" aria-labelledby="cartilhaModalTitle" hidden>
+        <div class="cartilha-backdrop" onclick="fecharCartilha()"></div>
+        <div class="cartilha-dialog" role="document">
+            <div class="cartilha-header">
+                <div class="cartilha-header-title-wrap">
+                    <span class="cartilha-badge" id="cartilhaTipoLetra">Consoante</span>
+                    <h2 id="cartilhaModalTitle" class="cartilha-title">Cartilha Ilustrada — Consoante B</h2>
+                </div>
+                <button type="button" class="cartilha-btn-close" onclick="fecharCartilha()" aria-label="Fechar cartilha (ou aperte Esc)">
+                    <i class="fas fa-times" aria-hidden="true"></i> Fechar
+                </button>
+            </div>
+
+            <div class="cartilha-body">
+                <div class="cartilha-image-col">
+                    <div class="cartilha-img-wrapper" id="cartilhaImgWrapper" onclick="tocarFraseCartilha()" title="Toque para ouvir a frase da lição" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')tocarFraseCartilha()">
+                        <img id="cartilhaImage" src="" alt="Página da cartilha da letra" class="cartilha-img" />
+                        <div id="cartilhaPlaceholder" class="cartilha-placeholder" style="display:none;">
+                            <div id="cartilhaPlaceholderSvgWrap" class="cartilha-placeholder-svg"></div>
+                            <p id="cartilhaPlaceholderText" class="cartilha-placeholder-text">Ilustração da consoante</p>
+                        </div>
+                    </div>
+                    <div class="cartilha-image-hint">
+                        <i class="fas fa-hand-pointer" aria-hidden="true"></i> Toque na imagem ou nos botões ao lado para ouvir
+                    </div>
+                </div>
+
+                <div class="cartilha-info-col">
+                    <div class="cartilha-letters-display">
+                        <span class="cartilha-big-upper" id="cartilhaBigUpper">B</span>
+                        <span class="cartilha-big-lower" id="cartilhaBigLower">b</span>
+                        <span class="cartilha-word-tag" id="cartilhaWordTag">Bola</span>
+                    </div>
+
+                    <div class="cartilha-phrase-box" id="cartilhaPhraseBox" onclick="tocarFraseCartilha()" role="button" tabindex="0" aria-label="Ouvir a frase da lição" onkeydown="if(event.key==='Enter'||event.key===' ')tocarFraseCartilha()">
+                        <div class="cartilha-phrase-icon" aria-hidden="true">
+                            <i class="fas fa-volume-high"></i>
+                        </div>
+                        <div class="cartilha-phrase-text">
+                            <span class="cartilha-phrase-label">Frase da lição:</span>
+                            <p id="cartilhaPhraseText" class="cartilha-phrase-quote">"A bola é colorida."</p>
+                        </div>
+                    </div>
+
+                    <div class="cartilha-words-section">
+                        <div class="cartilha-words-header">
+                            <span class="cartilha-words-title"><i class="fas fa-book-open" aria-hidden="true"></i> Palavras com esta consoante:</span>
+                            <span class="cartilha-words-hint">Toque na palavra para ouvir</span>
+                        </div>
+                        <div class="cartilha-words-grid" id="cartilhaWordsGrid" role="group" aria-label="Palavras da lição">
+                            <!-- Preenchido dinamicamente via JS -->
+                        </div>
+                    </div>
+
+                    <div class="cartilha-audio-actions">
+                        <button type="button" class="cartilha-btn-audio-main" id="btnCartilhaAudioCompleto" onclick="tocarAudioCompletoCartilha()" aria-label="Ouvir toda a página devagar">
+                            <i class="fas fa-volume-high" aria-hidden="true"></i>
+                            <span>Ouvir toda a página devagar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cartilha-footer">
+                <button type="button" class="cartilha-nav-btn prev" id="btnCartilhaPrev" onclick="cartilhaAnterior()" aria-label="Ver consoante anterior">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i> Consoante Anterior
+                </button>
+                <div class="cartilha-step-indicator" id="cartilhaCounter" aria-live="polite">
+                    Consoante 1 de 21
+                </div>
+                <button type="button" class="cartilha-nav-btn next" id="btnCartilhaNext" onclick="cartilhaProxima()" aria-label="Ver próxima consoante">
+                    Próxima Consoante <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 </main>
 
 <footer class="footer">
-    <i class="fas fa-seedling"></i> AprendIDos — Alfabetização para todos
+    <i class="fas fa-seedling" aria-hidden="true"></i> AprendIDos — Alfabetização para todos
 </footer>
 <div id="srAnnouncer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
 <div vw class="enabled"><div vw-access-button class="active"></div><div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div></div>
 <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
-
-<script>
-// Gera os cards das 19 consoantes (sem W e Y) com imagens, maiúsculas, minúsculas e som
-(function() {
-    var cons = [
-        { letter: 'B', lower: 'b', word: 'Bola',   rest: 'ola',   icon: 'fa-futbol' },
-        { letter: 'C', lower: 'c', word: 'Casa',   rest: 'asa',   icon: 'fa-house' },
-        { letter: 'D', lower: 'd', word: 'Dado',   rest: 'ado',   icon: 'fa-dice' },
-        { letter: 'F', lower: 'f', word: 'Faca',   rest: 'aca',   icon: 'fa-utensils' },
-        { letter: 'G', lower: 'g', word: 'Gato',   rest: 'ato',   icon: 'fa-cat' },
-        { letter: 'H', lower: 'h', word: 'Homem',  rest: 'omem',  icon: 'fa-user' },
-        { letter: 'J', lower: 'j', word: 'Janela', rest: 'anela', icon: 'fa-table-cells-large' },
-        { letter: 'K', lower: 'k', word: 'Kiwi',   rest: 'iwi',   icon: 'fa-lemon' },
-        { letter: 'L', lower: 'l', word: 'Lua',    rest: 'ua',    icon: 'fa-moon' },
-        { letter: 'M', lower: 'm', word: 'Mão',    rest: 'ão',    icon: 'fa-hand' },
-        { letter: 'N', lower: 'n', word: 'Nuvem',  rest: 'uvem',  icon: 'fa-cloud' },
-        { letter: 'P', lower: 'p', word: 'Pão',    rest: 'ão',    icon: 'fa-bread-slice' },
-        { letter: 'Q', lower: 'q', word: 'Queijo', rest: 'ueijo', icon: 'fa-cheese' },
-        { letter: 'R', lower: 'r', word: 'Rato',   rest: 'ato',   icon: 'fa-paw' },
-        { letter: 'S', lower: 's', word: 'Sol',    rest: 'ol',    icon: 'fa-sun' },
-        { letter: 'T', lower: 't', word: 'Terra',  rest: 'erra',  icon: 'fa-seedling' },
-        { letter: 'V', lower: 'v', word: 'Vaca',   rest: 'aca',   icon: 'fa-cow' },
-        { letter: 'X', lower: 'x', word: 'Xícara', rest: 'ícara', icon: 'fa-mug-hot' },
-        { letter: 'Z', lower: 'z', word: 'Zebra',  rest: 'ebra',  icon: 'fa-horse' }
-    ];
-    var grid = document.getElementById('consonantsGrid');
-    if (grid) {
-        cons.forEach(function(c) {
-            var div = document.createElement('div');
-            div.className = 'consonant-card';
-            div.setAttribute('data-consonant', c.letter);
-            div.setAttribute('role', 'button');
-            div.setAttribute('tabindex', '0');
-            div.setAttribute('aria-label', 'Letra ' + c.letter + ' maiúscula e ' + c.lower + ' minúscula, de ' + c.word + '. Toque para ouvir o som.');
-            div.setAttribute('onclick', "speakConsonant('" + c.letter + "')");
-            div.setAttribute('onkeydown', "if(event.key==='Enter'||event.key===' ')speakConsonant('" + c.letter + "')");
-            div.innerHTML =
-                '<div class="consonant-badge" aria-hidden="true">' +
-                    '<i class="fas ' + c.icon + '"></i>' +
-                '</div>' +
-                '<div class="consonant-letters" aria-hidden="true">' +
-                    '<span class="letter-upper">' + c.letter + '</span>' +
-                    '<span class="letter-lower">' + c.lower + '</span>' +
-                '</div>' +
-                '<div class="consonant-word" aria-hidden="true">' +
-                    '<span class="highlight">' + c.letter + '</span>' + c.rest +
-                '</div>' +
-                '<span class="consonant-sound-btn" aria-hidden="true">' +
-                    '<i class="fas fa-volume-high"></i>' +
-                    '<span>Ouvir</span>' +
-                '</span>';
-            grid.appendChild(div);
-        });
-    }
-})();
-</script>
 
 <script src="consoantes.js"></script>
 </body>

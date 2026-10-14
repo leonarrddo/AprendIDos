@@ -100,6 +100,7 @@ export async function getCurrentUser() {
 const ALLOWED_REDIRECT_PATHS = new Set([
   'index.html',
   'inicio.html',
+  'menu.html',
   'login.html',
   'cadastro.html',
   'licoes.html',

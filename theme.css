@@ -1,0 +1,567 @@
+/* ==========================================================================
+   AprendIDos - Sistema de Temas (Modo Claro & Modo Escuro Acessível)
+   Focado em acessibilidade, alto contraste e conforto visual para idosos
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   VARIÁVEIS DE TEMA
+   -------------------------------------------------------------------------- */
+:root {
+  --tema-transicao: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  --cor-sol: #F59E0B;
+  --cor-lua: #38BDF8;
+}
+
+/* Modo Escuro Global */
+body.dark-mode,
+html.dark-mode body {
+  /* Paleta Base Escura Confortável (WCAG AAA) */
+  --bg: #12161A;
+  --bg-card: #1E2836;
+  --white: #1E2836;
+  --fg: #F8FAFC;
+  --fg-secondary: #CBD5E1;
+  --muted: #94A3B8;
+  --border: #334155;
+
+  /* Verdes Acessíveis e Brilhantes no Escuro */
+  --green: #22C55E;
+  --green-light: #166534;
+  --green-pale: #133924;
+  --green-dark: #4ADE80;
+  --green-mid: #22C55E;
+  --accent-letter: #4ADE80;
+
+  background-color: #12161A !important;
+  color: #F8FAFC !important;
+}
+
+/* --------------------------------------------------------------------------
+   BARRA SUPERIOR DE ACESSIBILIDADE E USUÁRIO (MENU.HTML)
+   -------------------------------------------------------------------------- */
+.barra-superior-acessibilidade {
+  width: 100%;
+  background-color: #EFE8DC;
+  border-bottom: 2px solid #DBCFB9;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1020;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: var(--tema-transicao);
+}
+
+body.dark-mode .barra-superior-acessibilidade {
+  background-color: #182029;
+  border-bottom: 2px solid #2B3846;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.container-barra-acessibilidade {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.usuario-identificacao {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-usuario-circulo {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #007A43 0%, #2E7D32 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  box-shadow: 0 2px 8px rgba(0, 122, 67, 0.3);
+  flex-shrink: 0;
+}
+
+.info-usuario-texto {
+  display: flex;
+  flex-direction: column;
+}
+
+.saudacao-pequena {
+  font-size: 13px;
+  font-weight: 600;
+  color: #795548;
+  line-height: 1.1;
+}
+
+body.dark-mode .saudacao-pequena {
+  color: #94A3B8;
+}
+
+.nome-usuario-destaque {
+  font-size: 17px;
+  font-weight: 800;
+  color: #2B1B0E;
+  line-height: 1.2;
+}
+
+body.dark-mode .nome-usuario-destaque {
+  color: #F8FAFC;
+}
+
+.acoes-acessibilidade-topo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------------------
+   INTERRUPTOR DE TEMA ESTRATÉGICO (SEGMENTED SWITCH PILL)
+   Criado especificamente para que idosos vejam e entendam imediatamente!
+   -------------------------------------------------------------------------- */
+.aprendidos-theme-switch {
+  display: inline-flex;
+  align-items: center;
+  background-color: #E2D9C8;
+  border: 2px solid #C9BBA5;
+  border-radius: 50px;
+  padding: 4px;
+  position: relative;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08);
+  transition: var(--tema-transicao);
+}
+
+body.dark-mode .aprendidos-theme-switch {
+  background-color: #0F172A;
+  border-color: #334155;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.theme-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 40px;
+  background: transparent;
+  color: #5D4037;
+  font-family: 'Nunito', 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  outline: none;
+  user-select: none;
+}
+
+.theme-switch-btn .icon-sol {
+  font-size: 18px;
+  color: #F59E0B;
+  transition: transform 0.3s ease;
+}
+
+.theme-switch-btn .icon-lua {
+  font-size: 18px;
+  color: #64748B;
+  transition: transform 0.3s ease;
+}
+
+/* Estado Ativo: Modo Claro */
+.theme-switch-btn.active.btn-claro {
+  background-color: #FFFFFF;
+  color: #2B1B0E;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 800;
+}
+
+.theme-switch-btn.active.btn-claro .icon-sol {
+  transform: rotate(20deg) scale(1.15);
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.5));
+}
+
+/* Estado Ativo: Modo Escuro */
+body.dark-mode .theme-switch-btn {
+  color: #94A3B8;
+}
+
+body.dark-mode .theme-switch-btn.active.btn-escuro {
+  background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+  color: #FFFFFF;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+  border: 1px solid #475569;
+  font-weight: 800;
+}
+
+body.dark-mode .theme-switch-btn.active.btn-escuro .icon-lua {
+  color: #38BDF8;
+  transform: rotate(-15deg) scale(1.15);
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+}
+
+.theme-switch-btn:hover:not(.active) {
+  background-color: rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+body.dark-mode .theme-switch-btn:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #E2E8F0;
+}
+
+.theme-switch-btn:focus-visible {
+  outline: 3px solid #007A43;
+  outline-offset: 2px;
+}
+
+body.dark-mode .theme-switch-btn:focus-visible {
+  outline: 3px solid #38BDF8;
+  outline-offset: 2px;
+}
+
+/* Wrapper para Navbars e Botão Flutuante de Páginas de Entrada */
+.navbar-theme-wrapper {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.floating-theme-switch {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 9999;
+  border-radius: 50px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+  animation: fadeInDown 0.4s ease both;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --------------------------------------------------------------------------
+   BOTÃO DE SAIR NO MENU (ESTILO ACESSÍVEL)
+   -------------------------------------------------------------------------- */
+.btn-sair-acessivel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #FFEBEB;
+  color: #DC3545;
+  border: 1.5px solid #FFCDD2;
+  border-radius: 40px;
+  padding: 8px 18px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-sair-acessivel:hover {
+  background-color: #FFCDD2;
+  transform: translateY(-1px);
+}
+
+body.dark-mode .btn-sair-acessivel {
+  background-color: #361B20;
+  color: #F87171;
+  border-color: #5C262C;
+}
+
+body.dark-mode .btn-sair-acessivel:hover {
+  background-color: #4C242A;
+}
+
+/* --------------------------------------------------------------------------
+   NOTIFICAÇÃO TOAST VISUAL DE TEMA (COM FEEDBACK CLARO)
+   -------------------------------------------------------------------------- */
+.toast-tema-flutuante {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  background: #2B1B0E;
+  color: #FFFFFF;
+  padding: 14px 22px;
+  border-radius: 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 10000;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast-tema-flutuante.visivel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+body.dark-mode .toast-tema-flutuante {
+  background: #1E293B;
+  color: #F8FAFC;
+  border: 1px solid #334155;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   CUSTOMIZAÇÕES ESPECÍFICAS DE MENU.HTML NO MODO ESCURO
+   -------------------------------------------------------------------------- */
+body.dark-mode .header-superior {
+  background-color: #12161A !important;
+}
+
+body.dark-mode .titulo-principal {
+  color: #F8FAFC !important;
+}
+
+body.dark-mode .titulo-principal .aprend {
+  color: #34D399 !important;
+}
+
+body.dark-mode .titulo-principal .id {
+  color: #FBBF24 !important;
+}
+
+body.dark-mode .titulo-principal .os {
+  color: #34D399 !important;
+}
+
+body.dark-mode .subtitulo-header {
+  color: #CBD5E1 !important;
+}
+
+body.dark-mode .cartao-menu {
+  background-color: #1E2836 !important;
+  color: #F8FAFC !important;
+  border: 2px solid #2E3E50 !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .cartao-menu:hover,
+body.dark-mode .cartao-menu:focus-visible {
+  background-color: #263345 !important;
+  border-color: #34D399 !important;
+  box-shadow: 0 8px 25px rgba(52, 211, 153, 0.25) !important;
+  transform: scale(1.05);
+}
+
+body.dark-mode .cartao-menu .icone-menu {
+  color: #34D399 !important;
+}
+
+body.dark-mode .cartao-menu .texto-menu {
+  color: #F8FAFC !important;
+}
+
+body.dark-mode .secao-hero {
+  background-color: #161D24 !important;
+  border-top: 1px solid #283544 !important;
+  border-bottom: 1px solid #283544 !important;
+}
+
+body.dark-mode .titulo-hero {
+  color: #F8FAFC !important;
+}
+
+body.dark-mode .texto-hero {
+  color: #CBD5E1 !important;
+}
+
+body.dark-mode .cartao-ilustracao {
+  background-color: #1E2836 !important;
+  border: 2px solid #2E3E50 !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .botao-principal {
+  background-color: #16A34A !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.4) !important;
+}
+
+body.dark-mode .botao-principal:hover,
+body.dark-mode .botao-principal:focus-visible {
+  background-color: #22C55E !important;
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.5) !important;
+}
+
+body.dark-mode .rodape-ajuda {
+  background-color: #161D24 !important;
+  border-top: 1px solid #283544 !important;
+}
+
+body.dark-mode .texto-rodape-superior {
+  color: #F8FAFC !important;
+}
+
+body.dark-mode .area-telefone .numero-telefone {
+  color: #34D399 !important;
+}
+
+body.dark-mode .area-telefone .icone-telefone {
+  color: #34D399 !important;
+}
+
+body.dark-mode .texto-rodape-inferior {
+  color: #94A3B8 !important;
+}
+
+/* --------------------------------------------------------------------------
+   CUSTOMIZAÇÕES ESPECÍFICAS DE LICOES.HTML NO MODO ESCURO
+   -------------------------------------------------------------------------- */
+body.dark-mode .navbar {
+  background-color: #182029 !important;
+  border-bottom: 1px solid #283544 !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .btn-voltar {
+  background-color: #242E3D !important;
+  color: #F8FAFC !important;
+  border: 1px solid #334356 !important;
+}
+
+body.dark-mode .btn-voltar:hover {
+  background-color: #2E3D50 !important;
+  border-color: #475569 !important;
+}
+
+body.dark-mode .navbar-title {
+  color: #34D399 !important;
+}
+
+body.dark-mode #userProfileBadge {
+  background: #242E3D !important;
+  border: 1.5px solid #334356 !important;
+}
+
+body.dark-mode #userDisplayName {
+  color: #F8FAFC !important;
+}
+
+body.dark-mode .page-header h1 {
+  color: #F8FAFC !important;
+}
+
+body.dark-mode .page-header p {
+  color: #CBD5E1 !important;
+}
+
+body.dark-mode .progress-section {
+  background-color: #1E2836 !important;
+  border: 1.5px solid #2E3E50 !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.dark-mode .progress-label,
+body.dark-mode .progress-count {
+  color: #F1F5F9 !important;
+}
+
+body.dark-mode .progress-bar-bg {
+  background-color: #12161A !important;
+}
+
+body.dark-mode .activity-card {
+  background-color: #1E2836 !important;
+  border: 1.5px solid #2E3E50 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.dark-mode .activity-card:hover {
+  border-color: #34D399 !important;
+  box-shadow: 0 10px 25px rgba(52, 211, 153, 0.15) !important;
+}
+
+body.dark-mode .activity-card h3 {
+  color: #F8FAFC !important;
+}
+
+body.dark-mode .activity-card .description {
+  color: #CBD5E1 !important;
+}
+
+body.dark-mode .footer {
+  background-color: #182029 !important;
+  border-top: 1px solid #283544 !important;
+}
+
+body.dark-mode .footer p {
+  color: #94A3B8 !important;
+}
+
+/* --------------------------------------------------------------------------
+   CUSTOMIZAÇÕES DE PÁGINAS DE ATIVIDADES (LETRAS, VOGAIS, CONSOANTES, ETC)
+   -------------------------------------------------------------------------- */
+body.dark-mode .exercise-card,
+body.dark-mode .letter-card,
+body.dark-mode .card-box,
+body.dark-mode .canvas-container {
+  background-color: #1E2836 !important;
+  border-color: #334155 !important;
+  color: #F8FAFC !important;
+}
+
+body.dark-mode .audio-btn,
+body.dark-mode .btn-audio,
+body.dark-mode .btn-speak-family,
+body.dark-mode .btn-speak-word {
+  background-color: #133924 !important;
+  color: #4ADE80 !important;
+  border-color: #22C55E !important;
+}
+
+body.dark-mode .syllable-card-header {
+  background-color: #2E3E50 !important;
+  color: #FBBF24 !important;
+  border-color: #475569 !important;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVIDADE DA BARRA DE ACESSIBILIDADE
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .container-barra-acessibilidade {
+    padding: 8px 16px;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .usuario-identificacao {
+    display: none; /* Em telas muito pequenas economiza espaço no topo */
+  }
+
+  .acoes-acessibilidade-topo {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .theme-switch-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    gap: 6px;
+  }
+
+  .btn-sair-acessivel {
+    padding: 6px 14px;
+    font-size: 14px;
+  }
+}

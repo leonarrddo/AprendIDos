@@ -17,6 +17,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- AprendIDos - Sistema de Temas (Modo Claro & Escuro) -->
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -359,7 +362,7 @@
   <div class="bg-overlay" aria-hidden="true"></div>
 
   <main class="container">
-    <a href="inicio.html" title="Página inicial">
+    <a href="index.html" title="Página inicial">
       <img
         src="https://z-cdn-media.chatglm.cn/files/dccd2866-4c25-4482-b7a7-4d0d1e15d377.png?auth_key=1886391764-18bb28b2f3374b2ea7866cd244c35326-0-f2332627d4ee3b90bf75b318175d04c5"
         alt="Logo AprendIDos com coruja e idosos"
@@ -477,9 +480,9 @@
           btnGoogle.disabled = true;
           try {
             if (window.AprendIDosAuth && window.AprendIDosAuth.signInWithProvider) {
-              await window.AprendIDosAuth.signInWithProvider('google', 'index.html');
+              await window.AprendIDosAuth.signInWithProvider('google', 'menu.html');
             } else {
-              window.location.href = 'index.html';
+              window.location.href = 'menu.html';
             }
           } catch (e) {
             alert('Erro ao conectar com o Google: ' + e.message);
@@ -494,9 +497,9 @@
           btnFacebook.disabled = true;
           try {
             if (window.AprendIDosAuth && window.AprendIDosAuth.signInWithProvider) {
-              await window.AprendIDosAuth.signInWithProvider('facebook', 'index.html');
+              await window.AprendIDosAuth.signInWithProvider('facebook', 'menu.html');
             } else {
-              window.location.href = 'index.html';
+              window.location.href = 'menu.html';
             }
           } catch (e) {
             alert('Erro ao conectar com o Facebook: ' + e.message);
@@ -555,13 +558,13 @@
 
           try {
             if (window.AprendIDosAuth && window.AprendIDosAuth.signInWithEmail) {
-              await window.AprendIDosAuth.signInWithEmail(email, senha, 'index.html');
+              await window.AprendIDosAuth.signInWithEmail(email, senha, 'menu.html');
             } else {
               await new Promise(r => setTimeout(r, 600));
               if (window.AprendIDosAuth && window.AprendIDosAuth.signInWithEmail) {
-                await window.AprendIDosAuth.signInWithEmail(email, senha, 'index.html');
+                await window.AprendIDosAuth.signInWithEmail(email, senha, 'menu.html');
               } else {
-                window.location.href = 'index.html';
+                window.location.href = 'menu.html';
               }
             }
           } catch (err) {

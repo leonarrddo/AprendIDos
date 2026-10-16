@@ -506,11 +506,6 @@ function loadQuestion() {
             optsContainer.appendChild(btn);
         });
     }
-
-    // Toca o áudio da pergunta com um pequeno atraso agradável
-    setTimeout(function() {
-        playQuestionAudio();
-    }, 280);
 }
 
 function playQuestionAudio() {

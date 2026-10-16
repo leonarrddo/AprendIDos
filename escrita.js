@@ -112,8 +112,6 @@ function loadWord() {
             slotsContainer.appendChild(slot);
         }
     }
-
-    setTimeout(playQuestionAudio, 400);
 }
 
 function playQuestionAudio() {

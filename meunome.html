@@ -64,8 +64,8 @@
         /* NAME INPUT & DISPLAY */
         .card-box { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); margin-bottom: 2rem; }
         .input-row { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
-        .name-input { flex: 1; min-width: 240px; padding: 0.9rem 1.2rem; font-size: 1.3rem; font-weight: 800; font-family: 'Nunito', sans-serif; border: 3px solid var(--border); border-radius: var(--radius-sm); color: var(--fg); text-transform: uppercase; background: var(--bg); transition: border-color 0.2s; }
-        .name-input:focus { outline: none; border-color: var(--green); background: #fff; }
+        .name-input { flex: 1; min-width: 240px; padding: 0.9rem 1.2rem; font-size: 1.3rem; font-weight: 800; font-family: 'Nunito', sans-serif; border: 3px solid var(--border); border-radius: var(--radius-sm); color: var(--fg); text-transform: uppercase; background: var(--bg); transition: border-color 0.2s, background-color 0.2s; }
+        .name-input:focus { outline: none; border-color: var(--green); background: var(--white); }
         .btn-action { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.9rem 1.8rem; font-size: 1.1rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 10px rgba(46,125,50,0.25); }
         .btn-action:hover { background: var(--green-dark); }
         .btn-secondary { background: var(--green-pale); color: var(--green-dark); border: 2px solid var(--green-light); box-shadow: none; }
@@ -368,8 +368,8 @@
             min-width: 52px;
             padding: 0.4rem 0.6rem;
             border-radius: 12px;
-            background: #FFFFFF;
-            border: 2px solid #B0BEC5;
+            background: var(--white);
+            border: 2px solid var(--border);
             box-shadow: 0 2px 4px rgba(0,0,0,0.04);
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -577,6 +577,149 @@
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
         @keyframes fade-up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
         @media (max-width: 768px) { .navbar-nav { display: none; } .navbar-hamburger { display: flex; align-items: center; justify-content: center; } }
+
+        /* Suporte completo ao Modo Escuro */
+        body.dark-mode .name-input {
+            background-color: #161D24 !important;
+            color: #F8FAFC !important;
+            border-color: #334155 !important;
+        }
+        body.dark-mode .name-input:focus {
+            background-color: #1E2836 !important;
+            color: #FFFFFF !important;
+            border-color: #22C55E !important;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25) !important;
+        }
+        body.dark-mode .name-display {
+            background-color: #161D24 !important;
+            border: 1.5px solid #2B3846 !important;
+        }
+        body.dark-mode .name-letter.vowel {
+            background-color: #143522 !important;
+            color: #4ADE80 !important;
+            border-color: #22C55E !important;
+        }
+        body.dark-mode .name-letter.consonant {
+            background-color: #133038 !important;
+            color: #38BDF8 !important;
+            border-color: #0284C7 !important;
+        }
+        body.dark-mode .target-name-display {
+            background-color: #133924 !important;
+            color: #4ADE80 !important;
+            border-color: #22C55E !important;
+        }
+        body.dark-mode .writing-guidance-bar {
+            background-color: #16241C !important;
+            border-color: #1E462B !important;
+        }
+        body.dark-mode .writing-guidance-title {
+            color: #4ADE80 !important;
+        }
+        body.dark-mode .btn-guide-sm {
+            background-color: #1E2836 !important;
+            color: #4ADE80 !important;
+            border-color: #22C55E !important;
+        }
+        body.dark-mode .btn-guide-sm.active {
+            background-color: #22C55E !important;
+            color: #FFFFFF !important;
+            border-color: #16A34A !important;
+        }
+        body.dark-mode .writing-letters-tracker {
+            background-color: #161D24 !important;
+            border-color: #334155 !important;
+        }
+        body.dark-mode .tracker-chip {
+            background-color: #1E2836 !important;
+            border-color: #334155 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+        }
+        body.dark-mode .tracker-chip .chip-char {
+            color: #F8FAFC !important;
+        }
+        body.dark-mode .tracker-chip .chip-status {
+            color: #94A3B8 !important;
+        }
+        body.dark-mode .tracker-chip.completed {
+            background-color: #133924 !important;
+            border-color: #22C55E !important;
+        }
+        body.dark-mode .tracker-chip.completed .chip-char {
+            color: #4ADE80 !important;
+        }
+        body.dark-mode .tracker-chip.completed .chip-status {
+            color: #34D399 !important;
+        }
+        body.dark-mode .tracker-chip.partial {
+            background-color: #382806 !important;
+            border-color: #FBBF24 !important;
+        }
+        body.dark-mode .tracker-chip.partial .chip-char {
+            color: #FDE047 !important;
+        }
+        body.dark-mode .tracker-chip.partial .chip-status {
+            color: #FBBF24 !important;
+        }
+        body.dark-mode .writing-eval-card {
+            background: linear-gradient(135deg, #1E2836 0%, #161F2B 100%) !important;
+            border-color: #2E3E50 !important;
+        }
+        body.dark-mode .eval-title-wrap h3 {
+            color: #F8FAFC !important;
+        }
+        body.dark-mode .eval-meter-header {
+            color: #CBD5E1 !important;
+        }
+        body.dark-mode .eval-meter-score {
+            color: #4ADE80 !important;
+        }
+        body.dark-mode .eval-progress-bar-bg {
+            background-color: #10151C !important;
+        }
+        body.dark-mode .eval-feedback-msg {
+            background-color: #161D24 !important;
+            border-color: #2E3E50 !important;
+            color: #F8FAFC !important;
+        }
+        body.dark-mode .btn-speak-eval {
+            background-color: #242E3D !important;
+            color: #4ADE80 !important;
+            border-color: #22C55E !important;
+        }
+        body.dark-mode .canvas-hint-overlay {
+            background-color: rgba(18, 22, 26, 0.92) !important;
+            color: #CBD5E1 !important;
+            border-color: #334155 !important;
+        }
+        body.dark-mode .name-slot {
+            background-color: #161D24 !important;
+            border-color: #475569 !important;
+        }
+        body.dark-mode .name-slot.filled.vowel {
+            background-color: #143522 !important;
+            color: #4ADE80 !important;
+            border-color: #22C55E !important;
+        }
+        body.dark-mode .name-slot.filled.consonant {
+            background-color: #133038 !important;
+            color: #38BDF8 !important;
+            border-color: #0284C7 !important;
+        }
+        body.dark-mode .letter-tile {
+            background-color: #1E2836 !important;
+            color: #F8FAFC !important;
+            border-color: #334155 !important;
+        }
+        body.dark-mode .letter-tile:hover:not(:disabled) {
+            background-color: #133924 !important;
+            border-color: #22C55E !important;
+        }
+        body.dark-mode .letter-tile.used {
+            background-color: #161D24 !important;
+            border-color: #2B3846 !important;
+            opacity: 0.25 !important;
+        }
     </style>
 </head>
 <body>
@@ -656,7 +799,7 @@
         </h2>
         <div class="input-row">
             <input type="text" id="nameInput" class="name-input" placeholder="Digite seu nome (Ex: MARIA)" aria-label="Digite seu nome" onkeydown="if(event.key==='Enter')analyzeName()">
-            <button class="btn-action" onclick="analyzeName()" aria-label="Analisar meu nome">
+            <button class="btn-action" id="btnAnalyze" onclick="analyzeName()" aria-label="Analisar meu nome">
                 <i class="fas fa-magic"></i> Descobrir Letras
             </button>
         </div>

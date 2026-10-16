@@ -103,7 +103,6 @@ function loadQuestion() {
     if (fbArea) fbArea.innerHTML = '';
 
     renderSlotsAndTiles(q);
-    setTimeout(playQuestionAudio, 400);
 }
 
 function renderSlotsAndTiles(q) {

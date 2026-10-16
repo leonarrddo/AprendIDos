@@ -503,15 +503,28 @@
         }
 
         .vowel-illustration {
-            width: 76px;
-            height: 76px;
-            margin: 0.3rem 0;
+            width: 100px;
+            height: 100px;
+            margin: 0.35rem 0;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 4px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--border);
+            overflow: hidden;
         }
 
-        .vowel-illustration svg {
+        .vowel-illustration img,
+        .vowel-img {
             width: 100%;
             height: 100%;
+            object-fit: contain;
+            display: block;
+            border-radius: 8px;
         }
 
         .vowel-example {
@@ -1285,8 +1298,9 @@
             }
 
             .vowel-illustration {
-                width: 62px;
-                height: 62px;
+                width: 76px;
+                height: 76px;
+                padding: 3px;
             }
 
             .exercise-layout {
@@ -1453,35 +1467,21 @@
 
             <div class="vowels-grid" role="list">
 
-            <!-- VOGAL A — Avião -->
+            <!-- VOGAL A — Abelha -->
             <div class="vowel-card" data-vowel="a" role="listitem" tabindex="0"
-                 aria-label="Vogal A, A de Avião"
+                 aria-label="Vogal A, A de Abelha"
                  onclick="speakVowel('a')"
                  onkeydown="if(event.key==='Enter')speakVowel('a')">
                 <div class="vowel-letter" aria-hidden="true">A</div>
                 <div class="vowel-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <ellipse cx="40" cy="38" rx="28" ry="9" fill="#FFCCBC" stroke="#D84315" stroke-width="2.5"/>
-                        <path d="M30 33 L40 14 L50 33" fill="#FFAB91" stroke="#D84315" stroke-width="2.5" stroke-linejoin="round"/>
-                        <path d="M32 43 L40 58 L48 43" fill="#FFAB91" stroke="#D84315" stroke-width="2.5" stroke-linejoin="round"/>
-                        <rect x="60" y="22" width="5" height="18" rx="2" fill="#FFAB91" stroke="#D84315" stroke-width="2"/>
-                        <path d="M62 28 L72 24 L72 32 Z" fill="#FFAB91" stroke="#D84315" stroke-width="2" stroke-linejoin="round"/>
-                        <line x1="10" y1="34" x2="10" y2="42" stroke="#D84315" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="7" y1="32" x2="13" y2="44" stroke="#D84315" stroke-width="2.5" stroke-linecap="round"/>
-                        <circle cx="10" cy="38" r="2.5" fill="#D84315"/>
-                        <circle cx="22" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                        <circle cx="30" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                        <circle cx="38" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                        <circle cx="46" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                        <circle cx="54" cy="36" r="2.5" fill="#FFF3E0" stroke="#D84315" stroke-width="1.5"/>
-                    </svg>
+                    <img src="imagenscartilha/a.png" alt="A de Abelha" class="vowel-img" loading="lazy">
                 </div>
-                <div class="vowel-example"><span class="highlight">A</span> de Avião</div>
+                <div class="vowel-example"><span class="highlight">A</span> de Abelha</div>
                 <button class="vowel-sound-btn" aria-label="Ouvir a vogal A"
                         onclick="event.stopPropagation(); speakVowel('a')">
-                        <i class="fas fa-volume-up" aria-hidden="true"></i>
-                    </button>
-                </div>
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                </button>
+            </div>
 
             <!-- VOGAL E — Escada -->
             <div class="vowel-card" data-vowel="e" role="listitem" tabindex="0"
@@ -1490,126 +1490,62 @@
                  onkeydown="if(event.key==='Enter')speakVowel('e')">
                 <div class="vowel-letter" aria-hidden="true">E</div>
                 <div class="vowel-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="12" y="62" width="56" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
-                        <rect x="12" y="50" width="44" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
-                        <rect x="12" y="38" width="32" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
-                        <rect x="12" y="26" width="20" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
-                        <rect x="12" y="14" width="8" height="7" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
-                        <rect x="56" y="50" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825" stroke-width="2"/>
-                        <rect x="44" y="38" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825" stroke-width="2"/>
-                        <rect x="32" y="26" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825" stroke-width="2"/>
-                        <rect x="20" y="14" width="12" height="12" rx="1" fill="#FFE082" stroke="#F9A825" stroke-width="2"/>
-                        <line x1="12" y1="14" x2="12" y2="69" stroke="#F9A825" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="68" y1="62" x2="20" y2="14" stroke="#F9A825" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="68" y1="62" x2="68" y2="69" stroke="#F9A825" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="20" y1="14" x2="20" y2="21" stroke="#F9A825" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="32" y1="26" x2="32" y2="33" stroke="#F9A825" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="44" y1="38" x2="44" y2="45" stroke="#F9A825" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="56" y1="50" x2="56" y2="57" stroke="#F9A825" stroke-width="2.5" stroke-linecap="round"/>
-                    </svg>
+                    <img src="imagenscartilha/e.png" alt="E de Escada" class="vowel-img" loading="lazy">
                 </div>
                 <div class="vowel-example"><span class="highlight">E</span> de Escada</div>
                 <button class="vowel-sound-btn" aria-label="Ouvir a vogal E"
                         onclick="event.stopPropagation(); speakVowel('e')">
-                        <i class="fas fa-volume-up" aria-hidden="true"></i>
-                    </button>
-                </div>
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                </button>
+            </div>
 
-            <!-- VOGAL I — Ilha -->
+            <!-- VOGAL I — Igreja -->
             <div class="vowel-card" data-vowel="i" role="listitem" tabindex="0"
-                 aria-label="Vogal I, I de Ilha"
+                 aria-label="Vogal I, I de Igreja"
                  onclick="speakVowel('i')"
                  onkeydown="if(event.key==='Enter')speakVowel('i')">
                 <div class="vowel-letter" aria-hidden="true">I</div>
                 <div class="vowel-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="0" y="0" width="80" height="80" rx="4" fill="#E3F2FD"/>
-                        <circle cx="66" cy="14" r="8" fill="#FFF9C4" stroke="#F9A825" stroke-width="2"/>
-                        <path d="M0 52 Q10 48 20 52 Q30 56 40 52 Q50 48 60 52 Q70 56 80 52 L80 80 L0 80 Z" fill="#90CAF9"/>
-                        <path d="M0 58 Q10 54 20 58 Q30 62 40 58 Q50 54 60 58 Q70 62 80 58" stroke="#64B5F6" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <path d="M0 66 Q10 62 20 66 Q30 70 40 66 Q50 62 60 66 Q70 70 80 66" stroke="#64B5F6" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <ellipse cx="38" cy="52" rx="24" ry="10" fill="#FFF9C4" stroke="#FBC02D" stroke-width="2"/>
-                        <path d="M38 48 Q36 34 40 20" stroke="#795548" stroke-width="4" stroke-linecap="round" fill="none"/>
-                        <path d="M40 20 Q28 10 20 14" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" fill="none"/>
-                        <path d="M40 20 Q52 10 60 14" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" fill="none"/>
-                        <path d="M40 20 Q34 6 40 4" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" fill="none"/>
-                        <path d="M40 20 Q50 14 54 18" stroke="#388E3C" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-                        <path d="M40 20 Q30 14 26 18" stroke="#388E3C" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-                        <circle cx="40" cy="22" r="3" fill="#795548"/>
-                    </svg>
+                    <img src="imagenscartilha/i.png" alt="I de Igreja" class="vowel-img" loading="lazy">
                 </div>
-                <div class="vowel-example"><span class="highlight">I</span> de Ilha</div>
+                <div class="vowel-example"><span class="highlight">I</span> de Igreja</div>
                 <button class="vowel-sound-btn" aria-label="Ouvir a vogal I"
                         onclick="event.stopPropagation(); speakVowel('i')">
-                        <i class="fas fa-volume-up" aria-hidden="true"></i>
-                    </button>
-                </div>
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                </button>
+            </div>
 
-            <!-- VOGAL O — Ônibus -->
+            <!-- VOGAL O — Ovo -->
             <div class="vowel-card" data-vowel="o" role="listitem" tabindex="0"
-                 aria-label="Vogal O, O de Ônibus"
+                 aria-label="Vogal O, O de Ovo"
                  onclick="speakVowel('o')"
                  onkeydown="if(event.key==='Enter')speakVowel('o')">
                 <div class="vowel-letter" aria-hidden="true">O</div>
                 <div class="vowel-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="8" y="16" width="60" height="42" rx="6" fill="#BBDEFB" stroke="#1565C0" stroke-width="2.5"/>
-                        <rect x="52" y="22" width="12" height="16" rx="3" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
-                        <line x1="8" y1="42" x2="68" y2="42" stroke="#1565C0" stroke-width="2"/>
-                        <rect x="14" y="22" width="10" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
-                        <rect x="28" y="22" width="10" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
-                        <rect x="42" y="22" width="8" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
-                        <rect x="28" y="46" width="10" height="12" rx="2" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
-                        <circle cx="36" cy="52" r="1.5" fill="#1565C0"/>
-                        <rect x="4" y="48" width="6" height="8" rx="2" fill="#90CAF9" stroke="#1565C0" stroke-width="2"/>
-                        <circle cx="7" cy="50" r="2" fill="#EF5350"/>
-                        <circle cx="22" cy="60" r="7" fill="#E3F2FD" stroke="#1565C0" stroke-width="2.5"/>
-                        <circle cx="22" cy="60" r="3" fill="#1565C0"/>
-                        <circle cx="54" cy="60" r="7" fill="#E3F2FD" stroke="#1565C0" stroke-width="2.5"/>
-                        <circle cx="54" cy="60" r="3" fill="#1565C0"/>
-                        <line x1="2" y1="67" x2="72" y2="67" stroke="#90CAF9" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
+                    <img src="imagenscartilha/o.png" alt="O de Ovo" class="vowel-img" loading="lazy">
                 </div>
-                <div class="vowel-example"><span class="highlight">O</span> de Ônibus</div>
+                <div class="vowel-example"><span class="highlight">O</span> de Ovo</div>
                 <button class="vowel-sound-btn" aria-label="Ouvir a vogal O"
                         onclick="event.stopPropagation(); speakVowel('o')">
-                        <i class="fas fa-volume-up" aria-hidden="true"></i>
-                    </button>
-                </div>
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                </button>
+            </div>
 
-            <!-- VOGAL U — Urso -->
+            <!-- VOGAL U — Uva -->
             <div class="vowel-card" data-vowel="u" role="listitem" tabindex="0"
-                 aria-label="Vogal U, U de Urso"
+                 aria-label="Vogal U, U de Uva"
                  onclick="speakVowel('u')"
                  onkeydown="if(event.key==='Enter')speakVowel('u')">
                 <div class="vowel-letter" aria-hidden="true">U</div>
                 <div class="vowel-illustration" aria-hidden="true">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="24" cy="20" r="12" fill="#CE93D8" stroke="#6A1B9A" stroke-width="2.5"/>
-                        <circle cx="24" cy="20" r="6" fill="#E1BEE7" stroke="#6A1B9A" stroke-width="1.5"/>
-                        <circle cx="56" cy="20" r="12" fill="#CE93D8" stroke="#6A1B9A" stroke-width="2.5"/>
-                        <circle cx="56" cy="20" r="6" fill="#E1BEE7" stroke="#6A1B9A" stroke-width="1.5"/>
-                        <circle cx="40" cy="44" r="24" fill="#CE93D8" stroke="#6A1B9A" stroke-width="2.5"/>
-                        <ellipse cx="40" cy="52" rx="14" ry="11" fill="#E1BEE7"/>
-                        <circle cx="32" cy="38" r="4" fill="#4A148C"/>
-                        <circle cx="33" cy="37" r="1.5" fill="#fff"/>
-                        <circle cx="48" cy="38" r="4" fill="#4A148C"/>
-                        <circle cx="49" cy="37" r="1.5" fill="#fff"/>
-                        <ellipse cx="40" cy="48" rx="5" ry="3.5" fill="#4A148C"/>
-                        <circle cx="38" cy="48" r="1.2" fill="#E1BEE7"/>
-                        <circle cx="42" cy="48" r="1.2" fill="#E1BEE7"/>
-                        <path d="M34 54 Q40 60 46 54" stroke="#4A148C" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <circle cx="22" cy="48" r="4" fill="#F3E5F5" opacity="0.6"/>
-                        <circle cx="58" cy="48" r="4" fill="#F3E5F5" opacity="0.6"/>
-                    </svg>
+                    <img src="imagenscartilha/u.png" alt="U de Uva" class="vowel-img" loading="lazy">
                 </div>
-                <div class="vowel-example"><span class="highlight">U</span> de Urso</div>
+                <div class="vowel-example"><span class="highlight">U</span> de Uva</div>
                 <button class="vowel-sound-btn" aria-label="Ouvir a vogal U"
                         onclick="event.stopPropagation(); speakVowel('u')">
-                        <i class="fas fa-volume-up" aria-hidden="true"></i>
-                    </button>
-                </div>
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                </button>
+            </div>
 
             </div>
         </section>
@@ -1735,227 +1671,127 @@
 // ============================================================
 
 var vowelData = {
-    a: { letter: 'A', example: 'Avião' },
+    a: { letter: 'A', example: 'Abelha' },
     e: { letter: 'E', example: 'Escada' },
-    i: { letter: 'I', example: 'Ilha' },
-    o: { letter: 'O', example: 'Ônibus' },
-    u: { letter: 'U', example: 'Urso' }
+    i: { letter: 'I', example: 'Igreja' },
+    o: { letter: 'O', example: 'Ovo' },
+    u: { letter: 'U', example: 'Uva' }
 };
 
 // =========================================================
-// BANCO DE PALAVRAS — 200 palavras do cotidiano brasileiro
-// 40 por vogal → mais de 50 rodadas sem sentir repetição!
+// BANCO DE PALAVRAS — Palavras simples do cotidiano
+// Pensadas especialmente para idosos em alfabetização
 // =========================================================
 var wordBank = [
-    // ── VOGAL A (40 palavras) ──
-    { word: 'Abelha',     vowel: 'A' },
-    { word: 'Árvore',     vowel: 'A' },
-    { word: 'Amigo',      vowel: 'A' },
-    { word: 'Amor',       vowel: 'A' },
-    { word: 'Avó',        vowel: 'A' },
-    { word: 'Água',       vowel: 'A' },
-    { word: 'Alface',     vowel: 'A' },
-    { word: 'Azul',       vowel: 'A' },
-    { word: 'Abóbora',    vowel: 'A' },
-    { word: 'Abraço',     vowel: 'A' },
-    { word: 'Açúcar',     vowel: 'A' },
-    { word: 'Alegria',    vowel: 'A' },
-    { word: 'Aluno',      vowel: 'A' },
-    { word: 'Anel',       vowel: 'A' },
-    { word: 'Arco',       vowel: 'A' },
-    { word: 'Avião',      vowel: 'A' },
-    { word: 'Avental',    vowel: 'A' },
-    { word: 'Aranha',     vowel: 'A' },
-    { word: 'Artista',    vowel: 'A' },
-    { word: 'Amora',      vowel: 'A' },
-    { word: 'Aldeia',     vowel: 'A' },
-    { word: 'Almofada',   vowel: 'A' },
-    { word: 'Alpiste',    vowel: 'A' },
-    { word: 'Amêndoa',    vowel: 'A' },
-    { word: 'Anzol',      vowel: 'A' },
-    { word: 'Apito',      vowel: 'A' },
-    { word: 'Aquário',    vowel: 'A' },
-    { word: 'Arame',      vowel: 'A' },
-    { word: 'Areia',      vowel: 'A' },
-    { word: 'Armário',    vowel: 'A' },
-    { word: 'Arpão',      vowel: 'A' },
-    { word: 'Arrozal',    vowel: 'A' },
-    { word: 'Artesão',    vowel: 'A' },
-    { word: 'Assoalho',   vowel: 'A' },
-    { word: 'Atum',       vowel: 'A' },
-    { word: 'Aula',       vowel: 'A' },
-    { word: 'Aurora',     vowel: 'A' },
-    { word: 'Automóvel',  vowel: 'A' },
-    { word: 'Aveia',      vowel: 'A' },
-    { word: 'Azulejo',    vowel: 'A' },
+    // ── VOGAL A ──
+    { word: 'Abelha',   vowel: 'A' },
+    { word: 'Água',     vowel: 'A' },
+    { word: 'Amigo',    vowel: 'A' },
+    { word: 'Amor',     vowel: 'A' },
+    { word: 'Avó',      vowel: 'A' },
+    { word: 'Avô',      vowel: 'A' },
+    { word: 'Anel',     vowel: 'A' },
+    { word: 'Asa',      vowel: 'A' },
+    { word: 'Alho',     vowel: 'A' },
+    { word: 'Arroz',    vowel: 'A' },
+    { word: 'Azul',     vowel: 'A' },
+    { word: 'Açúcar',   vowel: 'A' },
+    { word: 'Aula',     vowel: 'A' },
+    { word: 'Areia',    vowel: 'A' },
+    { word: 'Apito',    vowel: 'A' },
+    { word: 'Arco',     vowel: 'A' },
+    { word: 'Amora',    vowel: 'A' },
+    { word: 'Amarelo',  vowel: 'A' },
+    { word: 'Abraço',   vowel: 'A' },
+    { word: 'Alface',   vowel: 'A' },
 
-    // ── VOGAL E (40 palavras) ──
-    { word: 'Escola',     vowel: 'E' },
-    { word: 'Elefante',   vowel: 'E' },
-    { word: 'Estrela',    vowel: 'E' },
-    { word: 'Escada',     vowel: 'E' },
-    { word: 'Espelho',    vowel: 'E' },
-    { word: 'Erva',       vowel: 'E' },
-    { word: 'Ervilha',    vowel: 'E' },
-    { word: 'Estrada',    vowel: 'E' },
-    { word: 'Enfermeiro', vowel: 'E' },
-    { word: 'Escova',     vowel: 'E' },
-    { word: 'Êxito',      vowel: 'E' },
-    { word: 'Exercício',  vowel: 'E' },
-    { word: 'Envelope',   vowel: 'E' },
-    { word: 'Espiga',     vowel: 'E' },
-    { word: 'Espada',     vowel: 'E' },
-    { word: 'Estante',    vowel: 'E' },
-    { word: 'Esfera',     vowel: 'E' },
-    { word: 'Esponja',    vowel: 'E' },
-    { word: 'Estojo',     vowel: 'E' },
-    { word: 'Estribo',    vowel: 'E' },
-    { word: 'Espiga',     vowel: 'E' },
-    { word: 'Escorpião',  vowel: 'E' },
-    { word: 'Esquilo',    vowel: 'E' },
-    { word: 'Estopa',     vowel: 'E' },
-    { word: 'Espuma',     vowel: 'E' },
-    { word: 'Esteira',    vowel: 'E' },
-    { word: 'Edifício',   vowel: 'E' },
-    { word: 'Efeito',     vowel: 'E' },
-    { word: 'Égua',       vowel: 'E' },
-    { word: 'Elástico',   vowel: 'E' },
-    { word: 'Elevador',   vowel: 'E' },
-    { word: 'Emoção',     vowel: 'E' },
-    { word: 'Empada',     vowel: 'E' },
-    { word: 'Empadão',    vowel: 'E' },
-    { word: 'Encanto',    vowel: 'E' },
-    { word: 'Enxada',     vowel: 'E' },
-    { word: 'Erário',     vowel: 'E' },
-    { word: 'Escrita',    vowel: 'E' },
-    { word: 'Estação',    vowel: 'E' },
-    { word: 'Estepe',     vowel: 'E' },
+    // ── VOGAL E ──
+    { word: 'Escada',   vowel: 'E' },
+    { word: 'Escola',   vowel: 'E' },
+    { word: 'Estrela',  vowel: 'E' },
+    { word: 'Espelho',  vowel: 'E' },
+    { word: 'Escova',   vowel: 'E' },
+    { word: 'Espuma',   vowel: 'E' },
+    { word: 'Esponja',  vowel: 'E' },
+    { word: 'Egua',     vowel: 'E' },
+    { word: 'Erva',     vowel: 'E' },
+    { word: 'Ervilha',  vowel: 'E' },
+    { word: 'Estrada',  vowel: 'E' },
+    { word: 'Elefante', vowel: 'E' },
+    { word: 'Estante',  vowel: 'E' },
+    { word: 'Esmalte',  vowel: 'E' },
+    { word: 'Enfeite',  vowel: 'E' },
+    { word: 'Eco',      vowel: 'E' },
+    { word: 'Ema',      vowel: 'E' },
+    { word: 'Efeito',   vowel: 'E' },
+    { word: 'Emoção',   vowel: 'E' },
+    { word: 'Empada',   vowel: 'E' },
 
-    // ── VOGAL I (40 palavras) ──
-    { word: 'Inseto',     vowel: 'I' },
-    { word: 'Igreja',     vowel: 'I' },
-    { word: 'Ilha',       vowel: 'I' },
-    { word: 'Iluminar',   vowel: 'I' },
-    { word: 'Idoso',      vowel: 'I' },
-    { word: 'Inverno',    vowel: 'I' },
-    { word: 'Irmão',      vowel: 'I' },
-    { word: 'Início',     vowel: 'I' },
-    { word: 'Índio',      vowel: 'I' },
-    { word: 'Imagem',     vowel: 'I' },
-    { word: 'Instrução',  vowel: 'I' },
-    { word: 'Infância',   vowel: 'I' },
-    { word: 'Ingresso',   vowel: 'I' },
-    { word: 'Imposto',    vowel: 'I' },
-    { word: 'Infinito',   vowel: 'I' },
-    { word: 'Iguaria',    vowel: 'I' },
-    { word: 'Igualdade',  vowel: 'I' },
-    { word: 'Ilusão',     vowel: 'I' },
-    { word: 'Imenso',     vowel: 'I' },
-    { word: 'Incêndio',   vowel: 'I' },
-    { word: 'Indústria',  vowel: 'I' },
-    { word: 'Inimigo',    vowel: 'I' },
-    { word: 'Interesse',  vowel: 'I' },
-    { word: 'Intuição',   vowel: 'I' },
-    { word: 'Inventor',   vowel: 'I' },
-    { word: 'Ipê',        vowel: 'I' },
-    { word: 'Irmandade',  vowel: 'I' },
-    { word: 'Irrigação',  vowel: 'I' },
-    { word: 'Itinerário', vowel: 'I' },
-    { word: 'Idioma',     vowel: 'I' },
-    { word: 'Ignorância', vowel: 'I' },
-    { word: 'Iguana',     vowel: 'I' },
-    { word: 'Impacto',    vowel: 'I' },
-    { word: 'Impressora', vowel: 'I' },
-    { word: 'Incisivo',   vowel: 'I' },
-    { word: 'Inocente',   vowel: 'I' },
-    { word: 'Inscrito',   vowel: 'I' },
-    { word: 'Instinto',   vowel: 'I' },
-    { word: 'Irônico',    vowel: 'I' },
-    { word: 'Isolado',    vowel: 'I' },
+    // ── VOGAL I ──
+    { word: 'Igreja',   vowel: 'I' },
+    { word: 'Ilha',     vowel: 'I' },
+    { word: 'Índio',    vowel: 'I' },
+    { word: 'Isca',     vowel: 'I' },
+    { word: 'Iglu',     vowel: 'I' },
+    { word: 'Iodo',     vowel: 'I' },
+    { word: 'Idade',    vowel: 'I' },
+    { word: 'Idoso',    vowel: 'I' },
+    { word: 'Idosa',    vowel: 'I' },
+    { word: 'Irmão',    vowel: 'I' },
+    { word: 'Irmã',     vowel: 'I' },
+    { word: 'Ímã',      vowel: 'I' },
+    { word: 'Inverno',  vowel: 'I' },
+    { word: 'Imagem',   vowel: 'I' },
+    { word: 'Ipê',      vowel: 'I' },
+    { word: 'Iogurte',  vowel: 'I' },
+    { word: 'Início',   vowel: 'I' },
+    { word: 'Injeção',  vowel: 'I' },
+    { word: 'Ideia',    vowel: 'I' },
+    { word: 'Inseto',   vowel: 'I' },
 
-    // ── VOGAL O (40 palavras) ──
-    { word: 'Ovelha',     vowel: 'O' },
-    { word: 'Ouro',       vowel: 'O' },
-    { word: 'Olho',       vowel: 'O' },
-    { word: 'Ônibus',     vowel: 'O' },
-    { word: 'Ovo',        vowel: 'O' },
-    { word: 'Oração',     vowel: 'O' },
-    { word: 'Obra',       vowel: 'O' },
-    { word: 'Osso',       vowel: 'O' },
-    { word: 'Otimismo',   vowel: 'O' },
-    { word: 'Ofício',     vowel: 'O' },
-    { word: 'Orelha',     vowel: 'O' },
-    { word: 'Oceano',     vowel: 'O' },
-    { word: 'Objeto',     vowel: 'O' },
-    { word: 'Obrigação',  vowel: 'O' },
-    { word: 'Oficial',    vowel: 'O' },
-    { word: 'Oliva',      vowel: 'O' },
-    { word: 'Ombro',      vowel: 'O' },
-    { word: 'Onça',       vowel: 'O' },
-    { word: 'Opção',      vowel: 'O' },
-    { word: 'Operação',   vowel: 'O' },
-    { word: 'Opinião',    vowel: 'O' },
-    { word: 'Oportunidade', vowel: 'O' },
-    { word: 'Oráculo',    vowel: 'O' },
-    { word: 'Orçamento',  vowel: 'O' },
-    { word: 'Orvalho',    vowel: 'O' },
-    { word: 'Osório',     vowel: 'O' },
-    { word: 'Ouriço',     vowel: 'O' },
-    { word: 'Outono',     vowel: 'O' },
-    { word: 'Outubro',    vowel: 'O' },
-    { word: 'Ouvidoria',  vowel: 'O' },
-    { word: 'Oásis',      vowel: 'O' },
-    { word: 'Obeso',      vowel: 'O' },
-    { word: 'Oblíquo',    vowel: 'O' },
-    { word: 'Obsessão',   vowel: 'O' },
-    { word: 'Obstáculo',  vowel: 'O' },
-    { word: 'Odor',       vowel: 'O' },
-    { word: 'Oferta',     vowel: 'O' },
-    { word: 'Ópera',      vowel: 'O' },
-    { word: 'Ostra',      vowel: 'O' },
-    { word: 'Oval',       vowel: 'O' },
+    // ── VOGAL O ──
+    { word: 'Ovo',      vowel: 'O' },
+    { word: 'Oca',      vowel: 'O' },
+    { word: 'Oito',     vowel: 'O' },
+    { word: 'Ouro',     vowel: 'O' },
+    { word: 'Olho',     vowel: 'O' },
+    { word: 'Onda',     vowel: 'O' },
+    { word: 'Osso',     vowel: 'O' },
+    { word: 'Orelha',   vowel: 'O' },
+    { word: 'Ovelha',   vowel: 'O' },
+    { word: 'Ônibus',   vowel: 'O' },
+    { word: 'Óculos',   vowel: 'O' },
+    { word: 'Óleo',     vowel: 'O' },
+    { word: 'Ombro',    vowel: 'O' },
+    { word: 'Onça',     vowel: 'O' },
+    { word: 'Obra',     vowel: 'O' },
+    { word: 'Orvalho',  vowel: 'O' },
+    { word: 'Oração',   vowel: 'O' },
+    { word: 'Outono',   vowel: 'O' },
+    { word: 'Oficina',  vowel: 'O' },
+    { word: 'Ontem',    vowel: 'O' },
 
-    // ── VOGAL U (40 palavras) ──
-    { word: 'Uva',        vowel: 'U' },
-    { word: 'Urubu',      vowel: 'U' },
-    { word: 'Urso',       vowel: 'U' },
-    { word: 'Unha',       vowel: 'U' },
-    { word: 'Uniforme',   vowel: 'U' },
-    { word: 'Universo',   vowel: 'U' },
-    { word: 'Urgência',   vowel: 'U' },
-    { word: 'Último',     vowel: 'U' },
-    { word: 'Usina',      vowel: 'U' },
-    { word: 'Útil',       vowel: 'U' },
-    { word: 'Urna',       vowel: 'U' },
-    { word: 'Úmido',      vowel: 'U' },
-    { word: 'Unicórnio',  vowel: 'U' },
-    { word: 'Utensílio',  vowel: 'U' },
-    { word: 'Ubiquidade', vowel: 'U' },
-    { word: 'Ultramar',   vowel: 'U' },
-    { word: 'Umbigo',     vowel: 'U' },
-    { word: 'Umidade',    vowel: 'U' },
-    { word: 'Unidade',    vowel: 'U' },
-    { word: 'União',      vowel: 'U' },
-    { word: 'Único',      vowel: 'U' },
-    { word: 'Uníssono',   vowel: 'U' },
-    { word: 'Urânio',     vowel: 'U' },
-    { word: 'Urdidura',   vowel: 'U' },
-    { word: 'Urucum',     vowel: 'U' },
-    { word: 'Ursinho',    vowel: 'U' },
-    { word: 'Urucubaca',  vowel: 'U' },
-    { word: 'Urutau',     vowel: 'U' },
-    { word: 'Usufruir',   vowel: 'U' },
-    { word: 'Utopia',     vowel: 'U' },
-    { word: 'Uísque',     vowel: 'U' },
-    { word: 'Urbano',     vowel: 'U' },
-    { word: 'Ufanismo',   vowel: 'U' },
-    { word: 'Ucraniano',  vowel: 'U' },
-    { word: 'Ultrasom',   vowel: 'U' },
-    { word: 'Unanimidade', vowel: 'U' },
-    { word: 'Unânime',    vowel: 'U' },
-    { word: 'Uivar',      vowel: 'U' },
-    { word: 'Ufologia',   vowel: 'U' },
-    { word: 'Ultrassom',  vowel: 'U' }
+    // ── VOGAL U ──
+    { word: 'Uva',      vowel: 'U' },
+    { word: 'Urso',     vowel: 'U' },
+    { word: 'Unha',     vowel: 'U' },
+    { word: 'Urna',     vowel: 'U' },
+    { word: 'Umbu',     vowel: 'U' },
+    { word: 'Uso',      vowel: 'U' },
+    { word: 'Útil',     vowel: 'U' },
+    { word: 'União',    vowel: 'U' },
+    { word: 'Urubu',    vowel: 'U' },
+    { word: 'Ursinho',  vowel: 'U' },
+    { word: 'Umbigo',   vowel: 'U' },
+    { word: 'Uniforme', vowel: 'U' },
+    { word: 'Único',    vowel: 'U' },
+    { word: 'Úmido',    vowel: 'U' },
+    { word: 'Urgente',  vowel: 'U' },
+    { word: 'Usina',    vowel: 'U' },
+    { word: 'Uivar',    vowel: 'U' },
+    { word: 'Urtiga',   vowel: 'U' },
+    { word: 'Unidade',  vowel: 'U' },
+    { word: 'Último',   vowel: 'U' }
 ];
 
 var questions = [];
@@ -2093,8 +1929,6 @@ function loadQuestion() {
         btn.disabled = false;
         btn.classList.remove('correct', 'wrong');
     });
-    // Lê a pergunta automaticamente após pequeno delay
-    setTimeout(playQuestionAudio, 500);
 }
 
 function playQuestionAudio() {

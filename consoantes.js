@@ -652,8 +652,6 @@ function loadQuestion() {
             optCont.appendChild(btn);
         });
     }
-
-    setTimeout(playQuestionAudio, 400);
 }
 
 function playQuestionAudio() {

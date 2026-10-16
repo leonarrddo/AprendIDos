@@ -193,10 +193,6 @@ function loadStory() {
             optCont.appendChild(btn);
         });
     }
-
-    setTimeout(function() {
-        playFullStory();
-    }, 400);
 }
 
 function playFullStory() {

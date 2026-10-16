@@ -60,5 +60,46 @@ test('Sistema de Temas: Modo Claro e Modo Escuro', async (t) => {
     assert.equal(isLight, true, 'O Modo Claro deve ser restaurado corretamente');
   });
 
+  await t.test('5. Deve garantir contraste correto de inputs e letras no meunome.html no Modo Escuro', async () => {
+    await page.evaluate(() => {
+      localStorage.setItem('aprendidos_theme', 'dark');
+    });
+    await page.goto('http://localhost:3000/meunome.html', { waitUntil: 'networkidle2' });
+
+    // Foca no input e digita um nome
+    await page.type('#nameInput', 'LEONARDO');
+    
+    // Verifica cores do input com foco
+    const inputStyles = await page.evaluate(() => {
+      const input = document.getElementById('nameInput');
+      const style = window.getComputedStyle(input);
+      return {
+        bg: style.backgroundColor,
+        color: style.color
+      };
+    });
+    // Não pode ser fundo branco puro rgb(255, 255, 255)
+    assert.notEqual(inputStyles.bg, 'rgb(255, 255, 255)', 'O campo de nome não deve ter fundo branco no Modo Escuro ao digitar');
+
+    // Clica para descobrir as letras
+    await page.click('#btnAnalyze');
+    await new Promise(r => setTimeout(r, 300));
+
+    // Verifica que os tracker-chips e o card de avaliação não são brancos
+    const writingStyles = await page.evaluate(() => {
+      const firstChip = document.querySelector('.tracker-chip');
+      const chipChar = document.querySelector('.tracker-chip .chip-char');
+      const evalCard = document.getElementById('writingEvalCard');
+      return {
+        chipBg: firstChip ? window.getComputedStyle(firstChip).backgroundColor : null,
+        chipCharColor: chipChar ? window.getComputedStyle(chipChar).color : null,
+        evalBg: evalCard ? window.getComputedStyle(evalCard).backgroundColor : null
+      };
+    });
+
+    assert.notEqual(writingStyles.chipBg, 'rgb(255, 255, 255)', 'Os chips das letras não devem ter fundo branco no Modo Escuro');
+    assert.notEqual(writingStyles.evalBg, 'rgb(255, 255, 255)', 'O card de avaliação não deve ter fundo branco puro no Modo Escuro');
+  });
+
   await browser.close();
 });

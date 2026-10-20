@@ -15,9 +15,9 @@
 var vowelData = {
     a: { letter: 'A', example: 'Avião' },
     e: { letter: 'E', example: 'Escada' },
-    i: { letter: 'I', example: 'Ilha' },
-    o: { letter: 'O', example: 'Ônibus' },
-    u: { letter: 'U', example: 'Urso' }
+    i: { letter: 'I', example: 'Igreja' },
+    o: { letter: 'O', example: 'Ovo' },
+    u: { letter: 'U', example: 'Uva' }
 };
 
 // Significados claros, objetivos e adequados para o público idoso e adulto

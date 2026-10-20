@@ -14,16 +14,18 @@
 // ============================================================================
 var alphabetData = {
     A: {
-        upper: 'A', lower: 'a', word: 'Abelha', simpleName: 'A de Abelha', type: 'vowel', icon: 'fa-bug',
-        phrase: 'A abelha faz mel.',
-        words: ['açaí', 'anel', 'avó', 'amigo', 'amor', 'asa', 'água', 'arara', 'agulha'],
+        upper: 'A', lower: 'a', word: 'Avião', simpleName: 'A de Avião', type: 'vowel', icon: 'fa-plane',
+        phrase: 'O avião voa alto no céu.',
+        words: ['avião', 'asa', 'anel', 'água', 'amigo', 'amor', 'árvore', 'azul'],
+        capaSrc: 'capaletras/A de Avião.png',
         imageSrc: 'imagenscartilha/a.png', hasCustomImage: true,
-        speech: 'Letra A. A de Abelha. A abelha faz mel.'
+        speech: 'Letra A. A de Avião. O avião voa alto no céu.'
     },
     B: {
         upper: 'B', lower: 'b', word: 'Bola', simpleName: 'B de Bola', type: 'consonant', icon: 'fa-futbol',
         phrase: 'A bola é colorida.',
         words: ['bola', 'balão', 'bala', 'bico', 'boneca', 'baixo', 'berço', 'bule', 'bolo'],
+        capaSrc: 'capaletras/Cartão educativo B de Bola.png',
         imageSrc: 'imagenscartilha/b.png', hasCustomImage: true,
         speech: 'Letra B. B de Bola. A bola é colorida.'
     },
@@ -31,6 +33,7 @@ var alphabetData = {
         upper: 'C', lower: 'c', word: 'Casa', simpleName: 'C de Casa', type: 'consonant', icon: 'fa-house',
         phrase: 'A casa é o meu lar.',
         words: ['casa', 'copo', 'cavalo', 'cobra', 'cabelo', 'caneta', 'coelho', 'caderno', 'café'],
+        capaSrc: 'capaletras/Cartaz educativo da letra C com casa.png',
         imageSrc: 'imagenscartilha/c.png', hasCustomImage: true,
         speech: 'Letra C. C de Casa. A casa é o meu lar.'
     },
@@ -38,6 +41,7 @@ var alphabetData = {
         upper: 'D', lower: 'd', word: 'Dado', simpleName: 'D de Dado', type: 'consonant', icon: 'fa-dice',
         phrase: 'O dado é divertido.',
         words: ['dado', 'dedo', 'dia', 'doce', 'dente', 'dama', 'dinheiro', 'dúvida'],
+        capaSrc: 'capaletras/Cartão Educativo da Letra D.png',
         imageSrc: 'imagenscartilha/d.png', hasCustomImage: true,
         speech: 'Letra D. D de Dado. O dado é divertido.'
     },
@@ -45,6 +49,7 @@ var alphabetData = {
         upper: 'E', lower: 'e', word: 'Escada', simpleName: 'E de Escada', type: 'vowel', icon: 'fa-star',
         phrase: 'A escada é alta.',
         words: ['escada', 'escola', 'esperto', 'elefante', 'espelho', 'esquilo', 'estrela', 'escova', 'enfeite'],
+        capaSrc: 'capaletras/Cartaz Educativo da Letra E e Escada.png',
         imageSrc: 'imagenscartilha/e.png', hasCustomImage: true,
         speech: 'Letra E. E de Escada. A escada é alta.'
     },
@@ -52,6 +57,7 @@ var alphabetData = {
         upper: 'F', lower: 'f', word: 'Faca', simpleName: 'F de Faca', type: 'consonant', icon: 'fa-utensils',
         phrase: 'A faca é afiada.',
         words: ['faca', 'fada', 'fogo', 'fita', 'foca', 'fundo', 'família', 'futebol'],
+        capaSrc: 'capaletras/Cartaz Educativo da Letra F com Faca.png',
         imageSrc: 'imagenscartilha/f.png', hasCustomImage: true,
         speech: 'Letra F. F de Faca. A faca é afiada.'
     },
@@ -59,6 +65,7 @@ var alphabetData = {
         upper: 'G', lower: 'g', word: 'Gato', simpleName: 'G de Gato', type: 'consonant', icon: 'fa-cat',
         phrase: 'O gato dorme.',
         words: ['gato', 'garrafa', 'geladeira', 'gema', 'girafa', 'grama', 'galinha', 'geleia', 'gemada'],
+        capaSrc: 'capaletras/Cartão educativo_ Letra G e gato.png',
         imageSrc: 'imagenscartilha/g.png', hasCustomImage: true,
         speech: 'Letra G. G de Gato. O gato dorme.'
     },
@@ -66,6 +73,7 @@ var alphabetData = {
         upper: 'H', lower: 'h', word: 'Homem', simpleName: 'H de Homem', type: 'consonant', icon: 'fa-user',
         phrase: 'A letra H é de homem.',
         words: ['homem', 'hotel', 'história', 'hora', 'honra', 'helicóptero', 'hábito', 'harpa'],
+        capaSrc: 'capaletras/Cartão do Alfabeto_ H de Homem.png',
         imageSrc: 'imagenscartilha/h.png', hasCustomImage: true,
         speech: 'Letra H. H de Homem. A letra H é de homem.'
     },
@@ -73,6 +81,7 @@ var alphabetData = {
         upper: 'I', lower: 'i', word: 'Igreja', simpleName: 'I de Igreja', type: 'vowel', icon: 'fa-church',
         phrase: 'A letra I é de igreja.',
         words: ['igreja', 'isopor', 'internet', 'ilha', 'inverno', 'irmão', 'imagem', 'instrumento'],
+        capaSrc: 'capaletras/Flashcard Infantil da Igreja.png',
         imageSrc: 'imagenscartilha/i.png', hasCustomImage: true,
         speech: 'Letra I. I de Igreja. A letra I é de igreja.'
     },
@@ -80,6 +89,7 @@ var alphabetData = {
         upper: 'J', lower: 'j', word: 'Jacaré', simpleName: 'J de Jacaré', type: 'consonant', icon: 'fa-table-cells-large',
         phrase: 'O jacaré é grande.',
         words: ['jacaré', 'jogo', 'joaninha', 'janela', 'jardim', 'juntos', 'jaca', 'jeito'],
+        capaSrc: 'capaletras/Cartão educativo da letra J com jacaré.png',
         imageSrc: 'imagenscartilha/j.png', hasCustomImage: true,
         speech: 'Letra J. J de Jacaré. O jacaré é grande.'
     },
@@ -87,13 +97,15 @@ var alphabetData = {
         upper: 'K', lower: 'k', word: 'Kiwi', simpleName: 'K de Kiwi', type: 'consonant', icon: 'fa-lemon',
         phrase: 'O kiwi é gostoso.',
         words: ['kiwi', 'kart', 'ketchup', 'karatê'],
-        imageSrc: 'imagenscartilha/k.png', hasCustomImage: false,
+        capaSrc: 'capaletras/Cartaz Infantil da Letra K com Kiwi.png',
+        imageSrc: 'capaletras/Cartaz Infantil da Letra K com Kiwi.png', hasCustomImage: true,
         speech: 'Letra K. K de Kiwi. O kiwi é gostoso.'
     },
     L: {
         upper: 'L', lower: 'l', word: 'Lua', simpleName: 'L de Lua', type: 'consonant', icon: 'fa-moon',
         phrase: 'A lua é bonita.',
         words: ['lua', 'lápis', 'leão', 'lago', 'livro', 'lombo', 'lima', 'lata', 'leite'],
+        capaSrc: 'capaletras/Cartaz Infantil da Letra L e da Lua.png',
         imageSrc: 'imagenscartilha/l.png', hasCustomImage: true,
         speech: 'Letra L. L de Lua. A lua é bonita.'
     },
@@ -101,6 +113,7 @@ var alphabetData = {
         upper: 'M', lower: 'm', word: 'Mulher', simpleName: 'M de Mulher', type: 'consonant', icon: 'fa-person-dress',
         phrase: 'A mulher é especial.',
         words: ['mala', 'mesa', 'macaco', 'mão', 'mar', 'melancia', 'mãe', 'meia', 'moto'],
+        capaSrc: 'capaletras/Cartão educativo da letra M_ Mulher.png',
         imageSrc: 'imagenscartilha/m.png', hasCustomImage: true,
         speech: 'Letra M. M de Mulher. A mulher é especial.'
     },
@@ -108,6 +121,7 @@ var alphabetData = {
         upper: 'N', lower: 'n', word: 'Navio', simpleName: 'N de Navio', type: 'consonant', icon: 'fa-ship',
         phrase: 'O navio é grande.',
         words: ['navio', 'nuvem', 'ninho', 'noite', 'norte', 'número', 'nada', 'nome', 'nariz'],
+        capaSrc: 'capaletras/Cartão Educativo da Letra N com Navio.png',
         imageSrc: 'imagenscartilha/n.png', hasCustomImage: true,
         speech: 'Letra N. N de Navio. O navio é grande.'
     },
@@ -115,6 +129,7 @@ var alphabetData = {
         upper: 'O', lower: 'o', word: 'Ovo', simpleName: 'O de Ovo', type: 'vowel', icon: 'fa-egg',
         phrase: 'O ovo é nutritivo.',
         words: ['ovo', 'ovelha', 'onça', 'oito', 'olho', 'orelha', 'onda', 'ouro', 'outono'],
+        capaSrc: 'capaletras/Cartaz Educativo da Letra O com Ovo.png',
         imageSrc: 'imagenscartilha/o.png', hasCustomImage: true,
         speech: 'Letra O. O de Ovo. O ovo é nutritivo.'
     },
@@ -122,6 +137,7 @@ var alphabetData = {
         upper: 'P', lower: 'p', word: 'Pato', simpleName: 'P de Pato', type: 'consonant', icon: 'fa-feather',
         phrase: 'O pato é simpático.',
         words: ['pato', 'pão', 'peixe', 'pipa', 'porta', 'pipoca', 'pijama', 'pote', 'pulga'],
+        capaSrc: 'capaletras/Cartaz Educativo do Pato.png',
         imageSrc: 'imagenscartilha/p.png', hasCustomImage: true,
         speech: 'Letra P. P de Pato. O pato é simpático.'
     },
@@ -129,6 +145,7 @@ var alphabetData = {
         upper: 'Q', lower: 'q', word: 'Queijo', simpleName: 'Q de Queijo', type: 'consonant', icon: 'fa-cheese',
         phrase: 'O queijo é delicioso.',
         words: ['queijo', 'quadro', 'quase', 'quilo', 'quina', 'quente', 'quati', 'queixo', 'quinta'],
+        capaSrc: 'capaletras/Cartão do Q de Queijo.png',
         imageSrc: 'imagenscartilha/q.png', hasCustomImage: true,
         speech: 'Letra Q. Q de Queijo. O queijo é delicioso.'
     },
@@ -136,6 +153,7 @@ var alphabetData = {
         upper: 'R', lower: 'r', word: 'Rato', simpleName: 'R de Rato', type: 'consonant', icon: 'fa-paw',
         phrase: 'O rato é esperto.',
         words: ['rato', 'rede', 'rio', 'roda', 'rima', 'roupa', 'relógio', 'raposa', 'rua'],
+        capaSrc: 'capaletras/Cartaz Educativo da Letra R com Rato.png',
         imageSrc: 'imagenscartilha/r.png', hasCustomImage: true,
         speech: 'Letra R. R de Rato. O rato é esperto.'
     },
@@ -143,6 +161,7 @@ var alphabetData = {
         upper: 'S', lower: 's', word: 'Sapo', simpleName: 'S de Sapo', type: 'consonant', icon: 'fa-frog',
         phrase: 'O sapo é saltitante.',
         words: ['sapo', 'sol', 'saia', 'sino', 'seda', 'sabonete', 'suco', 'sorvete'],
+        capaSrc: 'capaletras/Cartão Educativo_ S de Sapo.png',
         imageSrc: 'imagenscartilha/s.png', hasCustomImage: true,
         speech: 'Letra S. S de Sapo. O sapo é saltitante.'
     },
@@ -150,6 +169,7 @@ var alphabetData = {
         upper: 'T', lower: 't', word: 'Tomate', simpleName: 'T de Tomate', type: 'consonant', icon: 'fa-apple-whole',
         phrase: 'O tomate é saudável.',
         words: ['tomate', 'tela', 'tigre', 'trem', 'tijolo', 'tesoura', 'touro', 'tarde', 'tapete'],
+        capaSrc: 'capaletras/Cartaz Infantil da Letra T com Tomate.png',
         imageSrc: 'imagenscartilha/t.png', hasCustomImage: true,
         speech: 'Letra T. T de Tomate. O tomate é saudável.'
     },
@@ -157,6 +177,7 @@ var alphabetData = {
         upper: 'U', lower: 'u', word: 'Uva', simpleName: 'U de Uva', type: 'vowel', icon: 'fa-leaf',
         phrase: 'A uva é saborosa.',
         words: ['uva', 'urso', 'união', 'unha', 'urna', 'uniforme', 'urubu', 'urina', 'urucum'],
+        capaSrc: 'capaletras/Cartaz Educativo da Uva.png',
         imageSrc: 'imagenscartilha/u.png', hasCustomImage: true,
         speech: 'Letra U. U de Uva. A uva é saborosa.'
     },
@@ -164,6 +185,7 @@ var alphabetData = {
         upper: 'V', lower: 'v', word: 'Vaca', simpleName: 'V de Vaca', type: 'consonant', icon: 'fa-cow',
         phrase: 'A vaca é tranquila.',
         words: ['vaca', 'vela', 'vovô', 'viola', 'vento', 'vinho', 'violão', 'vassoura', 'vermelho'],
+        capaSrc: 'capaletras/Cartaz educativo da letra V com vaca.png',
         imageSrc: 'imagenscartilha/v.png', hasCustomImage: true,
         speech: 'Letra V. V de Vaca. A vaca é tranquila.'
     },
@@ -171,6 +193,7 @@ var alphabetData = {
         upper: 'W', lower: 'w', word: 'WhatsApp', simpleName: 'W de WhatsApp', type: 'consonant', icon: 'fa-comment-dots',
         phrase: 'O WhatsApp é prático.',
         words: ['whatsapp', 'whisky', 'waffle', 'wi-fi', 'workshop', 'wolverine', 'walkie-talkie', 'web'],
+        capaSrc: 'capaletras/Cartão Educativo da Letra W com WhatsApp.png',
         imageSrc: 'imagenscartilha/w.png', hasCustomImage: true,
         speech: 'Letra W. W de WhatsApp. O WhatsApp é prático.'
     },
@@ -178,6 +201,7 @@ var alphabetData = {
         upper: 'X', lower: 'x', word: 'Xadrez', simpleName: 'X de Xadrez', type: 'consonant', icon: 'fa-chess-board',
         phrase: 'O xadrez é divertido.',
         words: ['xadrez', 'xícara', 'xilofone', 'xarope', 'xampu', 'xbox', 'xale', 'xerife', 'xenofobia'],
+        capaSrc: 'imagenscartilha/x.png',
         imageSrc: 'imagenscartilha/x.png', hasCustomImage: true,
         speech: 'Letra X. X de Xadrez. O xadrez é divertido.'
     },
@@ -185,13 +209,15 @@ var alphabetData = {
         upper: 'Y', lower: 'y', word: 'Yoga', simpleName: 'Y de Yoga', type: 'consonant', icon: 'fa-heart',
         phrase: 'O yoga traz paz e saúde.',
         words: ['yoga', 'yakisoba', 'youtube'],
-        imageSrc: 'imagenscartilha/y.png', hasCustomImage: false,
+        capaSrc: '',
+        imageSrc: '', hasCustomImage: false,
         speech: 'Letra Y. Y de Yoga. O yoga traz paz e saúde.'
     },
     Z: {
         upper: 'Z', lower: 'z', word: 'Zebra', simpleName: 'Z de Zebra', type: 'consonant', icon: 'fa-horse',
         phrase: 'A zebra é linda.',
         words: ['zebra', 'zangão', 'zero', 'zíper', 'zumbi', 'zoológico', 'zente', 'zangado', 'zelador'],
+        capaSrc: 'capaletras/Cartaz Educativo da Zebra e da Letra Z.png',
         imageSrc: 'imagenscartilha/z.png', hasCustomImage: true,
         speech: 'Letra Z. Z de Zebra. A zebra é linda.'
     }
@@ -879,9 +905,10 @@ function renderAlphabetCards(filter) {
         card.setAttribute('onclick', "abrirCartilha('" + k + "')");
         card.setAttribute('onkeydown', "if(event.key==='Enter'||event.key===' ')abrirCartilha('" + k + "')");
 
-        var mediaHtml = item.hasCustomImage
+        var thumbSrc = item.capaSrc || (item.hasCustomImage ? item.imageSrc : null);
+        var mediaHtml = thumbSrc
             ? '<div class="letter-card-thumb-wrap" aria-hidden="true">' +
-                '<img src="' + item.imageSrc + '" alt="" class="letter-card-thumb" loading="lazy">' +
+                '<img src="' + thumbSrc + '" alt="' + item.word + '" class="letter-card-thumb" loading="lazy" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas ' + item.icon + '\\\'></i>\'">' +
               '</div>'
             : '<div class="letter-badge-icon" aria-hidden="true">' +
                 '<i class="fas ' + item.icon + '"></i>' +

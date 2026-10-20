@@ -515,6 +515,45 @@
             border: 1px solid #C8E6C9;
         }
 
+        .letter-card-thumb-wrap {
+            width: 82px;
+            height: 82px;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #FFFFFF;
+            border: 2px solid #C8E6C9;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            padding: 2px;
+            margin-bottom: 0.2rem;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .letter-card[data-type="vowel"] .letter-card-thumb-wrap {
+            border-color: #FFE0B2;
+        }
+
+        .letter-card:hover .letter-card-thumb-wrap {
+            transform: scale(1.08);
+            border-color: var(--green);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+        }
+
+        .letter-card[data-type="vowel"]:hover .letter-card-thumb-wrap {
+            border-color: #E65100;
+            box-shadow: 0 4px 12px rgba(230, 81, 0, 0.2);
+        }
+
+        .letter-card-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
         .letter-badge-icon {
             width: 58px;
             height: 58px;
@@ -1635,6 +1674,7 @@
             .activity-header h1 { font-size: 1.7rem; }
             .letters-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
             .letter-card { padding: 1.1rem 0.5rem 0.9rem; }
+            .letter-card-thumb-wrap { width: 70px; height: 70px; }
             .letter-badge-icon { width: 52px; height: 52px; font-size: 1.4rem; }
             .letter-letters .letter-upper { font-size: 2.3rem; }
             .letter-letters .letter-lower { font-size: 1.7rem; }

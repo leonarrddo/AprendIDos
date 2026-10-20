@@ -593,8 +593,8 @@ function getLetterMetrics() {
                     x2: curX + chW,
                     width: chW,
                     centerX: curX + chW / 2,
-                    y1: lineObj.baseline - lineObj.fontSize * 0.95,
-                    y2: lineObj.baseline + lineObj.fontSize * 0.15,
+                    y1: lineObj.baseline - lineObj.fontSize * 0.72,
+                    y2: lineObj.baseline,
                     baseline: lineObj.baseline,
                     fontSize: lineObj.fontSize,
                     line: lineObj.lineIndex || 0
@@ -623,8 +623,8 @@ function drawBackgroundGuides() {
     // Desenha pautas para cada linha (estilo caderno de caligrafia do Caminho Suave)
     layout.lines.forEach(function(lineObj) {
         var base = lineObj.baseline;
-        var top = base - lineObj.fontSize * 0.95;
-        var mid = base - lineObj.fontSize * 0.48;
+        var top = base - lineObj.fontSize * 0.72;
+        var mid = base - lineObj.fontSize * 0.36;
         
         writingCtx.save();
         // Linha de topo suave
@@ -668,20 +668,21 @@ function drawBackgroundGuides() {
             writingCtx.font = 'bold ' + m.fontSize + 'px Nunito, sans-serif';
             
             // 1. Fundo do cartão da letra (estilo bloco pedagógico para idosos enxergarem com facilidade)
-            var padX = Math.max(3, m.fontSize * 0.04);
+            var padX = Math.max(4, m.fontSize * 0.05);
+            var padY = Math.max(5, m.fontSize * 0.06);
             var cardX = m.x1 - padX;
-            var cardY = m.y1 - 3;
+            var cardY = m.y1 - padY;
             var cardW = m.width + padX * 2;
-            var cardH = (m.y2 - m.y1) + 6;
+            var cardH = (m.y2 - m.y1) + padY * 2;
             
             writingCtx.save();
-            writingCtx.fillStyle = 'rgba(232, 245, 233, 0.60)'; // verde claro com bom contraste
-            writingCtx.strokeStyle = 'rgba(165, 214, 167, 0.50)';
-            writingCtx.lineWidth = 1.2;
+            writingCtx.fillStyle = 'rgba(232, 245, 233, 0.65)'; // verde claro com bom contraste
+            writingCtx.strokeStyle = 'rgba(165, 214, 167, 0.70)';
+            writingCtx.lineWidth = 1.4;
             writingCtx.setLineDash([]);
             if (writingCtx.roundRect) {
                 writingCtx.beginPath();
-                writingCtx.roundRect(cardX, cardY, cardW, cardH, 8);
+                writingCtx.roundRect(cardX, cardY, cardW, cardH, 10);
                 writingCtx.fill();
                 writingCtx.stroke();
             } else {

@@ -390,8 +390,8 @@
         }
 
         .consonant-card-thumb-wrap {
-            width: 64px;
-            height: 64px;
+            width: 76px;
+            height: 76px;
             border-radius: 14px;
             overflow: hidden;
             border: 2px solid #C8E6C9;
@@ -401,18 +401,20 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: transform 0.22s ease;
+            padding: 2px;
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
         }
 
         .consonant-card:hover .consonant-card-thumb-wrap {
-            transform: scale(1.08) rotate(-3deg);
+            transform: scale(1.08);
             border-color: var(--green);
+            box-shadow: 0 4px 12px rgba(46,125,50,0.2);
         }
 
         .consonant-card-thumb {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             display: block;
         }
 
@@ -1136,7 +1138,7 @@
         @media (max-width: 600px) {
             .consonants-grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
             .consonant-card { padding: 1rem 0.5rem 0.85rem; }
-            .consonant-card-thumb-wrap, .consonant-badge-icon { width: 54px; height: 54px; }
+            .consonant-card-thumb-wrap, .consonant-badge-icon { width: 64px; height: 64px; }
             .consonant-letters .letter-upper { font-size: 2.3rem; }
             .consonant-letters .letter-lower { font-size: 1.7rem; }
             .consonant-word { font-size: 1.05rem; }

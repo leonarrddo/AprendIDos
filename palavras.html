@@ -6,7 +6,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
-    <title>AprendIDos — Palavras do Dia a Dia</title>
+    <title>AprendIDos — Catálogo de Palavras do Dia a Dia</title>
     <script>
       if (window.top !== window.self) {
         try { window.top.location = window.self.location; } catch (e) { }
@@ -31,6 +31,8 @@
         body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--fg); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
         .skip-link { position: absolute; top: -100%; left: 1rem; background: var(--green); color: #fff; padding: 0.8rem 1.4rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 1rem; z-index: 200; text-decoration: none; transition: top 0.2s; }
         .skip-link:focus { top: 0.5rem; }
+
+        /* NAVBAR */
         .navbar { background: var(--white); border-bottom: 3px solid var(--green); padding: 0.4rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
         .navbar-left { display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
         .btn-back { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--bg); border: 2px solid var(--green-light); border-radius: var(--radius-sm); padding: 0.45rem 0.9rem; color: var(--green); font-size: 0.95rem; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; text-decoration: none; }
@@ -48,71 +50,122 @@
         .navbar-mobile-menu.open { display: flex; }
         .navbar-mobile-menu a { display: flex; align-items: center; gap: 0.6rem; color: var(--muted); text-decoration: none; font-weight: 700; font-size: 1.2rem; padding: 1rem 1.2rem; border-radius: 8px; transition: all 0.2s; }
         .navbar-mobile-menu a:hover, .navbar-mobile-menu a.active { color: var(--green); background: var(--green-pale); }
-        .container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 3rem; flex: 1; }
-        .activity-header { margin-bottom: 2rem; }
-        .activity-header h1 { font-size: 2rem; font-weight: 900; color: var(--fg); margin-bottom: 0.3rem; }
-        .activity-header .subtitle { font-size: 1.1rem; color: var(--fg-secondary); font-weight: 600; }
-        .instruction-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 1.8rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+
+        .container { max-width: 1020px; margin: 0 auto; padding: 1.8rem 1.5rem 3rem; flex: 1; }
+        .activity-header { margin-bottom: 1.5rem; }
+        .activity-header h1 { font-size: 2.2rem; font-weight: 900; color: var(--fg); margin-bottom: 0.3rem; }
+        .activity-header .subtitle { font-size: 1.15rem; color: var(--fg-secondary); font-weight: 600; }
+
+        .instruction-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 1.4rem 1.8rem; margin-bottom: 1.8rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
         .instruction-card .instruction-text { flex: 1; }
         .instruction-card .instruction-text p { font-size: 1.15rem; font-weight: 700; color: var(--fg); }
-        .instruction-card .instruction-text p+p { margin-top: 0.3rem; font-size: 1rem; color: var(--fg-secondary); font-weight: 600; }
-        .btn-play-instruction { flex-shrink: 0; width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--green); background: var(--green-pale); color: var(--green); font-size: 1.6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
-        .btn-play-instruction:hover, .btn-play-instruction.speaking { background: var(--green); color: #fff; }
-        .section-title { font-size: 1.4rem; font-weight: 800; color: var(--fg); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
-        .section-title i { color: var(--green); font-size: 1.2rem; }
+        .instruction-card .instruction-text p+p { margin-top: 0.2rem; font-size: 1rem; color: var(--fg-secondary); font-weight: 600; }
+        .btn-play-instruction { flex-shrink: 0; width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--green); background: var(--green-pale); color: var(--green); font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
+        .btn-play-instruction:hover, .btn-play-instruction.speaking { background: var(--green); color: #fff; transform: scale(1.05); }
 
-        /* DEMO */
-        .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
-        .demo-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 1.1rem 0.6rem; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
-        .demo-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 4px 12px rgba(0,105,92,0.12); }
-        .demo-emoji { font-size: 2.2rem; line-height: 1; }
-        .demo-word { font-size: 1.25rem; font-weight: 900; color: var(--fg); }
-        .divider { border: none; height: 2px; background: var(--border); margin: 2rem 0 2.5rem; }
+        /* RÉGUA DE LETRAS A-Z */
+        .letter-nav-wrapper { position: sticky; top: 60px; z-index: 90; background: rgba(250, 243, 224, 0.96); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 0.6rem 0; margin: 0 -1.5rem 1.5rem; border-bottom: 2px solid var(--green-light); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .letter-nav-container { max-width: 1020px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; gap: 0.5rem; overflow-x: auto; scrollbar-width: thin; padding-bottom: 0.3rem; }
+        .letter-nav-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 48px; height: 48px; background: var(--white); color: var(--fg); border: 2.5px solid var(--border); border-radius: 12px; font-size: 1.35rem; font-weight: 900; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+        .letter-nav-btn:hover { background: var(--green-pale); border-color: var(--green); transform: translateY(-2px); }
+        .letter-nav-btn.active { background: var(--green); color: #fff; border-color: var(--green-dark); box-shadow: 0 4px 12px rgba(46,125,50,0.35); transform: scale(1.08); }
 
-        /* EXERCISE */
-        .exercise-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
-        .progress-label { font-size: 1rem; font-weight: 700; color: var(--muted); text-align: center; margin-bottom: 0.4rem; }
+        /* VITRINE DA LETRA */
+        .showcase-card { background: var(--white); border: 3px solid var(--border); border-radius: var(--radius); padding: 2rem; margin-bottom: 2.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+        .showcase-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-bottom: 2px solid var(--green-pale); padding-bottom: 1.2rem; margin-bottom: 1.5rem; }
+        .showcase-title-group { display: flex; align-items: center; gap: 1rem; }
+        .letter-badge-huge { width: 62px; height: 62px; border-radius: 16px; background: var(--green); color: #fff; font-size: 2.4rem; font-weight: 900; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(46,125,50,0.25); }
+        .showcase-title { font-size: 1.8rem; font-weight: 900; color: var(--fg); }
+        .showcase-title span { color: var(--green-dark); }
+        .btn-sound-letter { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--green-pale); color: var(--green-dark); border: 2px solid var(--green); border-radius: var(--radius-sm); padding: 0.55rem 1.1rem; font-size: 1rem; font-weight: 800; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+        .btn-sound-letter:hover { background: var(--green); color: #fff; }
+
+        /* BARRA DO LOTE */
+        .lot-control-bar { display: flex; align-items: center; justify-content: space-between; background: var(--green-pale); border: 2px solid var(--green-light); border-radius: var(--radius-sm); padding: 0.8rem 1.2rem; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 0.8rem; }
+        .lot-info { display: flex; align-items: center; gap: 0.6rem; font-size: 1.05rem; font-weight: 800; color: var(--green-dark); }
+        .lot-dots { display: flex; align-items: center; gap: 0.4rem; }
+        .lot-dot { width: 34px; height: 34px; border-radius: 8px; border: 2px solid var(--green); background: #fff; color: var(--green-dark); font-weight: 900; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .lot-dot.active { background: var(--green); color: #fff; border-color: var(--green-dark); transform: scale(1.08); }
+        .btn-next-lot { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.65rem 1.3rem; font-size: 1.05rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 10px rgba(46,125,50,0.25); }
+        .btn-next-lot:hover { background: var(--green-dark); transform: translateY(-2px); }
+
+        /* GRADE DE 4 CARDS DE PALAVRAS */
+        .words-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.3rem; margin-bottom: 2rem; }
+        @media (max-width: 900px) { .words-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .word-card { background: #fff; border: 2.5px solid var(--border); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); position: relative; user-select: none; }
+        .word-card:hover { transform: translateY(-6px); border-color: var(--green); box-shadow: 0 10px 24px rgba(46,125,50,0.18); }
+        .word-card.playing { animation: card-pulse 0.5s ease; border-color: var(--green-dark); }
+        @keyframes card-pulse { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
+
+        .word-img-wrapper { width: 100%; aspect-ratio: 1 / 1; border-radius: var(--radius-sm); overflow: hidden; background: #F8F9FA; border: 1.5px solid #E9ECEF; margin-bottom: 0.8rem; position: relative; display: flex; align-items: center; justify-content: center; }
+        .word-photo { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        .word-card:hover .word-photo { transform: scale(1.08); }
+        .word-fallback-icon { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; color: var(--green); background: linear-gradient(135deg, rgba(200, 230, 201, 0.35), rgba(232, 245, 233, 0.65)); }
+        .word-fallback-icon i { font-size: 3.2rem; opacity: 0.85; }
+        .placeholder-tag { font-size: 0.75rem; font-weight: 800; color: var(--fg-secondary); background: rgba(255, 255, 255, 0.9); border: 1.5px dashed var(--green); padding: 0.2rem 0.65rem; border-radius: 99px; }
+
+        .sound-pill { position: absolute; bottom: 8px; right: 8px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); color: #fff; font-size: 0.78rem; font-weight: 800; padding: 0.25rem 0.6rem; border-radius: 99px; display: inline-flex; align-items: center; gap: 0.35rem; transition: background 0.2s; }
+        .word-card:hover .sound-pill { background: var(--green); }
+
+        .word-name { font-size: 1.45rem; font-weight: 900; color: var(--fg); letter-spacing: 0.5px; }
+        .word-name .first-char { color: var(--green); font-size: 1.65rem; text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 4px; }
+
+        /* NAVEGAÇÃO DE LETRAS (ANTERIOR / PRÓXIMA) */
+        .letter-pagination { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-top: 2px dashed var(--green-light); padding-top: 1.5rem; flex-wrap: wrap; }
+        .btn-nav-step { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--bg); border: 2px solid var(--green); color: var(--green-dark); border-radius: var(--radius-sm); padding: 0.7rem 1.4rem; font-size: 1.05rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
+        .btn-nav-step:hover:not(:disabled) { background: var(--green); color: #fff; transform: translateY(-2px); }
+        .btn-nav-step:disabled { opacity: 0.4; cursor: not-allowed; border-color: #BDBDBD; color: #757575; }
+
+        /* EXERCÍCIO */
+        .divider { border: none; height: 3px; background: var(--border); margin: 3rem 0; border-radius: 99px; }
+        .section-title { font-size: 1.6rem; font-weight: 900; color: var(--fg); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
+        .section-title i { color: var(--green); }
+
+        .exercise-card { background: var(--white); border: 3px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+        .progress-label { font-size: 1rem; font-weight: 800; color: var(--muted); text-align: center; margin-bottom: 0.4rem; }
         .progress-bar-track { background: var(--green-light); border-radius: 99px; height: 14px; margin-bottom: 1.5rem; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.5s ease; width: 0%; }
-        .score-row { display: flex; align-items: center; justify-content: center; gap: 2rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
-        .score-item { display: flex; align-items: center; gap: 0.4rem; font-size: 1.05rem; font-weight: 700; color: var(--fg-secondary); }
-        .score-num { font-size: 1.4rem; font-weight: 900; min-width: 1.5ch; text-align: center; }
-        .score-item.hits .score-num { color: var(--green-dark); }
-        .score-item.misses .score-num { color: #C62828; }
-        .exercise-instruction { font-size: 1.2rem; font-weight: 800; color: var(--fg); text-align: center; margin-bottom: 1.2rem; }
+        .score-row { display: flex; align-items: center; justify-content: center; gap: 2rem; margin-bottom: 1.8rem; }
+        .score-item { display: flex; align-items: center; gap: 0.4rem; font-size: 1.05rem; font-weight: 800; }
+        .score-num { font-size: 1.4rem; font-weight: 900; }
+        .score-item.hits { color: var(--green-dark); }
+        .score-item.misses { color: #C62828; }
+
+        .exercise-instruction { font-size: 1.25rem; font-weight: 800; color: var(--fg); text-align: center; margin-bottom: 1.2rem; }
         .audio-row { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
-        .btn-audio-exercise { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.9rem 1.8rem; font-size: 1.1rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 10px rgba(46,125,50,0.25); }
-        .btn-audio-exercise:hover { background: var(--green-dark); }
+        .btn-audio-exercise { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.9rem 1.8rem; font-size: 1.15rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 10px rgba(46,125,50,0.25); }
+        .btn-audio-exercise:hover { background: var(--green-dark); transform: scale(1.02); }
         .btn-audio-exercise.speaking { animation: pulse-green 0.9s ease infinite; }
-        .btn-help-exercise { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--green-light); background: var(--green-pale); color: var(--green); font-size: 1.1rem; cursor: pointer; transition: all 0.2s; }
+        .btn-help-exercise { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--green-light); background: var(--green-pale); color: var(--green); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .btn-help-exercise:hover { background: var(--green); color: #fff; }
-        .audio-hint { font-size: 0.95rem; color: var(--muted); font-weight: 600; }
 
-        .options-container { display: flex; flex-direction: column; gap: 1rem; max-width: 480px; margin: 0 auto 1.5rem; }
-        .btn-word-opt { display: flex; align-items: center; justify-content: center; background: var(--bg); border: 3px solid var(--border); border-radius: var(--radius-sm); padding: 1.1rem 1.4rem; font-size: 1.8rem; font-weight: 900; font-family: 'Nunito', sans-serif; color: var(--fg); cursor: pointer; transition: all 0.2s; min-height: 70px; }
-        .btn-word-opt:hover:not(:disabled) { border-color: var(--accent); background: #E0F2F1; transform: translateY(-2px); }
-        .btn-word-opt:disabled { cursor: default; }
-        .btn-word-opt.correct { border-color: var(--green); background: var(--green-pale); color: var(--green-dark); animation: pop-correct 0.35s ease; }
-        .btn-word-opt.wrong { border-color: #EF9A9A; background: #FFF3F3; color: #C62828; animation: shake 0.4s ease; }
+        .options-container { display: flex; flex-direction: column; gap: 0.9rem; max-width: 520px; margin: 0 auto 1.5rem; }
+        .btn-exercise-opt { display: flex; align-items: center; justify-content: flex-start; gap: 1.2rem; background: var(--bg); border: 3px solid var(--border); border-radius: var(--radius-sm); padding: 0.7rem 1.2rem; cursor: pointer; transition: all 0.2s; min-height: 72px; width: 100%; text-align: left; }
+        .btn-exercise-opt:hover:not(:disabled) { border-color: var(--green); background: #E8F5E9; transform: translateY(-2px); }
+        .btn-exercise-opt:disabled { cursor: default; }
+        .opt-mini-photo { width: 54px; height: 54px; border-radius: 8px; object-fit: cover; border: 1.5px solid #DDD; flex-shrink: 0; }
+        .opt-text { font-size: 1.5rem; font-weight: 900; color: var(--fg); flex: 1; }
+        .btn-exercise-opt.correct { border-color: var(--green); background: var(--green-pale); color: var(--green-dark); }
+        .btn-exercise-opt.wrong { border-color: #EF9A9A; background: #FFF3F3; color: #C62828; animation: shake 0.4s ease; }
 
-        @keyframes pop-correct { 0%{transform:scale(1)} 50%{transform:scale(1.04)} 100%{transform:scale(1)} }
         @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-5px)} 40%{transform:translateX(5px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
         @keyframes pulse-green { 0%,100%{box-shadow:0 0 0 0 rgba(46,125,50,0.3)} 50%{box-shadow:0 0 0 10px rgba(46,125,50,0)} }
-        @keyframes fade-up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fade-up { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 
         .feedback-area { text-align: center; min-height: 3.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; }
         .feedback-msg { font-size: 1.3rem; font-weight: 800; border-radius: var(--radius-sm); padding: 0.7rem 1.5rem; display: inline-flex; align-items: center; gap: 0.5rem; animation: fade-up 0.3s ease; }
         .feedback-msg.success { background: var(--green-pale); color: var(--green-dark); border: 2px solid var(--green-light); }
         .feedback-msg.error { background: #FFF8E1; color: #E65100; border: 2px solid #FFE0B2; }
-        .btn-next { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.85rem 2rem; font-size: 1.05rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
+        .btn-next { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.85rem 2.2rem; font-size: 1.1rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
         .btn-next:hover { background: var(--green-dark); }
 
         /* COMPLETION */
         .completion { text-align: center; padding: 2.5rem 1.5rem; display: none; }
         .completion.visible { display: block; animation: fade-up 0.4s ease; }
-        .completion-icon { font-size: 3.5rem; color: var(--green); margin-bottom: 0.8rem; }
-        .completion h2 { font-size: 1.8rem; font-weight: 900; margin-bottom: 0.4rem; }
-        .completion p { font-size: 1.1rem; color: var(--fg-secondary); font-weight: 600; margin-bottom: 2rem; }
+        .completion-icon { font-size: 3.8rem; color: var(--green); margin-bottom: 0.8rem; }
+        .completion h2 { font-size: 2rem; font-weight: 900; margin-bottom: 0.4rem; }
+        .completion p { font-size: 1.15rem; color: var(--fg-secondary); font-weight: 600; margin-bottom: 2rem; }
         .completion-stats { display: flex; justify-content: center; gap: 2.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
         .stat { text-align: center; }
         .stat-value { font-size: 2.5rem; font-weight: 900; line-height: 1; }
@@ -124,7 +177,7 @@
         .wrong-answer { color: #C62828; text-decoration: line-through; font-weight: 800; }
         .btn-restart { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 1rem 2.5rem; font-size: 1.1rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
         .btn-restart:hover { background: var(--green-dark); }
-        .footer { background: var(--white); border-top: 2px solid var(--border); padding: 1.2rem 1.5rem; text-align: center; font-size: 0.9rem; color: var(--muted); font-weight: 600; margin-top: auto; }
+        .footer { background: var(--white); border-top: 2px solid var(--border); padding: 1.2rem 1.5rem; text-align: center; font-size: 0.95rem; color: var(--muted); font-weight: 700; margin-top: auto; }
         .footer i { color: var(--green); }
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
         @media (max-width: 768px) { .navbar-nav { display: none; } .navbar-hamburger { display: flex; align-items: center; justify-content: center; } }
@@ -162,24 +215,28 @@
     </button>
     <div class="navbar-mobile-menu" id="mobileMenu">
         <a href="menu.html" role="menuitem">
-            <i class="fas fa-home" aria-hidden="true"></i>
-            Início
+            <i class="fas fa-home" aria-hidden="true"></i> Início
         </a>
         <a href="licoes.html" role="menuitem">
-            <i class="fas fa-book" aria-hidden="true"></i>
-            Módulos
+            <i class="fas fa-book" aria-hidden="true"></i> Módulos
         </a>
         <a href="licoes.html" class="active" role="menuitem" aria-current="page">
-            <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
-            Atividades
+            <i class="fas fa-puzzle-piece" aria-hidden="true"></i> Atividades
         </a>
     </div>
 </nav>
 
+<!-- NAVEGAÇÃO DE A A Z (STICKY) -->
+<div class="letter-nav-wrapper">
+    <div class="letter-nav-container" id="letterNavContainer" role="tablist" aria-label="Selecione uma letra do alfabeto">
+        <!-- Gerado via JavaScript -->
+    </div>
+</div>
+
 <main class="container" id="main-content">
     <header class="activity-header">
         <h1>Palavras do Dia a Dia</h1>
-        <p class="subtitle">Aprenda a reconhecer palavras familiares presentes na sua rotina.</p>
+        <p class="subtitle">Descubra imagens reais e nomes de objetos familiares para cada letra do alfabeto.</p>
     </header>
 
     <div id="reviewBanner" style="display:none; align-items:center; gap:14px; background:#E8F5E9; border:2px solid #81C784; border-radius:16px; padding:14px 20px; margin-bottom:20px; color:#1B5E20; box-shadow:0 4px 12px rgba(46,125,50,0.10);">
@@ -192,53 +249,62 @@
 
     <div class="instruction-card">
         <div class="instruction-text">
-            <p>Reconheça palavras comuns do dia a dia.</p>
-            <p>Toque nos exemplos para ouvir cada palavra com atenção.</p>
+            <p>Toque em cada imagem para ouvir o nome da palavra com clareza.</p>
+            <p>Use o botão de <strong>"Ver mais palavras"</strong> para explorar novos lotes de objetos!</p>
         </div>
         <button class="btn-play-instruction" id="btnInstruction" aria-label="Ouvir instrução" onclick="playInstruction()">
             <i class="fas fa-play"></i>
         </button>
     </div>
 
-    <!-- DEMO -->
-    <section aria-labelledby="title-demo">
-        <h2 class="section-title" id="title-demo">
-            <i class="fas fa-book-open"></i> Exemplos do Cotidiano
-        </h2>
-        <div class="demo-grid">
-            <div class="demo-card" onclick="playDemo('Cama')" role="button" tabindex="0" aria-label="Cama">
-                <div class="demo-emoji">🛏️</div>
-                <div class="demo-word">CAMA</div>
+    <!-- VITRINE DA LETRA SELECIONADA -->
+    <section class="showcase-card" aria-labelledby="showcaseTitle">
+        <div class="showcase-header">
+            <div class="showcase-title-group">
+                <div class="letter-badge-huge" id="showcaseLetterBadge" aria-hidden="true">A</div>
+                <h2 class="showcase-title" id="showcaseTitle">Palavras com a Letra <span>A</span></h2>
             </div>
-            <div class="demo-card" onclick="playDemo('Mesa')" role="button" tabindex="0" aria-label="Mesa">
-                <div class="demo-emoji">🪵</div>
-                <div class="demo-word">MESA</div>
+            <button class="btn-sound-letter" onclick="playCurrentLetterSound()" aria-label="Ouvir o som da letra">
+                <i class="fas fa-volume-up"></i> Ouvir o som da letra
+            </button>
+        </div>
+
+        <!-- CONTROLE DOS 4 LOTES -->
+        <div class="lot-control-bar">
+            <div class="lot-info">
+                <i class="fas fa-layer-group"></i>
+                <span id="lotIndicator">Lote 1 de 4</span>
+                <div class="lot-dots" id="lotDots">
+                    <!-- Gerado via JavaScript -->
+                </div>
             </div>
-            <div class="demo-card" onclick="playDemo('Pão')" role="button" tabindex="0" aria-label="Pão">
-                <div class="demo-emoji">🥖</div>
-                <div class="demo-word">PÃO</div>
-            </div>
-            <div class="demo-card" onclick="playDemo('Copo')" role="button" tabindex="0" aria-label="Copo">
-                <div class="demo-emoji">🥛</div>
-                <div class="demo-word">COPO</div>
-            </div>
-            <div class="demo-card" onclick="playDemo('Café')" role="button" tabindex="0" aria-label="Café">
-                <div class="demo-emoji">☕</div>
-                <div class="demo-word">CAFÉ</div>
-            </div>
-            <div class="demo-card" onclick="playDemo('Porta')" role="button" tabindex="0" aria-label="Porta">
-                <div class="demo-emoji">🚪</div>
-                <div class="demo-word">PORTA</div>
-            </div>
+            <button class="btn-next-lot" onclick="nextLot()" aria-label="Ver mais 4 palavras">
+                <i class="fas fa-sync-alt"></i> Ver mais palavras
+            </button>
+        </div>
+
+        <!-- GRADE COM OS 4 CARDS -->
+        <div class="words-grid" id="wordsGrid">
+            <!-- Cards gerados via JavaScript -->
+        </div>
+
+        <!-- NAVEGAÇÃO DE LETRAS (ANTERIOR / PRÓXIMA) -->
+        <div class="letter-pagination">
+            <button class="btn-nav-step" id="btnPrevLetter" onclick="prevLetter()" aria-label="Letra anterior">
+                <i class="fas fa-arrow-left"></i> Letra anterior
+            </button>
+            <button class="btn-nav-step" id="btnNextLetter" onclick="nextLetter()" aria-label="Próxima letra">
+                Próxima letra <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
     </section>
 
     <hr class="divider">
 
-    <!-- EXERCÍCIO -->
+    <!-- EXERCÍCIO DE FIXAÇÃO -->
     <section aria-labelledby="title-exercise">
         <h2 class="section-title" id="title-exercise">
-            <i class="fas fa-pencil-alt"></i> Agora é sua vez
+            <i class="fas fa-pencil-alt"></i> Agora é sua vez de praticar
         </h2>
 
         <div id="exerciseLayout">
@@ -252,15 +318,14 @@
                     <div class="score-item misses"><i class="fas fa-times-circle" style="color:#C62828"></i><span>Erros:</span><span class="score-num" id="missesCount">0</span></div>
                 </div>
 
-                <p class="exercise-instruction">Ouça o áudio e toque na palavra correspondente:</p>
+                <p class="exercise-instruction">Ouça o áudio e toque na imagem correspondente:</p>
                 <div class="audio-row">
-                    <button class="btn-audio-exercise" id="btnExerciseAudio" onclick="playQuestionAudio()" aria-label="Ouvir a palavra">
+                    <button class="btn-audio-exercise" id="btnExerciseAudio" onclick="playExerciseAudio()" aria-label="Ouvir a palavra">
                         <i class="fas fa-volume-up"></i> Ouvir a palavra
                     </button>
                     <button class="btn-help-exercise" id="btnHelpExercise" onclick="playHelpExercise()" title="Ouvir instrução">
                         <i class="fas fa-play"></i>
                     </button>
-                    <span class="audio-hint">Toque para ouvir</span>
                 </div>
 
                 <div class="options-container" id="optionsContainer" role="group" aria-label="Opções de palavras"></div>

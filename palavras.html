@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; media-src 'self' data: blob: https://translate.google.com; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
     <title>AprendIDos — Catálogo de Palavras do Dia a Dia</title>
     <script>
       if (window.top !== window.self) {
@@ -105,8 +105,98 @@
         .word-fallback-icon i { font-size: 3.2rem; opacity: 0.85; }
         .placeholder-tag { font-size: 0.75rem; font-weight: 800; color: var(--fg-secondary); background: rgba(255, 255, 255, 0.9); border: 1.5px dashed var(--green); padding: 0.2rem 0.65rem; border-radius: 99px; }
 
-        .sound-pill { position: absolute; bottom: 8px; right: 8px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); color: #fff; font-size: 0.78rem; font-weight: 800; padding: 0.25rem 0.6rem; border-radius: 99px; display: inline-flex; align-items: center; gap: 0.35rem; transition: background 0.2s; }
-        .word-card:hover .sound-pill { background: var(--green); }
+        .sound-pill { position: absolute; bottom: 8px; right: 8px; background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(4px); color: #fff; border: 1.5px solid rgba(255,255,255,0.4); font-size: 0.82rem; font-weight: 800; padding: 0.3rem 0.7rem; border-radius: 99px; display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; z-index: 2; }
+        .sound-pill:hover { background: var(--green); border-color: #fff; transform: scale(1.05); }
+
+        .zoom-pill { position: absolute; top: 8px; left: 8px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(4px); color: var(--green-dark); border: 2px solid var(--green); font-size: 0.78rem; font-weight: 900; padding: 0.25rem 0.65rem; border-radius: 99px; display: inline-flex; align-items: center; gap: 0.35rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.2s; pointer-events: none; }
+        .word-card:hover .zoom-pill { background: var(--green); color: #fff; border-color: var(--green-dark); transform: scale(1.06); }
+
+        .btn-open-modal-palavras { display: inline-flex; align-items: center; gap: 0.6rem; background: linear-gradient(135deg, #1B5E20, #2E7D32); color: #FFFFFF; border: none; border-radius: 99px; padding: 0.65rem 1.4rem; font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 800; cursor: pointer; box-shadow: 0 3px 12px rgba(46,125,50,0.25); transition: all 0.22s ease; }
+        .btn-open-modal-palavras:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(46,125,50,0.35); background: linear-gradient(135deg, #16501B, #276E2B); }
+        .btn-open-modal-palavras:active { transform: scale(0.97); }
+
+        /* ===== MODAL DE PALAVRA AMPLIADA (FOTO MAIOR E EXPLICAÇÃO DIDÁTICA) ===== */
+        .palavra-modal { position: fixed; inset: 0; z-index: 1100; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; }
+        .palavra-modal.active { opacity: 1; visibility: visible; }
+        .palavra-backdrop { position: absolute; inset: 0; background: rgba(46, 30, 20, 0.82); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+        .palavra-dialog { position: relative; background: #FFFDF8; border-radius: 24px; border: 3.5px solid var(--green); box-shadow: 0 24px 60px rgba(0,0,0,0.4); width: 100%; max-width: 960px; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; animation: modal-pop 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes modal-pop { from { transform: scale(0.92) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+
+        .palavra-header { background: #FAF3E0; border-bottom: 2px solid #E0D5C1; padding: 1rem 1.6rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-shrink: 0; }
+        .palavra-header-title-wrap { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+        .palavra-badge-letter { font-size: 1rem; font-weight: 900; background: #E8F5E9; color: #2E7D32; border: 2px solid #A5D6A7; padding: 0.35rem 0.9rem; border-radius: 99px; letter-spacing: 0.5px; }
+        .palavra-badge-counter { font-size: 0.95rem; font-weight: 800; color: #5D4037; background: #FFFFFF; border: 1.5px solid #D7CCC8; padding: 0.35rem 0.8rem; border-radius: 99px; }
+
+        .palavra-btn-close { background: #FFFFFF; border: 2px solid #D7CCC8; color: #5D4037; font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 800; padding: 0.5rem 1.2rem; border-radius: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.2s; }
+        .palavra-btn-close:hover { background: #FFEBEE; color: #C62828; border-color: #EF9A9A; }
+
+        .palavra-body { padding: 1.6rem; overflow-y: auto; display: grid; grid-template-columns: 1fr 1.15fr; gap: 1.8rem; align-items: start; }
+        @media (max-width: 800px) { .palavra-body { grid-template-columns: 1fr; gap: 1.2rem; padding: 1.2rem; } }
+
+        .palavra-image-col { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; }
+        .palavra-img-wrapper { width: 100%; max-width: 380px; background: #FFFFFF; border: 3.5px solid #C8E6C9; border-radius: 20px; box-shadow: 0 10px 28px rgba(46,125,50,0.12); overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 340px; position: relative; cursor: pointer; transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s; }
+        .palavra-img-wrapper:hover { transform: scale(1.02); border-color: var(--green); box-shadow: 0 14px 34px rgba(46,125,50,0.22); }
+        .palavra-modal-photo { width: 100%; height: auto; max-height: 380px; object-fit: contain; display: block; background: #FFFFFF; padding: 0.5rem; }
+        .palavra-modal-fallback { padding: 3rem 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem; color: var(--green); }
+        .palavra-modal-fallback i { font-size: 5rem; opacity: 0.85; }
+        .palavra-img-zoom-tag { width: 100%; background: #FAF3E0; border-top: 2px solid #E0D5C1; padding: 0.55rem; font-size: 0.95rem; font-weight: 800; color: #5D4037; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+
+        .palavra-info-col { display: flex; flex-direction: column; gap: 1.1rem; }
+        .palavra-title-display { background: #FAF3E0; border: 2px solid #E0D5C1; border-radius: 18px; padding: 0.9rem 1.4rem; display: flex; align-items: center; justify-content: space-between; }
+        .palavra-big-word { font-size: 2.8rem; font-weight: 900; color: #3E2723; letter-spacing: 1px; line-height: 1.1; }
+        .palavra-big-word .first-char { color: #2E7D32; font-size: 3.2rem; text-decoration: underline; text-decoration-thickness: 4px; text-underline-offset: 6px; }
+
+        .palavra-syllables-box { background: #FFFFFF; border: 2px solid #C8E6C9; border-radius: 16px; padding: 0.9rem 1.3rem; display: flex; flex-direction: column; gap: 0.6rem; }
+        .palavra-syllables-label { font-size: 0.95rem; font-weight: 800; color: #1B5E20; display: flex; align-items: center; gap: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .palavra-syllables-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+        .palavra-syllable-pill { background: #E8F5E9; border: 2px solid #81C784; color: #1B5E20; font-size: 1.35rem; font-weight: 900; padding: 0.35rem 1rem; border-radius: 12px; letter-spacing: 1px; }
+
+        .palavra-desc-box { background: linear-gradient(135deg, #FFF9C4 0%, #FFF59D 100%); border: 2.5px solid #FBC02D; border-radius: 18px; padding: 1.2rem 1.4rem; display: flex; flex-direction: column; gap: 0.5rem; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 127, 23, 0.12); transition: all 0.22s ease; }
+        .palavra-desc-box:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(245, 127, 23, 0.22); background: linear-gradient(135deg, #FFF8B0 0%, #FFF176 100%); }
+        .palavra-desc-header { display: flex; align-items: center; gap: 0.6rem; }
+        .palavra-desc-icon { width: 36px; height: 36px; border-radius: 50%; background: #F57F17; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .palavra-desc-title { font-size: 1rem; font-weight: 900; color: #795548; text-transform: uppercase; letter-spacing: 0.5px; }
+        .palavra-desc-text { font-size: 1.22rem; font-weight: 800; color: #3E2723; line-height: 1.5; }
+        .palavra-desc-hint { font-size: 0.88rem; font-weight: 800; color: #8D6E63; display: flex; align-items: center; gap: 0.4rem; margin-top: 0.2rem; }
+
+        .palavra-actions-row { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .btn-palavra-action { display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 0.85rem 1.4rem; border-radius: 14px; font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 800; cursor: pointer; transition: all 0.2s ease; flex: 1; min-height: 54px; }
+        .btn-palavra-action.main { background: #2E7D32; color: #FFFFFF; border: 2px solid #1B5E20; box-shadow: 0 4px 12px rgba(46,125,50,0.25); }
+        .btn-palavra-action.main:hover { background: #1B5E20; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46,125,50,0.35); }
+        .btn-palavra-action.sec { background: #FAF3E0; color: #3E2723; border: 2px solid #C8E6C9; }
+        .btn-palavra-action.sec:hover { background: #E8F5E9; border-color: #2E7D32; transform: translateY(-2px); }
+
+        .palavra-footer { background: #FAF3E0; border-top: 2px solid #E0D5C1; padding: 1rem 1.6rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-shrink: 0; flex-wrap: wrap; }
+        .palavra-nav-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: #FFFFFF; border: 2.5px solid var(--green); color: var(--green-dark); border-radius: 12px; padding: 0.65rem 1.3rem; font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 800; cursor: pointer; transition: all 0.2s ease; }
+        .palavra-nav-btn:hover:not(:disabled) { background: var(--green); color: #FFFFFF; transform: translateY(-2px); }
+        .palavra-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: #BDBDBD; color: #757575; }
+
+        .palavra-step-dots { display: flex; align-items: center; gap: 0.4rem; }
+        .palavra-step-dot { width: 36px; height: 36px; border-radius: 10px; border: 2px solid var(--green); background: #FFFFFF; color: var(--green-dark); font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .palavra-step-dot:hover { background: var(--green-pale); transform: translateY(-2px); }
+        .palavra-step-dot.active { background: var(--green); color: #FFFFFF; border-color: var(--green-dark); transform: scale(1.1); }
+
+        /* Dark mode overrides */
+        body.dark-mode .palavra-dialog { background: #1E2836; border-color: #22C55E; }
+        body.dark-mode .palavra-header, body.dark-mode .palavra-footer { background: #182029; border-color: #2B3846; }
+        body.dark-mode .palavra-badge-counter { background: #2B3846; border-color: #334155; color: #F8FAFC; }
+        body.dark-mode .palavra-btn-close { background: #2B3846; border-color: #334155; color: #CBD5E1; }
+        body.dark-mode .palavra-img-wrapper { background: #0F172A; border-color: #334155; }
+        body.dark-mode .palavra-modal-photo { background: #0F172A; }
+        body.dark-mode .palavra-img-zoom-tag { background: #182029; border-color: #2B3846; color: #CBD5E1; }
+        body.dark-mode .palavra-title-display { background: #182029; border-color: #2B3846; }
+        body.dark-mode .palavra-big-word { color: #F8FAFC; }
+        body.dark-mode .palavra-syllables-box { background: #182029; border-color: #334155; }
+        body.dark-mode .palavra-syllable-pill { background: #133924; border-color: #22C55E; color: #4ADE80; }
+        body.dark-mode .palavra-desc-box { background: #252818; border-color: #F59E0B; }
+        body.dark-mode .palavra-desc-title { color: #FCD34D; }
+        body.dark-mode .palavra-desc-text { color: #FEF3C7; }
+        body.dark-mode .palavra-desc-hint { color: #FBBF24; }
+        body.dark-mode .btn-palavra-action.sec { background: #182029; border-color: #334155; color: #F8FAFC; }
+        body.dark-mode .palavra-nav-btn { background: #182029; border-color: #22C55E; color: #4ADE80; }
+        body.dark-mode .palavra-step-dot { background: #182029; border-color: #334155; color: #CBD5E1; }
+        body.dark-mode .palavra-step-dot.active { background: #22C55E; color: #0F172A; border-color: #4ADE80; }
+        body.dark-mode .zoom-pill { background: #182029; color: #4ADE80; border-color: #22C55E; }
 
         .word-name { font-size: 1.45rem; font-weight: 900; color: var(--fg); letter-spacing: 0.5px; }
         .word-name .first-char { color: var(--green); font-size: 1.65rem; text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 4px; }
@@ -264,9 +354,14 @@
                 <div class="letter-badge-huge" id="showcaseLetterBadge" aria-hidden="true">A</div>
                 <h2 class="showcase-title" id="showcaseTitle">Palavras com a Letra <span>A</span></h2>
             </div>
-            <button class="btn-sound-letter" onclick="playCurrentLetterSound()" aria-label="Ouvir o som da letra">
-                <i class="fas fa-volume-up"></i> Ouvir o som da letra
-            </button>
+            <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                <button type="button" class="btn-open-modal-palavras" onclick="abrirModalPalavra(0)" aria-label="Abrir as palavras com fotos ampliadas e explicação didática">
+                    <i class="fas fa-book-open"></i> Ver Palavras Ampliadas
+                </button>
+                <button type="button" class="btn-sound-letter" onclick="playCurrentLetterSound()" aria-label="Ouvir o som da letra">
+                    <i class="fas fa-volume-up"></i> Ouvir o som da letra
+                </button>
+            </div>
         </div>
 
         <!-- CONTROLE DOS 4 LOTES -->
@@ -356,6 +451,88 @@
             </div>
         </div>
     </section>
+
+    <!-- MODAL DE PALAVRA AMPLIADA COM FOTO MAIOR E DESCRIÇÃO DIDÁTICA -->
+    <div id="palavraModal" class="palavra-modal" role="dialog" aria-modal="true" aria-labelledby="palavraBigWord" hidden>
+            <div class="palavra-backdrop" onclick="fecharModalPalavra()"></div>
+            <div class="palavra-dialog" role="document">
+                <div class="palavra-header">
+                    <div class="palavra-header-title-wrap">
+                        <span class="palavra-badge-letter" id="palavraModalBadge">Letra A</span>
+                        <span class="palavra-badge-counter" id="palavraModalCounter">Palavra 1 de 8</span>
+                    </div>
+                    <button type="button" class="palavra-btn-close" onclick="fecharModalPalavra()" aria-label="Fechar janela (ou aperte a tecla Esc)">
+                        <i class="fas fa-times" aria-hidden="true"></i> <span>Fechar</span>
+                    </button>
+                </div>
+
+                <div class="palavra-body">
+                    <!-- Coluna da Foto Maior -->
+                    <div class="palavra-image-col">
+                        <div class="palavra-img-wrapper" id="palavraImgWrapper" onclick="tocarPalavraModal()" role="button" tabindex="0" title="Toque para ouvir o nome da palavra" onkeydown="if(event.key==='Enter'||event.key===' ')tocarPalavraModal()">
+                            <img id="palavraModalImg" src="" alt="Foto da palavra" class="palavra-modal-photo" />
+                            <div id="palavraModalFallback" class="palavra-modal-fallback" style="display:none;">
+                                <i id="palavraModalFallbackIcon" class="fas fa-image" aria-hidden="true"></i>
+                                <span id="palavraModalFallbackText">Ilustração</span>
+                            </div>
+                            <div class="palavra-img-zoom-tag">
+                                <i class="fas fa-volume-up" aria-hidden="true"></i> Toque na foto para ouvir
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna de Informações e Descrição Didática -->
+                    <div class="palavra-info-col">
+                        <div class="palavra-title-display">
+                            <h2 class="palavra-big-word" id="palavraBigWord">
+                                <span class="first-char" id="palavraFirstChar">A</span><span id="palavraRestChars">VIÃO</span>
+                            </h2>
+                        </div>
+
+                        <div class="palavra-syllables-box">
+                            <span class="palavra-syllables-label"><i class="fas fa-layer-group" aria-hidden="true"></i> Divisão das Sílabas:</span>
+                            <div class="palavra-syllables-pills" id="palavraSyllablesPills" role="group" aria-label="Sílabas da palavra">
+                                <!-- Preenchido dinamicamente via JS -->
+                            </div>
+                        </div>
+
+                        <div class="palavra-desc-box" id="palavraDescBox" onclick="tocarExplicacaoModal()" role="button" tabindex="0" aria-label="Ouvir explicação didática" onkeydown="if(event.key==='Enter'||event.key===' ')tocarExplicacaoModal()">
+                            <div class="palavra-desc-header">
+                                <div class="palavra-desc-icon" aria-hidden="true"><i class="fas fa-book-open"></i></div>
+                                <span class="palavra-desc-title">O que significa no dia a dia?</span>
+                            </div>
+                            <p class="palavra-desc-text" id="palavraDescText">
+                                <!-- Texto da explicação didática -->
+                            </p>
+                            <span class="palavra-desc-hint"><i class="fas fa-volume-high" aria-hidden="true"></i> Toque para ouvir a explicação com calma</span>
+                        </div>
+
+                        <div class="palavra-actions-row">
+                            <button type="button" class="btn-palavra-action main" onclick="tocarAudioCompletoModal()" aria-label="Ouvir palavra e explicação devagar">
+                                <i class="fas fa-volume-high" aria-hidden="true"></i>
+                                <span>Ouvir tudo devagar</span>
+                            </button>
+                            <button type="button" class="btn-palavra-action sec" onclick="tocarSilabasModal()" aria-label="Falar as sílabas pausadamente">
+                                <i class="fas fa-spell-check" aria-hidden="true"></i>
+                                <span>Falar sílabas</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="palavra-footer">
+                    <button type="button" class="palavra-nav-btn prev" id="btnPalavraModalPrev" onclick="palavraModalAnterior()" aria-label="Ver palavra anterior">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> Palavra Anterior
+                    </button>
+                    <div class="palavra-step-dots" id="palavraStepDots" role="group" aria-label="Seletor de palavras da letra">
+                        <!-- Dots das 8 palavras gerados dinamicamente -->
+                    </div>
+                    <button type="button" class="palavra-nav-btn next" id="btnPalavraModalNext" onclick="palavraModalProxima()" aria-label="Ver próxima palavra">
+                        Próxima Palavra <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
 </main>
 
 <footer class="footer">

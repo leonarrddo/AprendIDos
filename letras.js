@@ -227,12 +227,17 @@ var alphabetData = {
 // SISTEMA DE ÁUDIO DUPLO (Google TTS + Fallback Web Speech API)
 // ============================================================================
 var currentAudio = null;
+var speechGeneration = 0;
 
 function stopAllAudio() {
+    speechGeneration++;
     if (currentAudio) {
         try {
             currentAudio.pause();
             currentAudio.currentTime = 0;
+            currentAudio.src = '';
+            currentAudio.onended = null;
+            currentAudio.onerror = null;
         } catch (e) {}
         currentAudio = null;
     }
@@ -241,40 +246,57 @@ function stopAllAudio() {
             window.speechSynthesis.cancel();
         } catch (e) {}
     }
+    document.querySelectorAll('.speaking').forEach(function(el) {
+        el.classList.remove('speaking');
+    });
 }
 
 function speak(text, onEnd) {
     stopAllAudio();
+    if (!text || typeof text !== 'string') return;
 
-    // 1. Tenta áudio online natural via Google TTS em pt-BR
-    var googleTtsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
-    var audio = new Audio(googleTtsUrl);
-    currentAudio = audio;
+    var currentGen = speechGeneration;
+    var fallbackTriggered = false;
 
-    var audioPlayedSuccess = false;
+    function triggerFallback() {
+        if (fallbackTriggered) return;
+        fallbackTriggered = true;
+        if (currentGen !== speechGeneration) return;
+        speakNativo(text, onEnd, currentGen);
+    }
 
-    audio.onended = function() {
-        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
-        if (onEnd) onEnd();
-    };
+    try {
+        var googleTtsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
+        var audio = new Audio();
+        currentAudio = audio;
 
-    audio.onerror = function() {
-        if (!audioPlayedSuccess) {
-            speakNativo(text, onEnd);
+        audio.onended = function() {
+            if (currentGen !== speechGeneration) return;
+            document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+            currentAudio = null;
+            if (onEnd) onEnd();
+        };
+
+        audio.onerror = function() {
+            triggerFallback();
+        };
+
+        audio.src = googleTtsUrl;
+        var playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(function() {
+                // Áudio do Google iniciado com sucesso
+            }).catch(function() {
+                triggerFallback();
+            });
         }
-    };
-
-    var playPromise = audio.play();
-    if (playPromise !== undefined) {
-        playPromise.then(function() {
-            audioPlayedSuccess = true;
-        }).catch(function() {
-            speakNativo(text, onEnd);
-        });
+    } catch(e) {
+        triggerFallback();
     }
 }
 
-function speakNativo(text, onEnd) {
+function speakNativo(text, onEnd, gen) {
+    if (gen !== undefined && gen !== speechGeneration) return;
     if (!('speechSynthesis' in window)) {
         document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
         if (onEnd) onEnd();
@@ -282,7 +304,6 @@ function speakNativo(text, onEnd) {
     }
 
     try {
-        window.speechSynthesis.resume();
         window.speechSynthesis.cancel();
     } catch (e) {}
 
@@ -301,16 +322,22 @@ function speakNativo(text, onEnd) {
     }
 
     u.onend = function() {
+        if (gen !== undefined && gen !== speechGeneration) return;
         document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
         if (onEnd) onEnd();
     };
 
     u.onerror = function() {
+        if (gen !== undefined && gen !== speechGeneration) return;
         document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
         if (onEnd) onEnd();
     };
 
-    window.speechSynthesis.speak(u);
+    try {
+        window.speechSynthesis.speak(u);
+    } catch (e) {
+        if (onEnd) onEnd();
+    }
 }
 
 // ============================================================================

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; media-src 'self' data: blob: https://translate.google.com; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
     <title>AprendIDos — Frases Simples</title>
     <script>
       if (window.top !== window.self) {
@@ -61,13 +61,86 @@
         .section-title { font-size: 1.4rem; font-weight: 800; color: var(--fg); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
         .section-title i { color: var(--green); font-size: 1.2rem; }
 
+        /* NÍVEIS DE DIFICULDADE (BADGES E FILTROS) */
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.28rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+        }
+        .level-badge.level-facil {
+            background: #E8F5E9;
+            color: #1B5E20;
+            border: 1.5px solid #81C784;
+        }
+        .level-badge.level-medio {
+            background: #FFF8E1;
+            color: #E65100;
+            border: 1.5px solid #FFB74D;
+        }
+        .level-badge.level-dificil {
+            background: #EDE7F6;
+            color: #4A148C;
+            border: 1.5px solid #B39DDB;
+        }
+
+        .filter-tabs-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.4rem;
+        }
+        .btn-filter-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 0.45rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            color: var(--fg-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-filter-tab:hover {
+            border-color: var(--green);
+            background: var(--green-pale);
+        }
+        .btn-filter-tab.active {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green-dark);
+            box-shadow: 0 3px 8px rgba(46,125,50,0.25);
+        }
+
         /* DEMO */
-        .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
-        .demo-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 1.2rem 1rem; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
-        .demo-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 4px 12px rgba(0,105,92,0.12); }
-        .demo-phrase { font-size: 1.2rem; font-weight: 800; color: var(--fg); }
-        .demo-hint { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+        .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-bottom: 2.5rem; }
+        .demo-card { background: var(--white); border: 2.5px solid var(--border); border-radius: var(--radius-sm); padding: 1.2rem 1.1rem; text-align: left; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; justify-content: space-between; gap: 0.6rem; }
+        .demo-card:hover { transform: translateY(-3px); border-color: var(--green); box-shadow: 0 6px 16px rgba(46,125,50,0.12); }
+        .demo-card-header { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+        .demo-phrase { font-size: 1.2rem; font-weight: 800; color: var(--fg); line-height: 1.4; }
+        .demo-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 0.4rem; }
+        .demo-hint { font-size: 0.88rem; color: var(--green-dark); font-weight: 700; display: flex; align-items: center; gap: 0.4rem; }
         .divider { border: none; height: 2px; background: var(--border); margin: 2rem 0 2.5rem; }
+
+        .exercise-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
 
         /* EXERCISE */
         .exercise-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
@@ -204,29 +277,31 @@
         </button>
     </div>
 
-    <!-- DEMO -->
+    <!-- EXEMPLOS COM FILTRO DE NÍVEIS -->
     <section aria-labelledby="title-demo">
         <h2 class="section-title" id="title-demo">
-            <i class="fas fa-comment-dots"></i> Exemplos de Frases
+            <i class="fas fa-comment-dots"></i> Exemplos de Frases para Ler e Ouvir
         </h2>
-        <div class="demo-grid">
-            <div class="demo-card" onclick="playDemo('A casa é bonita')" role="button" tabindex="0" aria-label="A casa é bonita">
-                <div class="demo-phrase">🏠 A CASA É BONITA</div>
-                <div class="demo-hint">Toque para ouvir</div>
-            </div>
-            <div class="demo-card" onclick="playDemo('O gato bebe leite')" role="button" tabindex="0" aria-label="O gato bebe leite">
-                <div class="demo-phrase">🐱 O GATO BEBE LEITE</div>
-                <div class="demo-hint">Toque para ouvir</div>
-            </div>
-            <div class="demo-card" onclick="playDemo('Eu gosto de café')" role="button" tabindex="0" aria-label="Eu gosto de café">
-                <div class="demo-phrase">☕ EU GOSTO DE CAFÉ</div>
-                <div class="demo-hint">Toque para ouvir</div>
-            </div>
-            <div class="demo-card" onclick="playDemo('A vovó faz bolo')" role="button" tabindex="0" aria-label="A vovó faz bolo">
-                <div class="demo-phrase">👵 A VOVÓ FAZ BOLO</div>
-                <div class="demo-hint">Toque para ouvir</div>
-            </div>
+        <p style="font-size:1.05rem; color:var(--fg-secondary); font-weight:700; margin-bottom:1rem;">
+            Explore frases organizadas por níveis para exercitar sua leitura. Toque em qualquer cartão para ouvir com calma.
+        </p>
+
+        <div class="filter-tabs-bar" role="tablist" aria-label="Filtrar frases por nível">
+            <button type="button" class="btn-filter-tab active" id="tabFilterAll" onclick="filterDemoPhrases('todos', this)" role="tab" aria-selected="true">
+                <i class="fas fa-list"></i> Todas as Frases
+            </button>
+            <button type="button" class="btn-filter-tab" id="tabFilterFacil" onclick="filterDemoPhrases('facil', this)" role="tab" aria-selected="false">
+                <i class="fas fa-seedling"></i> Fáceis
+            </button>
+            <button type="button" class="btn-filter-tab" id="tabFilterMedio" onclick="filterDemoPhrases('medio', this)" role="tab" aria-selected="false">
+                <i class="fas fa-feather"></i> Médias
+            </button>
+            <button type="button" class="btn-filter-tab" id="tabFilterDificil" onclick="filterDemoPhrases('dificil', this)" role="tab" aria-selected="false">
+                <i class="fas fa-mountain"></i> Mais Desafiadoras
+            </button>
         </div>
+
+        <div class="demo-grid" id="demoGrid"></div>
     </section>
 
     <hr class="divider">
@@ -239,7 +314,10 @@
 
         <div id="exerciseLayout">
             <div class="exercise-card">
-                <p class="progress-label" id="progressLabel">Frase 1 de 6</p>
+                <div class="exercise-meta-row">
+                    <p class="progress-label" id="progressLabel" style="margin-bottom:0;">Frase 1 de 8</p>
+                    <span id="phraseLevelBadge" class="level-badge level-facil"><i class="fas fa-seedling"></i> Fácil</span>
+                </div>
                 <div class="progress-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressBar">
                     <div class="progress-bar-fill" id="progressFill"></div>
                 </div>

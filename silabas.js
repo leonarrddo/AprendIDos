@@ -31,6 +31,29 @@ var wordBank = [
 var TOTAL = 10;
 var questions = [], currentIdx = 0, hits = 0, misses = 0, answered = false, errorLog = [];
 var currentAudio = null, ptVoice = null;
+var speechGeneration = 0;
+
+function stopAllAudio() {
+    speechGeneration++;
+    if (currentAudio) {
+        try {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            currentAudio.src = '';
+            currentAudio.onended = null;
+            currentAudio.onerror = null;
+        } catch(e) {}
+        currentAudio = null;
+    }
+    if ('speechSynthesis' in window) {
+        try {
+            window.speechSynthesis.cancel();
+        } catch(e) {}
+    }
+    document.querySelectorAll('.speaking').forEach(function(el) {
+        el.classList.remove('speaking');
+    });
+}
 
 function loadVoices() {
     if (!('speechSynthesis' in window)) return;
@@ -40,28 +63,87 @@ function loadVoices() {
 if ('speechSynthesis' in window) { loadVoices(); window.speechSynthesis.onvoiceschanged = loadVoices; }
 
 function speak(text, onEnd) {
-    if (currentAudio) { try { currentAudio.pause(); currentAudio.currentTime = 0; } catch(e) {} }
-    if ('speechSynthesis' in window) { try { window.speechSynthesis.cancel(); } catch(e) {} }
-    var url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
-    var audio = new Audio(url);
-    currentAudio = audio;
-    var ok = false;
-    audio.onended = function() { if (onEnd) onEnd(); };
-    audio.onerror = function() { if (!ok) speakNativo(text, onEnd); };
-    var p = audio.play();
-    if (p) p.then(function() { ok = true; }).catch(function() { speakNativo(text, onEnd); });
+    stopAllAudio();
+    if (!text || typeof text !== 'string') return;
+
+    var currentGen = speechGeneration;
+    var fallbackTriggered = false;
+
+    function triggerFallback() {
+        if (fallbackTriggered) return;
+        fallbackTriggered = true;
+        if (currentGen !== speechGeneration) return;
+        speakNativo(text, onEnd, currentGen);
+    }
+
+    try {
+        var url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
+        var audio = new Audio();
+        currentAudio = audio;
+
+        audio.onended = function() {
+            if (currentGen !== speechGeneration) return;
+            document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+            currentAudio = null;
+            if (onEnd) onEnd();
+        };
+
+        audio.onerror = function() {
+            triggerFallback();
+        };
+
+        audio.src = url;
+        var p = audio.play();
+        if (p !== undefined) {
+            p.then(function() {
+                // Áudio do Google iniciado com sucesso
+            }).catch(function() {
+                triggerFallback();
+            });
+        }
+    } catch(e) {
+        triggerFallback();
+    }
 }
 
-function speakNativo(text, onEnd) {
-    if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; }
-    try { window.speechSynthesis.cancel(); } catch(e) {}
+function speakNativo(text, onEnd, gen) {
+    if (gen !== undefined && gen !== speechGeneration) return;
+    if (!('speechSynthesis' in window)) {
+        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+        if (onEnd) onEnd();
+        return;
+    }
+
+    try {
+        window.speechSynthesis.cancel();
+    } catch(e) {}
+
     var u = new SpeechSynthesisUtterance(text);
-    u.lang = 'pt-BR'; u.rate = 0.8; u.pitch = 1; u.volume = 1;
+    u.lang = 'pt-BR';
+    u.rate = 0.82; // Calmo e pausado para o idoso
+    u.pitch = 1.0;
+    u.volume = 1.0;
+
     if (!ptVoice) loadVoices();
     if (ptVoice) u.voice = ptVoice;
-    u.onend = function() { if (onEnd) onEnd(); };
-    u.onerror = function() { if (onEnd) onEnd(); };
-    setTimeout(function() { try { window.speechSynthesis.speak(u); } catch(e) { if (onEnd) onEnd(); } }, 80);
+
+    u.onend = function() {
+        if (gen !== undefined && gen !== speechGeneration) return;
+        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+        if (onEnd) onEnd();
+    };
+
+    u.onerror = function() {
+        if (gen !== undefined && gen !== speechGeneration) return;
+        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+        if (onEnd) onEnd();
+    };
+
+    try {
+        window.speechSynthesis.speak(u);
+    } catch(e) {
+        if (onEnd) onEnd();
+    }
 }
 
 function playInstruction() {
@@ -72,8 +154,11 @@ function playInstruction() {
     });
 }
 
-function playDemo(word) {
-    speak(word, null);
+function playDemo(word, btn) {
+    if (btn) btn.classList.add('speaking');
+    speak(word, function() {
+        if (btn) btn.classList.remove('speaking');
+    });
 }
 
 function shuffle(arr) {
@@ -98,6 +183,7 @@ function initExercise() {
 }
 
 function loadQuestion() {
+    stopAllAudio();
     answered = false;
     var q = questions[currentIdx];
     if (!q) return;
@@ -185,12 +271,16 @@ function checkAnswer(isCorrect, opt, btn) {
     var isLast = currentIdx >= TOTAL - 1;
     setTimeout(function() {
         var fb = document.getElementById('feedbackArea');
-        if (fb) {
-            fb.innerHTML += '<button class="btn-next" onclick="nextQuestion()" aria-label="' + (isLast ? 'Ver resultado' : 'Proxima') + '">' +
-                '<i class="fas ' + (isLast ? 'fa-flag-checkered' : 'fa-arrow-right') + '"></i> ' + (isLast ? 'Ver resultado' : 'Proxima') + '</button>';
-            var nb = document.querySelector('.btn-next'); if (nb) nb.focus();
+        if (fb && !fb.querySelector('.btn-next')) {
+            var btnNext = document.createElement('button');
+            btnNext.className = 'btn-next';
+            btnNext.onclick = nextQuestion;
+            btnNext.setAttribute('aria-label', isLast ? 'Ver resultado' : 'Próxima pergunta');
+            btnNext.innerHTML = '<i class="fas ' + (isLast ? 'fa-flag-checkered' : 'fa-arrow-right') + '"></i> ' + (isLast ? 'Ver resultado' : 'Próxima');
+            fb.appendChild(btnNext);
+            btnNext.focus();
         }
-    }, correct ? 200 : 800);
+    }, isCorrect ? 250 : 800);
 }
 
 function showFeedback(type, msg) {
@@ -198,9 +288,18 @@ function showFeedback(type, msg) {
     if (fb) fb.innerHTML = '<div class="feedback-msg ' + type + '" role="alert"><i class="fas ' + (type === 'success' ? 'fa-check-circle' : 'fa-redo') + '"></i> ' + msg + '</div>';
 }
 
-function nextQuestion() { currentIdx++; if (currentIdx >= TOTAL) showCompletion(); else loadQuestion(); }
+function nextQuestion() {
+    stopAllAudio();
+    currentIdx++;
+    if (currentIdx >= TOTAL) {
+        showCompletion();
+    } else {
+        loadQuestion();
+    }
+}
 
 function showCompletion() {
+    stopAllAudio();
     var layout = document.getElementById('exerciseLayout');
     var comp = document.getElementById('completionScreen');
     if (layout) layout.style.display = 'none';
@@ -223,7 +322,7 @@ function showCompletion() {
         });
     } else if (errSum) errSum.style.display = 'none';
     salvarProgresso();
-    speak('Parabens! Voce terminou! ' + msg);
+    speak('Parabéns! Você terminou! ' + msg);
 }
 
 function salvarProgresso() {
@@ -267,7 +366,11 @@ function verificarLicaoConcluida() {
     }
 }
 
-function restartExercise() { initExercise(); verificarLicaoConcluida(); }
+function restartExercise() {
+    stopAllAudio();
+    initExercise();
+    verificarLicaoConcluida();
+}
 
 function toggleMenu() {
     var menu = document.getElementById('mobileMenu'), btn = document.querySelector('.navbar-hamburger');
@@ -285,6 +388,7 @@ var lettersList = ['b', 'c', 'd', 'f', 'g', 'j', 'l', 'm', 'n', 'p', 'q', 'r', '
 var currentLetterIdx = 0;
 
 function showLetter(letterKey) {
+    stopAllAudio();
     var key = (letterKey || 'b').toLowerCase();
     var idx = lettersList.indexOf(key);
     if (idx === -1) idx = 0;
@@ -349,6 +453,7 @@ window.playQuestionAudio = playQuestionAudio; window.playHelpExercise = playHelp
 window.nextQuestion = nextQuestion; window.restartExercise = restartExercise;
 window.salvarEVerOutras = salvarEVerOutras; window.toggleMenu = toggleMenu;
 window.showLetter = showLetter; window.nextLetter = nextLetter; window.prevLetter = prevLetter;
+window.stopAllAudio = stopAllAudio;
 
 if (document.readyState === 'loading') { 
     document.addEventListener('DOMContentLoaded', function() { 

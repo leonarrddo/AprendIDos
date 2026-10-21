@@ -4,22 +4,65 @@
  */
 
 var sentenceBank = [
-    { text: 'A CASA É BONITA', words: ['A', 'CASA', 'É', 'BONITA'], audio: 'A casa é bonita' },
-    { text: 'O GATO BEBE LEITE', words: ['O', 'GATO', 'BEBE', 'LEITE'], audio: 'O gato bebe leite' },
-    { text: 'EU GOSTO DE CAFÉ', words: ['EU', 'GOSTO', 'DE', 'CAFÉ'], audio: 'Eu gosto de café' },
-    { text: 'A VOVÓ FAZ BOLO', words: ['A', 'VOVÓ', 'FAZ', 'BOLO'], audio: 'A vovó faz bolo' },
-    { text: 'O PÃO É QUENTINHO', words: ['O', 'PÃO', 'É', 'QUENTINHO'], audio: 'O pão é quentinho' },
-    { text: 'O SOL É BRILHANTE', words: ['O', 'SOL', 'É', 'BRILHANTE'], audio: 'O sol é brilhante' },
-    { text: 'O PATO NADA NA ÁGUA', words: ['O', 'PATO', 'NADA', 'NA', 'ÁGUA'], audio: 'O pato nada na água' },
-    { text: 'A FLOR É CHEIROSA', words: ['A', 'FLOR', 'É', 'CHEIROSA'], audio: 'A flor é cheirosa' },
-    { text: 'A PORTA ESTÁ ABERTA', words: ['A', 'PORTA', 'ESTÁ', 'ABERTA'], audio: 'A porta está aberta' },
-    { text: 'O DIA ESTÁ LINDO', words: ['O', 'DIA', 'ESTÁ', 'LINDO'], audio: 'O dia está lindo' }
+    // NÍVEL FÁCIL (3 a 4 palavras)
+    { text: 'A CASA É BONITA', words: ['A', 'CASA', 'É', 'BONITA'], audio: 'A casa é bonita', level: 'facil', emoji: '🏠' },
+    { text: 'O GATO BEBE LEITE', words: ['O', 'GATO', 'BEBE', 'LEITE'], audio: 'O gato bebe leite', level: 'facil', emoji: '🐱' },
+    { text: 'EU GOSTO DE CAFÉ', words: ['EU', 'GOSTO', 'DE', 'CAFÉ'], audio: 'Eu gosto de café', level: 'facil', emoji: '☕' },
+    { text: 'A VOVÓ FAZ BOLO', words: ['A', 'VOVÓ', 'FAZ', 'BOLO'], audio: 'A vovó faz bolo', level: 'facil', emoji: '👵' },
+    { text: 'O DIA ESTÁ LINDO', words: ['O', 'DIA', 'ESTÁ', 'LINDO'], audio: 'O dia está lindo', level: 'facil', emoji: '☀️' },
+    { text: 'O PÃO ESTÁ QUENTE', words: ['O', 'PÃO', 'ESTÁ', 'QUENTE'], audio: 'O pão está quente', level: 'facil', emoji: '🥖' },
+    { text: 'A FLOR É CHEIROSA', words: ['A', 'FLOR', 'É', 'CHEIROSA'], audio: 'A flor é cheirosa', level: 'facil', emoji: '🌸' },
+    { text: 'O CÃO É AMIGO', words: ['O', 'CÃO', 'É', 'AMIGO'], audio: 'O cão é amigo', level: 'facil', emoji: '🐶' },
+
+    // NÍVEL MÉDIO (4 a 5 palavras)
+    { text: 'O PATO NADA NA ÁGUA', words: ['O', 'PATO', 'NADA', 'NA', 'ÁGUA'], audio: 'O pato nada na água', level: 'medio', emoji: '🦆' },
+    { text: 'A PORTA DA SALA ABRIU', words: ['A', 'PORTA', 'DA', 'SALA', 'ABRIU'], audio: 'A porta da sala abriu', level: 'medio', emoji: '🚪' },
+    { text: 'O MENINO TOMA SUCO GELADO', words: ['O', 'MENINO', 'TOMA', 'SUCO', 'GELADO'], audio: 'O menino toma suco gelado', level: 'medio', emoji: '🥤' },
+    { text: 'O PÁSSARO CANTA NO JARDIM', words: ['O', 'PÁSSARO', 'CANTA', 'NO', 'JARDIM'], audio: 'O pássaro canta no jardim', level: 'medio', emoji: '🐦' },
+    { text: 'O SOL BRILHA NO CÉU', words: ['O', 'SOL', 'BRILHA', 'NO', 'CÉU'], audio: 'O sol brilha no céu', level: 'medio', emoji: '🌤️' },
+    { text: 'A FAMÍLIA ALMOÇA COM ALEGRIA', words: ['A', 'FAMÍLIA', 'ALMOÇA', 'COM', 'ALEGRIA'], audio: 'A família almoça com alegria', level: 'medio', emoji: '🍽️' },
+    { text: 'O RÁDIO TOCA UMA MÚSICA', words: ['O', 'RÁDIO', 'TOCA', 'UMA', 'MÚSICA'], audio: 'O rádio toca uma música', level: 'medio', emoji: '📻' },
+    { text: 'A ÁRVORE DÁ FRUTAS DOCES', words: ['A', 'ÁRVORE', 'DÁ', 'FRUTAS', 'DOCES'], audio: 'A árvore dá frutas doces', level: 'medio', emoji: '🌳' },
+
+    // NÍVEL DIFÍCIL (5 a 7 palavras)
+    { text: 'O SEU JOSÉ REGOU AS PLANTAS HOJE', words: ['O', 'SEU', 'JOSÉ', 'REGOU', 'AS', 'PLANTAS', 'HOJE'], audio: 'O seu José regou as plantas hoje', level: 'dificil', emoji: '🪴' },
+    { text: 'DONA MARIA FEZ UM BOLO DE CENOURA', words: ['DONA', 'MARIA', 'FEZ', 'UM', 'BOLO', 'DE', 'CENOURA'], audio: 'Dona Maria fez um bolo de cenoura', level: 'dificil', emoji: '🥕' },
+    { text: 'A CIDADE ACORDA COM MUITO MOVIMENTO', words: ['A', 'CIDADE', 'ACORDA', 'COM', 'MUITO', 'MOVIMENTO'], audio: 'A cidade acorda com muito movimento', level: 'dificil', emoji: '🏙️' },
+    { text: 'O NETO LEU UMA CARTA PARA A VOVÓ', words: ['O', 'NETO', 'LEU', 'UMA', 'CARTA', 'PARA', 'A', 'VOVÓ'], audio: 'O neto leu uma carta para a vovó', level: 'dificil', emoji: '✉️' },
+    { text: 'A CHUVA MANSA MOLHA A TERRA SECA', words: ['A', 'CHUVA', 'MANSA', 'MOLHA', 'A', 'TERRA', 'SECA'], audio: 'A chuva mansa molha a terra seca', level: 'dificil', emoji: '🌧️' },
+    { text: 'O SABÃO LIMPA A ROUPA NO VARAL', words: ['O', 'SABÃO', 'LIMPA', 'A', 'ROUPA', 'NO', 'VARAL'], audio: 'O sabão limpa a roupa no varal', level: 'dificil', emoji: '🫧' },
+    { text: 'A SAÚDE É O NOSSO MAIOR TESOURO', words: ['A', 'SAÚDE', 'É', 'O', 'NOSSO', 'MAIOR', 'TESOURO'], audio: 'A saúde é o nosso maior tesouro', level: 'dificil', emoji: '❤️' },
+    { text: 'TODOS NÓS MERECEMOS VIVER COM DIGNIDADE', words: ['TODOS', 'NÓS', 'MERECEMOS', 'VIVER', 'COM', 'DIGNIDADE'], audio: 'Todos nós merecemos viver com dignidade', level: 'dificil', emoji: '🕊️' }
 ];
 
-var TOTAL = 6;
+var TOTAL = 8;
 var questions = [], currentIdx = 0, hits = 0, misses = 0, errorLog = [];
 var assembledWords = [];
 var currentAudio = null, ptVoice = null;
+var speechGeneration = 0;
+var currentDemoFilter = 'todos';
+
+function stopAllAudio() {
+    speechGeneration++;
+    if (currentAudio) {
+        try {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            currentAudio.src = '';
+            currentAudio.onended = null;
+            currentAudio.onerror = null;
+        } catch(e) {}
+        currentAudio = null;
+    }
+    if ('speechSynthesis' in window) {
+        try {
+            window.speechSynthesis.cancel();
+        } catch(e) {}
+    }
+    document.querySelectorAll('.speaking').forEach(function(el) {
+        el.classList.remove('speaking');
+    });
+}
 
 function loadVoices() {
     if (!('speechSynthesis' in window)) return;
@@ -29,28 +72,87 @@ function loadVoices() {
 if ('speechSynthesis' in window) { loadVoices(); window.speechSynthesis.onvoiceschanged = loadVoices; }
 
 function speak(text, onEnd) {
-    if (currentAudio) { try { currentAudio.pause(); currentAudio.currentTime = 0; } catch(e) {} }
-    if ('speechSynthesis' in window) { try { window.speechSynthesis.cancel(); } catch(e) {} }
-    var url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
-    var audio = new Audio(url);
-    currentAudio = audio;
-    var ok = false;
-    audio.onended = function() { if (onEnd) onEnd(); };
-    audio.onerror = function() { if (!ok) speakNativo(text, onEnd); };
-    var p = audio.play();
-    if (p) p.then(function() { ok = true; }).catch(function() { speakNativo(text, onEnd); });
+    stopAllAudio();
+    if (!text || typeof text !== 'string') return;
+
+    var currentGen = speechGeneration;
+    var fallbackTriggered = false;
+
+    function triggerFallback() {
+        if (fallbackTriggered) return;
+        fallbackTriggered = true;
+        if (currentGen !== speechGeneration) return;
+        speakNativo(text, onEnd, currentGen);
+    }
+
+    try {
+        var url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
+        var audio = new Audio();
+        currentAudio = audio;
+
+        audio.onended = function() {
+            if (currentGen !== speechGeneration) return;
+            document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+            currentAudio = null;
+            if (onEnd) onEnd();
+        };
+
+        audio.onerror = function() {
+            triggerFallback();
+        };
+
+        audio.src = url;
+        var p = audio.play();
+        if (p !== undefined) {
+            p.then(function() {
+                // Áudio do Google iniciado com sucesso
+            }).catch(function() {
+                triggerFallback();
+            });
+        }
+    } catch(e) {
+        triggerFallback();
+    }
 }
 
-function speakNativo(text, onEnd) {
-    if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; }
-    try { window.speechSynthesis.cancel(); } catch(e) {}
+function speakNativo(text, onEnd, gen) {
+    if (gen !== undefined && gen !== speechGeneration) return;
+    if (!('speechSynthesis' in window)) {
+        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+        if (onEnd) onEnd();
+        return;
+    }
+
+    try {
+        window.speechSynthesis.cancel();
+    } catch(e) {}
+
     var u = new SpeechSynthesisUtterance(text);
-    u.lang = 'pt-BR'; u.rate = 0.8; u.pitch = 1; u.volume = 1;
+    u.lang = 'pt-BR';
+    u.rate = 0.82; // Calmo e amigável para idosos
+    u.pitch = 1.0;
+    u.volume = 1.0;
+
     if (!ptVoice) loadVoices();
     if (ptVoice) u.voice = ptVoice;
-    u.onend = function() { if (onEnd) onEnd(); };
-    u.onerror = function() { if (onEnd) onEnd(); };
-    setTimeout(function() { try { window.speechSynthesis.speak(u); } catch(e) { if (onEnd) onEnd(); } }, 80);
+
+    u.onend = function() {
+        if (gen !== undefined && gen !== speechGeneration) return;
+        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+        if (onEnd) onEnd();
+    };
+
+    u.onerror = function() {
+        if (gen !== undefined && gen !== speechGeneration) return;
+        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+        if (onEnd) onEnd();
+    };
+
+    try {
+        window.speechSynthesis.speak(u);
+    } catch(e) {
+        if (onEnd) onEnd();
+    }
 }
 
 function playInstruction() {
@@ -61,8 +163,67 @@ function playInstruction() {
     });
 }
 
-function playDemo(phrase) {
-    speak(phrase, null);
+function playDemo(phrase, cardEl) {
+    if (cardEl) cardEl.classList.add('speaking');
+    speak(phrase, function() {
+        if (cardEl) cardEl.classList.remove('speaking');
+    });
+}
+
+function getLevelBadgeHtml(level) {
+    var map = {
+        facil: { label: 'Fácil', cls: 'level-facil', icon: 'fa-seedling' },
+        medio: { label: 'Médio', cls: 'level-medio', icon: 'fa-feather' },
+        dificil: { label: 'Difícil', cls: 'level-dificil', icon: 'fa-mountain' }
+    };
+    var item = map[level] || map.facil;
+    return '<span class="level-badge ' + item.cls + '"><i class="fas ' + item.icon + '"></i> ' + item.label + '</span>';
+}
+
+function renderDemoGrid(filter) {
+    var grid = document.getElementById('demoGrid');
+    if (!grid) return;
+    currentDemoFilter = filter || 'todos';
+
+    var filtered = sentenceBank;
+    if (currentDemoFilter !== 'todos') {
+        filtered = sentenceBank.filter(function(s) { return s.level === currentDemoFilter; });
+    }
+
+    grid.innerHTML = '';
+    filtered.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'demo-card';
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', item.text + ' — Nível ' + item.level);
+        
+        card.innerHTML = 
+            '<div class="demo-card-header">' +
+                '<span style="font-size:1.6rem;">' + (item.emoji || '💬') + '</span>' +
+                getLevelBadgeHtml(item.level) +
+            '</div>' +
+            '<div class="demo-phrase">' + item.text + '</div>' +
+            '<div class="demo-footer">' +
+                '<span class="demo-hint"><i class="fas fa-volume-up"></i> Toque para ouvir</span>' +
+            '</div>';
+
+        card.onclick = function() { playDemo(item.audio, card); };
+        card.onkeydown = function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); playDemo(item.audio, card); } };
+        grid.appendChild(card);
+    });
+}
+
+function filterDemoPhrases(level, btn) {
+    document.querySelectorAll('.btn-filter-tab').forEach(function(b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+    });
+    if (btn) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+    }
+    renderDemoGrid(level);
 }
 
 function shuffle(arr) {
@@ -75,7 +236,13 @@ function shuffle(arr) {
 }
 
 function initExercise() {
-    questions = shuffle(sentenceBank.slice()).slice(0, TOTAL);
+    stopAllAudio();
+    var fac = shuffle(sentenceBank.filter(function(x) { return x.level === 'facil'; })).slice(0, 3);
+    var med = shuffle(sentenceBank.filter(function(x) { return x.level === 'medio'; })).slice(0, 3);
+    var dif = shuffle(sentenceBank.filter(function(x) { return x.level === 'dificil'; })).slice(0, 2);
+    questions = fac.concat(med).concat(dif);
+    TOTAL = questions.length;
+
     currentIdx = 0; hits = 0; misses = 0; errorLog = [];
     var h = document.getElementById('hitsCount'); if (h) h.textContent = '0';
     var m = document.getElementById('missesCount'); if (m) m.textContent = '0';
@@ -83,10 +250,12 @@ function initExercise() {
     var comp = document.getElementById('completionScreen');
     if (layout) layout.style.display = '';
     if (comp) comp.classList.remove('visible');
+    renderDemoGrid('todos');
     loadQuestion();
 }
 
 function loadQuestion() {
+    stopAllAudio();
     assembledWords = [];
     var q = questions[currentIdx];
     if (!q) return;
@@ -95,12 +264,24 @@ function loadQuestion() {
     var pBar = document.getElementById('progressBar');
     var pLabel = document.getElementById('progressLabel');
     var fbArea = document.getElementById('feedbackArea');
+    var levelBadge = document.getElementById('phraseLevelBadge');
 
     var pct = (currentIdx / TOTAL) * 100;
     if (pFill) pFill.style.width = pct + '%';
     if (pBar) pBar.setAttribute('aria-valuenow', Math.round(pct));
     if (pLabel) pLabel.textContent = 'Frase ' + (currentIdx + 1) + ' de ' + TOTAL;
     if (fbArea) fbArea.innerHTML = '';
+
+    if (levelBadge && q.level) {
+        var map = {
+            facil: { label: 'Fácil', cls: 'level-facil', icon: 'fa-seedling' },
+            medio: { label: 'Médio', cls: 'level-medio', icon: 'fa-feather' },
+            dificil: { label: 'Difícil', cls: 'level-dificil', icon: 'fa-mountain' }
+        };
+        var item = map[q.level] || map.facil;
+        levelBadge.className = 'level-badge ' + item.cls;
+        levelBadge.innerHTML = '<i class="fas ' + item.icon + '"></i> ' + item.label;
+    }
 
     renderSlotsAndTiles(q);
 }
@@ -123,7 +304,6 @@ function renderSlotsAndTiles(q) {
     }
 
     var scrambled = shuffle(q.words.slice());
-    // Garante que não fique na ordem exata original
     if (scrambled.join(' ') === q.words.join(' ') && q.words.length > 1) {
         scrambled.reverse();
     }
@@ -144,9 +324,9 @@ function renderSlotsAndTiles(q) {
 }
 
 function pickWord(word, btn) {
-    if (btn.disabled) return;
-    btn.disabled = true;
+    if (btn.classList.contains('used')) return;
     btn.classList.add('used');
+    btn.disabled = true;
 
     var q = questions[currentIdx];
     var pos = assembledWords.length;
@@ -176,27 +356,36 @@ function checkSentence() {
         var h = document.getElementById('hitsCount'); if (h) h.textContent = hits;
         document.querySelectorAll('.sentence-slot').forEach(function(s) { s.classList.add('correct'); });
         if (fb) fb.innerHTML = '<div class="feedback-msg success"><i class="fas fa-check-circle"></i> Parabéns! Frase correta!</div>';
-        speak('Parabéns! ' + q.audio);
+        speak('Muito bem! ' + q.audio);
 
         var isLast = currentIdx >= TOTAL - 1;
         setTimeout(function() {
-            if (fb) {
-                fb.innerHTML += '<br><button class="btn-next" onclick="nextQuestion()"><i class="fas ' + (isLast ? 'fa-flag-checkered' : 'fa-arrow-right') + '"></i> ' + (isLast ? 'Ver resultado' : 'Próxima frase') + '</button>';
-                var nb = document.querySelector('.btn-next'); if (nb) nb.focus();
+            if (fb && !fb.querySelector('.btn-next')) {
+                var btnNext = document.createElement('button');
+                btnNext.className = 'btn-next';
+                btnNext.onclick = nextQuestion;
+                btnNext.setAttribute('aria-label', isLast ? 'Ver resultado' : 'Próxima frase');
+                btnNext.innerHTML = '<i class="fas ' + (isLast ? 'fa-flag-checkered' : 'fa-arrow-right') + '"></i> ' + (isLast ? 'Ver resultado' : 'Próxima frase');
+                fb.appendChild(btnNext);
+                btnNext.focus();
             }
         }, 500);
     } else {
         misses++;
         var m = document.getElementById('missesCount'); if (m) m.textContent = misses;
-        errorLog.push({ phrase: q.text, chosen: built });
+        errorLog.push({ phrase: q.text, chosen: built, level: q.level });
         document.querySelectorAll('.sentence-slot').forEach(function(s) { s.classList.add('wrong'); });
-        if (fb) fb.innerHTML = '<div class="feedback-msg error"><i class="fas fa-redo"></i> Ordem incorreta. Tente novamente!</div><br>' +
-            '<button class="btn-next" onclick="retryCurrentSentence()"><i class="fas fa-redo"></i> Tentar de novo</button>';
+        if (fb) {
+            fb.innerHTML = '<div class="feedback-msg error"><i class="fas fa-redo"></i> Ordem incorreta. Tente novamente!</div><br>' +
+                '<button class="btn-next" onclick="retryCurrentSentence()"><i class="fas fa-redo"></i> Tentar de novo</button>';
+            var rb = fb.querySelector('.btn-next'); if (rb) rb.focus();
+        }
         speak('Ordem incorreta. Tente novamente.');
     }
 }
 
 function retryCurrentSentence() {
+    stopAllAudio();
     var q = questions[currentIdx];
     renderSlotsAndTiles(q);
 }
@@ -220,12 +409,14 @@ function playHelpExercise() {
 }
 
 function nextQuestion() {
+    stopAllAudio();
     currentIdx++;
     if (currentIdx >= TOTAL) showCompletion();
     else loadQuestion();
 }
 
 function showCompletion() {
+    stopAllAudio();
     var layout = document.getElementById('exerciseLayout');
     var comp = document.getElementById('completionScreen');
     if (layout) layout.style.display = 'none';
@@ -236,7 +427,7 @@ function showCompletion() {
     var ft = document.getElementById('finalTotal'); if (ft) ft.textContent = TOTAL;
     var pf = document.getElementById('progressFill'); if (pf) pf.style.width = '100%';
 
-    var msg = hits === TOTAL ? 'Fantástico! Acertou todas as frases!' : hits >= 4 ? 'Muito bem! Você está lendo muito bem!' : 'Bom começo! Continue praticando!';
+    var msg = hits === TOTAL ? 'Fantástico! Acertou todas as frases!' : hits >= 5 ? 'Muito bem! Você está lendo muito bem!' : 'Bom começo! Continue praticando!';
     var cm = document.getElementById('completionMsg'); if (cm) cm.textContent = msg;
 
     var errSum = document.getElementById('errorSummary');
@@ -246,7 +437,7 @@ function showCompletion() {
         errSum.style.display = 'block';
         errorLog.forEach(function(e) {
             var li = document.createElement('li');
-            li.innerHTML = 'Frase: <strong>' + e.phrase + '</strong>';
+            li.innerHTML = 'Frase: <strong>' + e.phrase + '</strong> ' + (e.level ? '(' + e.level + ')' : '');
             errList.appendChild(li);
         });
     } else if (errSum) errSum.style.display = 'none';
@@ -296,7 +487,11 @@ function verificarLicaoConcluida() {
     }
 }
 
-function restartExercise() { initExercise(); verificarLicaoConcluida(); }
+function restartExercise() {
+    stopAllAudio();
+    initExercise();
+    verificarLicaoConcluida();
+}
 
 function toggleMenu() {
     var menu = document.getElementById('mobileMenu'), btn = document.querySelector('.navbar-hamburger');
@@ -315,6 +510,15 @@ window.playQuestionAudio = playQuestionAudio; window.playHelpExercise = playHelp
 window.pickWord = pickWord; window.retryCurrentSentence = retryCurrentSentence;
 window.nextQuestion = nextQuestion; window.restartExercise = restartExercise;
 window.salvarEVerOutras = salvarEVerOutras; window.toggleMenu = toggleMenu;
+window.stopAllAudio = stopAllAudio; window.filterDemoPhrases = filterDemoPhrases;
+window.renderDemoGrid = renderDemoGrid;
 
-if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', function() { initExercise(); verificarLicaoConcluida(); }); }
-else { initExercise(); verificarLicaoConcluida(); }
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        initExercise();
+        verificarLicaoConcluida();
+    });
+} else {
+    initExercise();
+    verificarLicaoConcluida();
+}

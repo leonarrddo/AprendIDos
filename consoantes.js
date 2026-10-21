@@ -228,11 +228,17 @@ if ('speechSynthesis' in window) {
     window.speechSynthesis.onvoiceschanged = loadVoices;
 }
 
+var speechGeneration = 0;
+
 function stopAllAudio() {
+    speechGeneration++;
     if (currentAudio) {
         try {
             currentAudio.pause();
             currentAudio.currentTime = 0;
+            currentAudio.src = '';
+            currentAudio.onended = null;
+            currentAudio.onerror = null;
         } catch (e) {}
         currentAudio = null;
     }
@@ -241,37 +247,57 @@ function stopAllAudio() {
             window.speechSynthesis.cancel();
         } catch (e) {}
     }
+    document.querySelectorAll('.speaking').forEach(function(el) {
+        el.classList.remove('speaking');
+    });
 }
 
 function speak(text, onEnd) {
     stopAllAudio();
-    var googleTtsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
-    var audio = new Audio(googleTtsUrl);
-    currentAudio = audio;
-    var audioPlayedSuccess = false;
+    if (!text || typeof text !== 'string') return;
 
-    audio.onended = function() {
-        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
-        if (onEnd) onEnd();
-    };
+    var currentGen = speechGeneration;
+    var fallbackTriggered = false;
 
-    audio.onerror = function() {
-        if (!audioPlayedSuccess) {
-            speakNativo(text, onEnd);
+    function triggerFallback() {
+        if (fallbackTriggered) return;
+        fallbackTriggered = true;
+        if (currentGen !== speechGeneration) return;
+        speakNativo(text, onEnd, currentGen);
+    }
+
+    try {
+        var googleTtsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
+        var audio = new Audio();
+        currentAudio = audio;
+
+        audio.onended = function() {
+            if (currentGen !== speechGeneration) return;
+            document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+            currentAudio = null;
+            if (onEnd) onEnd();
+        };
+
+        audio.onerror = function() {
+            triggerFallback();
+        };
+
+        audio.src = googleTtsUrl;
+        var p = audio.play();
+        if (p !== undefined) {
+            p.then(function() {
+                // Áudio do Google iniciado com sucesso
+            }).catch(function() {
+                triggerFallback();
+            });
         }
-    };
-
-    var p = audio.play();
-    if (p !== undefined) {
-        p.then(function() {
-            audioPlayedSuccess = true;
-        }).catch(function() {
-            speakNativo(text, onEnd);
-        });
+    } catch(e) {
+        triggerFallback();
     }
 }
 
-function speakNativo(text, onEnd) {
+function speakNativo(text, onEnd, gen) {
+    if (gen !== undefined && gen !== speechGeneration) return;
     if (!('speechSynthesis' in window)) {
         document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
         if (onEnd) onEnd();
@@ -279,7 +305,6 @@ function speakNativo(text, onEnd) {
     }
 
     try {
-        window.speechSynthesis.resume();
         window.speechSynthesis.cancel();
     } catch (e) {}
 
@@ -293,22 +318,22 @@ function speakNativo(text, onEnd) {
     if (ptVoice) u.voice = ptVoice;
 
     u.onend = function() {
+        if (gen !== undefined && gen !== speechGeneration) return;
         document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
         if (onEnd) onEnd();
     };
 
     u.onerror = function() {
+        if (gen !== undefined && gen !== speechGeneration) return;
         document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
         if (onEnd) onEnd();
     };
 
-    setTimeout(function() {
-        try {
-            window.speechSynthesis.speak(u);
-        } catch (e) {
-            if (onEnd) onEnd();
-        }
-    }, 80);
+    try {
+        window.speechSynthesis.speak(u);
+    } catch (e) {
+        if (onEnd) onEnd();
+    }
 }
 
 // ============================================================================
@@ -926,6 +951,7 @@ window.restartExercise = restartExercise;
 window.salvarEVerOutras = salvarEVerOutras;
 window.verificarLicaoConcluida = verificarLicaoConcluida;
 window.toggleMenu = toggleMenu;
+window.stopAllAudio = stopAllAudio;
 
 // Inicialização segura
 if (document.readyState === 'loading') {

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
-    <title>AprendIDos — Escrita</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; media-src 'self' data: blob: https://translate.google.com; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
+    <title>AprendIDos — Treino de Escrita à Mão</title>
     <script>
       if (window.top !== window.self) {
         try { window.top.location = window.self.location; } catch (e) { }
@@ -49,66 +49,448 @@
         .navbar-mobile-menu a { display: flex; align-items: center; gap: 0.6rem; color: var(--muted); text-decoration: none; font-weight: 700; font-size: 1.2rem; padding: 1rem 1.2rem; border-radius: 8px; transition: all 0.2s; }
         .navbar-mobile-menu a:hover, .navbar-mobile-menu a.active { color: var(--green); background: var(--green-pale); }
         .container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 3rem; flex: 1; }
-        .activity-header { margin-bottom: 2rem; }
+        .activity-header { margin-bottom: 1.8rem; }
         .activity-header h1 { font-size: 2rem; font-weight: 900; color: var(--fg); margin-bottom: 0.3rem; }
         .activity-header .subtitle { font-size: 1.1rem; color: var(--fg-secondary); font-weight: 600; }
-        .instruction-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 1.8rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .instruction-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 1.5rem 1.8rem; margin-bottom: 1.8rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
         .instruction-card .instruction-text { flex: 1; }
         .instruction-card .instruction-text p { font-size: 1.15rem; font-weight: 700; color: var(--fg); }
         .instruction-card .instruction-text p+p { margin-top: 0.3rem; font-size: 1rem; color: var(--fg-secondary); font-weight: 600; }
-        .btn-play-instruction { flex-shrink: 0; width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--green); background: var(--green-pale); color: var(--green); font-size: 1.6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
+        .btn-play-instruction { flex-shrink: 0; width: 68px; height: 68px; border-radius: 50%; border: 3px solid var(--green); background: var(--green-pale); color: var(--green); font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
         .btn-play-instruction:hover, .btn-play-instruction.speaking { background: var(--green); color: #fff; }
-        .section-title { font-size: 1.4rem; font-weight: 800; color: var(--fg); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
-        .section-title i { color: var(--green); font-size: 1.2rem; }
 
-        /* EXERCISE */
-        .exercise-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        /* DESTAQUE PEDAGÓGICO: PRÁTICA NO CADERNO */
+        .notebook-callout-card {
+            background: linear-gradient(135deg, #FFFDE7 0%, #FFF8E1 100%);
+            border: 2.5px solid #FBC02D;
+            border-radius: var(--radius);
+            padding: 1.3rem 1.6rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            box-shadow: 0 4px 14px rgba(245, 127, 23, 0.12);
+        }
+        .notebook-icon-wrap {
+            width: 58px;
+            height: 58px;
+            border-radius: 14px;
+            background: #F57F17;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            box-shadow: 0 3px 10px rgba(245, 127, 23, 0.3);
+        }
+        .notebook-content { flex: 1; }
+        .notebook-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #FFF9C4;
+            color: #E65100;
+            border: 1.5px solid #FFE082;
+            padding: 0.2rem 0.65rem;
+            border-radius: 99px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.4rem;
+        }
+        .notebook-content h3 {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #3E2723;
+            margin-bottom: 0.3rem;
+        }
+        .notebook-content p {
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: #5D4037;
+            line-height: 1.5;
+            margin-bottom: 0.8rem;
+        }
+        .btn-notebook-audio {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #FFFFFF;
+            color: #E65100;
+            border: 2px solid #FFA726;
+            border-radius: 10px;
+            padding: 0.45rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-notebook-audio:hover {
+            background: #FFE082;
+            transform: translateY(-1px);
+        }
+
+        /* EXERCISE CARD */
+        .exercise-card { background: var(--white); border: 2px solid var(--border); border-radius: var(--radius); padding: 1.8rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04); margin-bottom: 2rem; }
         .progress-label { font-size: 1rem; font-weight: 700; color: var(--muted); text-align: center; margin-bottom: 0.4rem; }
         .progress-bar-track { background: var(--green-light); border-radius: 99px; height: 14px; margin-bottom: 1.5rem; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.5s ease; width: 0%; }
-        .score-row { display: flex; align-items: center; justify-content: center; gap: 2rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
+        .score-row { display: flex; align-items: center; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .score-item { display: flex; align-items: center; gap: 0.4rem; font-size: 1.05rem; font-weight: 700; color: var(--fg-secondary); }
         .score-num { font-size: 1.4rem; font-weight: 900; min-width: 1.5ch; text-align: center; }
         .score-item.hits .score-num { color: var(--green-dark); }
         .score-item.misses .score-num { color: #C62828; }
 
-        .audio-row { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        .btn-audio-exercise { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.9rem 1.8rem; font-size: 1.1rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 10px rgba(46,125,50,0.25); }
+        .current-word-target-box {
+            background: #E8F5E9;
+            border: 2px solid #81C784;
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.4rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .target-word-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--green-dark);
+            letter-spacing: 4px;
+        }
+        .target-word-hint {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--fg-secondary);
+        }
+        .btn-audio-exercise {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--green);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 0.7rem 1.3rem;
+            font-size: 1rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 8px rgba(46,125,50,0.25);
+        }
         .btn-audio-exercise:hover { background: var(--green-dark); }
         .btn-audio-exercise.speaking { animation: pulse-green 0.9s ease infinite; }
-        .btn-help-exercise { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--green-light); background: var(--green-pale); color: var(--green); font-size: 1.1rem; cursor: pointer; transition: all 0.2s; }
-        .btn-help-exercise:hover { background: var(--green); color: #fff; }
-        .word-hint { text-align: center; font-size: 1.1rem; font-weight: 700; color: var(--fg-secondary); margin-bottom: 1.5rem; }
 
-        /* SLOTS */
-        .letter-slots { display: flex; justify-content: center; gap: 0.8rem; margin-bottom: 2rem; }
-        .letter-slot { width: 62px; height: 70px; border: 3px dashed #BDBDBD; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 900; background: var(--bg); color: var(--fg); transition: all 0.2s; }
-        .letter-slot.filled { border-style: solid; border-color: var(--border); background: var(--white); }
-        .letter-slot.correct { border-color: var(--green); background: var(--green-pale); color: var(--green-dark); animation: pop-correct 0.35s ease; }
-        .letter-slot.wrong { border-color: #EF9A9A; background: #FFF3F3; color: #C62828; animation: shake 0.4s ease; }
+        /* BARRA DE FERRAMENTAS DO CANVAS */
+        .writing-controls-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.9rem;
+            padding: 0.8rem 1.2rem;
+            background: #FAFAFA;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+        }
+        .controls-left, .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .pen-colors {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .pen-label {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--fg-secondary);
+        }
+        .color-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 3px solid #E0E0E0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .color-dot.active {
+            border-color: #F57F17;
+            transform: scale(1.15);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
 
-        /* VIRTUAL KEYBOARD */
-        .virtual-keyboard { max-width: 650px; margin: 0 auto 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        .kb-row { display: flex; justify-content: center; gap: 0.4rem; }
-        .kb-key { min-width: 44px; height: 54px; padding: 0 0.5rem; font-size: 1.35rem; font-weight: 800; font-family: 'Nunito', sans-serif; background: var(--bg); border: 2px solid var(--border); border-radius: 8px; color: var(--fg); cursor: pointer; transition: all 0.15s; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
-        .kb-key:hover { background: var(--green-pale); border-color: var(--green); transform: translateY(-2px); }
-        .kb-key:active { transform: translateY(1px); }
-        .actions-row { margin-top: 0.4rem; gap: 0.8rem; }
-        .kb-action-key { height: 48px; padding: 0 1.2rem; font-size: 1.05rem; font-weight: 800; border-radius: 10px; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-        .del-key { background: #FFEBEE; border-color: #FFCDD2; color: #C62828; }
-        .del-key:hover { background: #FFCDD2; }
-        .confirm-key { background: var(--green-pale); border-color: var(--green-light); color: var(--green-dark); }
-        .confirm-key:hover { background: var(--green-light); }
+        /* BOTÃO VISÍVEL E EM DESTAQUE PARA OCULTAR PALAVRA NO FUNDO */
+        .btn-guide-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.55rem 1.1rem;
+            font-size: 0.98rem;
+            font-weight: 900;
+            font-family: 'Nunito', sans-serif;
+            border-radius: 10px;
+            border: 2.5px solid #00897B;
+            background: #E0F2F1;
+            color: #004D40;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0, 137, 123, 0.15);
+        }
+        .btn-guide-toggle:hover {
+            background: #B2DFDB;
+            transform: translateY(-1px);
+        }
+        .btn-guide-toggle.active {
+            background: #00695C;
+            color: #FFFFFF;
+            border-color: #004D40;
+            box-shadow: 0 3px 10px rgba(0, 77, 64, 0.3);
+        }
 
-        @keyframes pop-correct { 0%{transform:scale(1)} 50%{transform:scale(1.06)} 100%{transform:scale(1)} }
-        @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-5px)} 40%{transform:translateX(5px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
-        @keyframes pulse-green { 0%,100%{box-shadow:0 0 0 0 rgba(46,125,50,0.3)} 50%{box-shadow:0 0 0 10px rgba(46,125,50,0)} }
-        @keyframes fade-up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+        .btn-action-sm {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            background: #FFFFFF;
+            color: var(--fg);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-action-sm:hover {
+            border-color: var(--green);
+            background: var(--green-pale);
+        }
+        .btn-action-sm.btn-clear {
+            border-color: #FFCDD2;
+            color: #C62828;
+            background: #FFF3F3;
+        }
+        .btn-action-sm.btn-clear:hover {
+            background: #FFCDD2;
+        }
 
-        .feedback-area { text-align: center; min-height: 3.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; }
-        .feedback-msg { font-size: 1.3rem; font-weight: 800; border-radius: var(--radius-sm); padding: 0.7rem 1.5rem; display: inline-flex; align-items: center; gap: 0.5rem; animation: fade-up 0.3s ease; }
-        .feedback-msg.success { background: var(--green-pale); color: var(--green-dark); border: 2px solid var(--green-light); }
-        .feedback-msg.error { background: #FFF8E1; color: #E65100; border: 2px solid #FFE0B2; }
+        /* CANVAS DE ESCRITA */
+        .canvas-wrapper {
+            position: relative;
+            background: #FFFFFF;
+            border: 3px solid #81C784;
+            border-radius: var(--radius);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            margin-bottom: 1.2rem;
+        }
+        .writing-canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            min-height: 290px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+        .canvas-hint-overlay {
+            position: absolute;
+            bottom: 12px;
+            right: 14px;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--green-dark);
+            border: 1.5px solid var(--border);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: opacity 0.3s;
+        }
+
+        /* RASTREADOR DE LETRAS */
+        .writing-letters-tracker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+            padding: 0.8rem;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 2px dashed #CFD8DC;
+        }
+        .tracker-chip {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 58px;
+            padding: 0.45rem 0.7rem;
+            border-radius: 12px;
+            background: var(--white);
+            border: 2px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .tracker-chip .chip-char {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--fg);
+            line-height: 1.1;
+        }
+        .tracker-chip .chip-status {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--muted);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .tracker-chip.completed {
+            background: #E8F5E9;
+            border-color: #4CAF50;
+            box-shadow: 0 3px 8px rgba(76, 175, 80, 0.25);
+        }
+        .tracker-chip.completed .chip-char { color: #1B5E20; }
+        .tracker-chip.completed .chip-status { color: #2E7D32; font-weight: 900; }
+        .tracker-chip.partial { background: #FFF9C4; border-color: #FBC02D; }
+        .tracker-chip.partial .chip-status { color: #F57F17; }
+
+        /* CARD DE AVALIAÇÃO */
+        .writing-eval-card {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F1F8E9 100%);
+            border: 2px solid #A5D6A7;
+            border-radius: var(--radius);
+            padding: 1.4rem 1.6rem;
+            box-shadow: 0 4px 14px rgba(46,125,50,0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .eval-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .eval-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .eval-title-wrap i { font-size: 1.4rem; color: var(--green); }
+        .eval-title-wrap h3 { font-size: 1.25rem; font-weight: 900; color: var(--fg); }
+        .eval-stars-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 1.6rem;
+            color: #E0E0E0;
+        }
+        .eval-stars-wrap .fa-star.active { color: #FFB300; }
+        .eval-meter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--fg-secondary);
+            margin-bottom: 0.3rem;
+        }
+        .eval-meter-score { font-size: 1.2rem; font-weight: 900; color: var(--green-dark); }
+        .eval-progress-bar-bg {
+            width: 100%;
+            height: 18px;
+            background: #E0E0E0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+        }
+        .eval-progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #FBC02D, #4CAF50, #2E7D32);
+            transition: width 0.4s ease;
+        }
+        .eval-feedback-msg {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--fg);
+            background: rgba(255, 255, 255, 0.85);
+            border: 2px solid #C8E6C9;
+            border-radius: var(--radius-sm);
+            padding: 0.9rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .eval-feedback-msg i { font-size: 1.4rem; flex-shrink: 0; }
+        .eval-feedback-msg.success i { color: #2E7D32; }
+        .eval-feedback-msg.partial i { color: #F57F17; }
+        .eval-feedback-msg.info i { color: #1976D2; }
+
+        .eval-actions-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .btn-evaluate-main {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--green);
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 0.8rem 1.6rem;
+            font-size: 1.05rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 10px rgba(46,125,50,0.25);
+        }
+        .btn-evaluate-main:hover { background: var(--green-dark); transform: translateY(-1px); }
+        .btn-speak-eval {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #FFFFFF;
+            color: var(--green-dark);
+            border: 2px solid #81C784;
+            border-radius: var(--radius-sm);
+            padding: 0.8rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-speak-eval:hover { background: var(--green-pale); }
         .btn-next { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.85rem 2rem; font-size: 1.05rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
         .btn-next:hover { background: var(--green-dark); }
 
@@ -122,21 +504,14 @@
         .stat { text-align: center; }
         .stat-value { font-size: 2.5rem; font-weight: 900; line-height: 1; }
         .stat-label { font-size: 0.95rem; font-weight: 700; color: var(--muted); margin-top: 0.2rem; }
-        .error-summary { background: #FFF8E1; border: 2px solid #FFE0B2; border-radius: var(--radius-sm); padding: 1.2rem 1.5rem; margin-bottom: 2rem; text-align: left; max-width: 480px; margin-left: auto; margin-right: auto; }
-        .error-summary h3 { font-size: 1.05rem; font-weight: 800; color: #E65100; margin-bottom: 0.6rem; }
-        .error-summary ul { list-style: none; padding: 0; }
-        .error-summary li { font-size: 1rem; font-weight: 700; color: var(--fg-secondary); padding: 0.25rem 0; }
-        .wrong-answer { color: #C62828; text-decoration: line-through; font-weight: 800; }
         .btn-restart { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 1rem 2.5rem; font-size: 1.1rem; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
         .btn-restart:hover { background: var(--green-dark); }
         .footer { background: var(--white); border-top: 2px solid var(--border); padding: 1.2rem 1.5rem; text-align: center; font-size: 0.9rem; color: var(--muted); font-weight: 600; margin-top: auto; }
         .footer i { color: var(--green); }
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+        @keyframes pulse-green { 0%,100%{box-shadow:0 0 0 0 rgba(46,125,50,0.3)} 50%{box-shadow:0 0 0 10px rgba(46,125,50,0)} }
+        @keyframes fade-up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
         @media (max-width: 768px) { .navbar-nav { display: none; } .navbar-hamburger { display: flex; align-items: center; justify-content: center; } }
-        @media (max-width: 500px) {
-            .kb-key { min-width: 30px; height: 46px; font-size: 1.1rem; }
-            .letter-slot { width: 50px; height: 58px; font-size: 1.8rem; }
-        }
     </style>
 </head>
 <body>
@@ -187,8 +562,8 @@
 
 <main class="container" id="main-content">
     <header class="activity-header">
-        <h1>Escrita (Ditado Digital)</h1>
-        <p class="subtitle">Ouça a palavra e treine a escrita tocando nas letras ou usando seu teclado.</p>
+        <h1>Treino de Escrita à Mão (Caligrafia)</h1>
+        <p class="subtitle">Escreva as palavras com o dedo ou caneta touch e acompanhe sua caligrafia em tempo real.</p>
     </header>
 
     <div id="reviewBanner" style="display:none; align-items:center; gap:14px; background:#E8F5E9; border:2px solid #81C784; border-radius:16px; padding:14px 20px; margin-bottom:20px; color:#1B5E20; box-shadow:0 4px 12px rgba(46,125,50,0.10);">
@@ -199,23 +574,37 @@
         </div>
     </div>
 
+    <!-- CARD DE INSTRUÇÃO -->
     <div class="instruction-card">
         <div class="instruction-text">
-            <p>Ouça a palavra falada e escreva cada uma das letras.</p>
-            <p>Você pode clicar no teclado abaixo ou digitar diretamente no teclado do computador.</p>
+            <p>Passe o dedo cobrindo as letras ou pratique de memória.</p>
+            <p>O sistema avalia a precisão do seu traço automaticamente!</p>
         </div>
         <button class="btn-play-instruction" id="btnInstruction" aria-label="Ouvir instrução" onclick="playInstruction()">
             <i class="fas fa-play"></i>
         </button>
     </div>
 
-    <!-- EXERCÍCIO DE ESCRITA -->
-    <div id="exerciseLayout">
-        <section class="exercise-card" aria-labelledby="title-exercise">
-            <h2 class="section-title" id="title-exercise">
-                <i class="fas fa-keyboard"></i> Ditado Digital
-            </h2>
+    <!-- DESTAQUE PEDAGÓGICO: PRÁTICA NO CADERNO -->
+    <div class="notebook-callout-card" role="region" aria-label="Dica pedagógica de prática no caderno de papel">
+        <div class="notebook-icon-wrap" aria-hidden="true">
+            <i class="fas fa-book-open"></i>
+        </div>
+        <div class="notebook-content">
+            <div class="notebook-badge">
+                <i class="fas fa-pencil-alt"></i> Prática com Lápis e Papel
+            </div>
+            <h3>Dica de Ouro: Treine também no seu caderno!</h3>
+            <p>Pegue um lápis ou caneta e escreva esta palavra em uma folha de papel ou no seu caderno de estudos. O treino físico no papel fortalece a coordenação motora e fixa a palavra para sempre na memória!</p>
+            <button type="button" class="btn-notebook-audio" onclick="speakNotebookTip()" aria-label="Ouvir conselho de escrita no caderno">
+                <i class="fas fa-volume-up"></i> Ouvir Conselho do Professor
+            </button>
+        </div>
+    </div>
 
+    <!-- ÁREA PRINCIPAL DO EXERCÍCIO -->
+    <div id="exerciseLayout">
+        <div class="exercise-card">
             <p class="progress-label" id="progressLabel">Palavra 1 de 6</p>
             <div class="progress-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressBar">
                 <div class="progress-bar-fill" id="progressFill"></div>
@@ -225,41 +614,109 @@
                 <div class="score-item misses"><i class="fas fa-times-circle" style="color:#C62828"></i><span>Erros:</span><span class="score-num" id="missesCount">0</span></div>
             </div>
 
-            <div class="audio-row">
-                <button class="btn-audio-exercise" id="btnExerciseAudio" onclick="playQuestionAudio()" aria-label="Ouvir a palavra">
-                    <i class="fas fa-volume-up"></i> Ouvir a palavra
+            <!-- PALAVRA ATUAL -->
+            <div class="current-word-target-box">
+                <div>
+                    <div class="target-word-title" id="targetWordTitle">BOLA</div>
+                    <div class="target-word-hint" id="targetWordHint">Brinquedo redondo que rola</div>
+                </div>
+                <button type="button" class="btn-audio-exercise" id="btnWordAudio" onclick="playWordAudio()" aria-label="Ouvir a palavra">
+                    <i class="fas fa-volume-up"></i> Ouvir a Palavra
                 </button>
-                <button class="btn-help-exercise" id="btnHelpExercise" onclick="playHelpExercise()" title="Ouvir instrução">
-                    <i class="fas fa-play"></i>
-                </button>
-                <span class="audio-hint">Toque para ouvir</span>
             </div>
 
-            <p class="word-hint" id="wordHint">Dica: ——</p>
+            <!-- BARRA DE FERRAMENTAS DO QUADRO -->
+            <div class="writing-controls-bar">
+                <div class="controls-left">
+                    <div class="pen-colors" role="group" aria-label="Cor da caneta">
+                        <span class="pen-label"><i class="fas fa-paint-brush"></i> Cor:</span>
+                        <button type="button" class="color-dot active" style="background-color:#1565C0;" onclick="setPenColor('#1565C0', this)" aria-label="Caneta Azul" title="Caneta Azul"></button>
+                        <button type="button" class="color-dot" style="background-color:#212121;" onclick="setPenColor('#212121', this)" aria-label="Caneta Preta" title="Caneta Preta"></button>
+                        <button type="button" class="color-dot" style="background-color:#2E7D32;" onclick="setPenColor('#2E7D32', this)" aria-label="Caneta Verde" title="Caneta Verde"></button>
+                    </div>
 
-            <!-- ESPAÇOS DAS LETRAS -->
-            <div class="letter-slots" id="letterSlots" aria-live="polite"></div>
+                    <!-- BOTÃO VISÍVEL E IMPORTANTE: OCULTAR PALAVRA NO FUNDO -->
+                    <button type="button" class="btn-guide-toggle" id="btnToggleWordGuide" onclick="toggleWordGuide()" aria-pressed="false">
+                        <i class="fas fa-eye-slash"></i> Ocultar Palavra no Fundo
+                    </button>
+                </div>
 
-            <!-- TECLADO VIRTUAL -->
-            <div class="virtual-keyboard" id="virtualKeyboard" role="group" aria-label="Teclado na tela"></div>
+                <div class="controls-right">
+                    <button type="button" class="btn-action-sm btn-clear" onclick="clearWritingCanvas()" aria-label="Apagar e começar de novo">
+                        <i class="fas fa-eraser"></i> Apagar
+                    </button>
+                </div>
+            </div>
 
-            <div class="feedback-area" id="feedbackArea" aria-live="polite" aria-atomic="true"></div>
-        </section>
+            <!-- QUADRO DE ESCRITA (CANVAS TOUCH) -->
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <canvas id="writingCanvas" class="writing-canvas" aria-label="Quadro de caligrafia para escrever com o dedo"></canvas>
+                <div class="canvas-hint-overlay" id="canvasHint">
+                    <i class="fas fa-hand-pointer"></i> Passe o dedo nas linhas para escrever
+                </div>
+            </div>
+
+            <!-- RASTREADOR DE LETRAS DA PALAVRA -->
+            <div style="font-size:0.95rem; font-weight:800; color:var(--fg-secondary); margin-bottom:0.5rem; display:flex; align-items:center; justify-content:space-between;">
+                <span><i class="fas fa-list-check" style="color:var(--green)"></i> Progresso de cada letra:</span>
+                <span id="trackerProgressCount" style="color:var(--green-dark); font-weight:900;">0 de 0</span>
+            </div>
+            <div class="writing-letters-tracker" id="writingLettersTracker" role="region" aria-label="Progresso de cada letra">
+                <!-- Preenchido via JS -->
+            </div>
+
+            <!-- CARD DE AVALIAÇÃO EM TEMPO REAL -->
+            <div class="writing-eval-card" id="writingEvalCard" role="region" aria-label="Avaliação da caligrafia">
+                <div class="eval-top-row">
+                    <div class="eval-title-wrap">
+                        <i class="fas fa-award"></i>
+                        <h3>Avaliação da Caligrafia</h3>
+                    </div>
+                    <div class="eval-stars-wrap" id="evalStarsWrap" aria-label="Classificação por estrelas">
+                        <i class="fas fa-star" id="star1"></i>
+                        <i class="fas fa-star" id="star2"></i>
+                        <i class="fas fa-star" id="star3"></i>
+                    </div>
+                </div>
+
+                <div class="eval-meter-container">
+                    <div class="eval-meter-header">
+                        <span>Precisão do traçado:</span>
+                        <span class="eval-meter-score" id="evalScoreLabel">0%</span>
+                    </div>
+                    <div class="eval-progress-bar-bg" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="evalProgressBarBg">
+                        <div class="eval-progress-bar-fill" id="evalProgressBarFill" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="eval-feedback-msg info" id="evalFeedbackMsg">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="evalFeedbackText">Passe o dedo por cima das letras. O sistema avalia sua escrita automaticamente!</span>
+                </div>
+
+                <div class="eval-actions-row">
+                    <button type="button" class="btn-speak-eval" id="btnSpeakEval" onclick="speakCurrentEvaluation()" aria-label="Ouvir avaliação em voz alta">
+                        <i class="fas fa-volume-up"></i> Ouvir Avaliação
+                    </button>
+                    <button type="button" class="btn-evaluate-main" id="btnEvaluate" onclick="evaluateWriting(true)" aria-label="Avaliar agora">
+                        <i class="fas fa-magnifying-glass-chart"></i> Avaliar Agora
+                    </button>
+                </div>
+            </div>
+
+            <div class="feedback-area" id="feedbackArea" style="margin-top:1.5rem;" aria-live="polite" aria-atomic="true"></div>
+        </div>
     </div>
 
     <!-- TELA DE CONCLUSÃO -->
     <div class="completion exercise-card" id="completionScreen">
         <div class="completion-icon"><i class="fas fa-trophy"></i></div>
-        <h2>Parabéns! Você terminou!</h2>
-        <p id="completionMsg">Veja como você se saiu.</p>
+        <h2>Parabéns! Você é incrível!</h2>
+        <p id="completionMsg">Você praticou a caligrafia e a escrita das palavras!</p>
         <div class="completion-stats">
             <div class="stat"><div class="stat-value" style="color:var(--green-dark)" id="finalHits">0</div><div class="stat-label">Acertos</div></div>
             <div class="stat"><div class="stat-value" style="color:#C62828" id="finalMisses">0</div><div class="stat-label">Erros</div></div>
             <div class="stat"><div class="stat-value" style="color:var(--green)" id="finalTotal">6</div><div class="stat-label">Total</div></div>
-        </div>
-        <div class="error-summary" id="errorSummary" style="display:none;">
-            <h3><i class="fas fa-exclamation-triangle"></i> Palavras para revisar</h3>
-            <ul id="errorList"></ul>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px;max-width:480px;margin:24px auto 0;">
             <button type="button" id="btnSalvarEVerOutras" class="btn-restart" onclick="salvarEVerOutras(event)" style="background:var(--green);color:#fff;border:none;box-shadow:0 4px 14px rgba(46,125,50,0.3);">
@@ -281,6 +738,7 @@
 <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
 
+<script src="letter-paths.js"></script>
 <script src="escrita.js"></script>
 </body>
 </html>

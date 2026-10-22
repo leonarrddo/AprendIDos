@@ -855,3 +855,143 @@ body.dark-mode .error-summary li {
     font-size: 14px;
   }
 }
+
+/* ==========================================================================
+   ESTRUTURA GLOBAL DE RESPONSIVIDADE, ESTABILIDADE E ACESSIBILIDADE PARA IDOSOS
+   Projetado para telas de 320px até 1920px e ampliação de zoom até 400%
+   ========================================================================== */
+
+/* 1. Prevenção de rolagem horizontal e garantia de dimensionamento correto */
+html {
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+img, svg, canvas, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 2. Estabilidade de Canvas Touch & Zoom (Meu Nome e Escrita) */
+.canvas-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  touch-action: none !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  overscroll-behavior: contain;
+}
+
+.writing-canvas {
+  touch-action: none !important;
+  display: block;
+  max-width: 100%;
+}
+
+/* 3. Área de toque acessível para mãos idosas (mínimo de 48px conforme WCAG AAA) */
+.btn-action,
+.btn-next,
+.btn-restart,
+.btn-audio-exercise,
+.btn-option,
+.btn-option-syl,
+.btn-nav-step,
+.card-btn {
+  min-height: 48px;
+}
+
+/* 4. Navbar móvel compacta e sem quebras em telas estreitas (<= 480px e 320px) */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.4rem 0.65rem !important;
+  }
+
+  .navbar-left {
+    gap: 0.4rem !important;
+  }
+
+  .btn-back {
+    padding: 0.4rem 0.65rem !important;
+    font-size: 0.88rem !important;
+  }
+
+  .navbar-brand span {
+    font-size: 1rem !important;
+  }
+
+  .container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  /* Cartões de instrução e destaque empilhados com conforto */
+  .instruction-card {
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 1.2rem 1rem !important;
+    gap: 1rem !important;
+  }
+
+  .notebook-callout-card {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 1.2rem 1rem !important;
+    gap: 0.8rem !important;
+  }
+
+  .notebook-icon-wrap {
+    margin: 0 auto;
+  }
+
+  .writing-section,
+  .exercise-card,
+  .card-box,
+  .story-container {
+    padding: 1.4rem 1rem !important;
+  }
+
+  .writing-controls-bar {
+    padding: 0.6rem 0.8rem !important;
+    gap: 0.6rem !important;
+    justify-content: center !important;
+  }
+
+  .mode-toggles,
+  .pen-colors,
+  .writing-actions-top {
+    justify-content: center !important;
+  }
+}
+
+/* 5. Ajustes para micro-telas extremas (320px - 360px) */
+@media (max-width: 360px) {
+  .btn-back span {
+    display: none; /* Em 320px, mantém o ícone da seta para economizar espaço crítico */
+  }
+
+  .navbar-brand span {
+    font-size: 0.95rem !important;
+  }
+
+  .activity-header h1 {
+    font-size: 1.5rem !important;
+  }
+
+  .activity-header .subtitle {
+    font-size: 0.95rem !important;
+  }
+}
+

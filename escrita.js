@@ -40,6 +40,9 @@ var currentEvalScore = 0;
 var currentEvalMessage = '';
 var autoEvalTimeout = null;
 var hasPassedCurrentWord = false;
+var prevCanvasWidth = 0;
+var prevCanvasHeight = 0;
+var resizeDebounceTimer = null;
 
 // ============================================================
 // MOTOR DE VOZ (ANTI-ECO & ANTI-REPETIÇÃO)
@@ -290,18 +293,33 @@ function initWritingCanvas() {
     window.addEventListener('resize', handleCanvasResize);
 }
 
-function handleCanvasResize() {
-    if (!writingCanvas || writingCanvas.offsetParent === null) return;
-    setupCanvasResolution();
-    redrawWritingCanvas();
-}
-
 function setupCanvasResolution() {
     if (!writingCanvas) return;
     var container = writingCanvas.parentElement;
-    var rect = container.getBoundingClientRect();
+    var rect = container ? container.getBoundingClientRect() : writingCanvas.getBoundingClientRect();
     var width = Math.floor(rect.width) || 640;
     var height = 320; // Altura confortável para escrita grande
+
+    var dimChanged = (prevCanvasWidth > 0 && prevCanvasHeight > 0) &&
+                     (Math.abs(width - prevCanvasWidth) >= 3 || Math.abs(height - prevCanvasHeight) >= 3);
+
+    // Se já havia traços desenhados e as dimensões mudaram, reescala os traços existentes proporcionalmente!
+    if (dimChanged && strokes && strokes.length > 0 && prevCanvasWidth > 0 && prevCanvasHeight > 0) {
+        var scaleX = width / prevCanvasWidth;
+        var scaleY = height / prevCanvasHeight;
+        for (var s = 0; s < strokes.length; s++) {
+            var st = strokes[s];
+            if (st && st.points) {
+                for (var p = 0; p < st.points.length; p++) {
+                    st.points[p].x = st.points[p].x * scaleX;
+                    st.points[p].y = st.points[p].y * scaleY;
+                }
+            }
+        }
+    }
+
+    prevCanvasWidth = width;
+    prevCanvasHeight = height;
 
     var dpr = window.devicePixelRatio || 1;
     writingCanvas.width = width * dpr;
@@ -315,16 +333,40 @@ function setupCanvasResolution() {
     writingCtx.scale(dpr, dpr);
 }
 
+function handleCanvasResize() {
+    if (!writingCanvas || writingCanvas.offsetParent === null) return;
+    if (isDrawing) return;
+
+    if (resizeDebounceTimer) clearTimeout(resizeDebounceTimer);
+    resizeDebounceTimer = setTimeout(function() {
+        if (isDrawing || !writingCanvas) return;
+        var container = writingCanvas.parentElement;
+        var rect = container ? container.getBoundingClientRect() : writingCanvas.getBoundingClientRect();
+        var newWidth = Math.floor(rect.width) || 640;
+        if (prevCanvasWidth > 0 && Math.abs(newWidth - prevCanvasWidth) < 3) return;
+
+        setupCanvasResolution();
+        redrawWritingCanvas();
+        renderLetterTracker();
+    }, 100);
+}
+
 function getCanvasCoordinates(e) {
     var rect = writingCanvas.getBoundingClientRect();
+    var logicalWidth = parseFloat(writingCanvas.style.width) || prevCanvasWidth || (writingCanvas.width / (window.devicePixelRatio || 1));
+    var logicalHeight = parseFloat(writingCanvas.style.height) || prevCanvasHeight || (writingCanvas.height / (window.devicePixelRatio || 1));
+    var scaleX = rect.width > 0 ? (logicalWidth / rect.width) : 1;
+    var scaleY = rect.height > 0 ? (logicalHeight / rect.height) : 1;
     return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
     };
 }
 
 function attachCanvasEvents() {
     if (!writingCanvas) return;
+    writingCanvas.style.touchAction = 'none';
+    writingCanvas.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 
     writingCanvas.addEventListener('pointerdown', function(e) {
         e.preventDefault();

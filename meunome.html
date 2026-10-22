@@ -576,7 +576,30 @@
         .footer i { color: var(--green); }
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
         @keyframes fade-up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-        @media (max-width: 768px) { .navbar-nav { display: none; } .navbar-hamburger { display: flex; align-items: center; justify-content: center; } }
+        @media (max-width: 768px) {
+            .navbar-nav { display: none; }
+            .navbar-hamburger { display: flex; align-items: center; justify-content: center; }
+        }
+        @media (max-width: 600px) {
+            .container { padding: 1.5rem 1rem 2.5rem; }
+            .card-box, .writing-section { padding: 1.4rem 1rem; }
+            .name-input { font-size: 1.15rem; min-width: 100%; }
+            .name-letter { width: 48px; height: 56px; font-size: 1.8rem; }
+            .name-slot { width: 48px; height: 56px; font-size: 1.8rem; }
+            .letter-tile { min-width: 46px; height: 54px; font-size: 1.5rem; }
+            .writing-controls-bar { padding: 0.6rem 0.8rem; gap: 0.6rem; justify-content: center; }
+            .mode-toggles, .pen-colors, .writing-actions-top { justify-content: center; }
+            .eval-top-row { justify-content: center; text-align: center; }
+            .eval-actions-row { justify-content: center; }
+            .btn-evaluate-main, .btn-speak-eval { width: 100%; justify-content: center; }
+        }
+        @media (max-width: 380px) {
+            .name-letter { width: 40px; height: 48px; font-size: 1.5rem; border-radius: 8px; }
+            .name-slot { width: 40px; height: 48px; font-size: 1.5rem; border-radius: 8px; }
+            .letter-tile { min-width: 40px; height: 48px; font-size: 1.3rem; padding: 0 0.5rem; }
+            .assembled-slots { gap: 0.35rem; }
+            .letter-pool { gap: 0.35rem; }
+        }
 
         /* Suporte completo ao Modo Escuro */
         body.dark-mode .name-input {

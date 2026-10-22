@@ -270,7 +270,25 @@
         .footer { background: var(--white); border-top: 2px solid var(--border); padding: 1.2rem 1.5rem; text-align: center; font-size: 0.95rem; color: var(--muted); font-weight: 700; margin-top: auto; }
         .footer i { color: var(--green); }
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-        @media (max-width: 768px) { .navbar-nav { display: none; } .navbar-hamburger { display: flex; align-items: center; justify-content: center; } }
+        @media (max-width: 768px) {
+            .navbar-nav { display: none; }
+            .navbar-hamburger { display: flex; align-items: center; justify-content: center; }
+            .words-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        }
+        @media (max-width: 500px) {
+            .container { padding: 1.5rem 1rem 2.5rem; }
+            .words-grid { grid-template-columns: 1fr; max-width: 320px; margin-left: auto; margin-right: auto; }
+            .word-card { padding: 1.2rem; }
+            .lot-control-bar { justify-content: center; text-align: center; }
+            .lot-dots { justify-content: center; }
+            .btn-next-lot { width: 100%; justify-content: center; }
+            .options-container { gap: 0.8rem; }
+            .palavra-dialog { border-radius: 18px; }
+            .palavra-header { padding: 0.8rem 1rem; }
+            .palavra-body { padding: 1rem; }
+            .palavra-big-word { font-size: 2.2rem; }
+            .palavra-img-wrapper { min-height: 240px; }
+        }
     </style>
 </head>
 <body>

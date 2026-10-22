@@ -231,7 +231,25 @@
         .footer { background: var(--white); border-top: 2px solid var(--border); padding: 1.2rem 1.5rem; text-align: center; font-size: 0.9rem; color: var(--muted); font-weight: 600; margin-top: auto; }
         .footer i { color: var(--green); }
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-        @media (max-width: 768px) { .navbar-nav { display: none; } .navbar-hamburger { display: flex; align-items: center; justify-content: center; } }
+        @media (max-width: 768px) {
+            .navbar-nav { display: none; }
+            .navbar-hamburger { display: flex; align-items: center; justify-content: center; }
+        }
+        @media (max-width: 600px) {
+            .container { padding: 1.5rem 1rem 2.5rem; }
+            .reading-aids-bar { padding: 0.6rem 0.8rem; gap: 0.5rem; justify-content: center; }
+            .reading-aids-buttons { justify-content: center; }
+            .story-container { padding: 1.4rem 1.1rem; }
+            .story-title { font-size: 1.35rem; }
+            .story-text { padding: 0.9rem 1rem; }
+            .story-line { font-size: 1.12rem; padding: 0.5rem 0.6rem; }
+            .vocab-chips { justify-content: center; }
+        }
+        @media (max-width: 400px) {
+            .btn-reading-aid { padding: 0.35rem 0.6rem; font-size: 0.85rem; }
+            .story-emoji { font-size: 1.8rem; }
+            .story-line { font-size: 1.05rem; }
+        }
     </style>
 </head>
 <body>

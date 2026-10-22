@@ -1144,8 +1144,17 @@
             .consonant-word { font-size: 1.05rem; }
             .instruction-card { flex-direction: column; text-align: center; gap: 1rem; }
             .options-grid { grid-template-columns: repeat(3, 1fr); }
-            .btn-option { min-height: 70px; padding: 0.8rem 0.4rem; }
             .cartilha-footer { justify-content: center; }
+        }
+        @media (max-width: 380px) {
+            .consonants-grid { gap: 0.6rem; }
+            .consonant-card { padding: 0.8rem 0.35rem 0.75rem; }
+            .consonant-card-thumb-wrap, .consonant-badge-icon { width: 52px; height: 52px; }
+            .consonant-letters .letter-upper { font-size: 1.9rem; }
+            .consonant-letters .letter-lower { font-size: 1.4rem; }
+            .consonant-word { font-size: 0.95rem; }
+            .options-grid { gap: 0.4rem; }
+            .btn-option { min-height: 60px; padding: 0.6rem 0.2rem; }
         }
     </style>
 </head>

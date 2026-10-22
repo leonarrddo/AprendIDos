@@ -79,7 +79,7 @@
         .btn-speak-family { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.5rem 1rem; font-size: 1rem; font-weight: 800; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
         .btn-speak-family:hover { background: var(--green-dark); transform: scale(1.03); }
 
-        .syllables-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-bottom: 1.5rem; }
+        .syllables-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 1.2rem; margin-bottom: 1.5rem; }
         .syllable-card { background: #FAFAFA; border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem; }
         .syllable-card-header { font-size: 1.3rem; font-weight: 900; color: var(--green-dark); background: #FFF9C4; display: inline-block; align-self: flex-start; padding: 0.2rem 0.7rem; border-radius: 8px; border: 1.5px solid #FFE082; }
         .word-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
@@ -169,7 +169,27 @@
         .footer { background: var(--white); border-top: 2px solid var(--border); padding: 1.2rem 1.5rem; text-align: center; font-size: 0.9rem; color: var(--muted); font-weight: 600; margin-top: auto; }
         .footer i { color: var(--green); }
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-        @media (max-width: 768px) { .navbar-nav { display: none; } .navbar-hamburger { display: flex; align-items: center; justify-content: center; } }
+        @media (max-width: 768px) {
+            .navbar-nav { display: none; }
+            .navbar-hamburger { display: flex; align-items: center; justify-content: center; }
+        }
+        @media (max-width: 600px) {
+            .container { padding: 1.5rem 1rem 2.5rem; }
+            .letter-section { padding: 1.2rem 1rem; }
+            .letter-huge-title { font-size: 1.8rem; }
+            .letter-huge-badge { width: 46px; height: 46px; font-size: 1.6rem; border-radius: 10px; }
+            .syllable-family-title { font-size: 1.15rem; }
+            .syllables-grid { grid-template-columns: 1fr; gap: 0.9rem; }
+            .options-container { gap: 0.8rem; }
+            .btn-option-syl { font-size: 1.35rem; padding: 0.85rem 1rem; }
+            .letter-pagination { justify-content: center; }
+            .btn-nav-step { width: 100%; justify-content: center; }
+        }
+        @media (max-width: 400px) {
+            .btn-option-syl { font-size: 1.15rem; gap: 0.4rem; padding: 0.75rem 0.6rem; }
+            .btn-option-syl .syl { padding: 0.15rem 0.45rem; }
+            .word-item-left { font-size: 1.05rem; }
+        }
     </style>
 </head>
 <body>

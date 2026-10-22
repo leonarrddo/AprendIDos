@@ -230,8 +230,10 @@
         }
 
         .cartao-ilustracao {
-            width: 380px;
-            height: 380px;
+            width: 100%;
+            max-width: 380px;
+            aspect-ratio: 1 / 1;
+            height: auto;
             background-color: #FFFFFF;
             border-radius: 25px;
             box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.10);
@@ -363,7 +365,9 @@
             }
 
             .cartao-menu {
-                width: 45%;
+                width: calc(50% - 10px);
+                max-width: 190px;
+                min-width: 120px;
                 height: 85px;
             }
 
@@ -394,8 +398,10 @@
             }
 
             .cartao-ilustracao {
-                width: 300px;
-                height: 300px;
+                width: 100%;
+                max-width: 300px;
+                height: auto;
+                aspect-ratio: 1 / 1;
             }
 
             .rodape-ajuda {
@@ -417,6 +423,80 @@
 
             .texto-rodape-inferior {
                 font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-superior {
+                padding: 16px 14px 14px;
+            }
+            .titulo-principal {
+                font-size: clamp(26px, 8vw, 32px);
+                margin-top: 8px;
+            }
+            .subtitulo-header {
+                font-size: 16px;
+            }
+            .menu-principal {
+                gap: 10px;
+                padding: 0 8px;
+            }
+            .cartao-menu {
+                width: calc(50% - 6px);
+                height: 76px;
+                border-radius: 16px;
+                gap: 6px;
+            }
+            .cartao-menu .icone-menu {
+                font-size: 24px;
+            }
+            .cartao-menu .texto-menu {
+                font-size: 16px;
+            }
+            .secao-hero {
+                padding: 28px 14px;
+            }
+            .titulo-hero {
+                font-size: clamp(26px, 7vw, 34px);
+            }
+            .texto-hero {
+                font-size: 16px;
+                margin-top: 14px;
+            }
+            .botao-principal {
+                font-size: 18px;
+                height: 52px;
+                margin-top: 20px;
+            }
+            .cartao-ilustracao {
+                max-width: 250px;
+                padding: 10px;
+            }
+            .rodape-ajuda {
+                padding: 20px 14px;
+            }
+            .texto-rodape-superior {
+                font-size: 17px;
+            }
+            .area-telefone .numero-telefone {
+                font-size: 22px;
+            }
+            .area-telefone .icone-telefone {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .cartao-ilustracao {
+                max-width: 210px;
+            }
+            .menu-principal {
+                gap: 8px;
+                padding: 0 4px;
+            }
+            .cartao-menu {
+                width: 100%;
+                max-width: 260px;
             }
         }
 

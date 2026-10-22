@@ -228,6 +228,23 @@ var alphabetData = {
 // ============================================================================
 var currentAudio = null;
 var speechGeneration = 0;
+var ptVoiceCache = null;
+
+function loadVoices() {
+    if (!('speechSynthesis' in window)) return;
+    var voices = window.speechSynthesis.getVoices();
+    if (voices && voices.length > 0) {
+        ptVoiceCache =
+            voices.find(function(v) { return v.lang === 'pt-BR'; }) ||
+            voices.find(function(v) { return v.lang === 'pt_BR'; }) ||
+            voices.find(function(v) { return v.lang.startsWith('pt'); }) || null;
+    }
+}
+
+if ('speechSynthesis' in window) {
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+}
 
 function stopAllAudio() {
     speechGeneration++;
@@ -313,31 +330,26 @@ function speakNativo(text, onEnd, gen) {
     u.pitch = 1.0;
     u.volume = 1.0;
 
-    var voices = window.speechSynthesis.getVoices();
-    if (voices && voices.length > 0) {
-        var ptVoice = voices.find(function(v) {
-            return v.lang === 'pt-BR' || v.lang === 'pt_BR' || v.lang.startsWith('pt');
-        });
-        if (ptVoice) u.voice = ptVoice;
-    }
+    if (!ptVoiceCache) loadVoices();
+    if (ptVoiceCache) u.voice = ptVoiceCache;
 
-    u.onend = function() {
+    var cleanup = function() {
         if (gen !== undefined && gen !== speechGeneration) return;
         document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
         if (onEnd) onEnd();
     };
 
-    u.onerror = function() {
-        if (gen !== undefined && gen !== speechGeneration) return;
-        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
-        if (onEnd) onEnd();
-    };
+    u.onend = cleanup;
+    u.onerror = cleanup;
 
-    try {
-        window.speechSynthesis.speak(u);
-    } catch (e) {
-        if (onEnd) onEnd();
-    }
+    setTimeout(function() {
+        if (gen !== undefined && gen !== speechGeneration) return;
+        try {
+            window.speechSynthesis.speak(u);
+        } catch (e) {
+            cleanup();
+        }
+    }, 80);
 }
 
 // ============================================================================

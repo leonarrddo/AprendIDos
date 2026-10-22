@@ -35,15 +35,43 @@
   }
 
   // 2. Feedback por Voz Acessível (Web Speech API)
+  var _themePtVoice = null;
+  function _loadThemeVoices() {
+    if (!('speechSynthesis' in window)) return;
+    var v = window.speechSynthesis.getVoices();
+    if (!v || v.length === 0) return;
+    _themePtVoice =
+      v.find(function(x) { return x.lang === 'pt-BR'; }) ||
+      v.find(function(x) { return x.lang === 'pt_BR'; }) ||
+      v.find(function(x) { return x.lang.startsWith('pt'); }) || null;
+  }
+  if ('speechSynthesis' in window) {
+    _loadThemeVoices();
+    window.speechSynthesis.onvoiceschanged = _loadThemeVoices;
+  }
+
   function speakFeedback(texto) {
     if ('speechSynthesis' in window) {
       try {
-        window.speechSynthesis.cancel();
+        // Se uma atividade estiver tocando áudio ou falando, não cancela nem compete com a lição
+        var atividadeFalando = document.querySelector('.speaking, .highlight-line') !== null || window.speechSynthesis.speaking;
+        if (atividadeFalando) {
+          return;
+        }
+
         var utterance = new SpeechSynthesisUtterance(texto);
         utterance.lang = 'pt-BR';
-        utterance.rate = 1.0;
+        utterance.rate = 0.85;
         utterance.pitch = 1.0;
-        window.speechSynthesis.speak(utterance);
+
+        if (!_themePtVoice) _loadThemeVoices();
+        if (_themePtVoice) utterance.voice = _themePtVoice;
+
+        setTimeout(function() {
+          try {
+            window.speechSynthesis.speak(utterance);
+          } catch (e) {}
+        }, 60);
       } catch (e) {
         // Fallback silencioso se o navegador bloquear ou não tiver áudio
       }

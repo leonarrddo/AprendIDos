@@ -67,7 +67,11 @@ function stopAllAudio() {
 function loadVoices() {
     if (!('speechSynthesis' in window)) return;
     var v = window.speechSynthesis.getVoices();
-    ptVoice = v.find(function(x) { return x.lang === 'pt-BR' || x.lang.startsWith('pt'); }) || null;
+    if (!v || v.length === 0) return;
+    ptVoice =
+        v.find(function(x) { return x.lang === 'pt-BR'; }) ||
+        v.find(function(x) { return x.lang === 'pt_BR'; }) ||
+        v.find(function(x) { return x.lang.startsWith('pt'); }) || null;
 }
 if ('speechSynthesis' in window) { loadVoices(); window.speechSynthesis.onvoiceschanged = loadVoices; }
 
@@ -136,23 +140,23 @@ function speakNativo(text, onEnd, gen) {
     if (!ptVoice) loadVoices();
     if (ptVoice) u.voice = ptVoice;
 
-    u.onend = function() {
+    var cleanup = function() {
         if (gen !== undefined && gen !== speechGeneration) return;
         document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
         if (onEnd) onEnd();
     };
 
-    u.onerror = function() {
-        if (gen !== undefined && gen !== speechGeneration) return;
-        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
-        if (onEnd) onEnd();
-    };
+    u.onend = cleanup;
+    u.onerror = cleanup;
 
-    try {
-        window.speechSynthesis.speak(u);
-    } catch(e) {
-        if (onEnd) onEnd();
-    }
+    setTimeout(function() {
+        if (gen !== undefined && gen !== speechGeneration) return;
+        try {
+            window.speechSynthesis.speak(u);
+        } catch(e) {
+            cleanup();
+        }
+    }, 80);
 }
 
 function playInstruction() {

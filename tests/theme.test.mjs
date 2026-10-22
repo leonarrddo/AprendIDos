@@ -1,8 +1,55 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import puppeteer from 'puppeteer';
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+
+function createStaticServer() {
+  const root = process.cwd();
+  const mimes = {
+    '.html': 'text/html; charset=utf-8',
+    '.js': 'application/javascript; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
+    '.json': 'application/json',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.svg': 'image/svg+xml'
+  };
+
+  return http.createServer((req, res) => {
+    let safePath = path.normalize(decodeURIComponent(req.url.split('?')[0])).replace(/^(\.\.[\/\\])+/, '');
+    if (safePath === '/' || safePath === '\\') safePath = '/index.html';
+    const filePath = path.join(root, safePath);
+
+    fs.readFile(filePath, (err, data) => {
+      if (err) {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Not Found');
+        return;
+      }
+      const ext = path.extname(filePath).toLowerCase();
+      res.writeHead(200, { 'Content-Type': mimes[ext] || 'application/octet-stream' });
+      res.end(data);
+    });
+  });
+}
 
 test('Sistema de Temas: Modo Claro e Modo Escuro', async (t) => {
+  let server = null;
+  // Verifica se o servidor já está rodando ou inicializa servidor estático local na porta 3000
+  try {
+    await fetch('http://localhost:3000');
+  } catch (e) {
+    server = createStaticServer();
+    await new Promise((resolve) => server.listen(3000, resolve));
+  }
+
+  t.after(() => {
+    if (server) server.close();
+  });
+
   const browser = await puppeteer.launch({ 
     headless: true, 
     args: ['--no-sandbox', '--disable-setuid-sandbox'] 

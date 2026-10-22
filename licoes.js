@@ -6,8 +6,46 @@
  */
 
 /* ===== BOTÃO DE ÁUDIO DAS LIÇÕES ===== */
-let _licaoUtterance = null;
+let _licaoCurrentAudio = null;
+let _licaoPtVoice = null;
+let _licaoSpeechGen = 0;
 let _licaoBtnAtivo = null;
+
+function _loadLicaoVoices() {
+  if (!('speechSynthesis' in window)) return;
+  const v = window.speechSynthesis.getVoices();
+  if (!v || v.length === 0) return;
+  _licaoPtVoice =
+    v.find(x => x.lang === 'pt-BR') ||
+    v.find(x => x.lang === 'pt_BR') ||
+    v.find(x => x.lang.startsWith('pt')) || null;
+}
+
+if ('speechSynthesis' in window) {
+  _loadLicaoVoices();
+  window.speechSynthesis.onvoiceschanged = _loadLicaoVoices;
+}
+
+function _stopAllLicaoAudio() {
+  _licaoSpeechGen++;
+  if (_licaoCurrentAudio) {
+    try {
+      _licaoCurrentAudio.pause();
+      _licaoCurrentAudio.currentTime = 0;
+      _licaoCurrentAudio.src = '';
+      _licaoCurrentAudio.onended = null;
+      _licaoCurrentAudio.onerror = null;
+    } catch (e) {}
+    _licaoCurrentAudio = null;
+  }
+  if (window.speechSynthesis) {
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+  }
+  if (_licaoBtnAtivo) {
+    _pararBtnOuvir(_licaoBtnAtivo);
+    _licaoBtnAtivo = null;
+  }
+}
 
 function falarLicao(btn, event) {
   // Impede que o clique propague para o card (que navegaria para outra página)
@@ -16,31 +54,66 @@ function falarLicao(btn, event) {
   const texto = btn.dataset.audio || '';
   if (!texto) return;
 
-  // Cancela fala anterior e reseta botão anterior
-  if (window.speechSynthesis) {
-    window.speechSynthesis.cancel();
-  }
-  if (_licaoBtnAtivo && _licaoBtnAtivo !== btn) {
-    _pararBtnOuvir(_licaoBtnAtivo);
-  }
-
-  // Se este botão já está falando, para
+  // Se este botão já está falando, para tudo
   if (btn.classList.contains('speaking')) {
-    _pararBtnOuvir(btn);
-    _licaoBtnAtivo = null;
+    _stopAllLicaoAudio();
     return;
   }
+
+  _stopAllLicaoAudio();
 
   // Ativa visual de "speaking"
   _ativarBtnOuvir(btn);
   _licaoBtnAtivo = btn;
 
-  // Usa Web Speech API
+  const currentGen = _licaoSpeechGen;
+  let fallbackTriggered = false;
+
+  function triggerFallback() {
+    if (fallbackTriggered) return;
+    fallbackTriggered = true;
+    if (currentGen !== _licaoSpeechGen) return;
+    _falarLicaoNativo(texto, btn, currentGen);
+  }
+
+  // Tenta primeiro Google TTS para manter a mesma voz natural do restante do site
+  try {
+    const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(texto);
+    const audio = new Audio();
+    _licaoCurrentAudio = audio;
+
+    audio.onended = () => {
+      if (currentGen !== _licaoSpeechGen) return;
+      _pararBtnOuvir(btn);
+      if (_licaoBtnAtivo === btn) _licaoBtnAtivo = null;
+      _licaoCurrentAudio = null;
+    };
+
+    audio.onerror = () => {
+      triggerFallback();
+    };
+
+    audio.src = url;
+    const p = audio.play();
+    if (p !== undefined) {
+      p.catch(() => {
+        triggerFallback();
+      });
+    }
+  } catch (e) {
+    triggerFallback();
+  }
+}
+
+function _falarLicaoNativo(texto, btn, gen) {
+  if (gen !== undefined && gen !== _licaoSpeechGen) return;
   if (!window.speechSynthesis) {
-    console.warn('speechSynthesis não disponível neste navegador.');
     _pararBtnOuvir(btn);
+    if (_licaoBtnAtivo === btn) _licaoBtnAtivo = null;
     return;
   }
+
+  try { window.speechSynthesis.cancel(); } catch (e) {}
 
   const utter = new SpeechSynthesisUtterance(texto);
   utter.lang = 'pt-BR';
@@ -48,16 +121,26 @@ function falarLicao(btn, event) {
   utter.pitch = 1.0;
   utter.volume = 1.0;
 
-  // Tenta selecionar voz em português
-  const vozes = window.speechSynthesis.getVoices();
-  const vozPT = vozes.find(v => v.lang === 'pt-BR') || vozes.find(v => v.lang.startsWith('pt'));
-  if (vozPT) utter.voice = vozPT;
+  if (!_licaoPtVoice) _loadLicaoVoices();
+  if (_licaoPtVoice) utter.voice = _licaoPtVoice;
 
-  utter.onend = () => { _pararBtnOuvir(btn); _licaoBtnAtivo = null; };
-  utter.onerror = () => { _pararBtnOuvir(btn); _licaoBtnAtivo = null; };
+  const cleanup = () => {
+    if (gen !== undefined && gen !== _licaoSpeechGen) return;
+    _pararBtnOuvir(btn);
+    if (_licaoBtnAtivo === btn) _licaoBtnAtivo = null;
+  };
 
-  _licaoUtterance = utter;
-  window.speechSynthesis.speak(utter);
+  utter.onend = cleanup;
+  utter.onerror = cleanup;
+
+  setTimeout(() => {
+    if (gen !== undefined && gen !== _licaoSpeechGen) return;
+    try {
+      window.speechSynthesis.speak(utter);
+    } catch (e) {
+      cleanup();
+    }
+  }, 80);
 }
 
 function _ativarBtnOuvir(btn) {
@@ -70,13 +153,6 @@ function _pararBtnOuvir(btn) {
   btn.classList.remove('speaking');
   const label = btn.querySelector('.ouvir-label');
   if (label) label.textContent = 'Ouvir o que vou aprender';
-}
-
-// Garante que as vozes estejam carregadas (Chrome carrega assincronamente)
-if (window.speechSynthesis) {
-  window.speechSynthesis.onvoiceschanged = function() {
-    window.speechSynthesis.getVoices(); // força cache
-  };
 }
 
 // Funções de sessão universais (compatíveis com duplo-clique local file:// e servidores)

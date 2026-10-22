@@ -219,9 +219,11 @@ var ptVoice = null;
 function loadVoices() {
     if (!('speechSynthesis' in window)) return;
     var v = window.speechSynthesis.getVoices();
-    ptVoice = v.find(function(x) {
-        return x.lang === 'pt-BR' || x.lang === 'pt_BR' || x.lang.startsWith('pt');
-    }) || null;
+    if (!v || v.length === 0) return;
+    ptVoice =
+        v.find(function(x) { return x.lang === 'pt-BR'; }) ||
+        v.find(function(x) { return x.lang === 'pt_BR'; }) ||
+        v.find(function(x) { return x.lang.startsWith('pt'); }) || null;
 }
 if ('speechSynthesis' in window) {
     loadVoices();
@@ -329,11 +331,14 @@ function speakNativo(text, onEnd, gen) {
         if (onEnd) onEnd();
     };
 
-    try {
-        window.speechSynthesis.speak(u);
-    } catch (e) {
-        if (onEnd) onEnd();
-    }
+    setTimeout(function() {
+        if (gen !== undefined && gen !== speechGeneration) return;
+        try {
+            window.speechSynthesis.speak(u);
+        } catch (e) {
+            if (onEnd) onEnd();
+        }
+    }, 80);
 }
 
 // ============================================================================

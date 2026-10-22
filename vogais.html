@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; media-src 'self' data: blob: https://translate.google.com; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
     <title>AprendIDos — Vogais</title>
     <script>
       if (window.top !== window.self) {
@@ -1810,16 +1810,19 @@ var errorLog = [];
 var TOTAL = 10;
 var allVowels = 'AEIOUÁÉÍÓÚÃÕÂÊÎÔÛaeiouáéíóúãõâêîôû';
 
-// ---- SÍNTESE DE VOZ ----
-var ptVoiceCache = null;
+// ---- MOTOR DE ÁUDIO DUPLO (Google TTS + Web Speech API) ----
+var _vCurrentAudio = null;
+var _vPtVoice = null;
+var _vSpeechGen = 0;
 
 function loadVoices() {
+    if (!('speechSynthesis' in window)) return;
     var voices = window.speechSynthesis.getVoices();
-    if (voices.length > 0) {
-        ptVoiceCache = voices.find(function(v) {
-            return v.lang === 'pt-BR' || v.lang === 'pt_BR' || v.lang.startsWith('pt');
-        }) || null;
-    }
+    if (!voices || voices.length === 0) return;
+    _vPtVoice =
+        voices.find(function(v) { return v.lang === 'pt-BR'; }) ||
+        voices.find(function(v) { return v.lang === 'pt_BR'; }) ||
+        voices.find(function(v) { return v.lang.startsWith('pt'); }) || null;
 }
 
 if ('speechSynthesis' in window) {
@@ -1827,47 +1830,88 @@ if ('speechSynthesis' in window) {
     window.speechSynthesis.onvoiceschanged = loadVoices;
 }
 
-function speak(text, onEnd) {
-    if (!('speechSynthesis' in window)) {
-        if (onEnd) onEnd();
-        return;
+function _vStopAll() {
+    _vSpeechGen++;
+    if (_vCurrentAudio) {
+        try {
+            _vCurrentAudio.pause();
+            _vCurrentAudio.currentTime = 0;
+            _vCurrentAudio.src = '';
+            _vCurrentAudio.onended = null;
+            _vCurrentAudio.onerror = null;
+        } catch(e) {}
+        _vCurrentAudio = null;
     }
-
-    // Para fala anterior
-    window.speechSynthesis.cancel();
-
-    // Remove animações de qualquer botão
+    if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch(e) {}
+    }
     document.querySelectorAll('.speaking').forEach(function(el) {
         el.classList.remove('speaking');
     });
+}
+
+function speak(text, onEnd) {
+    _vStopAll();
+    if (!text || typeof text !== 'string') return;
+
+    var currentGen = _vSpeechGen;
+    var fallbackTriggered = false;
+
+    function triggerFallback() {
+        if (fallbackTriggered) return;
+        fallbackTriggered = true;
+        if (currentGen !== _vSpeechGen) return;
+        _vSpeakNativo(text, onEnd, currentGen);
+    }
+
+    try {
+        var url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
+        var audio = new Audio();
+        _vCurrentAudio = audio;
+
+        audio.onended = function() {
+            if (currentGen !== _vSpeechGen) return;
+            document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+            _vCurrentAudio = null;
+            if (onEnd) onEnd();
+        };
+        audio.onerror = function() { triggerFallback(); };
+        audio.src = url;
+        var p = audio.play();
+        if (p !== undefined) {
+            p.then(function() { /* Google TTS iniciado */ }).catch(function() { triggerFallback(); });
+        }
+    } catch(e) {
+        triggerFallback();
+    }
+}
+
+function _vSpeakNativo(text, onEnd, gen) {
+    if (gen !== undefined && gen !== _vSpeechGen) return;
+    if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; }
+    try { window.speechSynthesis.cancel(); } catch(e) {}
 
     var u = new SpeechSynthesisUtterance(text);
     u.lang = 'pt-BR';
     u.rate = 0.85;
     u.pitch = 1.0;
     u.volume = 1.0;
+    if (!_vPtVoice) loadVoices();
+    if (_vPtVoice) u.voice = _vPtVoice;
 
-    // Tenta usar voz Portuguesa
-    if (!ptVoiceCache) loadVoices();
-    if (ptVoiceCache) u.voice = ptVoiceCache;
-
-    var cleanup = function() {
-        document.querySelectorAll('.speaking').forEach(function(el) {
-            el.classList.remove('speaking');
-        });
+    u.onend = function() {
+        if (gen !== undefined && gen !== _vSpeechGen) return;
+        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
         if (onEnd) onEnd();
     };
-
-    u.onend = cleanup;
-    u.onerror = cleanup;
-
-    // Workaround do Chrome: pequeno delay garante reprodução
+    u.onerror = function() {
+        if (gen !== undefined && gen !== _vSpeechGen) return;
+        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+        if (onEnd) onEnd();
+    };
+    // Delay de 80ms: workaround para Chrome/Safari que ignoram speak() logo após cancel()
     setTimeout(function() {
-        try {
-            window.speechSynthesis.speak(u);
-        } catch (e) {
-            cleanup();
-        }
+        try { window.speechSynthesis.speak(u); } catch(e) { if (onEnd) onEnd(); }
     }, 80);
 }
 

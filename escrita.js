@@ -47,7 +47,11 @@ var hasPassedCurrentWord = false;
 function loadVoices() {
     if (!('speechSynthesis' in window)) return;
     var v = window.speechSynthesis.getVoices();
-    ptVoice = v.find(function(x) { return x.lang === 'pt-BR' || x.lang.startsWith('pt'); }) || null;
+    if (!v || v.length === 0) return;
+    ptVoice =
+        v.find(function(x) { return x.lang === 'pt-BR'; }) ||
+        v.find(function(x) { return x.lang === 'pt_BR'; }) ||
+        v.find(function(x) { return x.lang.startsWith('pt'); }) || null;
 }
 if ('speechSynthesis' in window) {
     loadVoices();
@@ -60,22 +64,26 @@ function stopAllAudio() {
         try {
             currentAudio.pause();
             currentAudio.currentTime = 0;
+            currentAudio.src = '';
+            currentAudio.onended = null;
+            currentAudio.onerror = null;
         } catch(e) {}
         currentAudio = null;
     }
     if ('speechSynthesis' in window) {
         try { window.speechSynthesis.cancel(); } catch(e) {}
     }
+    document.querySelectorAll('.speaking').forEach(function(el) {
+        el.classList.remove('speaking');
+    });
 }
 
 function speak(text, onEnd) {
     stopAllAudio();
+    if (!text || typeof text !== 'string') return;
     var thisGen = speechGeneration;
-    var url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
-    var audio = new Audio(url);
-    currentAudio = audio;
-
     var fallbackTriggered = false;
+
     function triggerFallback() {
         if (thisGen !== speechGeneration) return;
         if (fallbackTriggered) return;
@@ -83,49 +91,67 @@ function speak(text, onEnd) {
         speakNativo(text, onEnd, thisGen);
     }
 
-    audio.onended = function() {
-        if (thisGen !== speechGeneration) return;
-        if (onEnd) onEnd();
-    };
-    audio.onerror = function() {
-        triggerFallback();
-    };
+    try {
+        var url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
+        var audio = new Audio();
+        currentAudio = audio;
 
-    var p = audio.play();
-    if (p) {
-        p.catch(function() {
+        audio.onended = function() {
+            if (thisGen !== speechGeneration) return;
+            document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+            currentAudio = null;
+            if (onEnd) onEnd();
+        };
+        audio.onerror = function() {
             triggerFallback();
-        });
+        };
+
+        audio.src = url;
+        var p = audio.play();
+        if (p) {
+            p.catch(function() {
+                triggerFallback();
+            });
+        }
+    } catch(e) {
+        triggerFallback();
     }
 }
 
 function speakNativo(text, onEnd, expectedGen) {
     if (expectedGen !== undefined && expectedGen !== speechGeneration) return;
-    if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; }
+    if (!('speechSynthesis' in window)) {
+        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+        if (onEnd) onEnd();
+        return;
+    }
     try { window.speechSynthesis.cancel(); } catch(e) {}
 
     var u = new SpeechSynthesisUtterance(text);
     u.lang = 'pt-BR';
-    u.rate = 0.8;
-    u.pitch = 1;
-    u.volume = 1;
+    u.rate = 0.82;
+    u.pitch = 1.0;
+    u.volume = 1.0;
     if (!ptVoice) loadVoices();
     if (ptVoice) u.voice = ptVoice;
 
-    u.onend = function() {
+    var cleanup = function() {
         if (expectedGen !== undefined && expectedGen !== speechGeneration) return;
-        if (onEnd) onEnd();
-    };
-    u.onerror = function() {
-        if (expectedGen !== undefined && expectedGen !== speechGeneration) return;
+        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
         if (onEnd) onEnd();
     };
 
-    try {
-        window.speechSynthesis.speak(u);
-    } catch(e) {
-        if (onEnd) onEnd();
-    }
+    u.onend = cleanup;
+    u.onerror = cleanup;
+
+    setTimeout(function() {
+        if (expectedGen !== undefined && expectedGen !== speechGeneration) return;
+        try {
+            window.speechSynthesis.speak(u);
+        } catch(e) {
+            cleanup();
+        }
+    }, 80);
 }
 
 function playInstruction() {

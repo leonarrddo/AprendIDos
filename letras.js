@@ -229,6 +229,11 @@ var alphabetData = {
 var currentAudio = null;
 var speechGeneration = 0;
 var ptVoiceCache = null;
+var isIOS = (function() {
+    if (typeof navigator === 'undefined') return false;
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+})();
 
 function loadVoices() {
     if (!('speechSynthesis' in window)) return;
@@ -273,6 +278,14 @@ function speak(text, onEnd) {
     if (!text || typeof text !== 'string') return;
 
     var currentGen = speechGeneration;
+
+    // No iOS (Safari), o Google TTS falha com 404/AVPlayer e qualquer fallback assíncrono
+    // perde o gesto do usuário. Dispara síntese nativa imediatamente no clique!
+    if (isIOS) {
+        speakNativo(text, onEnd, currentGen);
+        return;
+    }
+
     var fallbackTriggered = false;
 
     function triggerFallback() {
@@ -342,14 +355,20 @@ function speakNativo(text, onEnd, gen) {
     u.onend = cleanup;
     u.onerror = cleanup;
 
-    setTimeout(function() {
-        if (gen !== undefined && gen !== speechGeneration) return;
-        try {
-            window.speechSynthesis.speak(u);
-        } catch (e) {
-            cleanup();
-        }
-    }, 80);
+    // No iOS, a chamada DEVE ser síncrona dentro do gesto do usuário.
+    // No Windows/Chrome, o delay de 80ms evita bug de cancelamento imediato.
+    if (isIOS) {
+        try { window.speechSynthesis.speak(u); } catch(e) { cleanup(); }
+    } else {
+        setTimeout(function() {
+            if (gen !== undefined && gen !== speechGeneration) return;
+            try {
+                window.speechSynthesis.speak(u);
+            } catch (e) {
+                cleanup();
+            }
+        }, 80);
+    }
 }
 
 // ============================================================================

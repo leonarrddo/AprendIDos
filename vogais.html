@@ -1814,6 +1814,11 @@ var allVowels = 'AEIOUÁÉÍÓÚÃÕÂÊÎÔÛaeiouáéíóúãõâêîôû';
 var _vCurrentAudio = null;
 var _vPtVoice = null;
 var _vSpeechGen = 0;
+var _vIsIOS = (function() {
+    if (typeof navigator === 'undefined') return false;
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+})();
 
 function loadVoices() {
     if (!('speechSynthesis' in window)) return;
@@ -1855,6 +1860,14 @@ function speak(text, onEnd) {
     if (!text || typeof text !== 'string') return;
 
     var currentGen = _vSpeechGen;
+
+    // No iOS (Safari), o Google TTS falha com 404/AVPlayer e qualquer fallback assíncrono
+    // perde o gesto do usuário. Dispara síntese nativa imediatamente no clique!
+    if (_vIsIOS) {
+        _vSpeakNativo(text, onEnd, currentGen);
+        return;
+    }
+
     var fallbackTriggered = false;
 
     function triggerFallback() {
@@ -1899,20 +1912,25 @@ function _vSpeakNativo(text, onEnd, gen) {
     if (!_vPtVoice) loadVoices();
     if (_vPtVoice) u.voice = _vPtVoice;
 
-    u.onend = function() {
+    var cleanup = function() {
         if (gen !== undefined && gen !== _vSpeechGen) return;
         document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
         if (onEnd) onEnd();
     };
-    u.onerror = function() {
-        if (gen !== undefined && gen !== _vSpeechGen) return;
-        document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
-        if (onEnd) onEnd();
-    };
-    // Delay de 80ms: workaround para Chrome/Safari que ignoram speak() logo após cancel()
-    setTimeout(function() {
-        try { window.speechSynthesis.speak(u); } catch(e) { if (onEnd) onEnd(); }
-    }, 80);
+
+    u.onend = cleanup;
+    u.onerror = cleanup;
+
+    // No iOS, a chamada DEVE ser síncrona dentro do gesto do usuário.
+    // No Windows/Chrome, o delay de 80ms evita bug de cancelamento imediato.
+    if (_vIsIOS) {
+        try { window.speechSynthesis.speak(u); } catch(e) { cleanup(); }
+    } else {
+        setTimeout(function() {
+            if (gen !== undefined && gen !== _vSpeechGen) return;
+            try { window.speechSynthesis.speak(u); } catch(e) { cleanup(); }
+        }, 80);
+    }
 }
 
 // ---- VOGAIS ----

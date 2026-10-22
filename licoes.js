@@ -10,6 +10,11 @@ let _licaoCurrentAudio = null;
 let _licaoPtVoice = null;
 let _licaoSpeechGen = 0;
 let _licaoBtnAtivo = null;
+const _licaoIsIOS = (function() {
+  if (typeof navigator === 'undefined') return false;
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+})();
 
 function _loadLicaoVoices() {
   if (!('speechSynthesis' in window)) return;
@@ -67,6 +72,13 @@ function falarLicao(btn, event) {
   _licaoBtnAtivo = btn;
 
   const currentGen = _licaoSpeechGen;
+
+  // No iOS (Safari), dispara fala nativa imediatamente e síncrona dentro do clique
+  if (_licaoIsIOS) {
+    _falarLicaoNativo(texto, btn, currentGen);
+    return;
+  }
+
   let fallbackTriggered = false;
 
   function triggerFallback() {
@@ -133,14 +145,20 @@ function _falarLicaoNativo(texto, btn, gen) {
   utter.onend = cleanup;
   utter.onerror = cleanup;
 
-  setTimeout(() => {
-    if (gen !== undefined && gen !== _licaoSpeechGen) return;
-    try {
-      window.speechSynthesis.speak(utter);
-    } catch (e) {
-      cleanup();
-    }
-  }, 80);
+  // No iOS, a chamada DEVE ser síncrona dentro do gesto do usuário.
+  // No Windows/Chrome, o delay de 80ms evita bug de cancelamento imediato.
+  if (_licaoIsIOS) {
+    try { window.speechSynthesis.speak(utter); } catch (e) { cleanup(); }
+  } else {
+    setTimeout(() => {
+      if (gen !== undefined && gen !== _licaoSpeechGen) return;
+      try {
+        window.speechSynthesis.speak(utter);
+      } catch (e) {
+        cleanup();
+      }
+    }, 80);
+  }
 }
 
 function _ativarBtnOuvir(btn) {

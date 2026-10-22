@@ -57,13 +57,41 @@ test('Sistema de Temas: Modo Claro e Modo Escuro', async (t) => {
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 800 });
 
+  // Intercepta supabase-config.js para forçar modo demo durante os testes do tema
+  await page.setRequestInterception(true);
+  page.on('request', (req) => {
+    if (req.url().includes('supabase-config.js')) {
+      req.respond({
+        status: 200,
+        contentType: 'application/javascript; charset=utf-8',
+        body: `
+          export const SUPABASE_URL = 'https://SEU_PROJETO_AQUI.supabase.co';
+          export const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_AQUI';
+          export const isSupabaseConfigured = () => false;
+        `
+      });
+    } else {
+      req.continue();
+    }
+  });
+
   await t.test('1. Deve renderizar o seletor estratégico no menu.html com usuário logado', async () => {
     await page.goto('http://localhost:3000/menu.html');
     await page.evaluate(() => {
-      localStorage.setItem('aprendidos_usuario', JSON.stringify({ nome: 'Dona Maria', email: 'maria@teste.com' }));
+      localStorage.setItem('aprendidos_usuario', JSON.stringify({
+        id: 'demo_test', email: 'maria@teste.com',
+        name: 'Dona Maria', nome: 'Dona Maria',
+        isDemo: true
+      }));
       localStorage.removeItem('aprendidos_theme');
     });
     await page.goto('http://localhost:3000/menu.html', { waitUntil: 'networkidle2' });
+
+    // Aguarda o guard assíncrono revelar a página (até 3s)
+    await page.waitForFunction(
+      () => document.documentElement.style.visibility === 'visible',
+      { timeout: 3000 }
+    );
 
     const switchExists = await page.$('.aprendidos-theme-switch');
     assert.ok(switchExists, 'O componente do switch de tema deve estar presente no menu.html');

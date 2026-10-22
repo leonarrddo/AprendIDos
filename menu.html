@@ -11,10 +11,9 @@
       if (window.top !== window.self) {
         try { window.top.location = window.self.location; } catch (e) { }
       }
-      // Se o usuário ainda não estiver logado, redireciona para a página inicial
-      if (!localStorage.getItem('aprendidos_usuario')) {
-        window.location.replace('index.html');
-      }
+      // Oculta a página até a validação da sessão ser concluída.
+      // O conteúdo será exibido pelo script de autenticação ao final da página.
+      document.documentElement.style.visibility = 'hidden';
     </script>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -640,56 +639,78 @@
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Interação de navegação do menu (independente da autenticação) -->
     <script>
-        // =============================================
-        // Interação nos botões do menu principal
-        // =============================================
-        document.querySelectorAll('.cartao-menu').forEach(function(botao) {
-            botao.addEventListener('click', function(e) {
-                var texto = this.querySelector('.texto-menu').textContent.trim();
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.cartao-menu').forEach(function(botao) {
+                botao.addEventListener('click', function(e) {
+                    var texto = this.querySelector('.texto-menu').textContent.trim();
 
-                if (texto === 'Lições' || texto === 'Ouça') {
+                    if (texto === 'Lições' || texto === 'Ouça') {
+                        e.preventDefault();
+                        window.location.href = 'licoes.html';
+                    } else if (texto === 'Início') {
+                        e.preventDefault();
+                        window.location.href = 'menu.html';
+                    } else if (texto === 'Ajuda') {
+                        e.preventDefault();
+                        document.querySelector('.rodape-ajuda').scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            var btnPrincipal = document.querySelector('.botao-principal');
+            if (btnPrincipal) {
+                btnPrincipal.addEventListener('click', function(e) {
                     e.preventDefault();
                     window.location.href = 'licoes.html';
-                } else if (texto === 'Início') {
-                    e.preventDefault();
-                    window.location.href = 'menu.html';
-                } else if (texto === 'Ajuda') {
-                    e.preventDefault();
-                    document.querySelector('.rodape-ajuda').scrollIntoView({ behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
+
+    <!-- Módulo de Autenticação: valida sessão real antes de exibir -->
+    <script type="module">
+        import { initSession, signOut } from './auth.js';
+
+        (async function() {
+            try {
+                // Aguarda a validação real da sessão (Supabase ou modo demo)
+                const { user, isAuthenticated } = await initSession();
+
+                if (!isAuthenticated || !user) {
+                    // Sem sessão válida → redireciona para login
+                    window.location.replace('login.html');
+                    return;
                 }
-            });
-        });
 
-        // =============================================
-        // Interação do botão "Começar Agora"
-        // =============================================
-        document.querySelector('.botao-principal').addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = 'licoes.html';
-        });
-
-        // =============================================
-        // Carrega nome do Usuário e Função Logout
-        // =============================================
-        try {
-            var rawUser = localStorage.getItem('aprendidos_usuario');
-            if (rawUser) {
-                var userObj = JSON.parse(rawUser);
-                var nomeCompleto = userObj.nome || (userObj.user_metadata && userObj.user_metadata.full_name) || (userObj.email ? userObj.email.split('@')[0] : 'Aprendiz');
+                // Exibe o nome atualizado da sessão real
+                var nomeCompleto = user.name || user.nome || (user.email ? user.email.split('@')[0] : 'Aprendiz');
                 var primeiroNome = nomeCompleto.split(' ')[0];
                 var nameEl = document.getElementById('menuUserDisplayName');
                 if (nameEl) nameEl.textContent = primeiroNome;
-            }
-        } catch(e) {}
 
-        var btnLogout = document.getElementById('btnMenuLogout');
-        if (btnLogout) {
-            btnLogout.addEventListener('click', function() {
-                try { localStorage.removeItem('aprendidos_usuario'); } catch(e) {}
-                window.location.href = 'index.html';
-            });
-        }
+                // Sessão confirmada → revela a página
+                document.documentElement.style.visibility = 'visible';
+            } catch(e) {
+                console.error('Erro ao validar sessão:', e);
+                window.location.replace('login.html');
+                return;
+            }
+
+            // Botão Sair — usa signOut do auth.js (limpa sessão Supabase + localStorage)
+            var btnLogout = document.getElementById('btnMenuLogout');
+            if (btnLogout) {
+                btnLogout.addEventListener('click', async function() {
+                    try {
+                        await signOut('login.html');
+                    } catch(e) {
+                        localStorage.removeItem('aprendidos_usuario');
+                        window.location.href = 'login.html';
+                    }
+                });
+            }
+        })();
     </script>
 
     <!-- Componente VLibras (Acessibilidade em LIBRAS) -->

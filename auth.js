@@ -34,10 +34,12 @@ export async function getSupabase() {
           supabase.auth.onAuthStateChange(async (event, session) => {
             if (session && session.user) {
               const u = session.user;
+              const nomeFull = u.user_metadata?.full_name || u.user_metadata?.name || u.email.split('@')[0];
               const usuario = {
                 id: u.id,
                 email: u.email,
-                name: u.user_metadata?.full_name || u.user_metadata?.name || u.email.split('@')[0],
+                name: nomeFull,
+                nome: nomeFull,
                 avatar: u.user_metadata?.avatar_url || u.user_metadata?.picture || null,
                 isDemo: false
               };
@@ -68,10 +70,12 @@ export async function getCurrentUser() {
     try {
       const { data: { user }, error } = await client.auth.getUser();
       if (user && !error) {
+        const nomeFull = user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0];
         const usuarioFormatado = {
           id: user.id,
           email: user.email,
-          name: user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0],
+          name: nomeFull,
+          nome: nomeFull,
           avatar: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
           isDemo: false
         };
@@ -83,14 +87,16 @@ export async function getCurrentUser() {
     }
   }
 
-  // Fallback no LocalStorage
-  try {
-    const demoUser = localStorage.getItem('aprendidos_usuario');
-    if (demoUser) {
-      return { ...JSON.parse(demoUser), isDemo: true };
+  // Fallback no LocalStorage — somente quando Supabase NÃO está configurado
+  if (!isSupabaseConfigured()) {
+    try {
+      const demoUser = localStorage.getItem('aprendidos_usuario');
+      if (demoUser) {
+        return { ...JSON.parse(demoUser), isDemo: true };
+      }
+    } catch (e) {
+      // Storage bloqueado
     }
-  } catch (e) {
-    // Storage bloqueado
   }
 
   return null;
@@ -139,30 +145,39 @@ export function sanitizeRedirectPath(path, defaultPath = 'index.html') {
 
 /**
  * Login com Google ou Facebook
+ *
+ * PRODUÇÃO (Supabase configurado):
+ *   - Inicia o fluxo OAuth real.
+ *   - Se o OAuth falhar, propaga o erro para o chamador exibir mensagem.
+ *   - NÃO cria usuário fictício.
+ *
+ * DEMO (Supabase NÃO configurado):
+ *   - Cria usuário demo para permitir testes locais sem backend.
  */
 export async function signInWithProvider(provider, redirectPath = 'index.html') {
   const safeRedirect = sanitizeRedirectPath(redirectPath, 'index.html');
   const client = await getSupabase();
-  if (client) {
-    try {
-      const targetUrl = new URL(safeRedirect, window.location.href).href;
-      const { data, error } = await client.auth.signInWithOAuth({
-        provider: provider,
-        options: { redirectTo: targetUrl }
-      });
-      if (error) throw error;
-      return data;
-    } catch (e) {
-      console.warn('Falha no OAuth real, fallback para demo:', e);
+
+  // ── PRODUÇÃO: fluxo OAuth real ──
+  if (client && isSupabaseConfigured()) {
+    const targetUrl = new URL(safeRedirect, window.location.href).href;
+    const { data, error } = await client.auth.signInWithOAuth({
+      provider: provider,
+      options: { redirectTo: targetUrl }
+    });
+    if (error) {
+      throw new Error(`Erro ao iniciar login com ${provider}: ${error.message}`);
     }
+    return data;
   }
 
-  // Simulação no Modo Demonstração
+  // ── MODO DEMONSTRAÇÃO: apenas quando Supabase NÃO está configurado ──
   const mockName = provider === 'google' ? 'Manoel da Silva (Google)' : 'Maria Oliveira (Facebook)';
   const mockUser = {
     id: 'demo_' + Date.now(),
     email: `${provider}.demo@aprendidos.com.br`,
     name: mockName,
+    nome: mockName,
     avatar: null,
     provider: provider,
     isDemo: true
@@ -226,7 +241,7 @@ export async function signUpWithEmail(name, email, password) {
   }
 
   // Fallback demo caso não configurado
-  const mockUser = { id: 'demo_' + Date.now(), email, name, avatar: null, provider: 'email', isDemo: true };
+  const mockUser = { id: 'demo_' + Date.now(), email, name, nome: name, avatar: null, provider: 'email', isDemo: true };
   localStorage.setItem('aprendidos_usuario', JSON.stringify(mockUser));
   return { user: mockUser, emailConfirmationRequired: false };
 }
@@ -272,10 +287,12 @@ export async function signInWithEmail(email, password, redirectPath = 'index.htm
     }
 
     const u = data.user;
+    const nomeFull = u.user_metadata?.full_name || u.user_metadata?.name || u.email.split('@')[0];
     const usuario = {
       id: u.id,
       email: u.email,
-      name: u.user_metadata?.full_name || u.user_metadata?.name || u.email.split('@')[0],
+      name: nomeFull,
+      nome: nomeFull,
       avatar: u.user_metadata?.avatar_url || u.user_metadata?.picture || null,
       isDemo: false
     };
@@ -288,11 +305,13 @@ export async function signInWithEmail(email, password, redirectPath = 'index.htm
     return { user: usuario, session: data.session };
   }
 
-  // Fallback demo caso não configurado
+  // Fallback demo caso Supabase NÃO esteja configurado
+  const mockEmailName = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
   const mockUser = {
     id: 'demo_' + Date.now(),
     email,
-    name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+    name: mockEmailName,
+    nome: mockEmailName,
     avatar: null,
     provider: 'email',
     isDemo: true
@@ -417,11 +436,62 @@ export async function getLessonProgress() {
   return progress;
 }
 
+/**
+ * Inicializa e valida a sessão do Supabase.
+ * Usado pelas páginas protegidas (menu.html, etc.) para aguardar
+ * a verificação real antes de decidir redirecionar.
+ *
+ * @returns {{ user: object|null, isAuthenticated: boolean }}
+ */
+export async function initSession() {
+  const client = await getSupabase();
+  if (client) {
+    try {
+      // Processa possíveis tokens no hash (retorno do OAuth)
+      // O Supabase SDK já faz isso via onAuthStateChange,
+      // mas getSession garante que esperamos a conclusão.
+      const { data: { session }, error } = await client.auth.getSession();
+      if (session && session.user && !error) {
+        const u = session.user;
+        const nomeFull = u.user_metadata?.full_name || u.user_metadata?.name || u.email.split('@')[0];
+        const usuario = {
+          id: u.id,
+          email: u.email,
+          name: nomeFull,
+          nome: nomeFull,
+          avatar: u.user_metadata?.avatar_url || u.user_metadata?.picture || null,
+          isDemo: false
+        };
+        localStorage.setItem('aprendidos_usuario', JSON.stringify(usuario));
+        return { user: usuario, isAuthenticated: true };
+      }
+    } catch (e) {
+      console.warn('Erro ao inicializar sessão Supabase:', e);
+    }
+  }
+
+  // Modo Demo: aceita localStorage somente quando Supabase NÃO está configurado
+  if (!isSupabaseConfigured()) {
+    try {
+      const raw = localStorage.getItem('aprendidos_usuario');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        return { user: { ...parsed, isDemo: true }, isAuthenticated: true };
+      }
+    } catch (e) { /* storage bloqueado */ }
+  }
+
+  // Nenhuma sessão válida — limpa possíveis dados obsoletos
+  localStorage.removeItem('aprendidos_usuario');
+  return { user: null, isAuthenticated: false };
+}
+
 // Expõe globalmente no window para compatibilidade com qualquer script
 if (typeof window !== 'undefined') {
   window.AprendIDosAuth = {
     getSupabase,
     getCurrentUser,
+    initSession,
     signInWithProvider,
     signUpWithEmail,
     resendConfirmationEmail,

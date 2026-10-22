@@ -291,13 +291,15 @@ function initWritingCanvas() {
 
     window.removeEventListener('resize', handleCanvasResize);
     window.addEventListener('resize', handleCanvasResize);
+    window.removeEventListener('orientationchange', handleCanvasResize);
+    window.addEventListener('orientationchange', handleCanvasResize);
 }
 
 function setupCanvasResolution() {
     if (!writingCanvas) return;
     var container = writingCanvas.parentElement;
     var rect = container ? container.getBoundingClientRect() : writingCanvas.getBoundingClientRect();
-    var width = Math.floor(rect.width) || 640;
+    var width = (container && container.clientWidth > 0) ? container.clientWidth : (Math.floor(rect.width) || 640);
     var height = 320; // Altura confortável para escrita grande
 
     var dimChanged = (prevCanvasWidth > 0 && prevCanvasHeight > 0) &&
@@ -342,7 +344,7 @@ function handleCanvasResize() {
         if (isDrawing || !writingCanvas) return;
         var container = writingCanvas.parentElement;
         var rect = container ? container.getBoundingClientRect() : writingCanvas.getBoundingClientRect();
-        var newWidth = Math.floor(rect.width) || 640;
+        var newWidth = (container && container.clientWidth > 0) ? container.clientWidth : (Math.floor(rect.width) || 640);
         if (prevCanvasWidth > 0 && Math.abs(newWidth - prevCanvasWidth) < 3) return;
 
         setupCanvasResolution();

@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; media-src 'self' data: blob: https://translate.google.com; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
@@ -31,7 +31,7 @@
         body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--fg); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
         .skip-link { position: absolute; top: -100%; left: 1rem; background: var(--green); color: #fff; padding: 0.8rem 1.4rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 1rem; z-index: 200; text-decoration: none; transition: top 0.2s; }
         .skip-link:focus { top: 0.5rem; }
-        .navbar { background: var(--white); border-bottom: 3px solid var(--green); padding: 0.4rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+        .navbar { background: var(--white); border-bottom: 3px solid var(--green); padding: 0.4rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 6px rgba(0,0,0,0.05); width: 100%; box-sizing: border-box; }
         .navbar-left { display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
         .btn-back { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--bg); border: 2px solid var(--green-light); border-radius: var(--radius-sm); padding: 0.45rem 0.9rem; color: var(--green); font-size: 0.95rem; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; text-decoration: none; }
         .btn-back:hover { background: var(--green-pale); border-color: var(--green); }
@@ -48,7 +48,7 @@
         .navbar-mobile-menu.open { display: flex; }
         .navbar-mobile-menu a { display: flex; align-items: center; gap: 0.6rem; color: var(--muted); text-decoration: none; font-weight: 700; font-size: 1.2rem; padding: 1rem 1.2rem; border-radius: 8px; transition: all 0.2s; }
         .navbar-mobile-menu a:hover, .navbar-mobile-menu a.active { color: var(--green); background: var(--green-pale); }
-        .container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 3rem; flex: 1; }
+        .container { max-width: 960px; width: 100%; margin: 0 auto; padding: 2rem 1.5rem 3rem; flex: 1; box-sizing: border-box; }
         .activity-header { margin-bottom: 1.8rem; }
         .activity-header h1 { font-size: 2rem; font-weight: 900; color: var(--fg); margin-bottom: 0.3rem; }
         .activity-header .subtitle { font-size: 1.1rem; color: var(--fg-secondary); font-weight: 600; }
@@ -514,6 +514,17 @@
         @media (max-width: 768px) {
             .navbar-nav { display: none; }
             .navbar-hamburger { display: flex; align-items: center; justify-content: center; }
+        }
+        @media (max-width: 480px) {
+            .navbar { padding: 0.4rem 0.65rem; }
+            .container { padding: 1.2rem 0.85rem 2rem; }
+        }
+        @media (max-width: 360px) {
+            .navbar { padding: 0.35rem 0.45rem; }
+            .container { padding: 1rem 0.6rem 1.8rem; }
+            .btn-back { font-size: 0; padding: 0.4rem 0.6rem; }
+            .btn-back i { font-size: 1rem; margin: 0; }
+            .navbar-brand span { display: none; }
         }
         @media (max-width: 600px) {
             .container { padding: 1.5rem 1rem 2.5rem; }

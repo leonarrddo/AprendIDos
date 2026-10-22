@@ -143,54 +143,62 @@
     setTheme(next);
   }
 
-  // 5. Criação do HTML do interruptor estratégico (Segmented Switch)
+  // 5. Criação do HTML do interruptor circular unificado (Sol / Lua)
   function createSwitchElement() {
     var container = document.createElement('div');
     container.className = 'aprendidos-theme-switch';
     container.setAttribute('role', 'group');
-    container.setAttribute('aria-label', 'Escolha entre Modo Claro e Modo Escuro');
+    container.setAttribute('aria-label', 'Controle de tema claro e escuro');
 
-    container.innerHTML =
-      '<button type="button" class="theme-switch-btn btn-claro" data-theme="light" aria-label="Ativar Modo Claro" title="Clique para ativar a tela clara">' +
-        '<span class="icon-sol">☀️</span>' +
-        '<span>Modo Claro</span>' +
-      '</button>' +
-      '<button type="button" class="theme-switch-btn btn-escuro" data-theme="dark" aria-label="Ativar Modo Escuro" title="Clique para ativar a tela escura e confortável">' +
-        '<span class="icon-lua">🌙</span>' +
-        '<span>Modo Escuro</span>' +
-      '</button>';
+    var currentTheme = getTheme();
+    var isDark = currentTheme === 'dark';
 
-    var btnClaro = container.querySelector('.btn-claro');
-    var btnEscuro = container.querySelector('.btn-escuro');
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'theme-toggle-btn theme-switch-btn ' + (isDark ? 'btn-escuro btn-claro active mode-dark' : 'btn-escuro mode-light');
+    btn.id = 'btnThemeToggle';
+    btn.setAttribute('aria-label', isDark ? 'Ativar modo claro' : 'Ativar modo escuro');
+    btn.setAttribute('title', isDark ? 'Ativar modo claro' : 'Ativar modo escuro');
+    btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
 
-    btnClaro.addEventListener('click', function () {
-      setTheme('light');
+    var iconSpan = document.createElement('span');
+    iconSpan.className = 'theme-icon-indicator';
+    iconSpan.setAttribute('aria-hidden', 'true');
+    iconSpan.textContent = isDark ? '🌙' : '☀️';
+
+    btn.appendChild(iconSpan);
+
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      toggleTheme();
     });
 
-    btnEscuro.addEventListener('click', function () {
-      setTheme('dark');
-    });
-
+    container.appendChild(btn);
     return container;
   }
 
-  // 6. Atualização do estado visual dos botões
+  // 6. Atualização do estado visual do botão circular
   function updateAllSwitches(currentTheme) {
+    var isDark = currentTheme === 'dark';
     var switches = document.querySelectorAll('.aprendidos-theme-switch');
     switches.forEach(function (sw) {
-      var btnClaro = sw.querySelector('.btn-claro');
-      var btnEscuro = sw.querySelector('.btn-escuro');
-      if (btnClaro && btnEscuro) {
-        if (currentTheme === 'dark') {
-          btnClaro.classList.remove('active');
-          btnClaro.setAttribute('aria-pressed', 'false');
-          btnEscuro.classList.add('active');
-          btnEscuro.setAttribute('aria-pressed', 'true');
+      var btn = sw.querySelector('.theme-toggle-btn, .theme-switch-btn');
+      if (btn) {
+        btn.setAttribute('aria-label', isDark ? 'Ativar modo claro' : 'Ativar modo escuro');
+        btn.setAttribute('title', isDark ? 'Ativar modo claro' : 'Ativar modo escuro');
+        btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+
+        if (isDark) {
+          btn.classList.add('active', 'mode-dark', 'btn-escuro', 'btn-claro');
+          btn.classList.remove('mode-light');
         } else {
-          btnClaro.classList.add('active');
-          btnClaro.setAttribute('aria-pressed', 'true');
-          btnEscuro.classList.remove('active');
-          btnEscuro.setAttribute('aria-pressed', 'false');
+          btn.classList.remove('active', 'mode-dark', 'btn-claro');
+          btn.classList.add('mode-light', 'btn-escuro');
+        }
+
+        var iconSpan = btn.querySelector('.theme-icon-indicator') || btn.querySelector('span');
+        if (iconSpan) {
+          iconSpan.textContent = isDark ? '🌙' : '☀️';
         }
       }
     });
@@ -211,17 +219,29 @@
       });
     }
 
-    // Se a página não tiver slot explícito, tenta injetar na navbar
+    // Se a página não tiver slot explícito, posiciona na navbar com prioridade para mobile
     if (!inserted && !document.querySelector('.aprendidos-theme-switch')) {
-      var navTarget = document.querySelector('.navbar-right') || document.querySelector('.navbar-nav');
-      if (navTarget) {
+      var navbar = document.querySelector('.navbar');
+      if (navbar) {
+        var hamburger = navbar.querySelector('.navbar-hamburger');
         var wrap = document.createElement('div');
         wrap.className = 'navbar-theme-wrapper';
         wrap.appendChild(createSwitchElement());
-        navTarget.appendChild(wrap);
-        inserted = true;
+        if (hamburger) {
+          navbar.insertBefore(wrap, hamburger);
+          inserted = true;
+        } else {
+          var navTarget = navbar.querySelector('.navbar-right') || navbar.querySelector('.navbar-nav');
+          if (navTarget) {
+            navTarget.appendChild(wrap);
+            inserted = true;
+          } else {
+            navbar.appendChild(wrap);
+            inserted = true;
+          }
+        }
       } else if (document.body && !document.querySelector('.floating-theme-switch')) {
-        // Se for tela de login/cadastro/inicio sem navbar, coloca botão flutuante no topo direito
+        // Se for tela de login/cadastro/inicio sem navbar, coloca botão circular flutuante
         var floatWrap = document.createElement('div');
         floatWrap.className = 'floating-theme-switch';
         floatWrap.appendChild(createSwitchElement());

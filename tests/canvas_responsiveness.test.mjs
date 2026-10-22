@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const rootDir = path.resolve('c:/Users/leo/Desktop/AprendIDos');
+const rootDir = process.cwd();
 
 test('Canvas coordinate conversion formula maps accurately across normal, 200%, 400%, and pinch zoom', () => {
     // Simula a fórmula matemática implementada em meunome.js e escrita.js:
@@ -111,4 +111,14 @@ test('theme.css defines universal responsiveness, canvas touch stability, and sm
     assert.ok(themeCss.includes('overflow-x: hidden'), 'theme.css must prevent horizontal body overflow');
     assert.ok(themeCss.includes('min-height: 48px'), 'theme.css must enforce minimum 48px touch targets for elderly accessibility');
     assert.ok(themeCss.includes('@media (max-width: 360px)'), 'theme.css must handle micro-screens (320px-360px)');
+});
+
+test('meunome.js and escrita.js protect canvas layout against visual zoom distortion and handle device rotation', () => {
+    const meunomeJs = fs.readFileSync(path.join(rootDir, 'meunome.js'), 'utf-8');
+    const escritaJs = fs.readFileSync(path.join(rootDir, 'escrita.js'), 'utf-8');
+
+    for (const code of [meunomeJs, escritaJs]) {
+        assert.ok(code.includes('orientationchange'), 'Must listen to orientationchange for device rotation');
+        assert.ok(code.includes('container.clientWidth'), 'Must use container clientWidth to avoid visual zoom layout skew');
+    }
 });

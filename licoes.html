@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; media-src 'self' data: blob: https://translate.google.com; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
@@ -53,7 +53,7 @@
     .navbar {
       background-color: #FFFFFF;
       padding: 0 20px;
-      height: 80px;
+      height: 76px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -70,20 +70,21 @@
     }
 
     .btn-voltar {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 8px;
       background-color: #F5DEB3;
       border: none;
       border-radius: 12px;
-      padding: 12px 18px;
+      padding: 10px 16px;
       font-family: 'Nunito', sans-serif;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: #3E2723;
       cursor: pointer;
       transition: background-color 0.2s, transform 0.15s;
       white-space: nowrap;
+      text-decoration: none;
     }
 
     .btn-voltar:hover {
@@ -95,7 +96,7 @@
     }
 
     .btn-voltar i {
-      font-size: 18px;
+      font-size: 16px;
     }
 
     .navbar-brand {
@@ -106,15 +107,15 @@
     }
 
     .navbar-logo {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       background-color: #2E7D32;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #FFFFFF;
-      font-size: 23px;
+      font-size: 22px;
       font-weight: 900;
       flex-shrink: 0;
       transition: transform 0.3s ease;
@@ -125,7 +126,7 @@
     }
 
     .navbar-title {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
       color: #2E7D32;
       letter-spacing: -0.5px;
@@ -135,7 +136,77 @@
     .navbar-right {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 10px;
+    }
+
+    #userProfileBadge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #FAF3E0;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1.5px solid #E8D5A8;
+    }
+
+    body.dark-mode #userProfileBadge {
+      background: #1E2836;
+      border-color: #334155;
+    }
+
+    #userAvatarCircle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #2E7D32;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    #userDisplayName {
+      font-weight: 800;
+      font-size: 14px;
+      color: #3E2723;
+      max-width: 130px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    body.dark-mode #userDisplayName {
+      color: #F8FAFC !important;
+    }
+
+    .btn-logout-header {
+      background-color: #FFEBEB;
+      color: #DC3545;
+      border: 1.5px solid #FFCDD2;
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.2s, transform 0.15s;
+      white-space: nowrap;
+      min-height: 42px;
+    }
+
+    .btn-logout-header:hover {
+      background-color: #FFCDD2;
+    }
+
+    .btn-logout-header:active {
+      transform: scale(0.95);
     }
 
     .nav-item {
@@ -745,170 +816,257 @@
     @media (max-width: 640px) {
 
       .navbar {
-        height: 100px;
-        padding: 0 10px;
+        height: auto;
+        min-height: auto;
+        padding: 8px 10px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        gap: 6px 8px;
+        align-items: center;
       }
 
       .navbar-left {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+        display: flex;
+        align-items: center;
         gap: 6px;
       }
 
-      .btn-voltar {
-        padding: 10px 10px;
+      .navbar-right {
+        display: contents;
+      }
+
+      #seletorTemaLicoes {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+
+      #userProfileBadge {
+        grid-column: 1 / 2;
+        grid-row: 2 / 2;
+        display: inline-flex;
+        align-items: center;
+        justify-self: start;
+        padding: 4px 10px;
+        gap: 6px;
+      }
+
+      #userAvatarCircle {
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+      }
+
+      #userDisplayName {
         font-size: 13px;
-        border-radius: 10px;
+        max-width: 120px;
+      }
+
+      .btn-logout-header {
+        grid-column: 2 / 3;
+        grid-row: 2 / 2;
+        justify-self: end;
+        padding: 5px 10px;
+        font-size: 13px;
+        min-height: 36px;
         gap: 4px;
       }
 
-      .btn-voltar i {
-        font-size: 16px;
+      .btn-voltar {
+        padding: 6px 9px;
+        font-size: 13px;
+        border-radius: 9px;
+        gap: 4px;
+        min-height: 38px;
       }
 
-      .btn-voltar span {
-        display: none;
+      .btn-voltar i {
+        font-size: 14px;
       }
 
       .navbar-logo {
-        width: 46px;
-        height: 46px;
-        border-radius: 12px;
-        font-size: 24px;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        font-size: 18px;
       }
 
       .navbar-title {
         font-size: 16px;
-      }
-
-      .navbar-right {
-        gap: 0px;
-      }
-
-      .nav-item {
-        padding: 6px 12px;
-        border-radius: 10px;
-        gap: 2px;
-      }
-
-      .nav-item i {
-        font-size: 44px;
-      }
-
-      .nav-item span {
-        font-size: 13px;
+        font-weight: 900;
       }
 
       .main-content {
-        padding: 24px 14px 44px;
+        padding: 16px 12px calc(36px + env(safe-area-inset-bottom, 0px));
       }
 
       .page-header {
-        margin-bottom: 24px;
+        margin-bottom: 18px;
       }
 
       .page-header h1 {
-        font-size: clamp(26px, 6vw, 32px);
-        margin-bottom: 10px;
+        font-size: clamp(21px, 5.2vw, 26px);
+        font-weight: 900;
+        line-height: 1.25;
+        margin-bottom: 6px;
+        text-wrap: balance;
+        max-width: 100%;
+        display: block;
+      }
+
+      .page-header h1::after {
+        display: none;
       }
 
       .page-header p {
-        font-size: clamp(17px, 4.2vw, 20px);
-        line-height: 1.6;
+        font-size: clamp(14px, 3.8vw, 17px);
+        line-height: 1.45;
+        text-wrap: pretty;
       }
 
       .progress-section {
-        padding: 18px 16px;
-        margin-bottom: 26px;
-        border-radius: 18px;
+        padding: 14px 16px;
+        margin-bottom: 18px;
+        border-radius: 16px;
+      }
+
+      .progress-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
       }
 
       .progress-label {
-        font-size: 18px;
+        font-size: clamp(14px, 4vw, 16px);
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .progress-label i {
+        font-size: 15px;
       }
 
       .progress-count {
-        font-size: 18px;
+        font-size: clamp(14px, 4vw, 16px);
+        font-weight: 800;
+        white-space: nowrap;
       }
 
       .progress-bar-bg {
-        height: 20px;
-        border-radius: 12px;
+        height: 12px;
+        border-radius: 8px;
+        width: 100%;
       }
 
       .progress-bar-fill {
-        border-radius: 12px;
+        border-radius: 8px;
       }
 
       .activities-grid {
         grid-template-columns: 1fr;
-        gap: 22px;
+        gap: 14px;
       }
 
       .activity-card {
-        padding: 24px 18px 22px;
-        border-radius: 20px;
+        padding: 16px 14px 16px;
+        border-radius: 18px;
       }
 
       .icon-circle {
-        width: 100px;
-        height: 100px;
-        margin-bottom: 18px;
+        width: 72px;
+        height: 72px;
+        margin-bottom: 10px;
       }
 
       .icon-circle svg {
-        width: 72px;
-        height: 72px;
+        width: 48px;
+        height: 48px;
       }
 
       .icon-circle .check-badge {
-        width: 32px;
-        height: 32px;
-        font-size: 16px;
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+        bottom: 0;
+        right: 0;
       }
 
       .status-badge {
-        padding: 6px 18px;
-        font-size: 15px;
-        margin-bottom: 14px;
-        border-radius: 26px;
+        padding: 4px 12px;
+        font-size: 12px;
+        margin-bottom: 8px;
+        border-radius: 20px;
+        gap: 5px;
       }
 
       .activity-card h3 {
-        font-size: clamp(22px, 5.5vw, 26px);
+        font-size: 19px;
         font-weight: 900;
-        margin-bottom: 10px;
-        line-height: 1.2;
+        margin-bottom: 4px;
+        line-height: 1.25;
       }
 
       .activity-card .description {
-        font-size: clamp(16px, 4vw, 19px);
-        line-height: 1.6;
+        font-size: 14px;
+        line-height: 1.45;
         color: #3E2723;
-        margin-bottom: 20px;
+        margin-bottom: 12px;
         min-height: auto;
       }
 
+      .btn-ouvir {
+        min-height: 46px;
+        padding: 9px 12px;
+        font-size: 15px;
+        margin-bottom: 8px;
+        border-radius: 12px;
+      }
+
       .card-btn {
-        padding: 16px 20px;
-        font-size: 18px;
-        border-radius: 16px;
-        min-height: 58px;
+        padding: 11px 16px;
+        font-size: 16px;
+        border-radius: 14px;
+        min-height: 48px;
       }
 
       .card-btn.btn-rever {
-        border-width: 4px;
+        border-width: 3px;
       }
 
       .footer {
-        padding: 28px 20px;
+        padding: 20px 14px calc(24px + env(safe-area-inset-bottom, 0px));
       }
 
       .footer p {
-        font-size: 17px;
+        font-size: 14px;
       }
 
       .toast {
+        font-size: 14px;
+        padding: 12px 18px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .btn-voltar span {
+        display: none;
+      }
+      .navbar-title {
         font-size: 15px;
-        padding: 14px 22px;
+      }
+      #userDisplayName {
+        max-width: 85px;
+      }
+      .btn-logout-header span {
+        display: none;
       }
     }
 
@@ -965,24 +1123,24 @@
         <span class="navbar-title">AprendIDos</span>
       </a>
     </div>
-    <div class="navbar-right" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <div class="navbar-right">
       <!-- SELETOR ESTRATÉGICO DE MODO ESCURO E CLARO -->
       <div class="seletor-tema-container" id="seletorTemaLicoes" data-theme-slot>
         <!-- Injetado dinamicamente pelo theme.js -->
       </div>
 
       <!-- Perfil do Usuário Logado -->
-      <div id="userProfileBadge" style="display: flex; align-items: center; gap: 10px; background: #FAF3E0; padding: 6px 14px; border-radius: 20px; border: 1.5px solid #E8D5A8;">
-        <div id="userAvatarCircle" style="width: 38px; height: 38px; border-radius: 50%; background: #2E7D32; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; overflow: hidden;">
+      <div id="userProfileBadge">
+        <div id="userAvatarCircle">
           <i class="fas fa-user"></i>
         </div>
-        <span id="userDisplayName" style="font-weight: 800; font-size: 16px; color: #3E2723; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        <span id="userDisplayName">
           Aprendiz
         </span>
       </div>
 
       <!-- Botão Sair (Logout) -->
-      <button id="btnLogout" class="btn-voltar" style="background-color: #FFEBEB; color: #DC3545; border: 1.5px solid #FFCDD2;" title="Sair da minha conta" aria-label="Sair da conta">
+      <button id="btnLogout" class="btn-voltar btn-logout-header" title="Sair da minha conta" aria-label="Sair da conta">
         <i class="fas fa-right-from-bracket"></i>
         <span>Sair</span>
       </button>

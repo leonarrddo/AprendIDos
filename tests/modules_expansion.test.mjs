@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const rootDir = path.resolve('c:/Users/leo/Desktop/AprendIDos');
+const rootDir = process.cwd();
 
 test('CSP in all updated learning modules must contain media-src with Google Translate TTS', () => {
     const htmlFiles = [

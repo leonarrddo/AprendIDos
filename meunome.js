@@ -521,6 +521,7 @@ function initWritingCanvas(name) {
     if (!canvasInitialised) {
         attachCanvasEvents();
         window.addEventListener('resize', handleCanvasResize);
+        window.addEventListener('orientationchange', handleCanvasResize);
         canvasInitialised = true;
     }
 }
@@ -632,7 +633,7 @@ function setupCanvasResolution() {
     if (!writingCanvas) return;
     var container = writingCanvas.parentElement;
     var rect = container ? container.getBoundingClientRect() : writingCanvas.getBoundingClientRect();
-    var width = Math.floor(rect.width) || 600;
+    var width = (container && container.clientWidth > 0) ? container.clientWidth : (Math.floor(rect.width) || 600);
     
     var layout = getCanvasLayout(width, currentName);
     var height = layout.height;
@@ -679,7 +680,7 @@ function handleCanvasResize() {
         if (isDrawing || !writingCanvas) return;
         var container = writingCanvas.parentElement;
         var rect = container ? container.getBoundingClientRect() : writingCanvas.getBoundingClientRect();
-        var newWidth = Math.floor(rect.width) || 600;
+        var newWidth = (container && container.clientWidth > 0) ? container.clientWidth : (Math.floor(rect.width) || 600);
         if (prevCanvasWidth > 0 && Math.abs(newWidth - prevCanvasWidth) < 3) return;
 
         setupCanvasResolution();

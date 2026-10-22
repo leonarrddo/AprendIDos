@@ -37,14 +37,10 @@ function createStaticServer() {
 }
 
 test('Sistema de Temas: Modo Claro e Modo Escuro', async (t) => {
-  let server = null;
-  // Verifica se o servidor já está rodando ou inicializa servidor estático local na porta 3000
-  try {
-    await fetch('http://localhost:3000');
-  } catch (e) {
-    server = createStaticServer();
-    await new Promise((resolve) => server.listen(3000, resolve));
-  }
+  const server = createStaticServer();
+  const port = await new Promise((resolve) => {
+    server.listen(0, () => resolve(server.address().port));
+  });
 
   t.after(() => {
     if (server) server.close();
@@ -76,7 +72,7 @@ test('Sistema de Temas: Modo Claro e Modo Escuro', async (t) => {
   });
 
   await t.test('1. Deve renderizar o seletor estratégico no menu.html com usuário logado', async () => {
-    await page.goto('http://localhost:3000/menu.html');
+    await page.goto(`http://localhost:${port}/menu.html`);
     await page.evaluate(() => {
       localStorage.setItem('aprendidos_usuario', JSON.stringify({
         id: 'demo_test', email: 'maria@teste.com',
@@ -85,7 +81,7 @@ test('Sistema de Temas: Modo Claro e Modo Escuro', async (t) => {
       }));
       localStorage.removeItem('aprendidos_theme');
     });
-    await page.goto('http://localhost:3000/menu.html', { waitUntil: 'networkidle2' });
+    await page.goto(`http://localhost:${port}/menu.html`, { waitUntil: 'networkidle2' });
 
     // Aguarda o guard assíncrono revelar a página (até 3s)
     await page.waitForFunction(
@@ -96,12 +92,33 @@ test('Sistema de Temas: Modo Claro e Modo Escuro', async (t) => {
     const switchExists = await page.$('.aprendidos-theme-switch');
     assert.ok(switchExists, 'O componente do switch de tema deve estar presente no menu.html');
 
+    // Validação de botão único e formato circular (PARTE 1)
+    const buttonCount = await page.$$eval('.aprendidos-theme-switch button', btns => btns.length);
+    assert.equal(buttonCount, 1, 'Deve possuir UM ÚNICO botão dentro do switch de tema');
+
+    const buttonAttrs = await page.$eval('.theme-toggle-btn', el => {
+      const rect = el.getBoundingClientRect();
+      const style = window.getComputedStyle(el);
+      return {
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+        borderRadius: style.borderRadius,
+        ariaLabel: el.getAttribute('aria-label'),
+        textContent: el.textContent.trim()
+      };
+    });
+
+    assert.ok(buttonAttrs.width >= 44 && buttonAttrs.width <= 50, 'Largura do botão deve estar entre 44px e 48px');
+    assert.ok(buttonAttrs.height >= 44 && buttonAttrs.height <= 50, 'Altura do botão deve estar entre 44px e 48px');
+    assert.equal(buttonAttrs.textContent, '☀️', 'No modo claro deve exibir o ícone de sol');
+    assert.equal(buttonAttrs.ariaLabel, 'Ativar modo escuro', 'No modo claro aria-label deve ser Ativar modo escuro');
+
     const userName = await page.$eval('#menuUserDisplayName', el => el.textContent.trim());
     assert.equal(userName, 'Dona', 'O primeiro nome do usuário deve ser exibido');
   });
 
-  await t.test('2. Deve alternar para o Modo Escuro ao clicar no botão escuro', async () => {
-    await page.click('.theme-switch-btn.btn-escuro');
+  await t.test('2. Deve alternar para o Modo Escuro ao clicar no botão circular de tema', async () => {
+    await page.click('.theme-toggle-btn');
     await new Promise(r => setTimeout(r, 400));
 
     const isDark = await page.evaluate(() => {
@@ -110,22 +127,31 @@ test('Sistema de Temas: Modo Claro e Modo Escuro', async (t) => {
     });
     assert.equal(isDark, true, 'O Modo Escuro deve estar ativado na classe do body e no localStorage');
 
-    const btnEscuroActive = await page.$eval('.theme-switch-btn.btn-escuro', el => el.classList.contains('active'));
-    assert.equal(btnEscuroActive, true, 'O botão Modo Escuro deve ter classe active');
+    const darkAttrs = await page.$eval('.theme-toggle-btn', el => ({
+      ariaLabel: el.getAttribute('aria-label'),
+      textContent: el.textContent.trim(),
+      isActive: el.classList.contains('active')
+    }));
+    assert.equal(darkAttrs.isActive, true, 'O botão deve ter classe active no modo escuro');
+    assert.equal(darkAttrs.textContent, '🌙', 'No modo escuro deve exibir o ícone de lua');
+    assert.equal(darkAttrs.ariaLabel, 'Ativar modo claro', 'No modo escuro aria-label deve ser Ativar modo claro');
   });
 
   await t.test('3. Deve manter o Modo Escuro ao navegar para licoes.html (persistência)', async () => {
-    await page.goto('http://localhost:3000/licoes.html', { waitUntil: 'networkidle2' });
+    await page.goto(`http://localhost:${port}/licoes.html`, { waitUntil: 'networkidle2' });
 
     const isDarkInLicoes = await page.evaluate(() => document.body.classList.contains('dark-mode'));
     assert.equal(isDarkInLicoes, true, 'O Modo Escuro deve permanecer ativo ao abrir licoes.html');
 
     const switchInLicoes = await page.$('.navbar .aprendidos-theme-switch');
     assert.ok(switchInLicoes, 'O switch de tema deve estar presente na navbar de licoes.html');
+
+    const licoesIcon = await page.$eval('.navbar .theme-toggle-btn', el => el.textContent.trim());
+    assert.equal(licoesIcon, '🌙', 'O ícone na navbar de licoes.html deve ser lua no modo escuro');
   });
 
   await t.test('4. Deve alternar de volta para Modo Claro com sucesso', async () => {
-    await page.click('.theme-switch-btn.btn-claro');
+    await page.click('.theme-toggle-btn');
     await new Promise(r => setTimeout(r, 400));
 
     const isLight = await page.evaluate(() => {
@@ -133,13 +159,20 @@ test('Sistema de Temas: Modo Claro e Modo Escuro', async (t) => {
              localStorage.getItem('aprendidos_theme') === 'light';
     });
     assert.equal(isLight, true, 'O Modo Claro deve ser restaurado corretamente');
+
+    const lightAttrs = await page.$eval('.theme-toggle-btn', el => ({
+      ariaLabel: el.getAttribute('aria-label'),
+      textContent: el.textContent.trim()
+    }));
+    assert.equal(lightAttrs.textContent, '☀️', 'Ao retornar para o modo claro deve exibir sol');
+    assert.equal(lightAttrs.ariaLabel, 'Ativar modo escuro', 'aria-label deve voltar para Ativar modo escuro');
   });
 
   await t.test('5. Deve garantir contraste correto de inputs e letras no meunome.html no Modo Escuro', async () => {
     await page.evaluate(() => {
       localStorage.setItem('aprendidos_theme', 'dark');
     });
-    await page.goto('http://localhost:3000/meunome.html', { waitUntil: 'networkidle2' });
+    await page.goto(`http://localhost:${port}/meunome.html`, { waitUntil: 'networkidle2' });
 
     // Foca no input e digita um nome
     await page.type('#nameInput', 'LEONARDO');

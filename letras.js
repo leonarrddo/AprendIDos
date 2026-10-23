@@ -98,7 +98,7 @@ var alphabetData = {
         phrase: 'O kiwi é gostoso.',
         words: ['kiwi', 'kart', 'ketchup', 'karatê'],
         capaSrc: 'capaletras/Cartaz Infantil da Letra K com Kiwi.png',
-        imageSrc: 'capaletras/Cartaz Infantil da Letra K com Kiwi.png', hasCustomImage: true,
+        imageSrc: 'imagenscartilha/k.png', hasCustomImage: true,
         speech: 'Letra K. K de Kiwi. O kiwi é gostoso.'
     },
     L: {
@@ -201,7 +201,7 @@ var alphabetData = {
         upper: 'X', lower: 'x', word: 'Xadrez', simpleName: 'X de Xadrez', type: 'consonant', icon: 'fa-chess-board',
         phrase: 'O xadrez é divertido.',
         words: ['xadrez', 'xícara', 'xilofone', 'xarope', 'xampu', 'xbox', 'xale', 'xerife', 'xenofobia'],
-        capaSrc: 'imagenscartilha/x.png',
+        capaSrc: 'capaletras/xadrez.png',
         imageSrc: 'imagenscartilha/x.png', hasCustomImage: true,
         speech: 'Letra X. X de Xadrez. O xadrez é divertido.'
     },
@@ -209,8 +209,8 @@ var alphabetData = {
         upper: 'Y', lower: 'y', word: 'Yoga', simpleName: 'Y de Yoga', type: 'consonant', icon: 'fa-heart',
         phrase: 'O yoga traz paz e saúde.',
         words: ['yoga', 'yakisoba', 'youtube'],
-        capaSrc: '',
-        imageSrc: '', hasCustomImage: false,
+        capaSrc: 'capaletras/yoga.png',
+        imageSrc: 'imagenscartilha/y.png', hasCustomImage: true,
         speech: 'Letra Y. Y de Yoga. O yoga traz paz e saúde.'
     },
     Z: {

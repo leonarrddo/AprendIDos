@@ -161,7 +161,7 @@ var consonantData = {
         upper: 'X', lower: 'x', word: 'Xadrez', icon: 'fa-chess-board',
         phrase: 'O xadrez é divertido.',
         words: ['xadrez', 'xícara', 'xilofone', 'xarope', 'xampu', 'xbox', 'xale', 'xerife', 'xenofobia'],
-        capaSrc: 'imagenscartilha/x.png',
+        capaSrc: 'capaletras/xadrez.png',
         imageSrc: 'imagenscartilha/x.png', hasCustomImage: true,
         speech: 'Letra X. X de Xadrez. O xadrez é divertido.'
     },
@@ -169,8 +169,8 @@ var consonantData = {
         upper: 'Y', lower: 'y', word: 'Yoga', icon: 'fa-heart',
         phrase: 'O yoga traz paz e saúde.',
         words: ['yoga', 'yakisoba', 'youtube'],
-        capaSrc: '',
-        imageSrc: '', hasCustomImage: false,
+        capaSrc: 'capaletras/yoga.png',
+        imageSrc: 'imagenscartilha/y.png', hasCustomImage: true,
         speech: 'Letra Y. Y de Yoga. O yoga traz paz e saúde.'
     },
     Z: {

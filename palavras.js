@@ -78,7 +78,7 @@ var catalogData = {
                     "word": "BOLA",
                     "syllables": "BO - LA",
                     "desc": "Objeto redondo muito usado em brincadeiras de criança e esportes queridos, como o futebol de domingo.",
-                    "img": "capaletras/Cartão educativo B de Bola.png",
+                    "img": "imagenspalavras/bola.jpg",
                     "icon": "fa-futbol"
                 },
                 {
@@ -143,7 +143,7 @@ var catalogData = {
                     "word": "CASA",
                     "syllables": "CA - SA",
                     "desc": "Nosso lar acolhedor, onde descansamos com tranquilidade e vivemos momentos felizes com quem amamos.",
-                    "img": "capaletras/Cartaz educativo da letra C com casa.png",
+                    "img": "imagenspalavras/casa.jpg",
                     "icon": "fa-house"
                 },
                 {
@@ -208,7 +208,7 @@ var catalogData = {
                     "word": "DADO",
                     "syllables": "DA - DO",
                     "desc": "Pequeno cubo com pontinhos marcados de um a seis, usado para jogar e se divertir com jogos de tabuleiro.",
-                    "img": "capaletras/Cartão Educativo da Letra D.png",
+                    "img": "imagenspalavras/dado.jpg",
                     "icon": "fa-dice"
                 },
                 {
@@ -287,7 +287,7 @@ var catalogData = {
                     "word": "ESPELHO",
                     "syllables": "ES - PE - LHO",
                     "desc": "Vidro prateado brilhante que reflete a nossa imagem para nos arrumarmos e vermos como estamos bem.",
-                    "img": "imagenscartilha/e.png",
+                    "img": "imagenspalavras/espelho.jpg",
                     "icon": "fa-square"
                 },
                 {
@@ -663,7 +663,7 @@ var catalogData = {
                     "word": "KIWI",
                     "syllables": "KI - WI",
                     "desc": "Frutinha arredondada de casca aveludada marrom e polpa verde com sementinhas pretas, rica em vitamina C.",
-                    "img": "capaletras/Cartaz Infantil da Letra K com Kiwi.png",
+                    "img": "imagenspalavras/kiwi.jpg",
                     "icon": "fa-lemon"
                 },
                 {
@@ -749,7 +749,7 @@ var catalogData = {
                     "word": "LUA",
                     "syllables": "LU - A",
                     "desc": "Lindo astro prateado que surge no céu à noite, iluminando a terra com suas fases crescente e cheia.",
-                    "img": "capaletras/Cartaz Infantil da Letra L e da Lua.png",
+                    "img": "imagenspalavras/lua.jpg",
                     "icon": "fa-moon"
                 }
             ],
@@ -858,7 +858,7 @@ var catalogData = {
                     "word": "NAVIO",
                     "syllables": "NA - VI - O",
                     "desc": "Embarcação gigante que viaja pelos oceanos levando cargas pesadas e milhares de viajantes pelo mar.",
-                    "img": "capaletras/Cartão Educativo da Letra N com Navio.png",
+                    "img": "imagenspalavras/navio.jpg",
                     "icon": "fa-ship"
                 },
                 {
@@ -923,7 +923,7 @@ var catalogData = {
                     "word": "OVO",
                     "syllables": "O - VO",
                     "desc": "Alimento simples, versátil e nutritivo posto pela galinha, com gema dourada para fritar, cozer ou pôr em receitas.",
-                    "img": "capaletras/Cartaz Educativo da Letra O com Ovo.png",
+                    "img": "imagenspalavras/ovo.jpeg",
                     "icon": "fa-egg"
                 },
                 {
@@ -1104,7 +1104,7 @@ var catalogData = {
                     "word": "QUINDIM",
                     "syllables": "QUIN - DIM",
                     "desc": "Doce dourado e reluzente feito com gemas de ovos, coco ralado e açúcar, macio e tradicional nas confeitarias.",
-                    "img": "capaletras/Cartão do Q de Queijo.png",
+                    "img": "imagenspalavras/quindin.jpeg",
                     "icon": "fa-cake-candles"
                 }
             ]
@@ -1269,7 +1269,7 @@ var catalogData = {
                     "word": "TOMATE",
                     "syllables": "TO - MA - TE",
                     "desc": "Fruto vermelho e suculento da horta, base saborosa para molhos caseiros e saladas frescas com azeite.",
-                    "img": "capaletras/Cartaz Infantil da Letra T com Tomate.png",
+                    "img": "imagenspalavras/tomate.jpg",
                     "icon": "fa-apple-whole"
                 }
             ],
@@ -1313,7 +1313,7 @@ var catalogData = {
                     "word": "UVA",
                     "syllables": "U - VA",
                     "desc": "Frutinha redonda e doce que nasce em cachos caprichados, maravilhosa para comer pura ou em sucos naturais.",
-                    "img": "capaletras/Cartaz Educativo da Uva.png",
+                    "img": "imagenspalavras/uva.jpg",
                     "icon": "fa-wine-glass"
                 },
                 {
@@ -1408,7 +1408,7 @@ var catalogData = {
                     "word": "VACA",
                     "syllables": "VA - CA",
                     "desc": "Animal dócil e generoso da fazenda que pasta calmamente no capim e nos presenteia com leite nutritivo todo dia.",
-                    "img": "capaletras/Cartaz educativo da letra V com vaca.png",
+                    "img": "imagenspalavras/vaca.jpg",
                     "icon": "fa-cow"
                 },
                 {
@@ -1529,7 +1529,7 @@ var catalogData = {
                     "word": "XADREZ",
                     "syllables": "XA - DREZ",
                     "desc": "Jogo clássico de tabuleiro e estratégia com peças de reis, rainhas e cavalos que estimula a mente.",
-                    "img": "imagenscartilha/x.png",
+                    "img": "imagenspalavras/xadrez.jpg",
                     "icon": "fa-chess-board"
                 }
             ],
@@ -1689,7 +1689,7 @@ var catalogData = {
                     "word": "ZELADOR",
                     "syllables": "ZE - LA - DOR",
                     "desc": "Profissional dedicado que cuida com muito carinho da limpeza, manutenção e segurança dos prédios.",
-                    "img": "imagenscartilha/z.png",
+                    "img": "imagenspalavras/zelador.jpg",
                     "icon": "fa-user-tie"
                 }
             ]

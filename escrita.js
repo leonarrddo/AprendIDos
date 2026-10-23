@@ -664,13 +664,15 @@ function renderLetterTracker() {
     var completed = 0;
 
     metrics.forEach(function(m, idx) {
-        var status = letterStatusMap[idx] || { passed: false, partial: false };
+        var status = letterStatusMap[idx] || { passed: false, partial: false, fallback: false };
         if (status.passed) completed++;
 
         var chip = document.createElement('div');
-        chip.className = 'letter-tracker-chip' + (status.passed ? ' completed' : (status.partial ? ' partial' : ''));
+        chip.className = 'tracker-chip letter-tracker-chip' + (status.passed ? ' completed' : (status.fallback ? ' uncalibrated' : (status.partial ? ' partial' : '')));
         chip.id = 'trackerChip_' + idx;
-        chip.title = 'Clique para ouvir a letra ' + m.char;
+        chip.title = status.fallback
+            ? 'Letra ' + m.char + ' (avaliação de traçado indisponível)'
+            : 'Clique para ouvir a letra ' + m.char;
 
         var charSpan = document.createElement('span');
         charSpan.className = 'chip-char';
@@ -681,7 +683,7 @@ function renderLetterTracker() {
         statusSpan.id = 'chipStatus_' + idx;
         statusSpan.innerHTML = status.passed
             ? '<i class="fas fa-check"></i>'
-            : (status.partial ? '<i class="fas fa-pencil-alt"></i>' : '<i class="fas fa-pen"></i>');
+            : (status.fallback ? '<i class="fas fa-question"></i>' : (status.partial ? '<i class="fas fa-pencil-alt"></i>' : '<i class="fas fa-pen"></i>'));
 
         chip.appendChild(charSpan);
         chip.appendChild(statusSpan);
@@ -744,37 +746,57 @@ function evaluateWriting(isManual) {
 
     var totalScoreSum = 0;
     var completedCount = 0;
+    var uncalibratedCount = 0;
 
     metrics.forEach(function(m, idx) {
-        var result;
-        if (typeof window.evaluateLetter === 'function') {
-            result = window.evaluateLetter(m.char, m, strokes, 0.1);
-        } else {
-            // Avaliação heurística por proximidade dos pontos do stroke
+        var result = null;
+        try {
+            if (typeof window.evaluateLetter === 'function') {
+                result = window.evaluateLetter(m.char, m, strokes, 0.1);
+            }
+        } catch (e) {
+            console.error('Erro na avaliação da letra ' + m.char + ':', e);
+            result = null;
+        }
+
+        // Se a avaliação principal não estiver disponível, falhar ou retornar inválido
+        if (!result || typeof result !== 'object') {
             result = evaluateLetterFallback(m, strokes);
         }
 
-        var passed = result.passed || (result.score >= 60) || (result.coverage >= 60);
-        var partial = !passed && (result.score >= 30 || result.coverage >= 30);
+        var isFallback = Boolean(result && result.fallback);
+        if (isFallback) {
+            uncalibratedCount++;
+        }
+
+        // A aprovação individual é estrita: só aprova se o avaliador principal aprovar explicitamente.
+        // Nunca aprova com base apenas em score/coverage contornando a reprovação do avaliador.
+        var passed = Boolean(result && result.passed === true && !isFallback);
+        var score = (result && typeof result.score === 'number' && !isNaN(result.score)) ? result.score : 0;
+        var coverage = (result && typeof result.coverage === 'number' && !isNaN(result.coverage)) ? result.coverage : 0;
+        var partial = !passed && !isFallback && (score >= 30 || coverage >= 30);
 
         letterStatusMap[idx] = {
-            score: result.score,
-            coverage: result.coverage,
+            score: score,
+            coverage: coverage,
             passed: passed,
-            partial: partial
+            partial: partial,
+            fallback: isFallback
         };
 
         if (passed) completedCount++;
-        totalScoreSum += result.score;
+        totalScoreSum += score;
     });
 
     var avgScore = Math.round(totalScoreSum / metrics.length);
     renderLetterTracker();
 
-    var allPassed = completedCount === metrics.length;
+    // A palavra só é considerada concluída quando TODAS as letras obrigatórias
+    // forem individualmente avaliadas e aprovadas, sem letras em fallback/não calibradas.
+    var allPassed = metrics.length > 0 && completedCount === metrics.length && uncalibratedCount === 0;
     var fbArea = document.getElementById('feedbackArea');
 
-    if (allPassed || avgScore >= 68) {
+    if (allPassed) {
         updateEvaluationUI(avgScore, 'Excelente caligrafia! Você escreveu a palavra ' + q.word + ' com maestria!', 'success');
 
         if (!hasPassedCurrentWord) {
@@ -790,6 +812,17 @@ function evaluateWriting(isManual) {
                     '<button class="btn-next" onclick="nextWord()" aria-label="' + (isLast ? 'Ver resultado' : 'Próxima palavra') + '"><i class="fas ' + (isLast ? 'fa-flag-checkered' : 'fa-arrow-right') + '"></i> ' + (isLast ? 'Concluir Lição' : 'Próxima Palavra') + '</button>';
             }
         }
+    } else if (uncalibratedCount > 0) {
+        // Quando faltar referência para alguma letra, informa o usuário e não bloqueia a progressão
+        var msgUncalibrated = 'A avaliação automática não está disponível para todas as letras desta palavra. Pratique o desenho e avance quando desejar.';
+        updateEvaluationUI(avgScore, msgUncalibrated, 'info');
+        if (isManual) speak(msgUncalibrated);
+
+        if (fbArea && !hasPassedCurrentWord) {
+            var isLastUncal = currentIdx >= TOTAL - 1;
+            fbArea.innerHTML = '<div class="feedback-msg info" role="alert"><i class="fas fa-info-circle"></i> ' + msgUncalibrated + '</div>' +
+                '<button class="btn-next" onclick="nextWord()" aria-label="' + (isLastUncal ? 'Ver resultado' : 'Próxima palavra') + '"><i class="fas ' + (isLastUncal ? 'fa-flag-checkered' : 'fa-arrow-right') + '"></i> ' + (isLastUncal ? 'Concluir Lição' : 'Próxima Palavra') + '</button>';
+        }
     } else if (avgScore >= 35 || completedCount > 0) {
         var msg = 'Muito bem! Você completou ' + completedCount + ' de ' + metrics.length + ' letras. Continue praticando o restante da palavra!';
         updateEvaluationUI(avgScore, msg, 'partial');
@@ -804,26 +837,32 @@ function evaluateWriting(isManual) {
 }
 
 function evaluateLetterFallback(m, allStrokes) {
-    // Estimador de cobertura de traço para quando letter-paths.js não tiver o caractere específico
+    // Estimador básico para quando letter-paths.js não tiver o caractere ou estiver inacessível.
+    // Retorna fallback: true e passed: false para NUNCA aprovar automaticamente rabiscos
+    // ou ausência de traçado de referência.
     var pointsInLetter = 0;
-    var totalPoints = 0;
-    var pad = m.fontSize * 0.25;
+    var pad = m ? (m.fontSize * 0.25) : 10;
 
-    allStrokes.forEach(function(st) {
-        st.points.forEach(function(pt) {
-            totalPoints++;
-            if (pt.x >= m.x1 - pad && pt.x <= m.x2 + pad &&
-                pt.y >= m.y1 - pad && pt.y <= m.y2 + pad) {
-                pointsInLetter++;
+    if (m && allStrokes && allStrokes.length > 0) {
+        allStrokes.forEach(function(st) {
+            if (st && st.points) {
+                st.points.forEach(function(pt) {
+                    if (pt.x >= m.x1 - pad && pt.x <= m.x2 + pad &&
+                        pt.y >= m.y1 - pad && pt.y <= m.y2 + pad) {
+                        pointsInLetter++;
+                    }
+                });
             }
         });
-    });
+    }
 
-    var cov = Math.min(100, Math.round((pointsInLetter / Math.max(8, m.fontSize * 0.4)) * 100));
+    var cov = m ? Math.min(100, Math.round((pointsInLetter / Math.max(8, m.fontSize * 0.4)) * 100)) : 0;
     return {
+        char: m ? m.char : '',
         score: cov,
         coverage: cov,
-        passed: cov >= 65
+        passed: false,
+        fallback: true
     };
 }
 

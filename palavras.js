@@ -1532,36 +1532,6 @@ var catalogData = {
                     "img": "imagenspalavras/xadrez.jpg",
                     "icon": "fa-chess-board"
                 }
-            ],
-            [
-                {
-                    "word": "XALE",
-                    "syllables": "XA - LE",
-                    "desc": "Manto quentinho e macio de lã ou tricô que colocamos sobre os ombros nos dias mais frios.",
-                    "img": "imagenspalavras/xicara.png",
-                    "icon": "fa-vest"
-                },
-                {
-                    "word": "XILOFONE",
-                    "syllables": "XI - LO - FO - NE",
-                    "desc": "Instrumento musical alegre com barras afinadas que tocamos com pequenas baquetas de madeira.",
-                    "img": "imagenscartilha/x.png",
-                    "icon": "fa-music"
-                },
-                {
-                    "word": "XERIFE",
-                    "syllables": "XE - RI - FE",
-                    "desc": "Autoridade policial encarregada de manter a ordem e a segurança da cidade com sua estrela no peito.",
-                    "img": "imagenscartilha/x.png",
-                    "icon": "fa-star"
-                },
-                {
-                    "word": "XAXIM",
-                    "syllables": "XA - XIM",
-                    "desc": "Vaso especial e tradicional de fibras vegetais muito usado para plantar e cuidar de samambaias.",
-                    "img": "imagenscartilha/x.png",
-                    "icon": "fa-seedling"
-                }
             ]
         ]
     },
@@ -1587,45 +1557,8 @@ var catalogData = {
                     "word": "YOUTUBE",
                     "syllables": "YOU - TU - BE",
                     "desc": "Aplicativo e site muito popular na internet onde assistimos a vídeos, músicas e programas educativos.",
-                    "img": "imagenspalavras/yoga.jpg",
+                    "img": "imagenspalavras/youtube.jpg",
                     "icon": "fa-video"
-                },
-                {
-                    "word": "YAKULT",
-                    "syllables": "YA - KULT",
-                    "desc": "Bebidinha láctea saborosa e geladinha com lactobacilos vivos que ajuda no funcionamento do intestino.",
-                    "img": "imagenspalavras/yakisoba.jpg",
-                    "icon": "fa-bottle-droplet"
-                }
-            ],
-            [
-                {
-                    "word": "YANKEE",
-                    "syllables": "YAN - KEE",
-                    "desc": "Termo carinhoso e conhecido em todo o mundo para se referir a esportistas e ao time de beisebol.",
-                    "img": "imagenspalavras/yoga.jpg",
-                    "icon": "fa-baseball-bat-ball"
-                },
-                {
-                    "word": "YORKSHIRE",
-                    "syllables": "YORK - SHI - RE",
-                    "desc": "Cachorrinho dócil, companheiro e inteligente, com pelo longo e brilhante, adorado pelas famílias.",
-                    "img": "imagenspalavras/yoga.jpg",
-                    "icon": "fa-dog"
-                },
-                {
-                    "word": "YANOMAMI",
-                    "syllables": "YA - NO - MA - MI",
-                    "desc": "Importante povo indígena brasileiro que vive em aldeias na Amazônia e protege as florestas.",
-                    "img": "imagenspalavras/yoga.jpg",
-                    "icon": "fa-feather"
-                },
-                {
-                    "word": "YPÊ",
-                    "syllables": "Y - PÊ",
-                    "desc": "Marca tradicional e famosa de sabão e produtos de limpeza que deixam as louças e roupas brilhando.",
-                    "img": "imagenspalavras/yakisoba.jpg",
-                    "icon": "fa-soap"
                 }
             ]
         ]

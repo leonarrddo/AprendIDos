@@ -13,11 +13,11 @@
 // DADOS DAS VOGAIS — Letras e Exemplos Principais
 // ============================================================================
 var vowelData = {
-    a: { letter: 'A', example: 'Avião' },
-    e: { letter: 'E', example: 'Escada' },
-    i: { letter: 'I', example: 'Igreja' },
-    o: { letter: 'O', example: 'Ovo' },
-    u: { letter: 'U', example: 'Uva' }
+    a: { letter: 'A', example: 'Avião', spokenName: 'A', speechParts: ['Vogal A.', 'A de Avião.'] },
+    e: { letter: 'E', example: 'Escada', spokenName: 'é', speechParts: ['Vogal é.', 'É de Escada.'] },
+    i: { letter: 'I', example: 'Igreja', spokenName: 'i', speechParts: ['Vogal i.', 'I de Igreja.'] },
+    o: { letter: 'O', example: 'Ovo', spokenName: 'ó', speechParts: ['Vogal ó.', 'Ó de Ovo.'] },
+    u: { letter: 'U', example: 'Uva', spokenName: 'u', speechParts: ['Vogal u.', 'U de Uva.'] }
 };
 
 // Significados claros, objetivos e adequados para o público idoso e adulto
@@ -695,8 +695,14 @@ if ('speechSynthesis' in window) {
     window.speechSynthesis.onvoiceschanged = loadVoices;
 }
 
+var sequenceTimer = null;
+
 function stopAllAudio() {
     speechGeneration++;
+    if (sequenceTimer) {
+        clearTimeout(sequenceTimer);
+        sequenceTimer = null;
+    }
     if (currentAudio) {
         try {
             currentAudio.pause();
@@ -723,19 +729,15 @@ var isIOS = (function() {
            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 })();
 
-/**
- * Sistema de Áudio Duplo Infalível (Google TTS Online + Web Speech API Local)
- */
-function speak(text, onEnd) {
-    stopAllAudio();
-    if (!text || typeof text !== 'string') return;
+function playSegment(text, onEnd, gen) {
+    if (!text || typeof text !== 'string') {
+        if (onEnd) onEnd();
+        return;
+    }
+    if (gen !== undefined && gen !== speechGeneration) return;
 
-    var currentGen = speechGeneration;
-
-    // No iOS (Safari), o Google TTS falha com 404/AVPlayer e qualquer fallback assíncrono
-    // perde o gesto do usuário. Dispara síntese nativa imediatamente no clique!
     if (isIOS) {
-        speakNativo(text, onEnd, currentGen);
+        speakNativo(text, onEnd, gen);
         return;
     }
 
@@ -744,8 +746,8 @@ function speak(text, onEnd) {
     function triggerFallback() {
         if (fallbackTriggered) return;
         fallbackTriggered = true;
-        if (currentGen !== speechGeneration) return;
-        speakNativo(text, onEnd, currentGen);
+        if (gen !== undefined && gen !== speechGeneration) return;
+        speakNativo(text, onEnd, gen);
     }
 
     try {
@@ -753,9 +755,13 @@ function speak(text, onEnd) {
         var audio = new Audio();
         currentAudio = audio;
 
+        audio.playbackRate = 0.90;
+        if ('preservesPitch' in audio) {
+            audio.preservesPitch = true;
+        }
+
         audio.onended = function() {
-            if (currentGen !== speechGeneration) return;
-            document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+            if (gen !== undefined && gen !== speechGeneration) return;
             currentAudio = null;
             if (onEnd) onEnd();
         };
@@ -776,6 +782,54 @@ function speak(text, onEnd) {
     } catch (e) {
         triggerFallback();
     }
+}
+
+function speakSequence(segments, onEnd, pauseMs) {
+    stopAllAudio();
+    if (!segments) {
+        if (onEnd) onEnd();
+        return;
+    }
+    if (typeof segments === 'string') segments = [segments];
+    if (segments.length === 0) {
+        if (onEnd) onEnd();
+        return;
+    }
+    if (pauseMs === undefined || pauseMs === null) pauseMs = 600;
+
+    var currentGen = speechGeneration;
+    var idx = 0;
+
+    function playNext() {
+        if (currentGen !== speechGeneration) return;
+        if (idx >= segments.length) {
+            document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+            if (onEnd) onEnd();
+            return;
+        }
+
+        var piece = segments[idx];
+        idx++;
+
+        playSegment(piece, function() {
+            if (currentGen !== speechGeneration) return;
+            if (idx >= segments.length) {
+                document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+                if (onEnd) onEnd();
+            } else {
+                sequenceTimer = setTimeout(function() {
+                    if (currentGen !== speechGeneration) return;
+                    playNext();
+                }, pauseMs);
+            }
+        }, currentGen);
+    }
+
+    playNext();
+}
+
+function speak(text, onEnd) {
+    speakSequence([text], onEnd, 0);
 }
 
 /**
@@ -933,7 +987,8 @@ function checkAnswer(selected) {
         var missesEl = document.getElementById('missesCount');
         if (missesEl) missesEl.textContent = misses;
         showFeedback('error', 'Vamos tentar novamente.');
-        speak('Vamos tentar novamente. A resposta era ' + q.vowel + '.');
+        var spokenVowel = (vowelData[q.vowel.toLowerCase()] && vowelData[q.vowel.toLowerCase()].spokenName) || q.vowel;
+        speak('Vamos tentar novamente. A resposta era a vogal ' + spokenVowel + '.');
     }
 
     announceSR(correct
@@ -1138,9 +1193,10 @@ function speakVowel(key) {
     document.querySelectorAll('.vowel-card').forEach(function(c) { c.classList.remove('speaking'); });
     var card = document.querySelector('.vowel-card[data-vowel="' + key + '"]');
     if (card) card.classList.add('speaking');
-    speak(data.letter + '. ' + data.letter + ' de ' + data.example + '.', function() {
+    var parts = data.speechParts || ['Vogal ' + (data.spokenName || data.letter) + '.', (data.spokenName || data.letter) + ' de ' + data.example + '.'];
+    speakSequence(parts, function() {
         if (card) card.classList.remove('speaking');
-    });
+    }, 600);
 }
 
 function playInstruction() {

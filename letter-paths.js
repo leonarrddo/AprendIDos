@@ -703,11 +703,12 @@ function evaluateLetter(ch, m, userStrokes, attemptBonus) {
 
     var scaledStrokes = getScaledStrokesForLetter(ch, m);
     if (!scaledStrokes) {
-        // Sem traçado definido: retorno neutro (não penaliza, não aprova)
+        // Sem traçado definido: NÃO aprova automaticamente.
+        // A flag fallback: true indica que a avaliação não foi possível.
         return {
-            char: ch, score: 50, coverage: 50, spatialAccuracy: 50,
-            orderScore: 50, directionScore: 50, lengthScore: 50,
-            completionScore: 50, outsideRatio: 0.5, passed: true,
+            char: ch, score: 0, coverage: 0, spatialAccuracy: 0,
+            orderScore: 0, directionScore: 0, lengthScore: 0,
+            completionScore: 0, outsideRatio: 1, passed: false,
             scaledStrokes: null, fallback: true
         };
     }

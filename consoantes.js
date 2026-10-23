@@ -12,6 +12,21 @@
 // ============================================================================
 // DADOS DAS 21 CONSOANTES DO ALFABETO (Mesmas palavras e imagens de letras.js)
 // ============================================================================
+// ============================================================================
+// NOMES FONÉTICOS EXPLÍCITOS DAS CONSOANTES EM PORTUGUÊS BRASILEIRO
+// ============================================================================
+var spokenLetterNames = {
+    B: 'bê', C: 'cê', D: 'dê', F: 'éfe', G: 'gê', H: 'agá', J: 'jota',
+    K: 'cá', L: 'éle', M: 'ême', N: 'êne', P: 'pê', Q: 'quê', R: 'érre',
+    S: 'ésse', T: 'tê', V: 'vê', W: 'dáblio', X: 'xis', Y: 'ípsilon', Z: 'zê'
+};
+
+function getSpokenLetterName(letter) {
+    if (!letter || typeof letter !== 'string') return '';
+    var upper = letter.toUpperCase();
+    return spokenLetterNames[upper] || letter;
+}
+
 var consonantData = {
     B: {
         upper: 'B', lower: 'b', word: 'Bola', icon: 'fa-futbol',
@@ -19,7 +34,9 @@ var consonantData = {
         words: ['bola', 'balão', 'bala', 'bico', 'boneca', 'baixo', 'berço', 'bule', 'bolo'],
         capaSrc: 'capaletras/Cartão educativo B de Bola.png',
         imageSrc: 'imagenscartilha/b.png', hasCustomImage: true,
-        speech: 'Letra B. B de Bola. A bola é colorida.'
+        speech: 'Letra bê. Bê de Bola. A bola é colorida.',
+        spokenName: 'bê',
+        speechParts: ['Letra bê.', 'Bê de Bola.', 'A bola é colorida.']
     },
     C: {
         upper: 'C', lower: 'c', word: 'Casa', icon: 'fa-house',
@@ -27,7 +44,9 @@ var consonantData = {
         words: ['casa', 'copo', 'cavalo', 'cobra', 'cabelo', 'caneta', 'coelho', 'caderno', 'café'],
         capaSrc: 'capaletras/Cartaz educativo da letra C com casa.png',
         imageSrc: 'imagenscartilha/c.png', hasCustomImage: true,
-        speech: 'Letra C. C de Casa. A casa é o meu lar.'
+        speech: 'Letra cê. Cê de Casa. A casa é o meu lar.',
+        spokenName: 'cê',
+        speechParts: ['Letra cê.', 'Cê de Casa.', 'A casa é o meu lar.']
     },
     D: {
         upper: 'D', lower: 'd', word: 'Dado', icon: 'fa-dice',
@@ -35,7 +54,9 @@ var consonantData = {
         words: ['dado', 'dedo', 'dia', 'doce', 'dente', 'dama', 'dinheiro', 'dúvida'],
         capaSrc: 'capaletras/Cartão Educativo da Letra D.png',
         imageSrc: 'imagenscartilha/d.png', hasCustomImage: true,
-        speech: 'Letra D. D de Dado. O dado é divertido.'
+        speech: 'Letra dê. Dê de Dado. O dado é divertido.',
+        spokenName: 'dê',
+        speechParts: ['Letra dê.', 'Dê de Dado.', 'O dado é divertido.']
     },
     F: {
         upper: 'F', lower: 'f', word: 'Faca', icon: 'fa-utensils',
@@ -43,7 +64,9 @@ var consonantData = {
         words: ['faca', 'fada', 'fogo', 'fita', 'foca', 'fundo', 'família', 'futebol'],
         capaSrc: 'capaletras/Cartaz Educativo da Letra F com Faca.png',
         imageSrc: 'imagenscartilha/f.png', hasCustomImage: true,
-        speech: 'Letra F. F de Faca. A faca é afiada.'
+        speech: 'Letra éfe. Éfe de Faca. A faca é afiada.',
+        spokenName: 'éfe',
+        speechParts: ['Letra éfe.', 'Éfe de Faca.', 'A faca é afiada.']
     },
     G: {
         upper: 'G', lower: 'g', word: 'Gato', icon: 'fa-cat',
@@ -51,7 +74,9 @@ var consonantData = {
         words: ['gato', 'garrafa', 'geladeira', 'gema', 'girafa', 'grama', 'galinha', 'geleia', 'gemada'],
         capaSrc: 'capaletras/Cartão educativo_ Letra G e gato.png',
         imageSrc: 'imagenscartilha/g.png', hasCustomImage: true,
-        speech: 'Letra G. G de Gato. O gato dorme.'
+        speech: 'Letra gê. Gê de Gato. O gato dorme.',
+        spokenName: 'gê',
+        speechParts: ['Letra gê.', 'Gê de Gato.', 'O gato dorme.']
     },
     H: {
         upper: 'H', lower: 'h', word: 'Homem', icon: 'fa-user',
@@ -59,7 +84,9 @@ var consonantData = {
         words: ['homem', 'hotel', 'história', 'hora', 'honra', 'helicóptero', 'hábito', 'harpa'],
         capaSrc: 'capaletras/Cartão do Alfabeto_ H de Homem.png',
         imageSrc: 'imagenscartilha/h.png', hasCustomImage: true,
-        speech: 'Letra H. H de Homem. A letra H é de homem.'
+        speech: 'Letra agá. Agá de Homem. A letra H é de homem.',
+        spokenName: 'agá',
+        speechParts: ['Letra agá.', 'Agá de Homem.', 'A letra H é de homem.']
     },
     J: {
         upper: 'J', lower: 'j', word: 'Jacaré', icon: 'fa-table-cells-large',
@@ -67,7 +94,9 @@ var consonantData = {
         words: ['jacaré', 'jogo', 'joaninha', 'janela', 'jardim', 'juntos', 'jaca', 'jeito'],
         capaSrc: 'capaletras/Cartão educativo da letra J com jacaré.png',
         imageSrc: 'imagenscartilha/j.png', hasCustomImage: true,
-        speech: 'Letra J. J de Jacaré. O jacaré é grande.'
+        speech: 'Letra jota. Jota de Jacaré. O jacaré é grande.',
+        spokenName: 'jota',
+        speechParts: ['Letra jota.', 'Jota de Jacaré.', 'O jacaré é grande.']
     },
     K: {
         upper: 'K', lower: 'k', word: 'Kiwi', icon: 'fa-lemon',
@@ -75,7 +104,9 @@ var consonantData = {
         words: ['kiwi', 'kart', 'ketchup', 'karatê'],
         capaSrc: 'capaletras/Cartaz Infantil da Letra K com Kiwi.png',
         imageSrc: 'capaletras/Cartaz Infantil da Letra K com Kiwi.png', hasCustomImage: true,
-        speech: 'Letra K. K de Kiwi. O kiwi é gostoso.'
+        speech: 'Letra cá. Cá de Kiwi. O kiwi é gostoso.',
+        spokenName: 'cá',
+        speechParts: ['Letra cá.', 'Cá de Kiwi.', 'O kiwi é gostoso.']
     },
     L: {
         upper: 'L', lower: 'l', word: 'Lua', icon: 'fa-moon',
@@ -83,7 +114,9 @@ var consonantData = {
         words: ['lua', 'lápis', 'leão', 'lago', 'livro', 'lombo', 'lima', 'lata', 'leite'],
         capaSrc: 'capaletras/Cartaz Infantil da Letra L e da Lua.png',
         imageSrc: 'imagenscartilha/l.png', hasCustomImage: true,
-        speech: 'Letra L. L de Lua. A lua é bonita.'
+        speech: 'Letra éle. Éle de Lua. A lua é bonita.',
+        spokenName: 'éle',
+        speechParts: ['Letra éle.', 'Éle de Lua.', 'A lua é bonita.']
     },
     M: {
         upper: 'M', lower: 'm', word: 'Mulher', icon: 'fa-person-dress',
@@ -91,7 +124,9 @@ var consonantData = {
         words: ['mala', 'mesa', 'macaco', 'mão', 'mar', 'melancia', 'mãe', 'meia', 'moto'],
         capaSrc: 'capaletras/Cartão educativo da letra M_ Mulher.png',
         imageSrc: 'imagenscartilha/m.png', hasCustomImage: true,
-        speech: 'Letra M. M de Mulher. A mulher é especial.'
+        speech: 'Letra ême. Ême de Mulher. A mulher é especial.',
+        spokenName: 'ême',
+        speechParts: ['Letra ême.', 'Ême de Mulher.', 'A mulher é especial.']
     },
     N: {
         upper: 'N', lower: 'n', word: 'Navio', icon: 'fa-ship',
@@ -99,7 +134,9 @@ var consonantData = {
         words: ['navio', 'nuvem', 'ninho', 'noite', 'norte', 'número', 'nada', 'nome', 'nariz'],
         capaSrc: 'capaletras/Cartão Educativo da Letra N com Navio.png',
         imageSrc: 'imagenscartilha/n.png', hasCustomImage: true,
-        speech: 'Letra N. N de Navio. O navio é grande.'
+        speech: 'Letra êne. Êne de Navio. O navio é grande.',
+        spokenName: 'êne',
+        speechParts: ['Letra êne.', 'Êne de Navio.', 'O navio é grande.']
     },
     P: {
         upper: 'P', lower: 'p', word: 'Pato', icon: 'fa-feather',
@@ -107,7 +144,9 @@ var consonantData = {
         words: ['pato', 'pão', 'peixe', 'pipa', 'porta', 'pipoca', 'pijama', 'pote', 'pulga'],
         capaSrc: 'capaletras/Cartaz Educativo do Pato.png',
         imageSrc: 'imagenscartilha/p.png', hasCustomImage: true,
-        speech: 'Letra P. P de Pato. O pato é simpático.'
+        speech: 'Letra pê. Pê de Pato. O pato é simpático.',
+        spokenName: 'pê',
+        speechParts: ['Letra pê.', 'Pê de Pato.', 'O pato é simpático.']
     },
     Q: {
         upper: 'Q', lower: 'q', word: 'Queijo', icon: 'fa-cheese',
@@ -115,7 +154,9 @@ var consonantData = {
         words: ['queijo', 'quadro', 'quase', 'quilo', 'quina', 'quente', 'quati', 'queixo', 'quinta'],
         capaSrc: 'capaletras/Cartão do Q de Queijo.png',
         imageSrc: 'imagenscartilha/q.png', hasCustomImage: true,
-        speech: 'Letra Q. Q de Queijo. O queijo é delicioso.'
+        speech: 'Letra quê. Quê de Queijo. O queijo é delicioso.',
+        spokenName: 'quê',
+        speechParts: ['Letra quê.', 'Quê de Queijo.', 'O queijo é delicioso.']
     },
     R: {
         upper: 'R', lower: 'r', word: 'Rato', icon: 'fa-paw',
@@ -123,7 +164,9 @@ var consonantData = {
         words: ['rato', 'rede', 'rio', 'roda', 'rima', 'roupa', 'relógio', 'raposa', 'rua'],
         capaSrc: 'capaletras/Cartaz Educativo da Letra R com Rato.png',
         imageSrc: 'imagenscartilha/r.png', hasCustomImage: true,
-        speech: 'Letra R. R de Rato. O rato é esperto.'
+        speech: 'Letra érre. Érre de Rato. O rato é esperto.',
+        spokenName: 'érre',
+        speechParts: ['Letra érre.', 'Érre de Rato.', 'O rato é esperto.']
     },
     S: {
         upper: 'S', lower: 's', word: 'Sapo', icon: 'fa-frog',
@@ -131,7 +174,9 @@ var consonantData = {
         words: ['sapo', 'sol', 'saia', 'sino', 'seda', 'sabonete', 'suco', 'sorvete'],
         capaSrc: 'capaletras/Cartão Educativo_ S de Sapo.png',
         imageSrc: 'imagenscartilha/s.png', hasCustomImage: true,
-        speech: 'Letra S. S de Sapo. O sapo é saltitante.'
+        speech: 'Letra ésse. Ésse de Sapo. O sapo é saltitante.',
+        spokenName: 'ésse',
+        speechParts: ['Letra ésse.', 'Ésse de Sapo.', 'O sapo é saltitante.']
     },
     T: {
         upper: 'T', lower: 't', word: 'Tomate', icon: 'fa-apple-whole',
@@ -139,7 +184,9 @@ var consonantData = {
         words: ['tomate', 'tela', 'tigre', 'trem', 'tijolo', 'tesoura', 'touro', 'tarde', 'tapete'],
         capaSrc: 'capaletras/Cartaz Infantil da Letra T com Tomate.png',
         imageSrc: 'imagenscartilha/t.png', hasCustomImage: true,
-        speech: 'Letra T. T de Tomate. O tomate é saudável.'
+        speech: 'Letra tê. Tê de Tomate. O tomate é saudável.',
+        spokenName: 'tê',
+        speechParts: ['Letra tê.', 'Tê de Tomate.', 'O tomate é saudável.']
     },
     V: {
         upper: 'V', lower: 'v', word: 'Vaca', icon: 'fa-cow',
@@ -147,7 +194,9 @@ var consonantData = {
         words: ['vaca', 'vela', 'vovô', 'viola', 'vento', 'vinho', 'violão', 'vassoura', 'vermelho'],
         capaSrc: 'capaletras/Cartaz educativo da letra V com vaca.png',
         imageSrc: 'imagenscartilha/v.png', hasCustomImage: true,
-        speech: 'Letra V. V de Vaca. A vaca é tranquila.'
+        speech: 'Letra vê. Vê de Vaca. A vaca é tranquila.',
+        spokenName: 'vê',
+        speechParts: ['Letra vê.', 'Vê de Vaca.', 'A vaca é tranquila.']
     },
     W: {
         upper: 'W', lower: 'w', word: 'WhatsApp', icon: 'fa-comment-dots',
@@ -155,7 +204,9 @@ var consonantData = {
         words: ['whatsapp', 'whisky', 'waffle', 'wi-fi', 'workshop', 'wolverine', 'walkie-talkie', 'web'],
         capaSrc: 'capaletras/Cartão Educativo da Letra W com WhatsApp.png',
         imageSrc: 'imagenscartilha/w.png', hasCustomImage: true,
-        speech: 'Letra W. W de WhatsApp. O WhatsApp é prático.'
+        speech: 'Letra dáblio. Dáblio de WhatsApp. O WhatsApp é prático.',
+        spokenName: 'dáblio',
+        speechParts: ['Letra dáblio.', 'Dáblio de WhatsApp.', 'O WhatsApp é prático.']
     },
     X: {
         upper: 'X', lower: 'x', word: 'Xadrez', icon: 'fa-chess-board',
@@ -163,7 +214,9 @@ var consonantData = {
         words: ['xadrez', 'xícara', 'xilofone', 'xarope', 'xampu', 'xbox', 'xale', 'xerife', 'xenofobia'],
         capaSrc: 'capaletras/xadrez.png',
         imageSrc: 'imagenscartilha/x.png', hasCustomImage: true,
-        speech: 'Letra X. X de Xadrez. O xadrez é divertido.'
+        speech: 'Letra xis. Xis de Xadrez. O xadrez é divertido.',
+        spokenName: 'xis',
+        speechParts: ['Letra xis.', 'Xis de Xadrez.', 'O xadrez é divertido.']
     },
     Y: {
         upper: 'Y', lower: 'y', word: 'Yoga', icon: 'fa-heart',
@@ -171,7 +224,9 @@ var consonantData = {
         words: ['yoga', 'yakisoba', 'youtube'],
         capaSrc: 'capaletras/yoga.png',
         imageSrc: 'imagenscartilha/y.png', hasCustomImage: true,
-        speech: 'Letra Y. Y de Yoga. O yoga traz paz e saúde.'
+        speech: 'Letra ípsilon. Ípsilon de Yoga. O yoga traz paz e saúde.',
+        spokenName: 'ípsilon',
+        speechParts: ['Letra ípsilon.', 'Ípsilon de Yoga.', 'O yoga traz paz e saúde.']
     },
     Z: {
         upper: 'Z', lower: 'z', word: 'Zebra', icon: 'fa-horse',
@@ -179,7 +234,9 @@ var consonantData = {
         words: ['zebra', 'zangão', 'zero', 'zíper', 'zumbi', 'zoológico', 'zente', 'zangado', 'zelador'],
         capaSrc: 'capaletras/Cartaz Educativo da Zebra e da Letra Z.png',
         imageSrc: 'imagenscartilha/z.png', hasCustomImage: true,
-        speech: 'Letra Z. Z de Zebra. A zebra é linda.'
+        speech: 'Letra zê. Zê de Zebra. A zebra é linda.',
+        spokenName: 'zê',
+        speechParts: ['Letra zê.', 'Zê de Zebra.', 'A zebra é linda.']
     }
 };
 
@@ -232,8 +289,14 @@ if ('speechSynthesis' in window) {
 
 var speechGeneration = 0;
 
+var sequenceTimer = null;
+
 function stopAllAudio() {
     speechGeneration++;
+    if (sequenceTimer) {
+        clearTimeout(sequenceTimer);
+        sequenceTimer = null;
+    }
     if (currentAudio) {
         try {
             currentAudio.pause();
@@ -260,16 +323,15 @@ var isIOS = (function() {
            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 })();
 
-function speak(text, onEnd) {
-    stopAllAudio();
-    if (!text || typeof text !== 'string') return;
+function playSegment(text, onEnd, gen) {
+    if (!text || typeof text !== 'string') {
+        if (onEnd) onEnd();
+        return;
+    }
+    if (gen !== undefined && gen !== speechGeneration) return;
 
-    var currentGen = speechGeneration;
-
-    // No iOS (Safari), o Google TTS falha com 404/AVPlayer e qualquer fallback assíncrono
-    // perde o gesto do usuário. Dispara síntese nativa imediatamente no clique!
     if (isIOS) {
-        speakNativo(text, onEnd, currentGen);
+        speakNativo(text, onEnd, gen);
         return;
     }
 
@@ -278,8 +340,8 @@ function speak(text, onEnd) {
     function triggerFallback() {
         if (fallbackTriggered) return;
         fallbackTriggered = true;
-        if (currentGen !== speechGeneration) return;
-        speakNativo(text, onEnd, currentGen);
+        if (gen !== undefined && gen !== speechGeneration) return;
+        speakNativo(text, onEnd, gen);
     }
 
     try {
@@ -287,9 +349,13 @@ function speak(text, onEnd) {
         var audio = new Audio();
         currentAudio = audio;
 
+        audio.playbackRate = 0.90;
+        if ('preservesPitch' in audio) {
+            audio.preservesPitch = true;
+        }
+
         audio.onended = function() {
-            if (currentGen !== speechGeneration) return;
-            document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+            if (gen !== undefined && gen !== speechGeneration) return;
             currentAudio = null;
             if (onEnd) onEnd();
         };
@@ -310,6 +376,54 @@ function speak(text, onEnd) {
     } catch(e) {
         triggerFallback();
     }
+}
+
+function speakSequence(segments, onEnd, pauseMs) {
+    stopAllAudio();
+    if (!segments) {
+        if (onEnd) onEnd();
+        return;
+    }
+    if (typeof segments === 'string') segments = [segments];
+    if (segments.length === 0) {
+        if (onEnd) onEnd();
+        return;
+    }
+    if (pauseMs === undefined || pauseMs === null) pauseMs = 600;
+
+    var currentGen = speechGeneration;
+    var idx = 0;
+
+    function playNext() {
+        if (currentGen !== speechGeneration) return;
+        if (idx >= segments.length) {
+            document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+            if (onEnd) onEnd();
+            return;
+        }
+
+        var piece = segments[idx];
+        idx++;
+
+        playSegment(piece, function() {
+            if (currentGen !== speechGeneration) return;
+            if (idx >= segments.length) {
+                document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });
+                if (onEnd) onEnd();
+            } else {
+                sequenceTimer = setTimeout(function() {
+                    if (currentGen !== speechGeneration) return;
+                    playNext();
+                }, pauseMs);
+            }
+        }, currentGen);
+    }
+
+    playNext();
+}
+
+function speak(text, onEnd) {
+    speakSequence([text], onEnd, 0);
 }
 
 function speakNativo(text, onEnd, gen) {
@@ -597,10 +711,11 @@ function tocarAudioCompletoCartilha() {
     var phraseBox = document.getElementById('cartilhaPhraseBox');
     if (phraseBox) phraseBox.classList.add('speaking');
 
-    speak(item.speech, function() {
+    var parts = item.speechParts || [item.speech];
+    speakSequence(parts, function() {
         if (btn) btn.classList.remove('speaking');
         if (phraseBox) phraseBox.classList.remove('speaking');
-    });
+    }, 600);
 }
 
 function tocarFraseCartilha() {
@@ -767,7 +882,7 @@ function checkAnswer(selected) {
         misses++;
         var ms = document.getElementById('missesCount'); if (ms) ms.textContent = misses;
         showFeedback('error', 'A letra correta é ' + q.consonant + '.');
-        speak('A letra correta é ' + q.consonant + '.');
+        speak('A letra correta é a consoante ' + getSpokenLetterName(q.consonant) + '.');
     }
 
     announceSR(correct ? 'Certo!' : 'A resposta correta era ' + q.consonant);

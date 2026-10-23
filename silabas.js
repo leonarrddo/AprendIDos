@@ -99,6 +99,11 @@ function speak(text, onEnd) {
         var audio = new Audio();
         currentAudio = audio;
 
+        audio.playbackRate = 0.90;
+        if ('preservesPitch' in audio) {
+            audio.preservesPitch = true;
+        }
+
         audio.onended = function() {
             if (currentGen !== speechGeneration) return;
             document.querySelectorAll('.speaking').forEach(function(el) { el.classList.remove('speaking'); });

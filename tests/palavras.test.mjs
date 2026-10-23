@@ -21,10 +21,13 @@ test('Palavras do Dia a Dia — Verificação da Estrutura de Dados e Imagens', 
     for (const letter of alphabet) {
         assert.ok(catalogData[letter], `catalogData deve conter a letra ${letter}`);
         assert.ok(Array.isArray(catalogData[letter].lots), `Letra ${letter} deve ter array de lotes`);
-        assert.equal(catalogData[letter].lots.length, 2, `Letra ${letter} deve ter 2 lotes`);
+
+        const expectedLots = (letter === 'X' || letter === 'Y') ? 1 : 2;
+        assert.equal(catalogData[letter].lots.length, expectedLots, `Letra ${letter} deve ter ${expectedLots} lote(s)`);
 
         for (const lot of catalogData[letter].lots) {
-            assert.equal(lot.length, 4, `Cada lote da letra ${letter} deve conter 4 palavras`);
+            const expectedWordsInLot = (letter === 'Y') ? 3 : 4;
+            assert.equal(lot.length, expectedWordsInLot, `Lote da letra ${letter} deve conter ${expectedWordsInLot} palavras`);
             for (const item of lot) {
                 totalWords++;
                 assert.ok(item.word && typeof item.word === 'string', 'Cada item deve ter uma palavra');
@@ -42,10 +45,10 @@ test('Palavras do Dia a Dia — Verificação da Estrutura de Dados e Imagens', 
         }
     }
 
-    assert.equal(totalWords, 208, 'Deve haver exatamente 208 palavras (26 letras x 8 palavras)');
-    assert.equal(withSyllables, 208, 'Todas as 208 palavras devem ter divisão silábica');
-    assert.equal(withDescription, 208, 'Todas as 208 palavras devem ter descrição didática');
-    assert.ok(withValidImage >= 200, `Pelo menos 200 palavras devem possuir arquivos de imagem válidos no disco (encontrados: ${withValidImage})`);
+    assert.equal(totalWords, 199, 'Deve haver 199 palavras (24 letras x 8 + 4 de X + 3 de Y)');
+    assert.equal(withSyllables, 199, 'Todas as 199 palavras devem ter divisão silábica');
+    assert.equal(withDescription, 199, 'Todas as 199 palavras devem ter descrição didática');
+    assert.ok(withValidImage >= 195, `Pelo menos 195 palavras devem possuir arquivos de imagem válidos no disco (encontrados: ${withValidImage})`);
 });
 
 test('Palavras do Dia a Dia — Verificação da Interface HTML do Modal', async (t) => {

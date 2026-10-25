@@ -205,27 +205,53 @@ const LESSON_KEYS = [
 ];
 
 async function getLessonProgress() {
-  // 1. Tenta via módulo de autenticação AprendIDosAuth (consulta nuvem Supabase e sincroniza no dispositivo)
+  // 1. Consulta a nuvem e recebe os dados locais identificados como locais quando não sincronizados.
   if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.getLessonProgress) {
     try {
       const authProg = await window.AprendIDosAuth.getLessonProgress();
-      if (authProg && typeof authProg === 'object') {
+      if (authProg && typeof authProg === 'object' && authProg.progress && typeof authProg.progress === 'object') {
         return authProg;
+      }
+      // Compatibility with older auth modules: unlabelled values are local, never cloud-confirmed.
+      if (authProg && typeof authProg === 'object') {
+        return {
+          status: 'local_only',
+          source: 'local',
+          synced: false,
+          progress: Object.fromEntries(Object.entries(authProg).map(([key, value]) => [
+            key, { ...value, syncStatus: 'local_only' }
+          ])),
+          localOnlyCount: Object.keys(authProg).length,
+          error: null
+        };
       }
     } catch(e) {}
   }
 
-  // 2. Busca no LocalStorage do usuário atual (ou chave legada caso seja modo demo)
-  const progress = {};
+  // 2. Fallback para a chave exclusiva do usuário atual ou do dispositivo anônimo.
   try {
     const user = await getCurrentUser();
-    const userKey = user && user.id ? `aprendidos_progresso_${user.id}` : null;
-    const raw = userKey ? localStorage.getItem(userKey) : localStorage.getItem('aprendidos_progresso');
+    const storageKey = window.AprendIDosAuth?.getProgressStorageKey
+      ? window.AprendIDosAuth.getProgressStorageKey(user)
+      : user?.id
+        ? `${user.isDemo ? 'aprendidos_progresso_demo_' : 'aprendidos_progresso_'}${user.id}`
+        : 'aprendidos_progresso_anonymous_v2';
+    const raw = localStorage.getItem(storageKey);
     if (raw) {
       try {
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === 'object') {
-          Object.assign(progress, parsed);
+          const progress = Object.fromEntries(Object.entries(parsed).map(([key, value]) => [
+            key, { ...value, syncStatus: 'local_only' }
+          ]));
+          return {
+            status: Object.keys(progress).length ? 'local_only' : 'empty',
+            source: 'local',
+            synced: false,
+            progress,
+            localOnlyCount: Object.keys(progress).length,
+            error: null
+          };
         }
       } catch(e) {}
     }
@@ -233,7 +259,7 @@ async function getLessonProgress() {
     console.warn('Erro ao ler progresso local:', e);
   }
 
-  return progress;
+  return { status: 'empty', source: 'local', synced: false, progress: {}, localOnlyCount: 0, error: null };
 }
 
 async function saveSingleLessonProgress(key, data = { completed: true, score: 10, total: 10 }) {
@@ -255,12 +281,19 @@ async function saveSingleLessonProgress(key, data = { completed: true, score: 10
 
     // Fallback local caso auth.js não esteja disponível
     const user = await getCurrentUser();
-    const storageKey = user && user.id ? `aprendidos_progresso_${user.id}` : 'aprendidos_progresso';
+    const storageKey = window.AprendIDosAuth?.getProgressStorageKey
+      ? window.AprendIDosAuth.getProgressStorageKey(user)
+      : user?.id
+        ? `${user.isDemo ? 'aprendidos_progresso_demo_' : 'aprendidos_progresso_'}${user.id}`
+        : 'aprendidos_progresso_anonymous_v2';
     try {
       const curr = JSON.parse(localStorage.getItem(storageKey) || '{}');
       curr[key] = record;
       localStorage.setItem(storageKey, JSON.stringify(curr));
-    } catch(e) {}
+      return { status: 'local_only', success: true, localSaved: true, synced: false, progress: curr };
+    } catch(e) {
+      return { status: 'failed', success: false, localSaved: false, synced: false, error: e };
+    }
   } catch(e) {
     console.warn('Erro ao salvar progresso:', e);
   }
@@ -328,24 +361,31 @@ async function initUserSession() {
 
 /* ===== CARREGA PROGRESSO DO BANCO / SESSÃO ===== */
 async function loadUserProgress() {
-  let progress = {};
+  let result = { progress: {}, localOnlyCount: 0, source: 'none', error: null };
   try {
-    progress = await getLessonProgress();
+    result = await getLessonProgress();
   } catch (e) {
     console.warn('Erro ao obter progresso:', e);
   }
+  const progress = result.progress || {};
 
   completedCount = 0;
 
   cards.forEach((card, index) => {
     const key = LESSON_KEYS[index];
     if (key && progress[key]?.completed) {
-      markCardAsDone(card, false);
+      markCardAsDone(card, false, progress[key].syncStatus);
       completedCount++;
     } else {
       resetCardToStart(card);
     }
   });
+
+  if (result.localOnlyCount > 0) {
+    showToast('Algumas atividades estão salvas somente neste aparelho.', 'cloud');
+  } else if (result.error) {
+    showToast('Não foi possível consultar o progresso na nuvem.', 'cloud');
+  }
 
   updateProgress();
 }
@@ -370,7 +410,7 @@ function resetCardToStart(card) {
   }
 }
 
-function markCardAsDone(card, animate = true) {
+function markCardAsDone(card, animate = true, syncStatus = 'synced') {
   if (!card) return;
   const circle = card.querySelector('.icon-circle');
   const badge = card.querySelector('.status-badge');
@@ -390,7 +430,9 @@ function markCardAsDone(card, animate = true) {
 
   if (badge) {
     badge.className = 'status-badge badge-concluida';
-    badge.innerHTML = '<i class="fas fa-check-circle"></i> Concluída';
+    badge.innerHTML = syncStatus === 'local_only'
+      ? '<i class="fas fa-mobile-alt" aria-hidden="true"></i> Só neste aparelho'
+      : '<i class="fas fa-check-circle" aria-hidden="true"></i> Concluída';
   }
 
   if (btn) {

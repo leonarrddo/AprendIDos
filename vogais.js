@@ -1089,33 +1089,12 @@ function salvarProgressoVogais() {
         savedAt: new Date().toISOString()
     };
 
-    var user = null;
-    try {
-        var userRaw = localStorage.getItem('aprendidos_usuario');
-        if (userRaw) user = JSON.parse(userRaw);
-    } catch(e) {}
-
-    var userKey = (user && user.id) ? ('aprendidos_progresso_' + user.id) : null;
-    var keys = [
-        userKey,
-        'aprendidos_progresso',
-        'aprendidos_progresso_anon'
-    ].filter(Boolean);
-
-    keys.forEach(function(k) {
-        try {
-            var curr = JSON.parse(localStorage.getItem(k) || '{}');
-            curr['vogais'] = progData;
-            localStorage.setItem(k, JSON.stringify(curr));
-        } catch(e) {}
-    });
-
     if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.saveLessonProgress) {
         try {
             return window.AprendIDosAuth.saveLessonProgress('vogais', progData);
         } catch(e) {}
     }
-    return Promise.resolve({ success: true, synced: false });
+    return Promise.resolve({ status: 'failed', success: false, localSaved: false, synced: false });
 }
 
 async function salvarEVerOutras(event) {
@@ -1130,16 +1109,24 @@ async function salvarEVerOutras(event) {
     try {
         var res = await salvarProgressoVogais();
         if (btn) {
-            if (res && res.synced) {
+            if (res && res.status === 'synced') {
                 btn.innerHTML = '<i class="fas fa-check-circle" aria-hidden="true"></i> Salvo na nuvem!';
+            } else if (res && res.status === 'local_only') {
+                btn.innerHTML = res.syncError
+                    ? '<i class="fas fa-mobile-alt" aria-hidden="true"></i> Salvo neste aparelho. Falha ao sincronizar.'
+                    : '<i class="fas fa-mobile-alt" aria-hidden="true"></i> Salvo somente neste aparelho.';
             } else {
-                btn.innerHTML = '<i class="fas fa-check-circle" aria-hidden="true"></i> Salvo com sucesso!';
+                btn.innerHTML = '<i class="fas fa-exclamation-circle" aria-hidden="true"></i> Falha ao salvar. Tente novamente.';
+                btn.disabled = false;
+                return;
             }
         }
     } catch (e) {
         if (btn) {
-            btn.innerHTML = '<i class="fas fa-check-circle" aria-hidden="true"></i> Salvo no dispositivo!';
+            btn.innerHTML = '<i class="fas fa-exclamation-circle" aria-hidden="true"></i> Falha ao salvar. Tente novamente.';
+            btn.disabled = false;
         }
+        return;
     }
 
     setTimeout(function() {
@@ -1159,8 +1146,10 @@ function verificarLicaoConcluida() {
             if (uRaw) user = JSON.parse(uRaw);
         } catch(e) {}
 
-        var userKey = (user && user.id) ? ('aprendidos_progresso_' + user.id) : null;
-        var keys = [userKey, 'aprendidos_progresso', 'aprendidos_progresso_anon'].filter(Boolean);
+        var userKey = (user && user.id)
+            ? ((user.isDemo ? 'aprendidos_progresso_demo_' : 'aprendidos_progresso_') + user.id)
+            : 'aprendidos_progresso_anonymous_v2';
+        var keys = [userKey];
 
         for (var i = 0; i < keys.length; i++) {
             var raw = localStorage.getItem(keys[i]);

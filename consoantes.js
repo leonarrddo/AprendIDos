@@ -966,29 +966,12 @@ function salvarProgresso() {
         savedAt: new Date().toISOString()
     };
 
-    var user = null;
-    try {
-        var r = localStorage.getItem('aprendidos_usuario');
-        if (r) user = JSON.parse(r);
-    } catch (e) {}
-
-    var uk = (user && user.id) ? ('aprendidos_progresso_' + user.id) : null;
-    var keys = [uk, 'aprendidos_progresso', 'aprendidos_progresso_anon'].filter(Boolean);
-
-    keys.forEach(function(k) {
-        try {
-            var c = JSON.parse(localStorage.getItem(k) || '{}');
-            c['consoantes'] = data;
-            localStorage.setItem(k, JSON.stringify(c));
-        } catch (e) {}
-    });
-
     if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.saveLessonProgress) {
         try {
             return window.AprendIDosAuth.saveLessonProgress('consoantes', data);
         } catch (e) {}
     }
-    return Promise.resolve({ success: true, synced: false });
+    return Promise.resolve({ status: 'failed', success: false, localSaved: false, synced: false });
 }
 
 async function salvarEVerOutras(event) {
@@ -1002,14 +985,24 @@ async function salvarEVerOutras(event) {
     try {
         var res = await salvarProgresso();
         if (btn) {
-            if (res && res.synced) {
+            if (res && res.status === 'synced') {
                 btn.innerHTML = '<i class="fas fa-check-circle"></i> Salvo na nuvem!';
+            } else if (res && res.status === 'local_only') {
+                btn.innerHTML = res.syncError
+                    ? '<i class="fas fa-mobile-alt"></i> Salvo neste aparelho. Falha ao sincronizar.'
+                    : '<i class="fas fa-mobile-alt"></i> Salvo somente neste aparelho.';
             } else {
-                btn.innerHTML = '<i class="fas fa-check-circle"></i> Salvo!';
+                btn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Falha ao salvar. Tente novamente.';
+                btn.disabled = false;
+                return;
             }
         }
     } catch(e) {
-        if (btn) btn.innerHTML = '<i class="fas fa-check-circle"></i> Salvo no aparelho!';
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Falha ao salvar. Tente novamente.';
+            btn.disabled = false;
+        }
+        return;
     }
 
     setTimeout(function() {
@@ -1029,8 +1022,10 @@ function verificarLicaoConcluida() {
             if (r) user = JSON.parse(r);
         } catch (e) {}
 
-        var uk = (user && user.id) ? ('aprendidos_progresso_' + user.id) : null;
-        var keys = [uk, 'aprendidos_progresso', 'aprendidos_progresso_anon'].filter(Boolean);
+        var uk = (user && user.id)
+            ? ((user.isDemo ? 'aprendidos_progresso_demo_' : 'aprendidos_progresso_') + user.id)
+            : 'aprendidos_progresso_anonymous_v2';
+        var keys = [uk];
 
         for (var i = 0; i < keys.length; i++) {
             var raw = localStorage.getItem(keys[i]);

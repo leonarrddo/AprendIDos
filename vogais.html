@@ -1648,7 +1648,7 @@
                 </div>
 
             <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;">
-                <a href="licoes.html" class="btn-restart" style="background-color: var(--green); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;" aria-label="Voltar para a lista de lições">
+                <a id="btnSalvarEVerOutras" href="licoes.html" onclick="salvarEVerOutras(event)" class="btn-restart" style="background-color: var(--green); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;" aria-label="Voltar para a lista de lições">
                     <i class="fas fa-check-circle" aria-hidden="true"></i>
                     Salvar e Ver Outras Lições
                 </a>
@@ -2148,6 +2148,58 @@ function showFeedback(type, msg) {
     }
 }
 
+var vogaisCompletionSavePromise = null;
+var vogaisCompletionSaveData = null;
+
+function salvarProgressoVogaisInline() {
+    vogaisCompletionSaveData = {
+        completed: true,
+        score: Math.round((hits / TOTAL) * 100),
+        total: TOTAL
+    };
+    if (window.AprendIDosAuth && window.AprendIDosAuth.saveLessonProgress) {
+        return window.AprendIDosAuth.saveLessonProgress('vogais', vogaisCompletionSaveData);
+    }
+    return Promise.resolve({ status: 'failed', success: false, localSaved: false, synced: false });
+}
+
+async function salvarEVerOutras(event) {
+    if (event) event.preventDefault();
+    var btn = document.getElementById('btnSalvarEVerOutras');
+    if (btn && btn.getAttribute('aria-disabled') === 'true') return;
+    if (btn) {
+        btn.setAttribute('aria-disabled', 'true');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Salvando progresso...';
+    }
+
+    try {
+        var result = await (vogaisCompletionSavePromise || salvarProgressoVogaisInline());
+        if (btn && result && result.status === 'synced') {
+            btn.innerHTML = '<i class="fas fa-check-circle" aria-hidden="true"></i> Salvo na nuvem!';
+        } else if (btn && result && result.status === 'local_only') {
+            btn.innerHTML = result.syncError
+                ? '<i class="fas fa-mobile-alt" aria-hidden="true"></i> Salvo neste aparelho. Falha ao sincronizar.'
+                : '<i class="fas fa-mobile-alt" aria-hidden="true"></i> Salvo somente neste aparelho.';
+        } else {
+            vogaisCompletionSavePromise = null;
+            if (btn) {
+                btn.removeAttribute('aria-disabled');
+                btn.innerHTML = '<i class="fas fa-exclamation-circle" aria-hidden="true"></i> Falha ao salvar. Tente novamente.';
+            }
+            return;
+        }
+    } catch (error) {
+        vogaisCompletionSavePromise = null;
+        if (btn) {
+            btn.removeAttribute('aria-disabled');
+            btn.innerHTML = '<i class="fas fa-exclamation-circle" aria-hidden="true"></i> Falha ao salvar. Tente novamente.';
+        }
+        return;
+    }
+
+    setTimeout(function() { window.location.href = 'licoes.html'; }, 500);
+}
+
 function showCompletion() {
     var exCard = document.getElementById('exerciseCard');
     var compScreen = document.getElementById('completionScreen');
@@ -2184,24 +2236,9 @@ function showCompletion() {
     } else if (errorSummaryEl) {
         errorSummaryEl.style.display = 'none';
     }
-    // Salva progresso no localStorage e sincroniza com a nuvem Supabase
-    try {
-        var user = null;
-        try { var u = localStorage.getItem('aprendidos_usuario'); if (u) user = JSON.parse(u); } catch(e) {}
-        var userKey = (user && user.id) ? ('aprendidos_progresso_' + user.id) : null;
-        var keys = [userKey, 'aprendidos_progresso', 'aprendidos_progresso_anon'].filter(Boolean);
-        keys.forEach(function(k) {
-            try {
-                var prog = JSON.parse(localStorage.getItem(k) || '{}');
-                prog['vogais'] = { completed: true, score: hits, total: TOTAL, date: new Date().toISOString() };
-                localStorage.setItem(k, JSON.stringify(prog));
-            } catch(e) {}
-        });
-    } catch(e) {}
-
-    if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.saveLessonProgress) {
-        window.AprendIDosAuth.saveLessonProgress('vogais', { completed: true, score: Math.round((hits / TOTAL) * 100), total: TOTAL });
-    }
+    vogaisCompletionSavePromise = salvarProgressoVogaisInline().catch(function(error) {
+        return { status: 'failed', success: false, localSaved: false, synced: false, error: error };
+    });
     speak('Parabéns! Você terminou! ' + msg);
 }
 

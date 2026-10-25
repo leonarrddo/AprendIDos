@@ -6,6 +6,7 @@
  */
 
 import { SUPABASE_URL, SUPABASE_ANON_KEY, isSupabaseConfigured } from './supabase-config.js';
+import { createProgressStore, getProgressStorageKey } from './progress-store.js';
 
 let supabase = null;
 let supabasePromise = null;
@@ -81,7 +82,7 @@ export async function getCurrentUser() {
           avatar: sessUser.user_metadata?.avatar_url || sessUser.user_metadata?.picture || null,
           isDemo: false
         };
-        localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioFormatado));
+        try { localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioFormatado)); } catch (e) {}
         return usuarioFormatado;
       }
 
@@ -97,7 +98,7 @@ export async function getCurrentUser() {
           avatar: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
           isDemo: false
         };
-        localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioFormatado));
+        try { localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioFormatado)); } catch (e) {}
         return usuarioFormatado;
       }
     } catch (e) {
@@ -357,135 +358,36 @@ export async function signOut(redirectPath = 'login.html') {
   }
 }
 
-/**
- * Salva o progresso de uma lição
- */
+const progressStorage = {
+  getItem(key) {
+    if (typeof localStorage === 'undefined') return null;
+    return localStorage.getItem(key);
+  },
+  setItem(key, value) {
+    if (typeof localStorage === 'undefined') throw new Error('Armazenamento local indisponível.');
+    localStorage.setItem(key, value);
+  },
+  removeItem(key) {
+    if (typeof localStorage === 'undefined') throw new Error('Armazenamento local indisponível.');
+    localStorage.removeItem(key);
+  }
+};
+
+const progressStore = createProgressStore({
+  getCurrentUser,
+  getSupabase,
+  storage: progressStorage,
+  logger: console
+});
+
+/** Salva o progresso e informa se ficou local, sincronizado ou falhou. */
 export async function saveLessonProgress(lessonId, data = {}) {
-  const user = await getCurrentUser();
-  const isAuthUser = Boolean(user && !user.isDemo && user.id);
-  const storageKey = isAuthUser ? `aprendidos_progresso_${user.id}` : 'aprendidos_progresso_demo';
-
-  let currentProgress = {};
-  try {
-    currentProgress = JSON.parse(localStorage.getItem(storageKey) || '{}');
-  } catch (e) { }
-
-  const scoreNum = Math.min(100, Math.max(0, Number(data.score ?? 10)));
-  const tentativasNum = Math.max(1, Number(data.tentativas ?? 1));
-
-  currentProgress[lessonId] = {
-    completed: true,
-    score: scoreNum,
-    tentativas: tentativasNum,
-    updatedAt: new Date().toISOString(),
-    ...data
-  };
-
-  try {
-    localStorage.setItem(storageKey, JSON.stringify(currentProgress));
-  } catch (e) { }
-
-  // Se não for usuário autenticado (modo demo), também sincroniza com a chave legada
-  if (!isAuthUser) {
-    try {
-      const legacy = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
-      legacy[lessonId] = currentProgress[lessonId];
-      localStorage.setItem('aprendidos_progresso', JSON.stringify(legacy));
-    } catch (e) { }
-  }
-
-  let synced = false;
-  let supabaseError = null;
-
-  const client = await getSupabase();
-  if (client && isAuthUser) {
-    try {
-      const { data: upsertData, error: upsertErr } = await client
-        .from('progresso_licoes')
-        .upsert({
-          user_id: user.id,
-          licao_id: lessonId,
-          concluido: true,
-          pontuacao: scoreNum,
-          tentativas: tentativasNum,
-          atualizado_em: new Date().toISOString()
-        }, { onConflict: 'user_id,licao_id' });
-
-      if (upsertErr) {
-        console.error('❌ [AprendIDos] Erro ao salvar progresso no Supabase:', upsertErr);
-        supabaseError = upsertErr;
-      } else {
-        synced = true;
-        console.log(`✅ [AprendIDos] Progresso da lição '${lessonId}' salvo no Supabase com sucesso!`);
-      }
-    } catch (e) {
-      console.error('❌ [AprendIDos] Exceção ao salvar progresso no Supabase:', e);
-      supabaseError = e;
-    }
-  }
-
-  return {
-    success: true,
-    synced,
-    error: supabaseError,
-    progress: currentProgress
-  };
+  return progressStore.saveLessonProgress(lessonId, data);
 }
 
-/**
- * Obtém todo o progresso do usuário
- */
+/** Recupera progresso com a origem e o estado de sincronização explícitos. */
 export async function getLessonProgress() {
-  const user = await getCurrentUser();
-  const isAuthUser = Boolean(user && !user.isDemo && user.id);
-  const storageKey = isAuthUser ? `aprendidos_progresso_${user.id}` : 'aprendidos_progresso_demo';
-
-  let progress = {};
-  try {
-    progress = JSON.parse(localStorage.getItem(storageKey) || '{}');
-  } catch (e) { }
-
-  // Se for modo demo / deslogado, busca também nas chaves legadas locais
-  if (!isAuthUser) {
-    try {
-      const legacy = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
-      progress = { ...legacy, ...progress };
-    } catch (e) { }
-    return progress;
-  }
-
-  // Usuário autenticado: sincroniza com a tabela progresso_licoes no Supabase
-  const client = await getSupabase();
-  if (client && isAuthUser) {
-    try {
-      const { data, error } = await client
-        .from('progresso_licoes')
-        .select('*')
-        .eq('user_id', user.id);
-
-      if (!error && data) {
-        data.forEach(item => {
-          progress[item.licao_id] = {
-            completed: item.concluido,
-            score: item.pontuacao,
-            tentativas: item.tentativas,
-            updatedAt: item.atualizado_em
-          };
-        });
-
-        // Grava no localStorage deste dispositivo para persistência e suporte offline
-        try {
-          localStorage.setItem(storageKey, JSON.stringify(progress));
-        } catch (e) { }
-      } else if (error) {
-        console.warn('⚠️ [AprendIDos] Erro ao carregar progresso do Supabase:', error);
-      }
-    } catch (e) {
-      console.warn('⚠️ [AprendIDos] Exceção ao consultar Supabase:', e);
-    }
-  }
-
-  return progress;
+  return progressStore.getLessonProgress();
 }
 
 /**
@@ -550,6 +452,7 @@ if (typeof window !== 'undefined') {
     signInWithEmail,
     signOut,
     saveLessonProgress,
-    getLessonProgress
+    getLessonProgress,
+    getProgressStorageKey
   };
 }

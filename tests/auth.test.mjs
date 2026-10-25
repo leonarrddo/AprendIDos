@@ -322,10 +322,12 @@ test('10. Preservação de funcionalidades não relacionadas à autenticação',
   await t.test('auth.js deve preservar saveLessonProgress e getLessonProgress', async () => {
     const fs = await import('node:fs');
     const authCode = fs.readFileSync(new URL('../auth.js', import.meta.url), 'utf-8');
+    const progressCode = fs.readFileSync(new URL('../progress-store.js', import.meta.url), 'utf-8');
 
     assert.ok(authCode.includes('saveLessonProgress'), 'saveLessonProgress deve existir');
     assert.ok(authCode.includes('getLessonProgress'), 'getLessonProgress deve existir');
-    assert.ok(authCode.includes('progresso_licoes'), 'Integração com tabela progresso_licoes deve existir');
+    assert.ok(authCode.includes("from './progress-store.js'"), 'auth.js deve usar o serviço central de progresso');
+    assert.ok(progressCode.includes('progresso_licoes'), 'O serviço deve consultar a tabela progresso_licoes');
   });
 });
 

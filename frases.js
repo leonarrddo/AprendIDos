@@ -479,17 +479,28 @@ function salvarProgresso() {
         try { var c = JSON.parse(localStorage.getItem(k) || '{}'); c['frases'] = data; localStorage.setItem(k, JSON.stringify(c)); } catch(e) {}
     });
     if (window.AprendIDosAuth && window.AprendIDosAuth.saveLessonProgress) {
-        try { window.AprendIDosAuth.saveLessonProgress('frases', data); } catch(e) {}
+        try { return window.AprendIDosAuth.saveLessonProgress('frases', data); } catch(e) {}
     }
+    return Promise.resolve({ success: true, synced: false });
 }
 
-function salvarEVerOutras(event) {
+async function salvarEVerOutras(event) {
     if (event) event.preventDefault();
     var btn = document.getElementById('btnSalvarEVerOutras');
     if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...'; }
-    salvarProgresso();
-    if (btn) btn.innerHTML = '<i class="fas fa-check-circle"></i> Salvo!';
-    setTimeout(function() { window.location.href = 'licoes.html'; }, 450);
+    try {
+        var res = await salvarProgresso();
+        if (btn) {
+            if (res && res.synced) {
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Salvo na nuvem!';
+            } else {
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Salvo!';
+            }
+        }
+    } catch(e) {
+        if (btn) btn.innerHTML = '<i class="fas fa-check-circle"></i> Salvo no aparelho!';
+    }
+    setTimeout(function() { window.location.href = 'licoes.html'; }, 500);
 }
 
 function verificarLicaoConcluida() {

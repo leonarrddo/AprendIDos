@@ -205,44 +205,28 @@ const LESSON_KEYS = [
 ];
 
 async function getLessonProgress() {
-  let progress = {};
-
-  // 1. Tenta via módulo de autenticação AprendIDosAuth se existir
+  // 1. Tenta via módulo de autenticação AprendIDosAuth (consulta nuvem Supabase e sincroniza no dispositivo)
   if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.getLessonProgress) {
     try {
       const authProg = await window.AprendIDosAuth.getLessonProgress();
       if (authProg && typeof authProg === 'object') {
-        progress = { ...progress, ...authProg };
+        return authProg;
       }
     } catch(e) {}
   }
 
-  // 2. Busca nas chaves do LocalStorage (usuário logado, legado e anônimo)
+  // 2. Busca no LocalStorage do usuário atual (ou chave legada caso seja modo demo)
+  const progress = {};
   try {
     const user = await getCurrentUser();
     const userKey = user && user.id ? `aprendidos_progresso_${user.id}` : null;
-    const keysToCheck = [
-      userKey,
-      'aprendidos_progresso',
-      'aprendidos_progresso_anon'
-    ].filter(Boolean);
-
-    for (const key of keysToCheck) {
-      const raw = localStorage.getItem(key);
-      if (raw) {
-        try {
-          const parsed = JSON.parse(raw);
-          if (parsed && typeof parsed === 'object') {
-            progress = { ...parsed, ...progress };
-          }
-        } catch(e) {}
-      }
-    }
-
-    // Se encontramos progresso e temos usuário logado, sincroniza na chave do usuário
-    if (userKey && Object.keys(progress).length > 0) {
+    const raw = userKey ? localStorage.getItem(userKey) : localStorage.getItem('aprendidos_progresso');
+    if (raw) {
       try {
-        localStorage.setItem(userKey, JSON.stringify(progress));
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          Object.assign(progress, parsed);
+        }
       } catch(e) {}
     }
   } catch(e) {
@@ -255,10 +239,6 @@ async function getLessonProgress() {
 async function saveSingleLessonProgress(key, data = { completed: true, score: 10, total: 10 }) {
   if (!key) return;
   try {
-    const user = await getCurrentUser();
-    const userKey = user && user.id ? `aprendidos_progresso_${user.id}` : null;
-    const keysToUpdate = [userKey, 'aprendidos_progresso', 'aprendidos_progresso_anon'].filter(Boolean);
-
     const record = {
       completed: true,
       score: data.score ?? 10,
@@ -267,19 +247,20 @@ async function saveSingleLessonProgress(key, data = { completed: true, score: 10
       ...data
     };
 
-    keysToUpdate.forEach(storageKey => {
-      try {
-        const curr = JSON.parse(localStorage.getItem(storageKey) || '{}');
-        curr[key] = record;
-        localStorage.setItem(storageKey, JSON.stringify(curr));
-      } catch(e) {}
-    });
-
     if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.saveLessonProgress) {
       try {
-        await window.AprendIDosAuth.saveLessonProgress(key, record);
+        return await window.AprendIDosAuth.saveLessonProgress(key, record);
       } catch(e) {}
     }
+
+    // Fallback local caso auth.js não esteja disponível
+    const user = await getCurrentUser();
+    const storageKey = user && user.id ? `aprendidos_progresso_${user.id}` : 'aprendidos_progresso';
+    try {
+      const curr = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      curr[key] = record;
+      localStorage.setItem(storageKey, JSON.stringify(curr));
+    } catch(e) {}
   } catch(e) {
     console.warn('Erro ao salvar progresso:', e);
   }
@@ -553,4 +534,10 @@ if (grid) {
   });
 }
 
-initUserSession();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    initUserSession();
+  });
+} else {
+  initUserSession();
+}

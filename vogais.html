@@ -1681,6 +1681,9 @@
         new window.VLibras.Widget('https://vlibras.gov.br/app');
     </script>
 
+<!-- Módulo de Autenticação e Sincronização Supabase -->
+<script type="module" src="auth.js"></script>
+
 <script>
 // ============================================================
 // AprendIDos — Vogais: Script INLINE (funciona em file://)
@@ -2181,12 +2184,24 @@ function showCompletion() {
     } else if (errorSummaryEl) {
         errorSummaryEl.style.display = 'none';
     }
-    // Salva progresso no localStorage
+    // Salva progresso no localStorage e sincroniza com a nuvem Supabase
     try {
-        var prog = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
-        prog['vogais'] = { completed: true, score: hits, total: TOTAL, date: new Date().toISOString() };
-        localStorage.setItem('aprendidos_progresso', JSON.stringify(prog));
+        var user = null;
+        try { var u = localStorage.getItem('aprendidos_usuario'); if (u) user = JSON.parse(u); } catch(e) {}
+        var userKey = (user && user.id) ? ('aprendidos_progresso_' + user.id) : null;
+        var keys = [userKey, 'aprendidos_progresso', 'aprendidos_progresso_anon'].filter(Boolean);
+        keys.forEach(function(k) {
+            try {
+                var prog = JSON.parse(localStorage.getItem(k) || '{}');
+                prog['vogais'] = { completed: true, score: hits, total: TOTAL, date: new Date().toISOString() };
+                localStorage.setItem(k, JSON.stringify(prog));
+            } catch(e) {}
+        });
     } catch(e) {}
+
+    if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.saveLessonProgress) {
+        window.AprendIDosAuth.saveLessonProgress('vogais', { completed: true, score: Math.round((hits / TOTAL) * 100), total: TOTAL });
+    }
     speak('Parabéns! Você terminou! ' + msg);
 }
 

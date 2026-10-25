@@ -68,6 +68,24 @@ export async function getCurrentUser() {
   const client = await getSupabase();
   if (client) {
     try {
+      // 1. Tenta recuperar da sessão ativa local (rápido e compatível com cache/offline)
+      const { data: sessionData } = await client.auth.getSession();
+      const sessUser = sessionData?.session?.user;
+      if (sessUser) {
+        const nomeFull = sessUser.user_metadata?.full_name || sessUser.user_metadata?.name || sessUser.email.split('@')[0];
+        const usuarioFormatado = {
+          id: sessUser.id,
+          email: sessUser.email,
+          name: nomeFull,
+          nome: nomeFull,
+          avatar: sessUser.user_metadata?.avatar_url || sessUser.user_metadata?.picture || null,
+          isDemo: false
+        };
+        localStorage.setItem('aprendidos_usuario', JSON.stringify(usuarioFormatado));
+        return usuarioFormatado;
+      }
+
+      // 2. Validação no servidor do Supabase
       const { data: { user }, error } = await client.auth.getUser();
       if (user && !error) {
         const nomeFull = user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0];
@@ -344,16 +362,21 @@ export async function signOut(redirectPath = 'login.html') {
  */
 export async function saveLessonProgress(lessonId, data = {}) {
   const user = await getCurrentUser();
-  const storageKey = `aprendidos_progresso_${user ? user.id : 'anon'}`;
+  const isAuthUser = Boolean(user && !user.isDemo && user.id);
+  const storageKey = isAuthUser ? `aprendidos_progresso_${user.id}` : 'aprendidos_progresso_demo';
 
   let currentProgress = {};
   try {
     currentProgress = JSON.parse(localStorage.getItem(storageKey) || '{}');
   } catch (e) { }
 
+  const scoreNum = Math.min(100, Math.max(0, Number(data.score ?? 10)));
+  const tentativasNum = Math.max(1, Number(data.tentativas ?? 1));
+
   currentProgress[lessonId] = {
     completed: true,
-    score: data.score ?? 10,
+    score: scoreNum,
+    tentativas: tentativasNum,
     updatedAt: new Date().toISOString(),
     ...data
   };
@@ -362,34 +385,51 @@ export async function saveLessonProgress(lessonId, data = {}) {
     localStorage.setItem(storageKey, JSON.stringify(currentProgress));
   } catch (e) { }
 
-  try {
-    const legacy = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
-    legacy[lessonId] = currentProgress[lessonId];
-    localStorage.setItem('aprendidos_progresso', JSON.stringify(legacy));
-  } catch (e) { }
+  // Se não for usuário autenticado (modo demo), também sincroniza com a chave legada
+  if (!isAuthUser) {
+    try {
+      const legacy = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
+      legacy[lessonId] = currentProgress[lessonId];
+      localStorage.setItem('aprendidos_progresso', JSON.stringify(legacy));
+    } catch (e) { }
+  }
 
-  try {
-    const anon = JSON.parse(localStorage.getItem('aprendidos_progresso_anon') || '{}');
-    anon[lessonId] = currentProgress[lessonId];
-    localStorage.setItem('aprendidos_progresso_anon', JSON.stringify(anon));
-  } catch (e) { }
+  let synced = false;
+  let supabaseError = null;
 
   const client = await getSupabase();
-  if (client && user && !user.isDemo) {
+  if (client && isAuthUser) {
     try {
-      await client.from('progresso_licoes').upsert({
-        user_id: user.id,
-        licao_id: lessonId,
-        concluido: true,
-        pontuacao: data.score ?? 10,
-        atualizado_em: new Date().toISOString()
-      }, { onConflict: 'user_id, licao_id' });
+      const { data: upsertData, error: upsertErr } = await client
+        .from('progresso_licoes')
+        .upsert({
+          user_id: user.id,
+          licao_id: lessonId,
+          concluido: true,
+          pontuacao: scoreNum,
+          tentativas: tentativasNum,
+          atualizado_em: new Date().toISOString()
+        }, { onConflict: 'user_id,licao_id' });
+
+      if (upsertErr) {
+        console.error('❌ [AprendIDos] Erro ao salvar progresso no Supabase:', upsertErr);
+        supabaseError = upsertErr;
+      } else {
+        synced = true;
+        console.log(`✅ [AprendIDos] Progresso da lição '${lessonId}' salvo no Supabase com sucesso!`);
+      }
     } catch (e) {
-      console.warn('Erro ao salvar progresso no Supabase:', e);
+      console.error('❌ [AprendIDos] Exceção ao salvar progresso no Supabase:', e);
+      supabaseError = e;
     }
   }
 
-  return currentProgress;
+  return {
+    success: true,
+    synced,
+    error: supabaseError,
+    progress: currentProgress
+  };
 }
 
 /**
@@ -397,24 +437,26 @@ export async function saveLessonProgress(lessonId, data = {}) {
  */
 export async function getLessonProgress() {
   const user = await getCurrentUser();
-  const storageKey = `aprendidos_progresso_${user ? user.id : 'anon'}`;
+  const isAuthUser = Boolean(user && !user.isDemo && user.id);
+  const storageKey = isAuthUser ? `aprendidos_progresso_${user.id}` : 'aprendidos_progresso_demo';
 
   let progress = {};
   try {
     progress = JSON.parse(localStorage.getItem(storageKey) || '{}');
   } catch (e) { }
 
-  try {
-    const legacy = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
-    progress = { ...legacy, ...progress };
-  } catch (e) { }
-  try {
-    const anon = JSON.parse(localStorage.getItem('aprendidos_progresso_anon') || '{}');
-    progress = { ...anon, ...progress };
-  } catch (e) { }
+  // Se for modo demo / deslogado, busca também nas chaves legadas locais
+  if (!isAuthUser) {
+    try {
+      const legacy = JSON.parse(localStorage.getItem('aprendidos_progresso') || '{}');
+      progress = { ...legacy, ...progress };
+    } catch (e) { }
+    return progress;
+  }
 
+  // Usuário autenticado: sincroniza com a tabela progresso_licoes no Supabase
   const client = await getSupabase();
-  if (client && user && !user.isDemo) {
+  if (client && isAuthUser) {
     try {
       const { data, error } = await client
         .from('progresso_licoes')
@@ -426,11 +468,21 @@ export async function getLessonProgress() {
           progress[item.licao_id] = {
             completed: item.concluido,
             score: item.pontuacao,
+            tentativas: item.tentativas,
             updatedAt: item.atualizado_em
           };
         });
+
+        // Grava no localStorage deste dispositivo para persistência e suporte offline
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(progress));
+        } catch (e) { }
+      } else if (error) {
+        console.warn('⚠️ [AprendIDos] Erro ao carregar progresso do Supabase:', error);
       }
-    } catch (e) { }
+    } catch (e) {
+      console.warn('⚠️ [AprendIDos] Exceção ao consultar Supabase:', e);
+    }
   }
 
   return progress;

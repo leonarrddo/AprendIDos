@@ -1112,12 +1112,13 @@ function salvarProgressoVogais() {
 
     if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.saveLessonProgress) {
         try {
-            window.AprendIDosAuth.saveLessonProgress('vogais', progData);
+            return window.AprendIDosAuth.saveLessonProgress('vogais', progData);
         } catch(e) {}
     }
+    return Promise.resolve({ success: true, synced: false });
 }
 
-function salvarEVerOutras(event) {
+async function salvarEVerOutras(event) {
     if (event) event.preventDefault();
     var btn = document.getElementById('btnSalvarEVerOutras');
     if (btn) {
@@ -1126,15 +1127,24 @@ function salvarEVerOutras(event) {
         btn.style.opacity = '0.9';
     }
 
-    salvarProgressoVogais();
-
-    if (btn) {
-        btn.innerHTML = '<i class="fas fa-check-circle" aria-hidden="true"></i> Salvo com sucesso!';
+    try {
+        var res = await salvarProgressoVogais();
+        if (btn) {
+            if (res && res.synced) {
+                btn.innerHTML = '<i class="fas fa-check-circle" aria-hidden="true"></i> Salvo na nuvem!';
+            } else {
+                btn.innerHTML = '<i class="fas fa-check-circle" aria-hidden="true"></i> Salvo com sucesso!';
+            }
+        }
+    } catch (e) {
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-check-circle" aria-hidden="true"></i> Salvo no dispositivo!';
+        }
     }
 
     setTimeout(function() {
         window.location.href = 'licoes.html';
-    }, 450);
+    }, 500);
 }
 
 function verificarLicaoConcluida() {

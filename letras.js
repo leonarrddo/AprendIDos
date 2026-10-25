@@ -958,12 +958,13 @@ function salvarProgressoLetras() {
 
     if (typeof window !== 'undefined' && window.AprendIDosAuth && window.AprendIDosAuth.saveLessonProgress) {
         try {
-            window.AprendIDosAuth.saveLessonProgress('letras', progData);
+            return window.AprendIDosAuth.saveLessonProgress('letras', progData);
         } catch(e) {}
     }
+    return Promise.resolve({ success: true, synced: false });
 }
 
-function salvarEVerOutras(event) {
+async function salvarEVerOutras(event) {
     if (event) event.preventDefault();
     var btn = document.getElementById('btnSalvarEVerOutras');
     if (btn) {
@@ -971,11 +972,22 @@ function salvarEVerOutras(event) {
         btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Salvando progresso...';
     }
 
-    salvarProgressoLetras();
+    try {
+        var res = await salvarProgressoLetras();
+        if (btn) {
+            if (res && res.synced) {
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Salvo na nuvem!';
+            } else {
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Salvo com sucesso!';
+            }
+        }
+    } catch(e) {
+        if (btn) btn.innerHTML = '<i class="fas fa-check-circle"></i> Salvo no aparelho!';
+    }
 
     setTimeout(function() {
         window.location.href = 'licoes.html';
-    }, 300);
+    }, 500);
 }
 
 function verificarLicaoConcluida() {

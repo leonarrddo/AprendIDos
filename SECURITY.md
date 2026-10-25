@@ -75,11 +75,9 @@ Todas as páginas HTML da aplicação receberam metatags defensivas:
 
 | Pacote | Versão | Justificativa de Arquitetura |
 | :--- | :--- | :--- |
-| `dompurify` | `^3.4.16` | Sanitização homologada de HTML para evitar DOM-based XSS. |
-| `zod` | `^4.6.5` | Validação declarativa e tipada de schemas e entradas. |
-| `@supabase/supabase-js` | `^2.49.1` | SDK oficial para autenticação segura e queries parametrizadas. |
+| `@supabase/supabase-js` | `^2.117.3` | SDK oficial para autenticação segura e queries parametrizadas. |
 
-*Auditoria:* Executado `npm audit` — **0 vulnerabilidades encontradas.**
+*Nota:* As dependências `dompurify` e `zod` foram removidas do projeto na auditoria de dependências por não estarem em uso ativo, mantendo a superfície de dependências enxuta e confiando em validações nativas e políticas de RLS.
 
 ---
 

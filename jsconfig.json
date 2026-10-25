@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    /* Alvo: JavaScript moderno compatível com os navegadores atuais */
+    "target": "ES2020",
+
+    /* Módulos ES (consistente com "type": "module" no package.json) */
+    "module": "ES2020",
+    "moduleResolution": "node",
+
+    /* Verificação de tipos básica — não intrusiva */
+    "checkJs": false,
+    "strict": false,
+
+    /* Melhora o IntelliSense sem afetar o código */
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+
+    /* APIs do navegador (DOM, Canvas, Web Speech, etc.) */
+    "lib": ["ES2020", "DOM", "DOM.Iterable"]
+  },
+
+  /* Arquivos do projeto que o VS Code deve analisar */
+  "include": [
+    "*.js",
+    "tests/**/*.mjs"
+  ],
+
+  /* Pastas que o VS Code deve ignorar na análise */
+  "exclude": [
+    "node_modules",
+    "scratch",
+    ".git"
+  ]
+}

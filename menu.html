@@ -589,10 +589,6 @@
                 <i class="bi bi-book-fill icone-menu" aria-hidden="true"></i>
                 <span class="texto-menu">Lições</span>
             </a>
-            <a href="#ouca" class="cartao-menu" role="button" aria-label="Ouça - Abrir atividades com áudio e narração">
-                <i class="bi bi-headphones icone-menu" aria-hidden="true"></i>
-                <span class="texto-menu">Ouça</span>
-            </a>
             <a href="#ajuda" class="cartao-menu" role="button" aria-label="Ajuda - Abrir suporte ao usuário">
                 <i class="bi bi-telephone-fill icone-menu" aria-hidden="true"></i>
                 <span class="texto-menu">Ajuda</span>
@@ -655,7 +651,7 @@
                 botao.addEventListener('click', function(e) {
                     var texto = this.querySelector('.texto-menu').textContent.trim();
 
-                    if (texto === 'Lições' || texto === 'Ouça') {
+                    if (texto === 'Lições') {
                         e.preventDefault();
                         window.location.href = 'licoes.html';
                     } else if (texto === 'Início') {

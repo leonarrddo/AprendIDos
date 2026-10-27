@@ -356,6 +356,37 @@
     margin-top: 12px;
   }
 
+  .link-recuperar-senha {
+    display: inline-block;
+    margin-top: 16px;
+    color: var(--roxo-escuro);
+    font-size: 1rem;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .feedback-status {
+    color: #1B5E20;
+    background: #E8F5E9;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 12px;
+  }
+  .btn-voltar-login {
+    display: block;
+    margin: 14px auto 0;
+    padding: 8px 12px;
+    background: transparent;
+    border: 0;
+    color: var(--roxo-escuro);
+    font: 800 1rem 'Nunito', sans-serif;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  [hidden] { display: none !important; }
+
   /* Responsivo */
   @media (max-width: 600px) {
     .logo { width: 300px; max-width: 90vw; }
@@ -451,7 +482,35 @@
         <button type="submit" class="btn-entrar-email" id="btnConfirmarEmail">
           <i class="fa-solid fa-right-to-bracket"></i> Entrar
         </button>
+        <button type="button" class="link-recuperar-senha" id="btnEsqueceuSenha">Esqueceu a senha?</button>
       </form>
+
+      <form id="formRecuperarSenha" hidden>
+        <p class="modal-subtitulo">Informe o e-mail usado no cadastro. Se houver uma conta associada, enviaremos instruções para redefinir a senha.</p>
+        <div class="campo-grupo">
+          <label class="campo-label" for="emailRecuperacao">Seu E-mail:</label>
+          <input type="email" id="emailRecuperacao" class="campo-input" placeholder="exemplo@email.com" autocomplete="email" required disabled>
+        </div>
+        <p id="statusRecuperacao" class="feedback-status" role="status" aria-live="polite" hidden></p>
+        <div id="erroRecuperacao" class="feedback-erro-login" role="alert" hidden></div>
+        <button type="submit" class="btn-entrar-email" id="btnEnviarRecuperacao" disabled>Enviar instruções</button>
+        <button type="button" class="btn-voltar-login" id="btnVoltarLogin" disabled>Voltar para entrar</button>
+      </form>
+
+      <form id="formNovaSenha" hidden>
+        <p class="modal-subtitulo">Escolha uma nova senha para sua conta.</p>
+        <div class="campo-grupo">
+          <label class="campo-label" for="novaSenha">Nova senha:</label>
+          <input type="password" id="novaSenha" class="campo-input" autocomplete="new-password" minlength="6" required disabled>
+        </div>
+        <div class="campo-grupo">
+          <label class="campo-label" for="confirmarNovaSenha">Confirme a nova senha:</label>
+          <input type="password" id="confirmarNovaSenha" class="campo-input" autocomplete="new-password" minlength="6" required disabled>
+        </div>
+        <div id="erroNovaSenha" class="feedback-erro-login" role="alert" hidden></div>
+        <button type="submit" class="btn-entrar-email" id="btnSalvarNovaSenha" disabled>Salvar nova senha</button>
+      </form>
+      <p id="statusNovaSenha" class="feedback-status" role="status" aria-live="polite" hidden></p>
     </div>
   </div>
 
@@ -469,10 +528,38 @@
       const formLogin = document.getElementById('formLoginEmail');
       const erroEl = document.getElementById('erroLoginEmail');
       const alertaConfirmado = document.getElementById('alertaConfirmado');
+      const formRecuperar = document.getElementById('formRecuperarSenha');
+      const formNovaSenha = document.getElementById('formNovaSenha');
+
+      function mostrarFormulario(formularioAtivo) {
+        [formLogin, formRecuperar, formNovaSenha].forEach(function(formulario) {
+          if (!formulario) return;
+          const ativo = formulario === formularioAtivo;
+          formulario.hidden = !ativo;
+          formulario.querySelectorAll('input, button').forEach(function(campo) {
+            campo.disabled = !ativo;
+          });
+        });
+      }
+
+      function mostrarMensagem(elemento, mensagem) {
+        if (!elemento) return;
+        elemento.textContent = mensagem;
+        elemento.hidden = false;
+      }
 
       // Verifica se o usuário chegou através do link de confirmação de e-mail
       const urlParams = new URLSearchParams(window.location.search);
-      const isConfirmado = urlParams.get('confirmado') === 'true' || window.location.hash.includes('access_token');
+      const isConfirmado = urlParams.get('confirmado') === 'true' ||
+        (window.location.hash.includes('access_token') && !window.location.hash.includes('type=recovery'));
+      const isPasswordRecovery = urlParams.get('redefinir-senha') === 'true' &&
+        (window.location.hash.includes('type=recovery') || urlParams.has('code'));
+
+      if (isPasswordRecovery && modal) {
+        modal.classList.add('open');
+        mostrarFormulario(formNovaSenha);
+        document.getElementById('novaSenha')?.focus();
+      }
 
       if (isConfirmado && alertaConfirmado) {
         alertaConfirmado.style.display = 'block';
@@ -530,6 +617,7 @@
         btnFechar.addEventListener('click', function() {
           modal.classList.remove('open');
           if (erroEl) erroEl.style.display = 'none';
+          mostrarFormulario(formLogin);
         });
       }
 
@@ -538,9 +626,78 @@
           if (e.target === modal) {
             modal.classList.remove('open');
             if (erroEl) erroEl.style.display = 'none';
+            mostrarFormulario(formLogin);
           }
         });
       }
+
+      const btnEsqueceuSenha = document.getElementById('btnEsqueceuSenha');
+      const btnVoltarLogin = document.getElementById('btnVoltarLogin');
+      const formRecuperarEmail = document.getElementById('emailRecuperacao');
+      const statusRecuperacao = document.getElementById('statusRecuperacao');
+      const erroRecuperacao = document.getElementById('erroRecuperacao');
+
+      btnEsqueceuSenha?.addEventListener('click', function() {
+        if (formRecuperarEmail) formRecuperarEmail.value = document.getElementById('loginEmail')?.value.trim() || '';
+        if (statusRecuperacao) statusRecuperacao.hidden = true;
+        if (erroRecuperacao) erroRecuperacao.hidden = true;
+        if (document.getElementById('statusNovaSenha')) document.getElementById('statusNovaSenha').hidden = true;
+        mostrarFormulario(formRecuperar);
+        formRecuperarEmail?.focus();
+      });
+
+      btnVoltarLogin?.addEventListener('click', function() {
+        mostrarFormulario(formLogin);
+        document.getElementById('loginEmail')?.focus();
+      });
+
+      formRecuperar?.addEventListener('submit', async function(evento) {
+        evento.preventDefault();
+        if (statusRecuperacao) statusRecuperacao.hidden = true;
+        if (erroRecuperacao) erroRecuperacao.hidden = true;
+        const botao = document.getElementById('btnEnviarRecuperacao');
+        const email = formRecuperarEmail?.value.trim() || '';
+        if (botao) { botao.disabled = true; botao.textContent = 'Enviando...'; }
+        try {
+          if (!window.AprendIDosAuth?.requestPasswordReset) throw new Error('Serviço indisponível');
+          await window.AprendIDosAuth.requestPasswordReset(email);
+          mostrarMensagem(statusRecuperacao, 'Se houver uma conta associada a esse e-mail, você receberá instruções para redefinir a senha. Confira também a pasta de spam.');
+        } catch (erro) {
+          console.error('Não foi possível solicitar a recuperação de senha:', erro);
+          mostrarMensagem(erroRecuperacao, 'Não foi possível enviar a solicitação agora. Confira sua conexão e tente novamente.');
+        } finally {
+          if (botao) { botao.disabled = false; botao.textContent = 'Enviar instruções'; }
+        }
+      });
+
+      formNovaSenha?.addEventListener('submit', async function(evento) {
+        evento.preventDefault();
+        const senha = document.getElementById('novaSenha')?.value || '';
+        const confirmacao = document.getElementById('confirmarNovaSenha')?.value || '';
+        const erroSenha = document.getElementById('erroNovaSenha');
+        const statusSenha = document.getElementById('statusNovaSenha');
+        const botao = document.getElementById('btnSalvarNovaSenha');
+        if (erroSenha) erroSenha.hidden = true;
+        if (statusSenha) statusSenha.hidden = true;
+        if (senha.length < 6 || senha !== confirmacao) {
+          mostrarMensagem(erroSenha, senha.length < 6 ? 'A nova senha deve ter pelo menos 6 caracteres.' : 'As senhas informadas não são iguais.');
+          return;
+        }
+        if (botao) { botao.disabled = true; botao.textContent = 'Salvando...'; }
+        try {
+          if (!window.AprendIDosAuth?.updatePassword) throw new Error('Serviço indisponível');
+          await window.AprendIDosAuth.updatePassword(senha);
+          mostrarMensagem(statusSenha, 'Senha atualizada. Agora você já pode entrar com a nova senha.');
+          window.history.replaceState({}, document.title, window.location.pathname);
+          mostrarFormulario(formLogin);
+          document.getElementById('loginEmail')?.focus();
+        } catch (erro) {
+          console.error('Não foi possível atualizar a senha:', erro);
+          mostrarMensagem(erroSenha, 'Não foi possível atualizar a senha. Abra novamente o link recebido ou solicite outro.');
+        } finally {
+          if (botao) { botao.disabled = false; botao.textContent = 'Salvar nova senha'; }
+        }
+      });
 
       // 4. Submissão do Login com E-mail e Senha no Supabase
       if (formLogin) {

@@ -344,6 +344,40 @@ export async function signInWithEmail(email, password, redirectPath = 'index.htm
 }
 
 /**
+ * Solicita ao Supabase um link de redefinição de senha por e-mail.
+ */
+export async function requestPasswordReset(email) {
+  const cleanEmail = (email || '').trim().toLowerCase();
+  if (!cleanEmail) throw new Error('Informe seu e-mail.');
+
+  const client = await getSupabase();
+  if (!client || !isSupabaseConfigured()) {
+    throw new Error('A recuperação de senha está indisponível no modo de demonstração.');
+  }
+
+  const redirectTo = new URL('login.html?redefinir-senha=true', window.location.href).href;
+  const { error } = await client.auth.resetPasswordForEmail(cleanEmail, { redirectTo });
+  if (error) throw error;
+  return true;
+}
+
+/** Atualiza a senha depois que o usuário abre um link válido de recuperação. */
+export async function updatePassword(password) {
+  if (!password || password.length < 6) {
+    throw new Error('A nova senha deve ter pelo menos 6 caracteres.');
+  }
+
+  const client = await getSupabase();
+  if (!client || !isSupabaseConfigured()) {
+    throw new Error('A redefinição de senha está indisponível no modo de demonstração.');
+  }
+
+  const { error } = await client.auth.updateUser({ password });
+  if (error) throw error;
+  return true;
+}
+
+/**
  * Logout
  */
 export async function signOut(redirectPath = 'login.html') {
@@ -450,6 +484,8 @@ if (typeof window !== 'undefined') {
     signUpWithEmail,
     resendConfirmationEmail,
     signInWithEmail,
+    requestPasswordReset,
+    updatePassword,
     signOut,
     saveLessonProgress,
     getLessonProgress,

@@ -7,6 +7,7 @@ import puppeteer from 'puppeteer';
 
 const loginHtml = fs.readFileSync(new URL('../login.html', import.meta.url), 'utf8');
 const authJs = fs.readFileSync(new URL('../auth.js', import.meta.url), 'utf8');
+const serviceWorkerJs = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
 const menuHtml = fs.readFileSync(new URL('../menu.html', import.meta.url), 'utf8');
 const licoesHtml = fs.readFileSync(new URL('../licoes.html', import.meta.url), 'utf8');
 
@@ -87,6 +88,10 @@ test('login oferece recuperação acessível e etapa para definir nova senha', (
   for (const [, , source] of scripts) assert.doesNotThrow(() => new Function(source), 'scripts inline da tela de login devem ser válidos');
 });
 
+test('Service Worker invalida os recursos JS antigos após a inclusão da recuperação de senha', () => {
+  assert.match(serviceWorkerJs, /const CACHE_VERSION = 'v4';/);
+});
+
 test('formulário de recuperação envia o e-mail informado e apresenta confirmação genérica', async (t) => {
   const server = createStaticServer();
   const port = await new Promise(resolve => server.listen(0, () => resolve(server.address().port)));
@@ -97,37 +102,79 @@ test('formulário de recuperação envia o e-mail informado e apresenta confirma
   });
 
   const page = await browser.newPage();
+  const pageErrors = [];
+  page.on('pageerror', error => pageErrors.push(error.message));
   await page.setRequestInterception(true);
   page.on('request', request => {
     const url = new URL(request.url());
     if (url.origin !== `http://localhost:${port}`) {
-      request.abort();
-    } else if (url.pathname.endsWith('/auth.js')) {
-      request.respond({ status: 200, contentType: 'application/javascript', body: 'export {};'});
+      if (url.pathname.endsWith('/vlibras-plugin.js')) {
+        request.respond({ status: 200, contentType: 'application/javascript', body: 'window.VLibras = { Widget: function() {} };' });
+      } else {
+        request.abort();
+      }
     } else if (url.pathname.endsWith('/pwa.js')) {
       request.respond({ status: 200, contentType: 'application/javascript', body: '' });
+    } else if (url.pathname.endsWith('/supabase-config.js')) {
+      request.respond({ status: 200, contentType: 'application/javascript', body: "export const SUPABASE_URL=''; export const SUPABASE_ANON_KEY=''; export const isSupabaseConfigured=()=>false;" });
     } else {
       request.continue();
     }
   });
-  await page.evaluateOnNewDocument(() => {
-    window.AprendIDosAuth = {
-      requestPasswordReset: async email => { window.__recoveryEmail = email; return true; }
+  await page.goto(`http://localhost:${port}/login.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => typeof window.AprendIDosAuth?.requestPasswordReset === 'function');
+  await page.evaluate(() => {
+    window.__recoveryCalls = [];
+    window.AprendIDosAuth.requestPasswordReset = async email => {
+      window.__recoveryCalls.push(email);
+      await new Promise(resolve => setTimeout(resolve, 120));
+      if (window.__recoveryCalls.length === 1) throw new Error('falha simulada');
+      return true;
     };
   });
-  await page.goto(`http://localhost:${port}/login.html`, { waitUntil: 'domcontentloaded' });
   await page.click('#btnAbrirModalEmail');
-  await page.type('#loginEmail', '  pessoa@exemplo.com  ');
+  await page.type('#loginEmail', 'pessoa@exemplo.com');
   await page.click('#btnEsqueceuSenha');
+  const controlsEnabled = await page.evaluate(() => ({
+    email: !document.getElementById('emailRecuperacao').disabled,
+    submit: !document.getElementById('btnEnviarRecuperacao').disabled,
+    back: !document.getElementById('btnVoltarLogin').disabled
+  }));
+  assert.deepEqual(controlsEnabled, { email: true, submit: true, back: true });
+  await page.$eval('#emailRecuperacao', input => { input.value = 'email-invalido'; });
+  assert.equal(await page.$eval('#formRecuperarSenha', form => form.checkValidity()), false);
+  await page.$eval('#emailRecuperacao', input => { input.value = 'pessoa@exemplo.com'; });
+  await page.click('#btnEnviarRecuperacao');
+  await page.waitForFunction(() => window.__recoveryCalls?.length === 1);
+  const loadingState = await page.evaluate(() => ({
+    disabled: document.getElementById('btnEnviarRecuperacao').disabled,
+    label: document.getElementById('btnEnviarRecuperacao').textContent
+  }));
+  assert.deepEqual(loadingState, { disabled: true, label: 'Enviando...' });
+  await page.waitForFunction(() => document.getElementById('erroRecuperacao').hidden === false);
+  const failedState = await page.evaluate(() => ({
+    disabled: document.getElementById('btnEnviarRecuperacao').disabled,
+    label: document.getElementById('btnEnviarRecuperacao').textContent,
+    error: document.getElementById('erroRecuperacao').textContent
+  }));
+  assert.equal(failedState.disabled, false);
+  assert.equal(failedState.label, 'Enviar instruções');
+  assert.match(failedState.error, /tente novamente/i);
+
   await page.click('#btnEnviarRecuperacao');
   await page.waitForFunction(() => document.getElementById('statusRecuperacao').hidden === false);
-
   const result = await page.evaluate(() => ({
-    emailSentToAction: window.__recoveryEmail,
+    emailSentToAction: window.__recoveryCalls,
     confirmation: document.getElementById('statusRecuperacao').textContent
   }));
-  assert.equal(result.emailSentToAction, 'pessoa@exemplo.com');
+  assert.deepEqual(result.emailSentToAction, ['pessoa@exemplo.com', 'pessoa@exemplo.com']);
   assert.match(result.confirmation, /Se houver uma conta associada/);
+  await page.click('#btnVoltarLogin');
+  assert.equal(await page.$eval('#formLoginEmail', form => form.hidden), false);
+  assert.equal(await page.$eval('#formRecuperarSenha', form => form.hidden), true);
+  await page.click('#btnEsqueceuSenha');
+  assert.equal(await page.$eval('#btnEnviarRecuperacao', button => button.disabled), false);
+  assert.deepEqual(pageErrors, []);
 });
 
 test('menu remove apenas o cartão Ouça e mantém os cartões principais', () => {

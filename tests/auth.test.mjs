@@ -144,6 +144,82 @@ test('3. signInWithProvider: separação demo vs produção', async (t) => {
   });
 });
 
+test('Facebook OAuth usa a instância Supabase existente e retorna ao menu de produção', async () => {
+  const fs = await import('node:fs');
+  const authCode = fs.readFileSync(new URL('../auth.js', import.meta.url), 'utf-8');
+  const start = authCode.indexOf('export async function signInWithProvider(');
+  const end = authCode.indexOf('\n/**\n * Cadastro com E-mail e Senha', start);
+  assert.ok(start >= 0 && end > start, 'deve encontrar a implementação atual do OAuth');
+
+  const calls = [];
+  const client = {
+    auth: {
+      async signInWithOAuth(options) {
+        calls.push(options);
+        return { data: { url: 'https://www.facebook.com/dialog/oauth' }, error: null };
+      }
+    }
+  };
+  const env = {
+    sanitizeRedirectPath,
+    async getSupabase() { return client; },
+    isSupabaseConfigured() { return true; },
+    window: { location: { href: 'https://aprendidos.vercel.app/login.html' } },
+    localStorage: { setItem() { assert.fail('OAuth real não deve criar usuário demo'); } },
+    setTimeout,
+    Promise
+  };
+  const source = authCode.slice(start, end).replace(/^export\s+/, '');
+  const signInWithProvider = new Function('env', `with (env) { ${source}\nreturn signInWithProvider; }`)(env);
+  const result = await signInWithProvider('facebook', 'menu.html');
+
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].provider, 'facebook');
+  assert.equal(calls[0].options.redirectTo, 'https://aprendidos.vercel.app/menu.html');
+  assert.equal(result.url, 'https://www.facebook.com/dialog/oauth');
+});
+
+test('Botão Facebook chama o provedor OAuth, sinaliza carregamento e recupera o botão em erro', async () => {
+  const fs = await import('node:fs');
+  const loginHtml = fs.readFileSync(new URL('../login.html', import.meta.url), 'utf-8');
+  const start = loginHtml.indexOf('if (btnFacebook) {');
+  const end = loginHtml.indexOf('// 3. Controle do Modal de E-mail', start);
+  assert.ok(start >= 0 && end > start, 'deve encontrar o handler existente do Facebook');
+  const handlerSource = loginHtml.slice(start, end);
+
+  async function runClick(auth) {
+    let clickHandler;
+    const label = { textContent: 'Entrar com Facebook' };
+    const button = {
+      disabled: false,
+      setAttribute(name, value) { this[name] = value; },
+      removeAttribute(name) { delete this[name]; },
+      querySelector() { return label; },
+      addEventListener(event, callback) { assert.equal(event, 'click'); clickHandler = callback; }
+    };
+    const alerts = [];
+    const env = { btnFacebook: button, window: { AprendIDosAuth: auth }, alert: message => alerts.push(message) };
+    new Function('env', `with (env) { ${handlerSource} }`)(env);
+    assert.equal(typeof clickHandler, 'function');
+    const pending = clickHandler();
+    assert.equal(button.disabled, true);
+    assert.equal(label.textContent, 'Conectando...');
+    assert.equal(button['aria-busy'], 'true');
+    await pending;
+    return { button, label, alerts };
+  }
+
+  const calls = [];
+  await runClick({ async signInWithProvider(...args) { calls.push(args); return { data: { url: 'https://facebook.com/oauth' } }; } });
+  assert.deepEqual(calls, [['facebook', 'menu.html']]);
+
+  const failed = await runClick({ async signInWithProvider() { throw new Error('provider indisponível'); } });
+  assert.equal(failed.button.disabled, false);
+  assert.equal(failed.label.textContent, 'Entrar com Facebook');
+  assert.equal(failed.button['aria-busy'], undefined);
+  assert.match(failed.alerts[0], /provider indisponível/);
+});
+
 // ─────────────────────────────────────────────────────────────────────────────
 // GRUPO 4: Consistência do nome (Problema 1)
 // ─────────────────────────────────────────────────────────────────────────────

@@ -590,16 +590,21 @@
       // 2. Login com Facebook
       if (btnFacebook) {
         btnFacebook.addEventListener('click', async function() {
+          if (btnFacebook.disabled) return;
+          const facebookLabel = btnFacebook.querySelector('span');
           btnFacebook.disabled = true;
+          btnFacebook.setAttribute('aria-busy', 'true');
+          if (facebookLabel) facebookLabel.textContent = 'Conectando...';
           try {
-            if (window.AprendIDosAuth && window.AprendIDosAuth.signInWithProvider) {
-              await window.AprendIDosAuth.signInWithProvider('facebook', 'menu.html');
-            } else {
-              window.location.href = 'menu.html';
+            if (!window.AprendIDosAuth || !window.AprendIDosAuth.signInWithProvider) {
+              throw new Error('Serviço de autenticação indisponível. Tente novamente.');
             }
+            await window.AprendIDosAuth.signInWithProvider('facebook', 'menu.html');
           } catch (e) {
             alert('Erro ao conectar com o Facebook: ' + e.message);
             btnFacebook.disabled = false;
+            btnFacebook.removeAttribute('aria-busy');
+            if (facebookLabel) facebookLabel.textContent = 'Entrar com Facebook';
           }
         });
       }

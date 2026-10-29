@@ -88,6 +88,7 @@ function speakText(text, btnElement = null, labelElement = null) {
     try {
       const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
       const audio = new Audio();
+      audio.src = url;
       _currentAudio = audio;
       audio.onended = () => {
         if (gen !== _speechGen || _currentAudio !== audio) return;
@@ -162,6 +163,8 @@ function speakText(text, btnElement = null, labelElement = null) {
       synthesis.speak(utter);
       if (!utter.voice) {
         // Alguns navegadores desktop preenchem a lista de vozes depois do primeiro acesso.
+        // A fala já foi enfileirada com speak() acima; o browser usará a voz padrão.
+        // Apenas tentamos atualizar a voz se voiceschanged disparar antes do início.
         const onVoicesChanged = () => {
           if (gen !== _speechGen || nativeStarted) return;
           const voice = choosePortugueseVoice();
@@ -172,12 +175,9 @@ function speakText(text, btnElement = null, labelElement = null) {
         } else {
           synthesis.onvoiceschanged = onVoicesChanged;
         }
-        _fallbackTimer = setTimeout(() => {
-          _fallbackTimer = null;
-          if (gen !== _speechGen || nativeStarted) return;
-          try { synthesis.cancel(); } catch (e) {}
-          speakRemote();
-        }, 4000);
+        // NÃO cancelamos a fala nativa com um timer. O speak() já foi chamado e o
+        // browser vai reproduzir com a voz padrão do idioma. Se realmente falhar,
+        // o callback utter.onerror acionará o fallback remoto.
       }
     } catch (e) {
       speakRemote();

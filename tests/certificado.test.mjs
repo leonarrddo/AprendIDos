@@ -225,7 +225,7 @@ test('Clique no certificado inicia síntese nativa imediata, lê nome/data e per
     certAudioStatus: { textContent: '' }
   };
   const env = {
-    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null, _nativeFallbackStartedForGen: -1,
+    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null,
     document: { getElementById: id => elements[id] || null },
     window: { speechSynthesis: { cancel() { stopped++; audioCalls.push('cancel'); }, getVoices() { return [{ lang: 'pt-BR', name: 'Português' }]; }, speak(utterance) { utterances.push(utterance); audioCalls.push('speak'); } } },
     SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
@@ -260,7 +260,7 @@ test('Sem síntese nativa, o áudio remoto é tentado e a interface informa falh
   let remoteTimeout;
   const status = { textContent: '' };
   const env = {
-    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null, _nativeFallbackStartedForGen: -1,
+    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null,
     document: { getElementById: id => id === 'certAudioStatus' ? status : null },
     window: {},
     Audio: class { constructor() { audio = this; } play() { return new Promise(() => {}); } pause() {} },
@@ -268,6 +268,9 @@ test('Sem síntese nativa, o áudio remoto é tentado e a interface informa falh
   };
   const controls = new Function('env', `with (env) { ${audioCode}\nreturn { speakText }; }`)(env);
   controls.speakText('texto completo do certificado');
+  assert.ok(audio.src, 'audio.src deve ser definido antes de play()');
+  assert.match(audio.src, /translate\.google\.com/, 'src deve apontar para a API do Google TTS');
+  assert.match(audio.src, /texto%20completo/, 'src deve conter o texto codificado');
   audio.onerror();
   assert.equal(status.textContent, 'Não foi possível reproduzir o áudio neste dispositivo.');
   assert.equal(env._isSpeaking, false);
@@ -276,17 +279,59 @@ test('Sem síntese nativa, o áudio remoto é tentado e a interface informa falh
   assert.equal(env._isSpeaking, false, 'timeout remoto deve liberar o controle de reprodução');
 });
 
-test('Lista de vozes inicialmente vazia aceita voz pt-BR carregada por voiceschanged', () => {
+test('Fala nativa com voz null não é cancelada por timer e completa normalmente', () => {
+  const controller = fs.readFileSync(path.join(rootDir, 'certificado.js'), 'utf8');
+  const start = controller.indexOf('function stopAudio()');
+  const end = controller.indexOf('/* ===== CARREGAMENTO E RENDERIZAÇÃO', start);
+  const audioCode = controller.slice(start, end);
+  let cancelCalled = false;
+  const utterances = [];
+  const timeoutCallbacks = [];
+  const synthesis = {
+    cancel() { cancelCalled = true; },
+    getVoices() { return []; },
+    addEventListener() {},
+    speak(utterance) { utterances.push(utterance); }
+  };
+  const env = {
+    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null,
+    document: { getElementById: () => null },
+    window: { speechSynthesis: synthesis },
+    SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
+    Audio: class {},
+    setTimeout(callback) { timeoutCallbacks.push(callback); return 5; },
+    clearTimeout() {}, console
+  };
+  new Function('env', `with (env) { ${audioCode}\nreturn { speakText }; }`)(env)
+    .speakText('Teste sem voz');
+
+  assert.equal(utterances.length, 1, 'speak() deve ser chamado mesmo sem voz');
+  assert.equal(utterances[0].voice, null);
+
+  // Simula a fala iniciando naturalmente (browser usa voz padrão)
+  utterances[0].onstart();
+  assert.equal(cancelCalled, false, 'a fala nativa não deve ser cancelada por nenhum timer');
+
+  // Se houver algum timer capturado, dispará-lo não deve cancelar
+  timeoutCallbacks.forEach(cb => cb());
+  assert.equal(cancelCalled, false, 'nenhum timer deve chamar synthesis.cancel()');
+
+  // Fala termina normalmente
+  utterances[0].onend();
+  assert.equal(env._isSpeaking, false, 'estado deve ser liberado após onend');
+});
+
+test('Lista de vozes inicialmente vazia aceita voz pt-BR carregada por voiceschanged sem cancelar', () => {
   const controller = fs.readFileSync(path.join(rootDir, 'certificado.js'), 'utf8');
   const start = controller.indexOf('function stopAudio()');
   const end = controller.indexOf('/* ===== CARREGAMENTO E RENDERIZAÇÃO', start);
   const audioCode = controller.slice(start, end);
   let voices = [];
   let onVoicesChanged;
-  let timeoutCallback;
+  let cancelCalled = false;
   const utterances = [];
   const synthesis = {
-    cancel() {},
+    cancel() { cancelCalled = true; },
     getVoices() { return voices; },
     addEventListener(_event, callback) { onVoicesChanged = callback; },
     speak(utterance) { utterances.push(utterance); }
@@ -297,7 +342,7 @@ test('Lista de vozes inicialmente vazia aceita voz pt-BR carregada por voicescha
     window: { speechSynthesis: synthesis },
     SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
     Audio: class {},
-    setTimeout(callback) { timeoutCallback = callback; return 5; },
+    setTimeout(callback) { return 5; },
     clearTimeout() {}, console
   };
   new Function('env', `with (env) { ${audioCode}\nreturn { speakText }; }`)(env)
@@ -305,12 +350,17 @@ test('Lista de vozes inicialmente vazia aceita voz pt-BR carregada por voicescha
   assert.equal(utterances.length, 1, 'a fala é enfileirada sem esperar a lista de vozes');
   assert.equal(utterances[0].voice, null);
 
+  // voiceschanged dispara e atualiza a voz
   voices = [{ lang: 'pt-BR', name: 'Português Brasil' }];
   onVoicesChanged();
   assert.equal(utterances[0].voice.lang, 'pt-BR');
+
+  // A fala inicia normalmente e depois termina
   utterances[0].onstart();
-  timeoutCallback();
-  assert.equal(utterances.length, 1, 'voz nativa iniciada não deve duplicar com fallback remoto');
+  assert.equal(cancelCalled, false, 'não deve cancelar a fala nativa com timer');
+  utterances[0].onend();
+  assert.equal(env._isSpeaking, false, 'estado deve voltar ao normal após onend');
+  assert.equal(utterances.length, 1, 'voz nativa não deve duplicar com fallback remoto');
 });
 
 test('10. CSP em certificado.html inclui media-src e sw.js inclui arquivos do certificado no precache', () => {

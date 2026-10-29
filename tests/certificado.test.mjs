@@ -206,7 +206,7 @@ test('9. certificado.html define regras para impressão A4 landscape e oculta co
 
 test('Clique no certificado inicia síntese nativa imediata, lê nome/data e permite parar', () => {
   const controller = fs.readFileSync(path.join(rootDir, 'certificado.js'), 'utf8');
-  const start = controller.indexOf('function stopAudio()');
+  const start = controller.indexOf('function updateAudioUI');
   const end = controller.indexOf('/* ===== CARREGAMENTO E RENDERIZAÇÃO', start);
   assert.ok(start >= 0 && end > start);
   const audioCode = controller.slice(start, end);
@@ -225,142 +225,125 @@ test('Clique no certificado inicia síntese nativa imediata, lê nome/data e per
     certAudioStatus: { textContent: '' }
   };
   const env = {
-    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null,
+    _activeUtterance: null, _isSpeaking: false,
     document: { getElementById: id => elements[id] || null },
-    window: { speechSynthesis: { cancel() { stopped++; audioCalls.push('cancel'); }, getVoices() { return [{ lang: 'pt-BR', name: 'Português' }]; }, speak(utterance) { utterances.push(utterance); audioCalls.push('speak'); } } },
+    window: {
+      speechSynthesis: {
+        cancel() { stopped++; audioCalls.push('cancel'); },
+        getVoices() { return [{ lang: 'pt-BR', name: 'Microsoft Maria Desktop - Portuguese (Brazil)' }]; },
+        speak(utterance) { utterances.push(utterance); audioCalls.push('speak'); }
+      }
+    },
     SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
-    Audio: class { play() { throw new Error('A voz nativa deveria ser preferida'); } },
-    setTimeout(callback) { env.fallback = callback; return 1; },
-    clearTimeout() {},
     console
   };
   const controls = new Function('env', `with (env) { ${audioCode}\n${clickCode}\nreturn { speakText, stopAudio }; }`)(env);
   const button = elements.btnOuvirCert;
+
+  // 1º clique: inicia fala nativa sem cancel prévio
   env.window.ouvirCertificado(button);
   assert.deepEqual(audioCalls, ['speak'], 'o primeiro clique não deve cancelar uma fila vazia antes de falar');
   assert.match(utterances[0].text, /Maria da Silva concluiu todas as 9 atividades/);
   assert.match(utterances[0].text, /29 de outubro de 2026/);
   assert.equal(utterances[0].lang, 'pt-BR');
-  assert.equal(utterances[0].voice.lang, 'pt-BR');
+  assert.equal(utterances[0].voice.name, 'Microsoft Maria Desktop - Portuguese (Brazil)');
   assert.equal(elements.labelOuvirCert.textContent, 'Toque para parar');
+
+  // 2º clique: interrompe leitura ativa
   env.window.ouvirCertificado(button);
   assert.ok(stopped > 0, 'Tocar durante a narração deve cancelar a fala atual');
   assert.deepEqual(audioCalls.slice(0, 2), ['speak', 'cancel']);
   assert.equal(env._isSpeaking, false);
+  assert.equal(elements.labelOuvirCert.textContent, 'Ouvir Certificado');
+
+  // 3º clique: reinicia leitura após parada
   env.window.ouvirCertificado(button);
   assert.equal(utterances.length, 2, 'Uma nova leitura após parar deve iniciar normalmente');
 });
 
-test('Sem síntese nativa, o áudio remoto é tentado e a interface informa falha sem ficar presa', () => {
+test('Sem síntese nativa, a interface informa mensagem adequada sem travar', () => {
   const controller = fs.readFileSync(path.join(rootDir, 'certificado.js'), 'utf8');
-  const start = controller.indexOf('function stopAudio()');
+  const start = controller.indexOf('function updateAudioUI');
   const end = controller.indexOf('/* ===== CARREGAMENTO E RENDERIZAÇÃO', start);
   const audioCode = controller.slice(start, end);
-  let audio;
-  let remoteTimeout;
   const status = { textContent: '' };
   const env = {
-    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null,
+    _activeUtterance: null, _isSpeaking: false,
     document: { getElementById: id => id === 'certAudioStatus' ? status : null },
     window: {},
-    Audio: class { constructor() { audio = this; } play() { return new Promise(() => {}); } pause() {} },
-    setTimeout(callback) { remoteTimeout = callback; return 1; }, clearTimeout() {}, console
+    console
   };
   const controls = new Function('env', `with (env) { ${audioCode}\nreturn { speakText }; }`)(env);
   controls.speakText('texto completo do certificado');
-  assert.ok(audio.src, 'audio.src deve ser definido antes de play()');
-  assert.match(audio.src, /translate\.google\.com/, 'src deve apontar para a API do Google TTS');
-  assert.match(audio.src, /texto%20completo/, 'src deve conter o texto codificado');
-  audio.onerror();
-  assert.equal(status.textContent, 'Não foi possível reproduzir o áudio neste dispositivo.');
+  assert.equal(status.textContent, 'Síntese de voz não disponível neste dispositivo.');
   assert.equal(env._isSpeaking, false);
-  controls.speakText('segunda tentativa');
-  remoteTimeout();
-  assert.equal(env._isSpeaking, false, 'timeout remoto deve liberar o controle de reprodução');
 });
 
-test('Fala nativa com voz null não é cancelada por timer e completa normalmente', () => {
+test('Preferência de voz: prioriza vozes Microsoft e Google em pt-BR', () => {
   const controller = fs.readFileSync(path.join(rootDir, 'certificado.js'), 'utf8');
-  const start = controller.indexOf('function stopAudio()');
+  const start = controller.indexOf('function updateAudioUI');
+  const end = controller.indexOf('/* ===== CARREGAMENTO E RENDERIZAÇÃO', start);
+  const audioCode = controller.slice(start, end);
+  const utterances = [];
+  const synthesis = {
+    speaking: false,
+    cancel() {},
+    getVoices() {
+      return [
+        { lang: 'en-US', name: 'Microsoft David' },
+        { lang: 'pt-PT', name: 'Helia' },
+        { lang: 'pt-BR', name: 'Outra Voz Brasileira' },
+        { lang: 'pt-BR', name: 'Microsoft Daniel - Portuguese (Brazil)' }
+      ];
+    },
+    speak(utterance) { utterances.push(utterance); }
+  };
+  const env = {
+    _activeUtterance: null, _isSpeaking: false,
+    document: { getElementById: () => null },
+    window: { speechSynthesis: synthesis },
+    SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
+    console
+  };
+  new Function('env', `with (env) { ${audioCode}\nreturn { speakText }; }`)(env)
+    .speakText('Teste de preferência de voz');
+
+  assert.equal(utterances.length, 1);
+  assert.equal(utterances[0].voice.name, 'Microsoft Daniel - Portuguese (Brazil)');
+});
+
+test('Lista de vozes vazia: permite falar com a voz padrão (null) sem travar nem falhar', () => {
+  const controller = fs.readFileSync(path.join(rootDir, 'certificado.js'), 'utf8');
+  const start = controller.indexOf('function updateAudioUI');
   const end = controller.indexOf('/* ===== CARREGAMENTO E RENDERIZAÇÃO', start);
   const audioCode = controller.slice(start, end);
   let cancelCalled = false;
   const utterances = [];
-  const timeoutCallbacks = [];
   const synthesis = {
+    speaking: false,
     cancel() { cancelCalled = true; },
     getVoices() { return []; },
-    addEventListener() {},
     speak(utterance) { utterances.push(utterance); }
   };
   const env = {
-    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null,
+    _activeUtterance: null, _isSpeaking: false,
     document: { getElementById: () => null },
     window: { speechSynthesis: synthesis },
     SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
-    Audio: class {},
-    setTimeout(callback) { timeoutCallbacks.push(callback); return 5; },
-    clearTimeout() {}, console
+    console
   };
   new Function('env', `with (env) { ${audioCode}\nreturn { speakText }; }`)(env)
-    .speakText('Teste sem voz');
+    .speakText('Teste sem voz carregada');
 
-  assert.equal(utterances.length, 1, 'speak() deve ser chamado mesmo sem voz');
-  assert.equal(utterances[0].voice, null);
+  assert.equal(utterances.length, 1, 'speak() deve ser chamado mesmo com getVoices() vazio');
+  assert.ok(!utterances[0].voice, 'voice não deve ser fixada para o browser usar o padrão');
+  assert.equal(cancelCalled, false, 'não deve chamar cancel()');
 
-  // Simula a fala iniciando naturalmente (browser usa voz padrão)
+  // Simula ciclo completo de reprodução
   utterances[0].onstart();
-  assert.equal(cancelCalled, false, 'a fala nativa não deve ser cancelada por nenhum timer');
-
-  // Se houver algum timer capturado, dispará-lo não deve cancelar
-  timeoutCallbacks.forEach(cb => cb());
-  assert.equal(cancelCalled, false, 'nenhum timer deve chamar synthesis.cancel()');
-
-  // Fala termina normalmente
+  assert.equal(env._isSpeaking, true);
   utterances[0].onend();
-  assert.equal(env._isSpeaking, false, 'estado deve ser liberado após onend');
-});
-
-test('Lista de vozes inicialmente vazia aceita voz pt-BR carregada por voiceschanged sem cancelar', () => {
-  const controller = fs.readFileSync(path.join(rootDir, 'certificado.js'), 'utf8');
-  const start = controller.indexOf('function stopAudio()');
-  const end = controller.indexOf('/* ===== CARREGAMENTO E RENDERIZAÇÃO', start);
-  const audioCode = controller.slice(start, end);
-  let voices = [];
-  let onVoicesChanged;
-  let cancelCalled = false;
-  const utterances = [];
-  const synthesis = {
-    cancel() { cancelCalled = true; },
-    getVoices() { return voices; },
-    addEventListener(_event, callback) { onVoicesChanged = callback; },
-    speak(utterance) { utterances.push(utterance); }
-  };
-  const env = {
-    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null,
-    document: { getElementById: () => null },
-    window: { speechSynthesis: synthesis },
-    SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
-    Audio: class {},
-    setTimeout(callback) { return 5; },
-    clearTimeout() {}, console
-  };
-  new Function('env', `with (env) { ${audioCode}\nreturn { speakText }; }`)(env)
-    .speakText('Certificado de Ana');
-  assert.equal(utterances.length, 1, 'a fala é enfileirada sem esperar a lista de vozes');
-  assert.equal(utterances[0].voice, null);
-
-  // voiceschanged dispara e atualiza a voz
-  voices = [{ lang: 'pt-BR', name: 'Português Brasil' }];
-  onVoicesChanged();
-  assert.equal(utterances[0].voice.lang, 'pt-BR');
-
-  // A fala inicia normalmente e depois termina
-  utterances[0].onstart();
-  assert.equal(cancelCalled, false, 'não deve cancelar a fala nativa com timer');
-  utterances[0].onend();
-  assert.equal(env._isSpeaking, false, 'estado deve voltar ao normal após onend');
-  assert.equal(utterances.length, 1, 'voz nativa não deve duplicar com fallback remoto');
+  assert.equal(env._isSpeaking, false);
 });
 
 test('10. CSP em certificado.html inclui media-src e sw.js inclui arquivos do certificado no precache', () => {

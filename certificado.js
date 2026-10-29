@@ -17,174 +17,109 @@ import {
 
 let _currentUser = null;
 let _currentCertData = null;
-let _currentAudio = null;
+let _activeUtterance = null;
 let _isSpeaking = false;
-let _speechGen = 0;
-let _fallbackTimer = null;
 
-/* ===== CONTROLE DE ÁUDIO ===== */
-function stopAudio() {
-  const hadActiveSpeech = _isSpeaking;
-  _speechGen++;
-  if (_fallbackTimer) {
-    clearTimeout(_fallbackTimer);
-    _fallbackTimer = null;
+/* ===== CONTROLE DE ÁUDIO SIMPLIFICADO (SÍNTESE NATIVA) ===== */
+function updateAudioUI(isSpeaking, btnElement = null, labelElement = null) {
+  _isSpeaking = isSpeaking;
+  const btn = btnElement || document.getElementById('btnOuvirCert');
+  const label = labelElement || document.getElementById('labelOuvirCert');
+  if (btn) {
+    if (isSpeaking) {
+      btn.classList.add('speaking');
+    } else {
+      btn.classList.remove('speaking');
+    }
   }
-  if (_currentAudio) {
+  if (label) {
+    label.textContent = isSpeaking ? 'Toque para parar' : 'Ouvir Certificado';
+  }
+}
+
+function stopAudio(btnElement = null, labelElement = null) {
+  if (_isSpeaking && 'speechSynthesis' in window) {
     try {
-      _currentAudio.pause();
-      _currentAudio.currentTime = 0;
-      _currentAudio.src = '';
+      window.speechSynthesis.cancel();
     } catch (e) {}
-    _currentAudio = null;
   }
-  // Cancelar uma fila vazia antes do primeiro speak() pode deixar a síntese do
-  // Chrome/Windows sem iniciar. Só cancele a API nativa se havia fala ativa.
-  if (hadActiveSpeech && 'speechSynthesis' in window) {
-    try { window.speechSynthesis.cancel(); } catch (e) {}
-  }
-  _isSpeaking = false;
-  const btn = document.getElementById('btnOuvirCert');
-  const label = document.getElementById('labelOuvirCert');
-  if (btn) btn.classList.remove('speaking');
-  if (label) label.textContent = 'Ouvir Certificado';
+  _activeUtterance = null;
+  updateAudioUI(false, btnElement, labelElement);
+}
+
+function choosePreferredVoice(synthesis) {
+  if (!synthesis || typeof synthesis.getVoices !== 'function') return null;
+  const voices = synthesis.getVoices() || [];
+  if (!voices.length) return null;
+
+  const ptVoices = voices.filter(v => /^pt(-|_)?BR$/i.test(v.lang) || /^pt/i.test(v.lang));
+  if (!ptVoices.length) return null;
+
+  // Preferência por vozes brasileiras de alta qualidade: Microsoft ou Google
+  return ptVoices.find(v => /Microsoft/i.test(v.name))
+    || ptVoices.find(v => /Google/i.test(v.name))
+    || ptVoices.find(v => /^pt(-|_)?BR$/i.test(v.lang))
+    || ptVoices[0];
 }
 
 function speakText(text, btnElement = null, labelElement = null) {
   if (!text) return;
 
-  if (_isSpeaking) {
-    stopAudio();
+  if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance !== 'function') {
+    const status = document.getElementById('certAudioStatus');
+    if (status) status.textContent = 'Síntese de voz não disponível neste dispositivo.';
     return;
   }
 
-  stopAudio();
-  _isSpeaking = true;
-  const gen = _speechGen;
+  const synthesis = window.speechSynthesis;
 
-  if (btnElement) btnElement.classList.add('speaking');
-  if (labelElement) labelElement.textContent = 'Toque para parar';
+  // Se já houver leitura ativa, o toque interrompe (comportamento de alternância)
+  if (_isSpeaking || synthesis.speaking) {
+    stopAudio(btnElement, labelElement);
+    return;
+  }
 
-  const onFinish = () => {
-    if (gen !== _speechGen) return;
-    if (_fallbackTimer) {
-      clearTimeout(_fallbackTimer);
-      _fallbackTimer = null;
-    }
-    _isSpeaking = false;
-    if (btnElement) btnElement.classList.remove('speaking');
-    if (labelElement) labelElement.textContent = 'Ouvir Certificado';
+  const status = document.getElementById('certAudioStatus');
+  if (status) status.textContent = '';
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'pt-BR';
+
+  const voice = choosePreferredVoice(synthesis);
+  if (voice) {
+    utter.voice = voice;
+  }
+
+  // Manter referência ativa no escopo do módulo previne a coleta de lixo (GC)
+  // precoce do Chromium/Windows antes ou durante a reprodução da fala.
+  _activeUtterance = utter;
+
+  utter.onstart = () => {
+    updateAudioUI(true, btnElement, labelElement);
   };
 
-  const announceUnavailable = () => {
-    if (gen !== _speechGen) return;
-    const status = document.getElementById('certAudioStatus');
-    if (status) status.textContent = 'Não foi possível reproduzir o áudio neste dispositivo.';
-    onFinish();
-  };
-
-  const speakRemote = () => {
-    if (gen !== _speechGen || _currentAudio) return;
-    try {
-      const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
-      const audio = new Audio();
-      audio.src = url;
-      _currentAudio = audio;
-      audio.onended = () => {
-        if (gen !== _speechGen || _currentAudio !== audio) return;
-        _currentAudio = null;
-        onFinish();
-      };
-      audio.onerror = () => {
-        if (gen !== _speechGen || _currentAudio !== audio) return;
-        _currentAudio = null;
-        announceUnavailable();
-      };
-      const playPromise = audio.play();
-      _fallbackTimer = setTimeout(() => {
-        if (gen !== _speechGen || _currentAudio !== audio) return;
-        _currentAudio = null;
-        try { audio.pause(); audio.src = ''; } catch (e) {}
-        announceUnavailable();
-      }, 6000);
-      if (playPromise && typeof playPromise.catch === 'function') {
-        playPromise.catch(() => {
-          if (gen !== _speechGen || _currentAudio !== audio) return;
-          _currentAudio = null;
-          announceUnavailable();
-        });
-      }
-    } catch (e) {
-      announceUnavailable();
+  utter.onend = () => {
+    if (_activeUtterance === utter) {
+      _activeUtterance = null;
+      updateAudioUI(false, btnElement, labelElement);
     }
   };
 
-  const speakNative = () => {
-    if (gen !== _speechGen) return;
-    if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance !== 'function') {
-      speakRemote();
-      return;
-    }
-    const status = document.getElementById('certAudioStatus');
-    if (status) status.textContent = '';
-    try {
-      const synthesis = window.speechSynthesis;
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = 'pt-BR';
-      utter.rate = 0.84;
-      utter.pitch = 1.0;
-      const choosePortugueseVoice = () => {
-        const voices = typeof synthesis.getVoices === 'function' ? synthesis.getVoices() : [];
-        return voices.find(voice => /^pt-BR$/i.test(voice.lang))
-          || voices.find(voice => /^pt(?:-|$)/i.test(voice.lang))
-          || null;
-      };
-      utter.voice = choosePortugueseVoice();
-      let nativeStarted = false;
-      const clearNativeFallback = () => {
-        if (_fallbackTimer) {
-          clearTimeout(_fallbackTimer);
-          _fallbackTimer = null;
-        }
-      };
-      utter.onstart = () => {
-        if (gen !== _speechGen) return;
-        nativeStarted = true;
-        clearNativeFallback();
-      };
-      utter.onend = onFinish;
-      utter.onerror = () => {
-        if (gen === _speechGen) {
-          clearNativeFallback();
-          speakRemote();
-        }
-      };
-      // Chamado diretamente no gesto do usuário para respeitar as políticas dos navegadores móveis.
-      synthesis.speak(utter);
-      if (!utter.voice) {
-        // Alguns navegadores desktop preenchem a lista de vozes depois do primeiro acesso.
-        // A fala já foi enfileirada com speak() acima; o browser usará a voz padrão.
-        // Apenas tentamos atualizar a voz se voiceschanged disparar antes do início.
-        const onVoicesChanged = () => {
-          if (gen !== _speechGen || nativeStarted) return;
-          const voice = choosePortugueseVoice();
-          if (voice) utter.voice = voice;
-        };
-        if (typeof synthesis.addEventListener === 'function') {
-          synthesis.addEventListener('voiceschanged', onVoicesChanged, { once: true });
-        } else {
-          synthesis.onvoiceschanged = onVoicesChanged;
-        }
-        // NÃO cancelamos a fala nativa com um timer. O speak() já foi chamado e o
-        // browser vai reproduzir com a voz padrão do idioma. Se realmente falhar,
-        // o callback utter.onerror acionará o fallback remoto.
-      }
-    } catch (e) {
-      speakRemote();
+  utter.onerror = (err) => {
+    console.warn('Erro na síntese nativa:', err);
+    if (_activeUtterance === utter) {
+      _activeUtterance = null;
+      updateAudioUI(false, btnElement, labelElement);
     }
   };
 
-  speakNative();
+  // Se o sintetizador estiver suspenso por inatividade no Chromium, desengasga
+  if (synthesis.paused) {
+    try { synthesis.resume(); } catch (e) {}
+  }
+
+  updateAudioUI(true, btnElement, labelElement);
+  synthesis.speak(utter);
 }
 
 /* ===== CARREGAMENTO E RENDERIZAÇÃO DO CERTIFICADO ===== */

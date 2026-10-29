@@ -20,10 +20,15 @@ let _currentCertData = null;
 let _currentAudio = null;
 let _isSpeaking = false;
 let _speechGen = 0;
+let _fallbackTimer = null;
 
 /* ===== CONTROLE DE ÁUDIO ===== */
 function stopAudio() {
   _speechGen++;
+  if (_fallbackTimer) {
+    clearTimeout(_fallbackTimer);
+    _fallbackTimer = null;
+  }
   if (_currentAudio) {
     try {
       _currentAudio.pause();
@@ -59,6 +64,10 @@ function speakText(text, btnElement = null, labelElement = null) {
 
   const onFinish = () => {
     if (gen !== _speechGen) return;
+    if (_fallbackTimer) {
+      clearTimeout(_fallbackTimer);
+      _fallbackTimer = null;
+    }
     _isSpeaking = false;
     if (btnElement) btnElement.classList.remove('speaking');
     if (labelElement) labelElement.textContent = 'Ouvir Certificado';
@@ -66,10 +75,22 @@ function speakText(text, btnElement = null, labelElement = null) {
 
   const speakNative = () => {
     if (gen !== _speechGen) return;
+    if (_fallbackTimer) {
+      clearTimeout(_fallbackTimer);
+      _fallbackTimer = null;
+    }
+    if (_currentAudio) {
+      try { _currentAudio.pause(); _currentAudio.src = ''; } catch (e) {}
+      _currentAudio = null;
+    }
     if (!('speechSynthesis' in window)) {
+      const status = document.getElementById('certAudioStatus');
+      if (status) status.textContent = 'Não foi possível reproduzir o áudio neste dispositivo.';
       onFinish();
       return;
     }
+    const status = document.getElementById('certAudioStatus');
+    if (status) status.textContent = '';
     try {
       window.speechSynthesis.cancel();
       const utter = new SpeechSynthesisUtterance(text);
@@ -100,6 +121,8 @@ function speakText(text, btnElement = null, labelElement = null) {
     };
 
     const playPromise = audio.play();
+    // Uma requisição de áudio pode ficar pendente sem rejeitar. Tenta a voz nativa nesse caso.
+    _fallbackTimer = setTimeout(speakNative, 2500);
     if (playPromise !== undefined) {
       playPromise.catch(() => {
         speakNative();

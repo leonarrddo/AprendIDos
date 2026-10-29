@@ -565,13 +565,15 @@
     }
 
     @media print {
+      html, body { page-break-after: avoid !important; }
       html, body {
         background: #FFFFFF !important;
         color: #000000 !important;
         margin: 0 !important;
         padding: 0 !important;
         width: 100% !important;
-        height: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
         overflow: visible !important;
       }
 
@@ -601,14 +603,21 @@
       }
 
       .certificate-paper {
+        box-sizing: border-box !important;
         border: 10px double #007A43 !important;
         box-shadow: none !important;
         background: #FFFFFF !important;
         width: 100% !important;
         max-width: 100% !important;
-        min-height: 185mm !important;
-        padding: 24mm 24mm 16mm !important;
+        width: 100% !important;
+        height: 194mm !important;
+        min-height: 0 !important;
+        max-height: 194mm !important;
+        padding: 9mm 15mm !important;
+        overflow: hidden !important;
         page-break-inside: avoid !important;
+        break-inside: avoid-page !important;
+        page-break-after: avoid !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
@@ -626,6 +635,10 @@
       .cert-statement {
         font-size: 16pt !important;
       }
+
+      .certificate-paper-wrapper,
+      #certEligibleSection,
+      .main-content { break-after: avoid-page !important; page-break-after: avoid !important; }
     }
 
     /* Responsividade em telas pequenas */
@@ -677,6 +690,7 @@
           <button type="button" class="btn-action btn-ouvir-cert" id="btnOuvirCert" onclick="ouvirCertificado(this)" aria-label="Ouvir o texto do certificado">
             <i class="fas fa-volume-up" aria-hidden="true"></i> <span id="labelOuvirCert">Ouvir Certificado</span>
           </button>
+          <span id="certAudioStatus" role="status" aria-live="polite"></span>
           <button type="button" class="btn-action btn-editar-nome" id="btnAbrirModalNome" onclick="abrirModalNome()" aria-label="Alterar o nome no certificado">
             <i class="fas fa-user-edit" aria-hidden="true"></i> Ajustar Meu Nome
           </button>

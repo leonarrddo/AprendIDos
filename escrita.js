@@ -889,14 +889,19 @@ function evaluateWriting(isManual) {
     }
 
     if (allPassed) {
-        updateEvaluationUI(avgScore, stars, 'Excelente caligrafia! Você escreveu a palavra ' + q.word + ' com maestria!', 'success');
+        var successMessage = stars === 3
+            ? 'Excelente caligrafia! Você escreveu a palavra ' + q.word + ' com maestria!'
+            : 'Muito bem por concluir a palavra! Continue praticando para melhorar seus traços.';
+        updateEvaluationUI(avgScore, stars, successMessage, stars === 3 ? 'success' : 'partial');
 
         if (!hasPassedCurrentWord) {
             hasPassedCurrentWord = true;
             hits++;
             var h = document.getElementById('hitsCount'); if (h) h.textContent = hits;
 
-            speak('Excelente! Você escreveu a palavra ' + q.word + ' com perfeição!');
+            speak(stars === 3
+                ? 'Excelente! Você escreveu a palavra ' + q.word + ' com perfeição!'
+                : 'Muito bem por concluir a palavra! Continue praticando para melhorar seus traços.');
 
             if (fbArea) fbArea.innerHTML = '<div class="feedback-msg success" role="alert"><i class="fas fa-check-circle"></i> Parabéns! Escrita completada com sucesso!</div>';
         }

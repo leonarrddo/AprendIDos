@@ -526,12 +526,24 @@ function calculateCoverage(expectedPoints, userPoints, tolerance) {
     if (!userPoints || userPoints.length === 0) return 0;
     var tolSq = tolerance * tolerance;
     var covered = 0;
+    var usedUserPoints = new Array(userPoints.length).fill(false);
     for (var i = 0; i < expectedPoints.length; i++) {
         var ep = expectedPoints[i];
+        var nearestIndex = -1;
+        var nearestDistance = tolSq;
         for (var j = 0; j < userPoints.length; j++) {
+            if (usedUserPoints[j]) continue;
             var dx = ep.x - userPoints[j].x;
             var dy = ep.y - userPoints[j].y;
-            if (dx * dx + dy * dy <= tolSq) { covered++; break; }
+            var distance = dx * dx + dy * dy;
+            if (distance <= nearestDistance) {
+                nearestDistance = distance;
+                nearestIndex = j;
+            }
+        }
+        if (nearestIndex !== -1) {
+            usedUserPoints[nearestIndex] = true;
+            covered++;
         }
     }
     return Math.min(100, Math.round((covered / expectedPoints.length) * 100));

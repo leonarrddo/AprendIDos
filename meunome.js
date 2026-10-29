@@ -1323,7 +1323,7 @@ function evaluateWriting(isManual) {
         var faltam = metrics.length - completedCount;
         feedbackMsg = faltam > 0
             ? 'Você está quase lá! Vamos completar ' + faltam + ' letra(s) que ainda precisam de treino.'
-            : 'Ótimo trabalho! O traçado do seu nome está muito bom.';
+            : 'Muito bem por concluir seu nome! Continue praticando para melhorar seus traços.';
     } else if (partialRatio >= 0.35 || (completedCount > 0 && avgScore >= 35)) {
         stars = 1;
         statusClass = 'partial';

@@ -195,9 +195,46 @@ test('9. certificado.html define regras para impressão A4 landscape e oculta co
   assert.match(certHtml, /@media print/i);
   assert.match(certHtml, /\.no-print/);
   assert.match(certHtml, /print-color-adjust:\s*exact/);
+  assert.match(certHtml, /height:\s*194mm/i);
+  assert.match(certHtml, /box-sizing:\s*border-box/i);
+  assert.match(certHtml, /overflow:\s*hidden/i);
+  assert.match(certHtml, /\.no-print[^}]*display:\s*none/is);
   assert.match(certHtml, /id="btnImprimirCert"/);
   assert.match(certHtml, /id="btnOuvirCert"/);
   assert.match(certHtml, /id="btnAbrirModalNome"/);
+});
+
+test('Áudio do certificado usa texto completo, permite parar e recorre à voz nativa', async () => {
+  const controller = fs.readFileSync(path.join(rootDir, 'certificado.js'), 'utf8');
+  const start = controller.indexOf('function stopAudio()');
+  const end = controller.indexOf('/* ===== CARREGAMENTO E RENDERIZAÇÃO', start);
+  assert.ok(start >= 0 && end > start);
+  const audioCode = controller.slice(start, end);
+  const utterances = [];
+  let stopped = 0;
+  let audioInstance;
+  const env = {
+    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null,
+    document: { getElementById: () => ({ classList: { add() {}, remove() {} }, textContent: '' }) },
+    window: { speechSynthesis: { cancel() { stopped++; }, speak(utterance) { utterances.push(utterance); } } },
+    SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
+    Audio: class { constructor() { audioInstance = this; } play() { return new Promise(() => {}); } pause() {} },
+    setTimeout(callback) { env.fallback = callback; return 1; },
+    clearTimeout() {},
+    console
+  };
+  const controls = new Function('env', `with (env) { ${audioCode}\nreturn { speakText, stopAudio }; }`)(env);
+  const button = { classList: { add() {}, remove() {} } };
+  const label = { textContent: '' };
+  const certificateText = 'Certificado de conclusão. Maria da Silva concluiu todas as 9 atividades.';
+  controls.speakText(certificateText, button, label);
+  audioInstance.onerror();
+  assert.equal(utterances[0].text, certificateText);
+  assert.equal(utterances[0].lang, 'pt-BR');
+  assert.equal(label.textContent, 'Toque para parar');
+  controls.speakText(certificateText, button, label);
+  assert.ok(stopped > 0, 'Tocar durante a narração deve cancelar a fala atual');
+  assert.equal(env._isSpeaking, false);
 });
 
 test('10. CSP em certificado.html inclui media-src e sw.js inclui arquivos do certificado no precache', () => {

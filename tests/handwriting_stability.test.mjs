@@ -279,10 +279,10 @@ test('8. Reconhecimento: caligrafia com pequenas variações é aprovada; rabisc
     const ref = getScaledStrokesForLetter('L', m);
 
     // Traçado realista com jitter manual de ±2px
-    const naturalStrokes = ref.map(s => ({
+    const naturalStrokes = ref.map((s, strokeIndex) => ({
         points: resamplePolyline(s, 3, 15).map(pt => ({
-            x: pt.x + (Math.random() * 4 - 2),
-            y: pt.y + (Math.random() * 4 - 2)
+            x: pt.x + (strokeIndex % 2 === 0 ? 1.5 : -1.5),
+            y: pt.y + (strokeIndex % 2 === 0 ? -1 : 1)
         })),
         letterIndex: 0
     }));
@@ -301,6 +301,31 @@ test('8. Reconhecimento: caligrafia com pequenas variações é aprovada; rabisc
     const scribbleRes = evaluateLetter('L', m, scribble, 0);
     assert.equal(scribbleRes.passed, false, 'Rabisco caótico deve ser reprovado');
     assert.ok(scribbleRes.score <= 15, `Score do rabisco deve ser <= 15 (obteve ${scribbleRes.score})`);
+});
+
+test('Pontuação distingue traçado próximo ao modelo de um formato claramente incompatível', () => {
+    ['A', 'C', 'L', 'S'].forEach(char => {
+        const metric = { char, index: 0, x1: 50, y1: 50, x2: 130, y2: 150, width: 80, centerX: 90, fontSize: 80 };
+        const reference = getScaledStrokesForLetter(char, metric);
+        const reasonable = reference.map(stroke => ({
+            points: resamplePolyline(stroke, 3, 15).map(point => ({
+                x: 90 + (point.x - 90) * 1.08 + 3,
+                y: 100 + (point.y - 100) * 1.08 - 2
+            })),
+            letterIndex: 0
+        }));
+        const incompatible = [{
+            points: Array.from({ length: 30 }, (_, index) => ({ x: 55 + index * 2, y: 145 })),
+            letterIndex: 0
+        }];
+
+        const reasonableResult = evaluateLetter(char, metric, reasonable, 0);
+        const incompatibleResult = evaluateLetter(char, metric, incompatible, 0);
+        assert.ok(reasonableResult.score > incompatibleResult.score,
+            `${char}: traçado próximo (${reasonableResult.score}) deve superar o incompatível (${incompatibleResult.score})`);
+        assert.equal(incompatibleResult.passed, false, `${char} incompatível não pode passar`);
+        assert.ok(incompatibleResult.score <= 42);
+    });
 });
 
 // 9. NAVEGAÇÃO E CONCLUSÃO

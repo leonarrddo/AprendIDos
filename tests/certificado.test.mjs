@@ -215,6 +215,7 @@ test('Clique no certificado inicia síntese nativa imediata, lê nome/data e per
   assert.ok(clickStart >= 0 && clickEnd > clickStart, 'handler do botão precisa existir');
   const clickCode = controller.slice(clickStart, clickEnd);
   const utterances = [];
+  const audioCalls = [];
   let stopped = 0;
   const elements = {
     btnOuvirCert: { classList: { add() {}, remove() {} } },
@@ -226,7 +227,7 @@ test('Clique no certificado inicia síntese nativa imediata, lê nome/data e per
   const env = {
     _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null, _nativeFallbackStartedForGen: -1,
     document: { getElementById: id => elements[id] || null },
-    window: { speechSynthesis: { cancel() { stopped++; }, getVoices() { return [{ lang: 'pt-BR', name: 'Português' }]; }, speak(utterance) { utterances.push(utterance); } } },
+    window: { speechSynthesis: { cancel() { stopped++; audioCalls.push('cancel'); }, getVoices() { return [{ lang: 'pt-BR', name: 'Português' }]; }, speak(utterance) { utterances.push(utterance); audioCalls.push('speak'); } } },
     SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
     Audio: class { play() { throw new Error('A voz nativa deveria ser preferida'); } },
     setTimeout(callback) { env.fallback = callback; return 1; },
@@ -236,6 +237,7 @@ test('Clique no certificado inicia síntese nativa imediata, lê nome/data e per
   const controls = new Function('env', `with (env) { ${audioCode}\n${clickCode}\nreturn { speakText, stopAudio }; }`)(env);
   const button = elements.btnOuvirCert;
   env.window.ouvirCertificado(button);
+  assert.deepEqual(audioCalls, ['speak'], 'o primeiro clique não deve cancelar uma fila vazia antes de falar');
   assert.match(utterances[0].text, /Maria da Silva concluiu todas as 9 atividades/);
   assert.match(utterances[0].text, /29 de outubro de 2026/);
   assert.equal(utterances[0].lang, 'pt-BR');
@@ -243,6 +245,7 @@ test('Clique no certificado inicia síntese nativa imediata, lê nome/data e per
   assert.equal(elements.labelOuvirCert.textContent, 'Toque para parar');
   env.window.ouvirCertificado(button);
   assert.ok(stopped > 0, 'Tocar durante a narração deve cancelar a fala atual');
+  assert.deepEqual(audioCalls.slice(0, 2), ['speak', 'cancel']);
   assert.equal(env._isSpeaking, false);
   env.window.ouvirCertificado(button);
   assert.equal(utterances.length, 2, 'Uma nova leitura após parar deve iniciar normalmente');

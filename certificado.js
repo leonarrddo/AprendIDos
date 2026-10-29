@@ -24,6 +24,7 @@ let _fallbackTimer = null;
 
 /* ===== CONTROLE DE ÁUDIO ===== */
 function stopAudio() {
+  const hadActiveSpeech = _isSpeaking;
   _speechGen++;
   if (_fallbackTimer) {
     clearTimeout(_fallbackTimer);
@@ -37,7 +38,9 @@ function stopAudio() {
     } catch (e) {}
     _currentAudio = null;
   }
-  if ('speechSynthesis' in window) {
+  // Cancelar uma fila vazia antes do primeiro speak() pode deixar a síntese do
+  // Chrome/Windows sem iniciar. Só cancele a API nativa se havia fala ativa.
+  if (hadActiveSpeech && 'speechSynthesis' in window) {
     try { window.speechSynthesis.cancel(); } catch (e) {}
   }
   _isSpeaking = false;

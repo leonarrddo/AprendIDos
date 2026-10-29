@@ -200,7 +200,7 @@ test('9. certificado.html define regras para impressão A4 landscape e oculta co
   assert.match(certHtml, /overflow:\s*hidden/i);
   assert.match(certHtml, /\.no-print[^}]*display:\s*none/is);
   assert.match(certHtml, /id="btnImprimirCert"/);
-  assert.match(certHtml, /id="btnOuvirCert"/);
+  assert.doesNotMatch(certHtml, /id="btnOuvirCert"/, 'Botão de ouvir certificado deve ser removido');
   assert.match(certHtml, /id="btnAbrirModalNome"/);
 });
 

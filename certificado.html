@@ -681,16 +681,12 @@
     <!-- TELA QUANDO O ALUNO É ELEGÍVEL (9 LIÇÕES CONCLUÍDAS) -->
     <div id="certEligibleSection" style="display: none; width: 100%;">
 
-      <!-- BARRA DE AÇÕES (IMPRIMIR, OUVIR, ALTERAR NOME) -->
+      <!-- BARRA DE AÇÕES (IMPRIMIR, ALTERAR NOME) -->
       <section class="certificate-toolbar no-print" aria-label="Ações do certificado">
         <div class="toolbar-actions">
           <button type="button" class="btn-action btn-imprimir" id="btnImprimirCert" onclick="window.print()" aria-label="Imprimir certificado ou salvar em PDF">
             <i class="fas fa-print" aria-hidden="true"></i> Imprimir / Salvar PDF
           </button>
-          <button type="button" class="btn-action btn-ouvir-cert" id="btnOuvirCert" onclick="ouvirCertificado(this)" aria-label="Ouvir o texto do certificado">
-            <i class="fas fa-volume-up" aria-hidden="true"></i> <span id="labelOuvirCert">Ouvir Certificado</span>
-          </button>
-          <span id="certAudioStatus" role="status" aria-live="polite"></span>
           <button type="button" class="btn-action btn-editar-nome" id="btnAbrirModalNome" onclick="abrirModalNome()" aria-label="Alterar o nome no certificado">
             <i class="fas fa-user-edit" aria-hidden="true"></i> Ajustar Meu Nome
           </button>

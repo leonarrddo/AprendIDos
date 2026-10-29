@@ -21,6 +21,7 @@ let _currentAudio = null;
 let _isSpeaking = false;
 let _speechGen = 0;
 let _fallbackTimer = null;
+let _nativeFallbackStartedForGen = -1;
 
 /* ===== CONTROLE DE ÁUDIO ===== */
 function stopAudio() {
@@ -73,64 +74,80 @@ function speakText(text, btnElement = null, labelElement = null) {
     if (labelElement) labelElement.textContent = 'Ouvir Certificado';
   };
 
-  const speakNative = () => {
+  const announceUnavailable = () => {
     if (gen !== _speechGen) return;
-    if (_fallbackTimer) {
-      clearTimeout(_fallbackTimer);
-      _fallbackTimer = null;
+    const status = document.getElementById('certAudioStatus');
+    if (status) status.textContent = 'Não foi possível reproduzir o áudio neste dispositivo.';
+    onFinish();
+  };
+
+  const speakRemote = () => {
+    if (gen !== _speechGen || _currentAudio) return;
+    try {
+      const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
+      const audio = new Audio();
+      _currentAudio = audio;
+      audio.onended = () => {
+        if (gen !== _speechGen || _currentAudio !== audio) return;
+        _currentAudio = null;
+        onFinish();
+      };
+      audio.onerror = () => {
+        if (gen !== _speechGen || _currentAudio !== audio) return;
+        _currentAudio = null;
+        announceUnavailable();
+      };
+      const playPromise = audio.play();
+      _fallbackTimer = setTimeout(() => {
+        if (gen !== _speechGen || _currentAudio !== audio) return;
+        _currentAudio = null;
+        try { audio.pause(); audio.src = ''; } catch (e) {}
+        announceUnavailable();
+      }, 6000);
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => {
+          if (gen !== _speechGen || _currentAudio !== audio) return;
+          _currentAudio = null;
+          announceUnavailable();
+        });
+      }
+    } catch (e) {
+      announceUnavailable();
     }
-    if (_currentAudio) {
-      try { _currentAudio.pause(); _currentAudio.src = ''; } catch (e) {}
-      _currentAudio = null;
-    }
-    if (!('speechSynthesis' in window)) {
-      const status = document.getElementById('certAudioStatus');
-      if (status) status.textContent = 'Não foi possível reproduzir o áudio neste dispositivo.';
-      onFinish();
+  };
+
+  const speakNative = () => {
+    if (gen !== _speechGen || _nativeFallbackStartedForGen === gen) return;
+    _nativeFallbackStartedForGen = gen;
+    if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance !== 'function') {
+      speakRemote();
       return;
     }
     const status = document.getElementById('certAudioStatus');
     if (status) status.textContent = '';
     try {
-      window.speechSynthesis.cancel();
+      const synthesis = window.speechSynthesis;
+      synthesis.cancel();
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = 'pt-BR';
       utter.rate = 0.84;
       utter.pitch = 1.0;
+      const voices = typeof synthesis.getVoices === 'function' ? synthesis.getVoices() : [];
+      utter.voice = voices.find(voice => /^pt-BR$/i.test(voice.lang))
+        || voices.find(voice => /^pt(?:-|$)/i.test(voice.lang))
+        || null;
       utter.onend = onFinish;
-      utter.onerror = onFinish;
-      window.speechSynthesis.speak(utter);
+      utter.onerror = () => {
+        if (gen === _speechGen) speakRemote();
+      };
+      // Chamado diretamente no gesto do usuário para respeitar as políticas dos navegadores móveis.
+      synthesis.speak(utter);
     } catch (e) {
-      onFinish();
+      speakRemote();
     }
   };
 
-  try {
-    const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-BR&client=tw-ob&q=' + encodeURIComponent(text);
-    const audio = new Audio();
-    _currentAudio = audio;
-
-    audio.onended = () => {
-      _currentAudio = null;
-      onFinish();
-    };
-
-    audio.onerror = () => {
-      _currentAudio = null;
-      speakNative();
-    };
-
-    const playPromise = audio.play();
-    // Uma requisição de áudio pode ficar pendente sem rejeitar. Tenta a voz nativa nesse caso.
-    _fallbackTimer = setTimeout(speakNative, 2500);
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        speakNative();
-      });
-    }
-  } catch (e) {
-    speakNative();
-  }
+  speakNative();
 }
 
 /* ===== CARREGAMENTO E RENDERIZAÇÃO DO CERTIFICADO ===== */

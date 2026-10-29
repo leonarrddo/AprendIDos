@@ -204,37 +204,73 @@ test('9. certificado.html define regras para impressão A4 landscape e oculta co
   assert.match(certHtml, /id="btnAbrirModalNome"/);
 });
 
-test('Áudio do certificado usa texto completo, permite parar e recorre à voz nativa', async () => {
+test('Clique no certificado inicia síntese nativa imediata, lê nome/data e permite parar', () => {
   const controller = fs.readFileSync(path.join(rootDir, 'certificado.js'), 'utf8');
   const start = controller.indexOf('function stopAudio()');
   const end = controller.indexOf('/* ===== CARREGAMENTO E RENDERIZAÇÃO', start);
   assert.ok(start >= 0 && end > start);
   const audioCode = controller.slice(start, end);
+  const clickStart = controller.indexOf('window.ouvirCertificado = function(btn)');
+  const clickEnd = controller.indexOf('window.ouvirMensagemIncompleta', clickStart);
+  assert.ok(clickStart >= 0 && clickEnd > clickStart, 'handler do botão precisa existir');
+  const clickCode = controller.slice(clickStart, clickEnd);
   const utterances = [];
   let stopped = 0;
-  let audioInstance;
+  const elements = {
+    btnOuvirCert: { classList: { add() {}, remove() {} } },
+    labelOuvirCert: { textContent: 'Ouvir Certificado' },
+    certStudentName: { textContent: 'Maria da Silva' },
+    certDateDisplay: { textContent: '29 de outubro de 2026' },
+    certAudioStatus: { textContent: '' }
+  };
   const env = {
-    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null,
-    document: { getElementById: () => ({ classList: { add() {}, remove() {} }, textContent: '' }) },
-    window: { speechSynthesis: { cancel() { stopped++; }, speak(utterance) { utterances.push(utterance); } } },
+    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null, _nativeFallbackStartedForGen: -1,
+    document: { getElementById: id => elements[id] || null },
+    window: { speechSynthesis: { cancel() { stopped++; }, getVoices() { return [{ lang: 'pt-BR', name: 'Português' }]; }, speak(utterance) { utterances.push(utterance); } } },
     SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
-    Audio: class { constructor() { audioInstance = this; } play() { return new Promise(() => {}); } pause() {} },
+    Audio: class { play() { throw new Error('A voz nativa deveria ser preferida'); } },
     setTimeout(callback) { env.fallback = callback; return 1; },
     clearTimeout() {},
     console
   };
-  const controls = new Function('env', `with (env) { ${audioCode}\nreturn { speakText, stopAudio }; }`)(env);
-  const button = { classList: { add() {}, remove() {} } };
-  const label = { textContent: '' };
-  const certificateText = 'Certificado de conclusão. Maria da Silva concluiu todas as 9 atividades.';
-  controls.speakText(certificateText, button, label);
-  audioInstance.onerror();
-  assert.equal(utterances[0].text, certificateText);
+  const controls = new Function('env', `with (env) { ${audioCode}\n${clickCode}\nreturn { speakText, stopAudio }; }`)(env);
+  const button = elements.btnOuvirCert;
+  env.window.ouvirCertificado(button);
+  assert.match(utterances[0].text, /Maria da Silva concluiu todas as 9 atividades/);
+  assert.match(utterances[0].text, /29 de outubro de 2026/);
   assert.equal(utterances[0].lang, 'pt-BR');
-  assert.equal(label.textContent, 'Toque para parar');
-  controls.speakText(certificateText, button, label);
+  assert.equal(utterances[0].voice.lang, 'pt-BR');
+  assert.equal(elements.labelOuvirCert.textContent, 'Toque para parar');
+  env.window.ouvirCertificado(button);
   assert.ok(stopped > 0, 'Tocar durante a narração deve cancelar a fala atual');
   assert.equal(env._isSpeaking, false);
+  env.window.ouvirCertificado(button);
+  assert.equal(utterances.length, 2, 'Uma nova leitura após parar deve iniciar normalmente');
+});
+
+test('Sem síntese nativa, o áudio remoto é tentado e a interface informa falha sem ficar presa', () => {
+  const controller = fs.readFileSync(path.join(rootDir, 'certificado.js'), 'utf8');
+  const start = controller.indexOf('function stopAudio()');
+  const end = controller.indexOf('/* ===== CARREGAMENTO E RENDERIZAÇÃO', start);
+  const audioCode = controller.slice(start, end);
+  let audio;
+  let remoteTimeout;
+  const status = { textContent: '' };
+  const env = {
+    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null, _nativeFallbackStartedForGen: -1,
+    document: { getElementById: id => id === 'certAudioStatus' ? status : null },
+    window: {},
+    Audio: class { constructor() { audio = this; } play() { return new Promise(() => {}); } pause() {} },
+    setTimeout(callback) { remoteTimeout = callback; return 1; }, clearTimeout() {}, console
+  };
+  const controls = new Function('env', `with (env) { ${audioCode}\nreturn { speakText }; }`)(env);
+  controls.speakText('texto completo do certificado');
+  audio.onerror();
+  assert.equal(status.textContent, 'Não foi possível reproduzir o áudio neste dispositivo.');
+  assert.equal(env._isSpeaking, false);
+  controls.speakText('segunda tentativa');
+  remoteTimeout();
+  assert.equal(env._isSpeaking, false, 'timeout remoto deve liberar o controle de reprodução');
 });
 
 test('10. CSP em certificado.html inclui media-src e sw.js inclui arquivos do certificado no precache', () => {

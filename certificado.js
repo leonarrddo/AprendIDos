@@ -21,7 +21,6 @@ let _currentAudio = null;
 let _isSpeaking = false;
 let _speechGen = 0;
 let _fallbackTimer = null;
-let _nativeFallbackStartedForGen = -1;
 
 /* ===== CONTROLE DE ÁUDIO ===== */
 function stopAudio() {
@@ -117,8 +116,7 @@ function speakText(text, btnElement = null, labelElement = null) {
   };
 
   const speakNative = () => {
-    if (gen !== _speechGen || _nativeFallbackStartedForGen === gen) return;
-    _nativeFallbackStartedForGen = gen;
+    if (gen !== _speechGen) return;
     if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance !== 'function') {
       speakRemote();
       return;
@@ -127,21 +125,57 @@ function speakText(text, btnElement = null, labelElement = null) {
     if (status) status.textContent = '';
     try {
       const synthesis = window.speechSynthesis;
-      synthesis.cancel();
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = 'pt-BR';
       utter.rate = 0.84;
       utter.pitch = 1.0;
-      const voices = typeof synthesis.getVoices === 'function' ? synthesis.getVoices() : [];
-      utter.voice = voices.find(voice => /^pt-BR$/i.test(voice.lang))
-        || voices.find(voice => /^pt(?:-|$)/i.test(voice.lang))
-        || null;
+      const choosePortugueseVoice = () => {
+        const voices = typeof synthesis.getVoices === 'function' ? synthesis.getVoices() : [];
+        return voices.find(voice => /^pt-BR$/i.test(voice.lang))
+          || voices.find(voice => /^pt(?:-|$)/i.test(voice.lang))
+          || null;
+      };
+      utter.voice = choosePortugueseVoice();
+      let nativeStarted = false;
+      const clearNativeFallback = () => {
+        if (_fallbackTimer) {
+          clearTimeout(_fallbackTimer);
+          _fallbackTimer = null;
+        }
+      };
+      utter.onstart = () => {
+        if (gen !== _speechGen) return;
+        nativeStarted = true;
+        clearNativeFallback();
+      };
       utter.onend = onFinish;
       utter.onerror = () => {
-        if (gen === _speechGen) speakRemote();
+        if (gen === _speechGen) {
+          clearNativeFallback();
+          speakRemote();
+        }
       };
       // Chamado diretamente no gesto do usuário para respeitar as políticas dos navegadores móveis.
       synthesis.speak(utter);
+      if (!utter.voice) {
+        // Alguns navegadores desktop preenchem a lista de vozes depois do primeiro acesso.
+        const onVoicesChanged = () => {
+          if (gen !== _speechGen || nativeStarted) return;
+          const voice = choosePortugueseVoice();
+          if (voice) utter.voice = voice;
+        };
+        if (typeof synthesis.addEventListener === 'function') {
+          synthesis.addEventListener('voiceschanged', onVoicesChanged, { once: true });
+        } else {
+          synthesis.onvoiceschanged = onVoicesChanged;
+        }
+        _fallbackTimer = setTimeout(() => {
+          _fallbackTimer = null;
+          if (gen !== _speechGen || nativeStarted) return;
+          try { synthesis.cancel(); } catch (e) {}
+          speakRemote();
+        }, 4000);
+      }
     } catch (e) {
       speakRemote();
     }

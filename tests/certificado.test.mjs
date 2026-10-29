@@ -273,6 +273,43 @@ test('Sem síntese nativa, o áudio remoto é tentado e a interface informa falh
   assert.equal(env._isSpeaking, false, 'timeout remoto deve liberar o controle de reprodução');
 });
 
+test('Lista de vozes inicialmente vazia aceita voz pt-BR carregada por voiceschanged', () => {
+  const controller = fs.readFileSync(path.join(rootDir, 'certificado.js'), 'utf8');
+  const start = controller.indexOf('function stopAudio()');
+  const end = controller.indexOf('/* ===== CARREGAMENTO E RENDERIZAÇÃO', start);
+  const audioCode = controller.slice(start, end);
+  let voices = [];
+  let onVoicesChanged;
+  let timeoutCallback;
+  const utterances = [];
+  const synthesis = {
+    cancel() {},
+    getVoices() { return voices; },
+    addEventListener(_event, callback) { onVoicesChanged = callback; },
+    speak(utterance) { utterances.push(utterance); }
+  };
+  const env = {
+    _currentAudio: null, _isSpeaking: false, _speechGen: 0, _fallbackTimer: null,
+    document: { getElementById: () => null },
+    window: { speechSynthesis: synthesis },
+    SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
+    Audio: class {},
+    setTimeout(callback) { timeoutCallback = callback; return 5; },
+    clearTimeout() {}, console
+  };
+  new Function('env', `with (env) { ${audioCode}\nreturn { speakText }; }`)(env)
+    .speakText('Certificado de Ana');
+  assert.equal(utterances.length, 1, 'a fala é enfileirada sem esperar a lista de vozes');
+  assert.equal(utterances[0].voice, null);
+
+  voices = [{ lang: 'pt-BR', name: 'Português Brasil' }];
+  onVoicesChanged();
+  assert.equal(utterances[0].voice.lang, 'pt-BR');
+  utterances[0].onstart();
+  timeoutCallback();
+  assert.equal(utterances.length, 1, 'voz nativa iniciada não deve duplicar com fallback remoto');
+});
+
 test('10. CSP em certificado.html inclui media-src e sw.js inclui arquivos do certificado no precache', () => {
   const certHtml = fs.readFileSync(path.join(rootDir, 'certificado.html'), 'utf8');
   const swJs = fs.readFileSync(path.join(rootDir, 'sw.js'), 'utf8');

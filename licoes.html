@@ -397,6 +397,115 @@
       animation: shimmer 2s ease-in-out infinite;
     }
 
+
+    /* ===== BANNER DE CELEBRAÇÃO DO CERTIFICADO ===== */
+    .certificate-banner {
+      background: linear-gradient(135deg, #007A43 0%, #004D25 100%);
+      color: #FFFFFF;
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin-bottom: 36px;
+      box-shadow: 0 8px 24px rgba(0, 122, 67, 0.28);
+      position: relative;
+      overflow: hidden;
+      animation: fadeSlideIn 0.6s ease forwards;
+    }
+
+    .certificate-banner-content {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+
+    .certificate-banner-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid #FFD54F;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: #FFD54F;
+      flex-shrink: 0;
+    }
+
+    .certificate-banner-text {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .certificate-banner-text h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+
+    .certificate-banner-text p {
+      font-size: 18px;
+      color: #E8F5E9;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .certificate-banner-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-certificado-principal {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background-color: #FFD54F;
+      color: #004D25;
+      font-family: 'Nunito', sans-serif;
+      font-size: 19px;
+      font-weight: 900;
+      padding: 14px 24px;
+      border-radius: 14px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.15s ease, background-color 0.2s ease;
+      white-space: nowrap;
+      min-height: 52px;
+    }
+
+    .btn-certificado-principal:hover {
+      background-color: #FFCA28;
+      transform: translateY(-2px);
+    }
+
+    .btn-certificado-principal:active {
+      transform: scale(0.96);
+    }
+
+    .btn-certificado-ouvir {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: rgba(255, 255, 255, 0.18);
+      color: #FFFFFF;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      min-height: 52px;
+    }
+
+    .btn-certificado-ouvir:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
     /* ===== GRID ===== */
     .activities-grid {
       display: grid;
@@ -1170,6 +1279,28 @@
       </div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
+      </div>
+    </section>
+
+    <!-- BANNER DE CELEBRAÇÃO DO CERTIFICADO (quando 9 de 9 estiverem concluídas) -->
+    <section class="certificate-banner" id="certificateBanner" style="display: none;" role="region" aria-label="Certificado de Conclusão">
+      <div class="certificate-banner-content">
+        <div class="certificate-banner-icon" aria-hidden="true">
+          <i class="fas fa-award"></i>
+        </div>
+        <div class="certificate-banner-text">
+          <h2>Parabéns! Você concluiu todas as 9 atividades!</h2>
+          <p>Sua dedicação é uma grande vitória. O seu Certificado de Conclusão do AprendIDos está disponível.</p>
+        </div>
+        <div class="certificate-banner-actions">
+          <a href="certificado.html" class="btn-certificado-principal" id="btnVerCertificado">
+            <i class="fas fa-certificate" aria-hidden="true"></i> Ver Meu Certificado
+          </a>
+          <button type="button" class="btn-certificado-ouvir" id="btnOuvirCelebracao" data-audio="Parabéns! Você concluiu todas as 9 atividades da plataforma AprendIDos com muita dedicação. O seu Certificado de Conclusão está pronto. Toque no botão grande para ver e imprimir o seu certificado!" aria-label="Ouvir mensagem de parabéns pelo certificado" onclick="falarLicao(this, event)">
+            <span class="ouvir-icon"><i class="fas fa-volume-up"></i></span>
+            <span class="ouvir-label">Ouvir parabéns</span>
+          </button>
+        </div>
       </div>
     </section>
 

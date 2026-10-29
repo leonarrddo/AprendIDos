@@ -1045,6 +1045,13 @@ function attachCanvasEvents() {
         isDrawing = false;
         try { writingCanvas.releasePointerCapture(e.pointerId); } catch(err) {}
         if (currentStroke && currentStroke.points.length > 1) {
+            var mList = getLetterMetrics();
+            if (typeof findBestLetterForStroke === 'function') {
+                var assigned = findBestLetterForStroke(currentStroke, mList);
+                if (assigned >= 0) {
+                    currentStroke.letterIndex = assigned;
+                }
+            }
             strokes.push(currentStroke);
         }
         currentStroke = null;
@@ -1194,16 +1201,68 @@ function evaluateWriting(isManual) {
     var totalScoreSum = 0;
     
     metrics.forEach(function(m, idx) {
+        m.allMetrics = metrics;
+        var filterFn = (typeof filterStrokesForLetter === 'function')
+            ? filterStrokesForLetter
+            : (typeof window !== 'undefined' && typeof window.filterStrokesForLetter === 'function' ? window.filterStrokesForLetter : null);
+
+        var letterStrokes = filterFn
+            ? filterFn(m, strokes, metrics)
+            : strokes.filter(function(st) {
+                if (!st || !st.points || st.points.length === 0) return false;
+                if (st.letterIndex !== undefined) return st.letterIndex === idx;
+                if (!metrics || metrics.length <= 1) return true;
+                var sumX = 0;
+                for (var p = 0; p < st.points.length; p++) sumX += st.points[p].x;
+                var avgX = sumX / st.points.length;
+                var prevM = (idx > 0) ? metrics[idx - 1] : null;
+                var nextM = (idx < metrics.length - 1) ? metrics[idx + 1] : null;
+                var leftCol = prevM ? (prevM.x2 + m.x1) / 2 : (m.x1 - (m.width || 50) * 0.45);
+                var rightCol = nextM ? (m.x2 + nextM.x1) / 2 : (m.x2 + (m.width || 50) * 0.45);
+                return avgX >= leftCol && avgX <= rightCol;
+            });
+
+        if (letterStrokes.length === 0) {
+            if (letterStatusMap[idx]) {
+                letterStatusMap[idx].score = 0;
+                letterStatusMap[idx].coverage = 0;
+                letterStatusMap[idx].passed = false;
+                letterStatusMap[idx].strokeCount = 0;
+                letterStatusMap[idx].result = null;
+            }
+            var emptyChip = document.getElementById('trackerChip_' + idx);
+            var emptyChipStatus = document.getElementById('chipStatus_' + idx);
+            if (emptyChip && emptyChipStatus) {
+                emptyChip.classList.remove('completed', 'partial');
+                emptyChipStatus.innerHTML = '<i class="fas fa-pen"></i>';
+            }
+            return;
+        }
+
+        // Estabilidade: se os traços desta letra específica não mudaram, mantém avaliação estável
+        var prevStatus = letterStatusMap[idx];
+        if (prevStatus && prevStatus.strokeCount === letterStrokes.length && prevStatus._lastStrokeRef === letterStrokes[letterStrokes.length - 1] && prevStatus.result) {
+            if (prevStatus.passed && !isSevereScribble) {
+                completedCount++;
+            }
+            totalScoreSum += prevStatus.score;
+            return;
+        }
+
         var attempts = letterAttempts[idx] || 0;
         var bonus = attempts * WRITING_EVALUATION_CONFIG.attemptToleranceBonus;
         
-        var result = evaluateLetter(m.char, m, strokes, bonus);
+        var result = (typeof evaluateLetter === 'function')
+            ? evaluateLetter(m.char, m, letterStrokes, bonus)
+            : { score: 0, coverage: 0, passed: false };
         
         if (letterStatusMap[idx]) {
-            letterStatusMap[idx].score    = result.score;
-            letterStatusMap[idx].coverage = result.coverage;
-            letterStatusMap[idx].passed   = result.passed;
-            letterStatusMap[idx].result   = result;
+            letterStatusMap[idx].score          = result.score;
+            letterStatusMap[idx].coverage       = result.coverage;
+            letterStatusMap[idx].passed         = result.passed;
+            letterStatusMap[idx].result         = result;
+            letterStatusMap[idx].strokeCount    = letterStrokes.length;
+            letterStatusMap[idx]._lastStrokeRef = letterStrokes[letterStrokes.length - 1];
         }
         
         if (result.passed && !isSevereScribble) {
@@ -1537,6 +1596,7 @@ function clearWritingCanvas() {
     stopWritingDemo();
     strokes = [];
     currentStroke = null;
+    letterStatusMap = {};
     redrawWritingCanvas();
     var hint = document.getElementById('canvasHint');
     if (hint) hint.style.opacity = '1';

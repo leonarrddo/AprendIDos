@@ -253,3 +253,121 @@ test('10. Palavra com todas as letras aprovadas: continuar permitindo a conclus�
     assert.equal(allPassed, true, 'A palavra com todas as letras aprovadas deve ser aprovada');
     assert.ok(avgScore >= 70, `Média esperada >= 70% (obteve ${avgScore}%)`);
 });
+
+// Executa as funções reais de avaliação e navegação com dependências da página controladas.
+function extractFunction(name, nextMarker) {
+    const start = escritaCode.indexOf(`function ${name}(`);
+    const end = escritaCode.indexOf(nextMarker, start);
+    assert.notEqual(start, -1, `Função ${name} deve existir`);
+    assert.notEqual(end, -1, `Delimitador de ${name} deve existir`);
+    return escritaCode.slice(start, end).trim();
+}
+
+function createWritingHarness({ result, strokes = [{ points: [{ x: 1, y: 1 }] }], currentIdx = 0, total = 2, passed = false }) {
+    const feedbackArea = {
+        innerHTML: '',
+        querySelector(selector) {
+            return selector === '.btn-next' && this.innerHTML.includes('class="btn-next"') ? {} : null;
+        },
+        insertAdjacentHTML(_position, html) { this.innerHTML += html; }
+    };
+    const elements = {
+        feedbackArea,
+        hitsCount: { textContent: '' },
+        exerciseLayout: { style: {} },
+        completionScreen: { classList: { add(value) { this.value = value; } } },
+        finalHits: { textContent: '' },
+        finalMisses: { textContent: '' },
+        finalTotal: { textContent: '' },
+        progressFill: { style: {} },
+        completionMsg: { textContent: '' }
+    };
+    const env = {
+        writingCanvas: {},
+        questions: [{ word: 'CASA' }, { word: 'BOLA' }],
+        currentIdx,
+        TOTAL: total,
+        strokes,
+        letterStatusMap: {},
+        hasPassedCurrentWord: passed,
+        hits: passed ? 1 : 0,
+        misses: 0,
+        currentEvalScore: 0,
+        currentEvalMessage: '',
+        hideWordGuide: false,
+        window: { evaluateLetter: () => result },
+        document: { getElementById(id) { return elements[id] || null; } },
+        getLetterMetrics: () => [{ char: 'C', x1: 0, y1: 0, x2: 10, y2: 10, fontSize: 10 }],
+        updateEvaluationUI(score, message, type) { env.currentEvalScore = score; env.currentEvalMessage = message; env.currentEvalType = type; },
+        renderLetterTracker() {},
+        evaluateLetterFallback() { return { passed: false, score: 0, coverage: 0, fallback: true }; },
+        speak() {},
+        stopAllAudio() {},
+        loadWord() { env.loadedIndex = env.currentIdx; },
+        salvarProgresso() { env.progressSaveCount = (env.progressSaveCount || 0) + 1; return Promise.resolve(); },
+        console
+    };
+    const buttonSource = extractFunction('ensureNextWordButton', '\nfunction evaluateWriting');
+    const evaluateSource = extractFunction('evaluateWriting', '\nfunction evaluateLetterFallback');
+    const nextSource = extractFunction('nextWord', '\nfunction showCompletion');
+    const completionSource = extractFunction('showCompletion', '\nfunction restartExercise');
+    const functions = new Function('env', `with (env) { ${buttonSource}\n${evaluateSource}\n${nextSource}\n${completionSource}\nreturn { evaluateWriting, nextWord }; }`)(env);
+    return { env, feedbackArea, elements, ...functions };
+}
+
+test('Reconhecimento parcial mostra Próxima Palavra sem aprovar a palavra', () => {
+    const h = createWritingHarness({ result: { passed: false, score: 40, coverage: 40 } });
+    h.evaluateWriting(false);
+    assert.match(h.feedbackArea.innerHTML, /Próxima Palavra/);
+    assert.equal(h.env.hasPassedCurrentWord, false);
+    assert.equal(h.env.hits, 0);
+});
+
+test('Avaliações repetidas mantêm somente um botão de avanço', () => {
+    const h = createWritingHarness({ result: { passed: false, score: 40, coverage: 40 } });
+    h.evaluateWriting(false);
+    h.evaluateWriting(false);
+    assert.equal((h.feedbackArea.innerHTML.match(/class="btn-next"/g) || []).length, 1);
+});
+
+test('Botão de avanço carrega a palavra seguinte', () => {
+    const h = createWritingHarness({ result: { passed: false, score: 40, coverage: 40 } });
+    h.evaluateWriting(false);
+    h.nextWord();
+    assert.equal(h.env.currentIdx, 1);
+    assert.equal(h.env.loadedIndex, 1);
+});
+
+test('Avançar na última palavra mostra a conclusão e salva o progresso', () => {
+    const h = createWritingHarness({ result: { passed: false, score: 40, coverage: 40 }, currentIdx: 1, total: 2 });
+    h.evaluateWriting(false);
+    assert.match(h.feedbackArea.innerHTML, /Concluir Lição/);
+    h.nextWord();
+    assert.equal(h.elements.exerciseLayout.style.display, 'none');
+    assert.equal(h.elements.completionScreen.classList.value, 'visible');
+    assert.equal(h.env.progressSaveCount, 1);
+});
+
+test('Aprovação automática continua exigindo aprovação explícita de todas as letras', () => {
+    const h = createWritingHarness({ result: { passed: true, score: 91, coverage: 90 } });
+    h.evaluateWriting(false);
+    assert.equal(h.env.hasPassedCurrentWord, true);
+    assert.equal(h.env.hits, 1);
+    assert.match(h.feedbackArea.innerHTML, /Próxima Palavra/);
+});
+
+test('Sem traços, a avaliação manual oferece continuidade sem aprovar a palavra', () => {
+    const h = createWritingHarness({ result: { passed: false, score: 0, coverage: 0 }, strokes: [] });
+    h.evaluateWriting(true);
+    assert.match(h.feedbackArea.innerHTML, /Próxima Palavra/);
+    assert.equal(h.env.hasPassedCurrentWord, false);
+    assert.equal(h.env.hits, 0);
+});
+
+test('Pontuação baixa oferece avanço manual sem aprovar a palavra', () => {
+    const h = createWritingHarness({ result: { passed: false, score: 10, coverage: 10 } });
+    h.evaluateWriting(true);
+    assert.match(h.feedbackArea.innerHTML, /Próxima Palavra/);
+    assert.equal(h.env.hasPassedCurrentWord, false);
+    assert.equal(h.env.hits, 0);
+});

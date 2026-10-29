@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: https: blob:; media-src 'self' data: blob: https://translate.google.com; connect-src 'self' https://ggptdxmsrsfrpvntlfja.supabase.co https://cdn.jsdelivr.net https://vlibras.gov.br; frame-src 'self' https://vlibras.gov.br; object-src 'none'; base-uri 'self';">
+  <title>AprendIDos - Certificado de Conclusão</title>
+
+  <!-- Configurações PWA e Acesso Mobile -->
+  <meta name="theme-color" content="#007A43">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="AprendIDos">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="manifest" href="manifest.json">
+  <script src="pwa.js" defer></script>
+  <script>
+    if (window.top !== window.self) {
+      try { window.top.location = window.self.location; } catch (e) { }
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- AprendIDos - Sistema de Temas (Modo Claro & Escuro) -->
+  <link rel="stylesheet" href="theme.css">
+  <script src="theme.js"></script>
+
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #FAF3E0;
+      color: #3E2723;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      background-color: #FFFFFF;
+      padding: 0 20px;
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(62, 39, 35, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-voltar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #F5DEB3;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #3E2723;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.2s, transform 0.15s;
+    }
+
+    .btn-voltar:hover { background-color: #E8D5A8; }
+    .btn-voltar:active { transform: scale(0.96); }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .navbar-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #007A43, #004D25);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: 900;
+      font-size: 24px;
+    }
+
+    .navbar-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #007A43;
+    }
+
+    /* ===== CONTAINER PRINCIPAL ===== */
+    .main-content {
+      flex: 1;
+      max-width: 1080px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 20px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ===== BARRA DE AÇÕES (TOOLBAR) ===== */
+    .certificate-toolbar {
+      background-color: #FFFFFF;
+      border-radius: 16px;
+      padding: 18px 24px;
+      box-shadow: 0 2px 10px rgba(62, 39, 35, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 22px;
+      border-radius: 14px;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      min-height: 52px;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    }
+
+    .btn-action:active { transform: scale(0.97); }
+
+    .btn-imprimir {
+      background: linear-gradient(135deg, #007A43 0%, #004D25 100%);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(0, 122, 67, 0.35);
+    }
+    .btn-imprimir:hover {
+      background: linear-gradient(135deg, #008F4E 0%, #005F2E 100%);
+      box-shadow: 0 6px 18px rgba(0, 122, 67, 0.45);
+    }
+
+    .btn-ouvir-cert {
+      background: linear-gradient(135deg, #0097A7 0%, #00796B 100%);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(0, 121, 107, 0.3);
+    }
+    .btn-ouvir-cert.speaking {
+      background: linear-gradient(135deg, #F57F17 0%, #E65100 100%);
+      box-shadow: 0 4px 14px rgba(230, 81, 0, 0.4);
+    }
+
+    .btn-editar-nome {
+      background-color: #FAF3E0;
+      color: #3E2723;
+      border: 2px solid #D7CCC8;
+    }
+    .btn-editar-nome:hover {
+      background-color: #F5E8C8;
+    }
+
+    .sync-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background-color: #E8F5E9;
+      color: #1B5E20;
+    }
+    .sync-status-badge.local_only {
+      background-color: #FFF3E0;
+      color: #E65100;
+    }
+
+    /* ===== FOLHA DO CERTIFICADO ===== */
+    .certificate-paper-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .certificate-paper {
+      width: 100%;
+      max-width: 1000px;
+      background: #FFFDF8;
+      border: 12px double #007A43;
+      border-radius: 20px;
+      padding: 44px 48px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(62, 39, 35, 0.12);
+      color: #2D241E;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 28px;
+      min-height: 640px;
+    }
+
+    /* Cantoneiras decorativas clássicas */
+    .certificate-paper::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 2px solid #C89B3C;
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    .cert-corner {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      border-color: #007A43;
+      border-style: solid;
+      pointer-events: none;
+    }
+    .cert-corner.top-left { top: 14px; left: 14px; border-width: 4px 0 0 4px; }
+    .cert-corner.top-right { top: 14px; right: 14px; border-width: 4px 4px 0 0; }
+    .cert-corner.bottom-left { bottom: 14px; left: 14px; border-width: 0 0 4px 4px; }
+    .cert-corner.bottom-right { bottom: 14px; right: 14px; border-width: 0 4px 4px 0; }
+
+    /* Cabeçalho do Certificado */
+    .cert-header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cert-emblem {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #007A43, #004D25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFD54F;
+      font-size: 34px;
+      box-shadow: 0 4px 16px rgba(0, 122, 67, 0.25);
+      border: 3px solid #C89B3C;
+    }
+
+    .cert-main-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #007A43;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .cert-sub-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #C89B3C;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .cert-divider {
+      width: 140px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #C89B3C, transparent);
+      margin: 4px auto 0;
+    }
+
+    /* Corpo do Certificado */
+    .cert-body {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 0 20px;
+    }
+
+    .cert-preamble {
+      font-size: 21px;
+      font-weight: 600;
+      color: #5D4037;
+    }
+
+    .cert-student-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 44px;
+      font-weight: 700;
+      color: #004D25;
+      padding: 6px 20px;
+      border-bottom: 2px solid #C89B3C;
+      max-width: 90%;
+      word-break: break-word;
+      line-height: 1.3;
+    }
+
+    .cert-statement {
+      font-size: 20px;
+      line-height: 1.6;
+      color: #3E2723;
+      max-width: 820px;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    /* Rodapé do Certificado */
+    .cert-footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(200, 155, 60, 0.4);
+      flex-wrap: wrap;
+    }
+
+    .cert-seal-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .cert-seal-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #FAF3E0;
+      border: 2px dashed #007A43;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #007A43;
+      font-size: 26px;
+    }
+
+    .cert-seal-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #5D4037;
+      line-height: 1.3;
+    }
+
+    .cert-signature-box {
+      text-align: center;
+      min-width: 220px;
+    }
+
+    .cert-sig-line {
+      width: 200px;
+      height: 2px;
+      background-color: #3E2723;
+      margin: 0 auto 6px;
+    }
+
+    .cert-sig-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: #007A43;
+    }
+
+    .cert-sig-role {
+      font-size: 14px;
+      color: #795548;
+      font-weight: 600;
+    }
+
+    .cert-date-box {
+      text-align: right;
+      font-size: 16px;
+      font-weight: 700;
+      color: #3E2723;
+    }
+
+    /* Nota de Esclarecimento Pedagógico */
+    .cert-disclaimer {
+      text-align: center;
+      font-size: 12px;
+      color: #8D6E63;
+      margin-top: 10px;
+      line-height: 1.4;
+      padding-top: 8px;
+      border-top: 1px dotted rgba(62, 39, 35, 0.2);
+    }
+
+    /* ===== TELA DE INCOMPLETO (QUANDO < 9 LIÇÕES) ===== */
+    .card-incomplete {
+      background-color: #FFFFFF;
+      border-radius: 20px;
+      padding: 36px 32px;
+      box-shadow: 0 4px 16px rgba(62, 39, 35, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+    }
+
+    .incomplete-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #FFF8E1;
+      border: 3px solid #FFA000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      color: #E65100;
+    }
+
+    .incomplete-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #3E2723;
+    }
+
+    .incomplete-text {
+      font-size: 20px;
+      color: #5D4037;
+      max-width: 680px;
+      line-height: 1.6;
+    }
+
+    .incomplete-progress-card {
+      width: 100%;
+      max-width: 580px;
+      background: #FAF3E0;
+      border-radius: 14px;
+      padding: 18px 24px;
+      text-align: left;
+    }
+
+    .incomplete-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .incomplete-list li {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .incomplete-list li.done { color: #2E7D32; }
+    .incomplete-list li.pending { color: #8D6E63; }
+
+    /* ===== MODAL DE EDIÇÃO DE NOME ===== */
+    .modal-backdrop-custom {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .modal-backdrop-custom.visible {
+      display: flex;
+    }
+
+    .modal-content-custom {
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .modal-title-custom {
+      font-size: 24px;
+      font-weight: 800;
+      color: #007A43;
+    }
+
+    .modal-label-custom {
+      font-size: 17px;
+      font-weight: 700;
+      color: #3E2723;
+    }
+
+    .modal-input-custom {
+      width: 100%;
+      font-family: 'Nunito', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 2px solid #007A43;
+      color: #3E2723;
+      outline: none;
+    }
+    .modal-input-custom:focus {
+      border-color: #004D25;
+      box-shadow: 0 0 0 4px rgba(0, 122, 67, 0.2);
+    }
+
+    .modal-actions-custom {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    /* ===== ACESSIBILIDADE E PREFERS-REDUCED-MOTION ===== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ===== ESTILOS DE IMPRESSÃO (A4 LANDSCAPE) ===== */
+    @page {
+      size: A4 landscape;
+      margin: 8mm;
+    }
+
+    @media print {
+      html, body {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        overflow: visible !important;
+      }
+
+      /* Esconde elementos de tela e navegação */
+      .navbar,
+      .certificate-toolbar,
+      .btn-action,
+      .btn-voltar,
+      .footer,
+      .modal-backdrop-custom,
+      .no-print,
+      #vlibras,
+      [vw] {
+        display: none !important;
+      }
+
+      .main-content {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .certificate-paper-wrapper {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .certificate-paper {
+        border: 10px double #007A43 !important;
+        box-shadow: none !important;
+        background: #FFFFFF !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 185mm !important;
+        padding: 24mm 24mm 16mm !important;
+        page-break-inside: avoid !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .cert-student-name {
+        font-size: 36pt !important;
+        color: #004D25 !important;
+      }
+
+      .cert-main-title {
+        font-size: 26pt !important;
+        color: #007A43 !important;
+      }
+
+      .cert-statement {
+        font-size: 16pt !important;
+      }
+    }
+
+    /* Responsividade em telas pequenas */
+    @media (max-width: 600px) {
+      .certificate-paper { padding: 32px 24px; }
+      .cert-main-title { font-size: 24px; }
+      .cert-student-name { font-size: 30px; }
+      .cert-statement { font-size: 17px; }
+      .cert-footer { flex-direction: column; align-items: center; text-align: center; }
+      .cert-date-box { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA DE NAVEGAÇÃO -->
+  <nav class="navbar no-print" role="navigation" aria-label="Navegação superior">
+    <div class="navbar-left">
+      <a href="licoes.html" class="btn-voltar" aria-label="Voltar para as atividades">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar para Atividades
+      </a>
+      <a href="menu.html" class="navbar-brand" aria-label="Início do AprendIDos">
+        <div class="navbar-logo" aria-hidden="true">A</div>
+        <span class="navbar-title">AprendIDos</span>
+      </a>
+    </div>
+    <div class="navbar-right">
+      <div id="seletorTemaCertificado" data-theme-slot></div>
+    </div>
+  </nav>
+
+  <main class="main-content" id="mainContent">
+
+    <!-- ÁREA DE CARREGAMENTO INICIAL -->
+    <div id="certLoading" class="card-incomplete" role="status" aria-live="polite">
+      <i class="fas fa-spinner fa-spin" style="font-size:42px;color:#007A43;" aria-hidden="true"></i>
+      <h2 style="font-size:24px;">Carregando seu progresso...</h2>
+    </div>
+
+    <!-- TELA QUANDO O ALUNO É ELEGÍVEL (9 LIÇÕES CONCLUÍDAS) -->
+    <div id="certEligibleSection" style="display: none; width: 100%;">
+
+      <!-- BARRA DE AÇÕES (IMPRIMIR, OUVIR, ALTERAR NOME) -->
+      <section class="certificate-toolbar no-print" aria-label="Ações do certificado">
+        <div class="toolbar-actions">
+          <button type="button" class="btn-action btn-imprimir" id="btnImprimirCert" onclick="window.print()" aria-label="Imprimir certificado ou salvar em PDF">
+            <i class="fas fa-print" aria-hidden="true"></i> Imprimir / Salvar PDF
+          </button>
+          <button type="button" class="btn-action btn-ouvir-cert" id="btnOuvirCert" onclick="ouvirCertificado(this)" aria-label="Ouvir o texto do certificado">
+            <i class="fas fa-volume-up" aria-hidden="true"></i> <span id="labelOuvirCert">Ouvir Certificado</span>
+          </button>
+          <button type="button" class="btn-action btn-editar-nome" id="btnAbrirModalNome" onclick="abrirModalNome()" aria-label="Alterar o nome no certificado">
+            <i class="fas fa-user-edit" aria-hidden="true"></i> Ajustar Meu Nome
+          </button>
+        </div>
+        <div id="syncStatusBadge" class="sync-status-badge">
+          <i class="fas fa-check-circle" aria-hidden="true"></i> Conquista Registrada
+        </div>
+      </section>
+
+      <!-- FOLHA DO CERTIFICADO FORMATADA PARA IMPRESSÃO A4 -->
+      <div class="certificate-paper-wrapper">
+        <article class="certificate-paper" id="certificatePaper" role="region" aria-label="Certificado de Conclusão">
+          <div class="cert-corner top-left"></div>
+          <div class="cert-corner top-right"></div>
+          <div class="cert-corner bottom-left"></div>
+          <div class="cert-corner bottom-right"></div>
+
+          <!-- CABEÇALHO -->
+          <header class="cert-header">
+            <div class="cert-emblem" aria-hidden="true">
+              <i class="fas fa-seedling"></i>
+            </div>
+            <h1 class="cert-main-title">Certificado de Conclusão</h1>
+            <p class="cert-sub-title">AprendIDos • Alfabetização e Letramento Digital</p>
+            <div class="cert-divider" aria-hidden="true"></div>
+          </header>
+
+          <!-- CORPO DO TEXTO -->
+          <div class="cert-body">
+            <p class="cert-preamble">Certificamos com reconhecimento e alegria que</p>
+            <h2 class="cert-student-name" id="certStudentName">Aprendiz</h2>
+            <p class="cert-statement" id="certStatementText">
+              concluiu com êxito todas as 9 atividades da jornada de alfabetização do AprendIDos,
+              demonstrando dedicação, autonomia e esforço contínuo no aprendizado das letras, sílabas, palavras e escrita.
+            </p>
+          </div>
+
+          <!-- RODAPÉ, SELO E ASSINATURA -->
+          <footer class="cert-footer">
+            <div class="cert-seal-box">
+              <div class="cert-seal-icon" aria-hidden="true">
+                <i class="fas fa-award"></i>
+              </div>
+              <div class="cert-seal-text">
+                <strong>Jornada Completa</strong><br>
+                <span>9 de 9 lições praticadas</span>
+              </div>
+            </div>
+
+            <div class="cert-signature-box">
+              <div class="cert-sig-line"></div>
+              <p class="cert-sig-name">AprendIDos</p>
+              <p class="cert-sig-role">Reconhecimento de Conclusão</p>
+            </div>
+
+            <div class="cert-date-box">
+              <p>Concluído em</p>
+              <strong id="certDateDisplay">-- de -- de ----</strong>
+            </div>
+          </footer>
+
+          <!-- DECLARAÇÃO DE ESCLARECIMENTO -->
+          <div class="cert-disclaimer">
+            Documento de reconhecimento formativo emitido pela plataforma AprendIDos. Celebra a conclusão prática das atividades e o esforço do aluno. Não constitui diploma de ensino formal regular.
+            <br>
+            <span id="certAuthCode" style="font-weight:700;">ID: APR-0000-0000</span>
+          </div>
+        </article>
+      </div>
+
+    </div>
+
+    <!-- TELA QUANDO O ALUNO AINDA NÃO CONCLUIU TODAS AS 9 LIÇÕES -->
+    <div id="certIncompleteSection" class="card-incomplete" style="display: none;" role="region" aria-label="Certificado pendente">
+      <div class="incomplete-icon" aria-hidden="true">
+        <i class="fas fa-hourglass-half"></i>
+      </div>
+      <h2 class="incomplete-title">Seu Certificado está Quase Pronto!</h2>
+      <p class="incomplete-text">
+        O certificado de conclusão reconhece quem completou as <strong>9 atividades</strong> do AprendIDos.
+        Você já concluiu <strong id="incompleteCountDisplay">0 de 9</strong> atividades.
+      </p>
+
+      <div class="incomplete-progress-card">
+        <h3 style="font-size:18px;margin-bottom:8px;color:#3E2723;">Atividades que você já completou:</h3>
+        <ul class="incomplete-list" id="incompleteLessonsList">
+          <!-- Injetado dinamicamente via JS -->
+        </ul>
+      </div>
+
+      <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:10px;">
+        <a href="licoes.html" class="btn-action btn-imprimir" style="text-decoration:none;">
+          <i class="fas fa-play" aria-hidden="true"></i> Continuar Atividades
+        </a>
+        <button type="button" class="btn-action btn-ouvir-cert" onclick="ouvirMensagemIncompleta()">
+          <i class="fas fa-volume-up" aria-hidden="true"></i> Ouvir Explicação
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL ACESSÍVEL PARA EDITAR NOME NO CERTIFICADO -->
+  <div class="modal-backdrop-custom no-print" id="modalNomeBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalNomeTitulo">
+    <div class="modal-content-custom">
+      <h3 class="modal-title-custom" id="modalNomeTitulo">Ajustar Nome no Certificado</h3>
+      <label class="modal-label-custom" for="inputNomeCustom">Digite seu nome como gostaria que aparecesse impresso:</label>
+      <input type="text" id="inputNomeCustom" class="modal-input-custom" maxlength="120" placeholder="Ex: Maria José da Silva">
+      <div class="modal-actions-custom">
+        <button type="button" class="btn-action btn-editar-nome" onclick="fecharModalNome()">Cancelar</button>
+        <button type="button" class="btn-action btn-imprimir" onclick="salvarNomeCustom()">Salvar no Certificado</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer no-print">
+    <p style="font-size:16px;color:#795548;font-weight:700;">
+      <i class="fas fa-seedling" style="color:#007A43;"></i> AprendIDos — Alfabetização para todas as idades
+    </p>
+  </footer>
+
+  <!-- Script de Autenticação Supabase -->
+  <script type="module" src="auth.js"></script>
+
+  <!-- Lógica Principal do Certificado -->
+  <script type="module" src="certificado.js"></script>
+
+  <!-- Componente VLibras (Acessibilidade em LIBRAS) -->
+  <div vw class="enabled" class="no-print">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
+
+</body>
+</html>
+

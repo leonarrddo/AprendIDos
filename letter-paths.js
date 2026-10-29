@@ -577,20 +577,36 @@ function calculateOutOfBoundsRatio(scaledStrokes, userPoints, tolerance) {
  * aproximadamente na direção correta (progressão crescente em t).
  * @returns {number} 0-100
  */
-function calculateStrokeOrder(combinedExpected, userPoints, regressionTolerance) {
-    if (!userPoints || userPoints.length < 3) return 50;
+function calculateStrokeOrder(combinedExpected, userStrokesOrPoints, regressionTolerance) {
+    if (!userStrokesOrPoints || userStrokesOrPoints.length === 0) return 50;
     if (!combinedExpected || combinedExpected.length < 2) return 50;
 
     var reg = regressionTolerance || 0.18;
-    var tValues = userPoints.map(function(p) {
-        return closestOnPolyline(p, combinedExpected).t;
-    });
-
     var good = 0, total = 0;
-    for (var i = 1; i < tValues.length; i++) {
-        total++;
-        if (tValues[i] >= tValues[i - 1] - reg) good++;
+
+    if (Array.isArray(userStrokesOrPoints) && userStrokesOrPoints[0] && userStrokesOrPoints[0].points) {
+        userStrokesOrPoints.forEach(function(st) {
+            if (!st || !st.points || st.points.length < 2) return;
+            var tValues = st.points.map(function(p) {
+                return closestOnPolyline(p, combinedExpected).t;
+            });
+            for (var i = 1; i < tValues.length; i++) {
+                total++;
+                if (tValues[i] >= tValues[i - 1] - reg) good++;
+            }
+        });
+    } else {
+        var pts = userStrokesOrPoints;
+        if (pts.length < 3) return 50;
+        var tVals = pts.map(function(p) {
+            return closestOnPolyline(p, combinedExpected).t;
+        });
+        for (var j = 1; j < tVals.length; j++) {
+            total++;
+            if (tVals[j] >= tVals[j - 1] - reg) good++;
+        }
     }
+
     if (total === 0) return 50;
     return Math.min(100, Math.round((good / total) * 100));
 }
@@ -657,26 +673,247 @@ function calculateStrokeLengthScore(scaledStrokes, userStrokes, maxRatio) {
  * e pelo fim de cada stroke essencial.
  * @returns {number} 0-100
  */
-function calculateStrokeCompletion(scaledStrokes, allUserPoints, tolerance) {
+function strokeVector(stroke) {
+    if (!stroke) return { x: 0, y: 0, len: 0 };
+    var pts = stroke.points || stroke;
+    if (!pts || pts.length < 2) return { x: 0, y: 0, len: 0 };
+    var p0 = pts[0], pEnd = pts[pts.length - 1];
+    var dx = pEnd.x - p0.x;
+    var dy = pEnd.y - p0.y;
+    var len = Math.sqrt(dx * dx + dy * dy);
+    return { x: dx, y: dy, len: len };
+}
+
+function strokeAlignment(strokeA, strokeB) {
+    var vA = strokeVector(strokeA);
+    var vB = strokeVector(strokeB);
+    if (vA.len < 5 || vB.len < 5) return 0;
+    return (vA.x * vB.x + vA.y * vB.y) / (vA.len * vB.len);
+}
+
+function calculateStrokeCompletion(scaledStrokes, localUserStrokesOrPoints, tolerance) {
     if (!scaledStrokes || scaledStrokes.length === 0) return 50;
-    if (!allUserPoints || allUserPoints.length === 0) return 0;
+    if (!localUserStrokesOrPoints || localUserStrokesOrPoints.length === 0) return 0;
+
+    var localStrokes = localUserStrokesOrPoints;
+    if (Array.isArray(localUserStrokesOrPoints) && localUserStrokesOrPoints[0] && !localUserStrokesOrPoints[0].points) {
+        localStrokes = [{ points: localUserStrokesOrPoints }];
+    }
 
     var completed = 0;
-    var tolSq = tolerance * tolerance;
-    scaledStrokes.forEach(function(stroke) {
-        if (stroke.length < 2) { completed++; return; }
-        var start = stroke[0], end = stroke[stroke.length - 1];
-        var startOk = false, endOk = false;
-        for (var i = 0; i < allUserPoints.length; i++) {
-            var dx1 = allUserPoints[i].x - start.x, dy1 = allUserPoints[i].y - start.y;
-            if (dx1*dx1 + dy1*dy1 <= tolSq * 4) startOk = true;
-            var dx2 = allUserPoints[i].x - end.x,   dy2 = allUserPoints[i].y - end.y;
-            if (dx2*dx2 + dy2*dy2 <= tolSq * 4) endOk = true;
-            if (startOk && endOk) break;
+    var tolSq = tolerance * tolerance * 2.25;
+
+    scaledStrokes.forEach(function(expStroke) {
+        if (expStroke.length < 2) { completed++; return; }
+        
+        var matched = false;
+        for (var u = 0; u < localStrokes.length; u++) {
+            var uStroke = localStrokes[u];
+            if (!uStroke || !uStroke.points || uStroke.points.length < 2) continue;
+            
+            var align = Math.abs(strokeAlignment(expStroke, uStroke));
+            // Letras com curvas (ex: O, C, S) podem ter alinhamento vetorial de ponta a ponta menor
+            var isCurved = expStroke.length > 4;
+            if (!isCurved && align < 0.40) continue;
+            
+            var nearCount = 0;
+            var sampleStep = Math.max(1, Math.floor(uStroke.points.length / 6));
+            var samples = 0;
+            for (var p = 0; p < uStroke.points.length; p += sampleStep) {
+                samples++;
+                var pt = uStroke.points[p];
+                var minD = Infinity;
+                for (var s = 0; s < expStroke.length - 1; s++) {
+                    var dx = expStroke[s+1].x - expStroke[s].x;
+                    var dy = expStroke[s+1].y - expStroke[s].y;
+                    var l2 = dx * dx + dy * dy;
+                    var t = l2 === 0 ? 0 : Math.max(0, Math.min(1, ((pt.x - expStroke[s].x) * dx + (pt.y - expStroke[s].y) * dy) / l2));
+                    var px = expStroke[s].x + t * dx;
+                    var py = expStroke[s].y + t * dy;
+                    var d2 = (pt.x - px) * (pt.x - px) + (pt.y - py) * (pt.y - py);
+                    if (d2 < minD) minD = d2;
+                }
+                if (minD <= tolSq) nearCount++;
+            }
+            if (samples > 0 && (nearCount / samples) >= 0.35) {
+                matched = true;
+                break;
+            }
         }
-        if (startOk && endOk) completed++;
+        if (matched) completed++;
     });
+
     return Math.min(100, Math.round((completed / scaledStrokes.length) * 100));
+}
+
+// ============================================================
+// ASSOCIAÇÃO E ISOLAMENTO DE TRAÇOS POR LETRA
+// ============================================================
+
+/**
+ * Associa um traço à letra mais compatível entre as métricas disponíveis.
+ * Considera alinhamento vertical/linha, coluna horizontal e proximidade com o modelo.
+ *
+ * @param {Object} stroke   Objeto de traço com array de pontos [{x, y}]
+ * @param {Array}  metrics  Array de métricas das letras (getLetterMetrics)
+ * @returns {number}        Índice da letra em metrics, ou -1 se fora de todas
+ */
+function findBestLetterForStroke(stroke, metrics) {
+    if (!stroke || !stroke.points || stroke.points.length === 0 || !metrics || metrics.length === 0) {
+        return -1;
+    }
+    
+    var pts = stroke.points;
+    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    var sumX = 0, sumY = 0;
+    for (var p = 0; p < pts.length; p++) {
+        var pt = pts[p];
+        if (pt.x < minX) minX = pt.x;
+        if (pt.x > maxX) maxX = pt.x;
+        if (pt.y < minY) minY = pt.y;
+        if (pt.y > maxY) maxY = pt.y;
+        sumX += pt.x;
+        sumY += pt.y;
+    }
+    var avgX = sumX / pts.length;
+    var avgY = sumY / pts.length;
+    var strokeCenterY = (minY + maxY) / 2;
+
+    var bestIndex = -1;
+    var bestScore = -Infinity;
+
+    for (var i = 0; i < metrics.length; i++) {
+        var m = metrics[i];
+        
+        // 1. Verificação vertical / linha (para nomes em múltiplas linhas ou pauta)
+        var vertDist = 0;
+        if (strokeCenterY < m.y1) {
+            vertDist = m.y1 - strokeCenterY;
+        } else if (strokeCenterY > m.y2) {
+            vertDist = strokeCenterY - m.y2;
+        }
+        var maxVertTolerance = m.fontSize * 1.5;
+        if (vertDist > maxVertTolerance) {
+            continue;
+        }
+
+        // 2. Coluna horizontal entre letras vizinhas da mesma linha
+        var leftCol, rightCol;
+        var prevM = (i > 0 && metrics[i - 1].line === m.line) ? metrics[i - 1] : null;
+        var nextM = (i < metrics.length - 1 && metrics[i + 1].line === m.line) ? metrics[i + 1] : null;
+
+        if (prevM) {
+            leftCol = (prevM.x2 + m.x1) / 2;
+        } else {
+            leftCol = m.x1 - m.width * 0.45;
+        }
+
+        if (nextM) {
+            rightCol = (m.x2 + nextM.x1) / 2;
+        } else {
+            rightCol = m.x2 + m.width * 0.45;
+        }
+
+        var insideCount = 0;
+        for (var k = 0; k < pts.length; k++) {
+            if (pts[k].x >= leftCol && pts[k].x <= rightCol) {
+                insideCount++;
+            }
+        }
+        var columnRatio = insideCount / pts.length;
+        var centerDistNorm = Math.abs(avgX - m.centerX) / Math.max(1, m.width);
+
+        var score = (columnRatio * 100) - (centerDistNorm * 35) - ((vertDist / m.fontSize) * 20);
+
+        if (avgX >= leftCol && avgX <= rightCol) {
+            score += 40;
+        }
+
+        // 3. Proximidade com o traçado de referência da letra (se disponível)
+        var scaled = (typeof getScaledStrokesForLetter === 'function')
+            ? getScaledStrokesForLetter(m.char, m) : null;
+        if (scaled && scaled.length > 0 && columnRatio > 0.20) {
+            var sampleStep = Math.max(1, Math.floor(pts.length / 8));
+            var pathDistSum = 0;
+            var sampleCount = 0;
+            for (var sp = 0; sp < pts.length; sp += sampleStep) {
+                var pnt = pts[sp];
+                var minD = Infinity;
+                for (var s = 0; s < scaled.length; s++) {
+                    var poly = scaled[s];
+                    for (var seg = 0; seg < poly.length - 1; seg++) {
+                        var d = pointToSegmentDist(pnt, poly[seg], poly[seg + 1]);
+                        if (d < minD) minD = d;
+                    }
+                }
+                pathDistSum += minD;
+                sampleCount++;
+            }
+            if (sampleCount > 0) {
+                var avgPathDist = pathDistSum / sampleCount;
+                var normPathDist = avgPathDist / Math.max(1, m.fontSize * 0.2);
+                if (normPathDist < 1.0) {
+                    score += (1.0 - normPathDist) * 30;
+                } else {
+                    score -= Math.min(30, (normPathDist - 1.0) * 15);
+                }
+            }
+        }
+
+        if (score > bestScore) {
+            bestScore = score;
+            bestIndex = i;
+        }
+    }
+
+    return (bestScore >= 15) ? bestIndex : -1;
+}
+
+/**
+ * Filtra e retorna apenas os traços que pertencem a uma letra específica.
+ * Preserva os traços completos sem fatiar pontos e sem contaminação entre vizinhas.
+ *
+ * @param {Object} letterMetric  Métrica da letra alvo (de getLetterMetrics)
+ * @param {Array}  allStrokes    Lista de todos os traços do quadro
+ * @param {Array}  allMetrics    Lista de todas as métricas da palavra/nome (opcional)
+ * @returns {Array}              Array de traços associados exclusivamente a esta letra
+ */
+function filterStrokesForLetter(letterMetric, allStrokes, allMetrics) {
+    if (!letterMetric || !allStrokes || allStrokes.length === 0) return [];
+
+    var targetIndex = (letterMetric.index !== undefined) ? letterMetric.index : 0;
+
+    return allStrokes.filter(function(st) {
+        if (!st || !st.points || st.points.length === 0) return false;
+
+        // 1. Associação explícita
+        if (st.letterIndex !== undefined) {
+            return st.letterIndex === targetIndex;
+        }
+
+        // 2. Associação por métricas completas
+        if (allMetrics && allMetrics.length > 0) {
+            var assigned = findBestLetterForStroke(st, allMetrics);
+            return assigned === targetIndex;
+        }
+
+        // 3. Fallback para avaliação de letra avulsa
+        var pts = st.points;
+        var sumX = 0, sumY = 0;
+        for (var p = 0; p < pts.length; p++) {
+            sumX += pts[p].x;
+            sumY += pts[p].y;
+        }
+        var avgX = sumX / pts.length;
+        var avgY = sumY / pts.length;
+
+        var padX = Math.max(letterMetric.fontSize * 0.25, letterMetric.width * 0.25);
+        var padY = letterMetric.fontSize * 0.5;
+
+        var inX = (avgX >= letterMetric.x1 - padX && avgX <= letterMetric.x2 + padX);
+        var inY = (avgY >= letterMetric.y1 - padY && avgY <= letterMetric.y2 + padY);
+        return inX && inY;
+    });
 }
 
 // ============================================================
@@ -713,19 +950,26 @@ function evaluateLetter(ch, m, userStrokes, attemptBonus) {
         };
     }
 
-    // Bounding box expandida para coleta de pontos desta letra
-    var bbox = {
-        x1: m.x1 - tolerance * 1.5, x2: m.x2 + tolerance * 1.5,
-        y1: m.y1 - tolerance * 1.5, y2: m.y2 + tolerance * 1.5
-    };
+    // Isola os traços pertencentes a esta letra específica sem contaminação entre vizinhas
+    var localUserStrokes = filterStrokesForLetter(m, userStrokes, m.allMetrics);
 
-    var localUserStrokes = (userStrokes || []).map(function(st) {
-        if (!st || !st.points) return { points: [] };
-        return { points: st.points.filter(function(p) {
-            return p.x >= bbox.x1 && p.x <= bbox.x2 &&
-                   p.y >= bbox.y1 && p.y <= bbox.y2;
-        })};
-    }).filter(function(st) { return st.points.length > 0; });
+    // Se filterStrokesForLetter não encontrou traços mas userStrokes foram fornecidos
+    // diretamente para a letra (ex: teste unitário avulso sem métricas completas)
+    if (localUserStrokes.length === 0 && userStrokes && userStrokes.length > 0) {
+        var hasOtherLetterIndex = userStrokes.some(function(st) {
+            return st && st.letterIndex !== undefined && m.index !== undefined && st.letterIndex !== m.index;
+        });
+        if (!hasOtherLetterIndex) {
+            localUserStrokes = userStrokes.filter(function(st) {
+                if (!st || !st.points || st.points.length === 0) return false;
+                var sumX = 0;
+                for (var i = 0; i < st.points.length; i++) sumX += st.points[i].x;
+                var avgX = sumX / st.points.length;
+                var padX = Math.max(m.fontSize * 0.3, m.width * 0.3);
+                return (avgX >= m.x1 - padX && avgX <= m.x2 + padX);
+            });
+        }
+    }
 
     var rawUserPoints = [];
     localUserStrokes.forEach(function(st) {
@@ -755,10 +999,10 @@ function evaluateLetter(ch, m, userStrokes, attemptBonus) {
     var coverage         = calculateCoverage(expectedPoints, allUserPoints, tolerance);
     var spatialAccuracy  = calculateSpatialAccuracy(scaledStrokes, allUserPoints, tolerance);
     var outsideRatio     = 1 - spatialAccuracy / 100;
-    var orderScore       = calculateStrokeOrder(combinedExpected, allUserPoints, cfg.orderRegressionTolerance);
+    var orderScore       = calculateStrokeOrder(combinedExpected, localUserStrokes, cfg.orderRegressionTolerance);
     var directionScore   = calculateDirectionScore(scaledStrokes, allUserPoints, tolerance);
     var lengthScore      = calculateStrokeLengthScore(scaledStrokes, localUserStrokes, cfg.maxLengthRatio);
-    var completionScore  = calculateStrokeCompletion(scaledStrokes, allUserPoints, tolerance);
+    var completionScore  = calculateStrokeCompletion(scaledStrokes, localUserStrokes, tolerance);
 
     var rawScore =
         coverage        * cfg.weightCoverage +
@@ -779,14 +1023,17 @@ function evaluateLetter(ch, m, userStrokes, attemptBonus) {
     var finalScore = Math.min(100, Math.max(0, calculatedScore));
 
     // Todos os critérios mínimos devem ser satisfeitos
-    var minCov = cfg.minCoverage * bonusFactor;
-    var minAcc = cfg.minSpatialAccuracy * bonusFactor;
+    // O bônus de tentativas alivia os requisitos mínimos, não os penaliza
+    var bonusDiscount = Math.min(15, (bonusFactor - 1) * 100);
+    var minCov = Math.max(45, cfg.minCoverage - bonusDiscount);
+    var minAcc = Math.max(40, cfg.minSpatialAccuracy - bonusDiscount);
     var passed =
         finalScore >= cfg.minScore &&
         coverage >= minCov &&
         spatialAccuracy >= minAcc &&
         outsideRatio <= cfg.maxOutsideRatio &&
-        lengthScore >= 35;
+        lengthScore >= 35 &&
+        (scaledStrokes.length <= 1 || completionScore >= 70);
 
     // Proteção estrita: se a letra NÃO passou, sua pontuação não pode inflar a média geral
     if (!passed) {
@@ -1035,6 +1282,8 @@ window.calculateDirectionScore    = calculateDirectionScore;
 window.calculateStrokeLengthScore = calculateStrokeLengthScore;
 window.calculateStrokeCompletion  = calculateStrokeCompletion;
 window.evaluateLetter             = evaluateLetter;
+window.findBestLetterForStroke    = findBestLetterForStroke;
+window.filterStrokesForLetter     = filterStrokesForLetter;
 
 window.demoState                  = demoState;
 window.stopDemo                   = stopDemo;

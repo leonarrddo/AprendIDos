@@ -454,6 +454,10 @@ function updateProgress() {
     void progressCount.offsetWidth;
     progressCount.classList.add('bump');
   }
+  const banner = document.getElementById('certificateBanner');
+  if (banner) {
+    banner.style.display = (completedCount >= TOTAL) ? 'block' : 'none';
+  }
 }
 
 /* ===== SISTEMA DE TOAST ===== */

@@ -37,6 +37,7 @@ var penWidth = 5.5;
 var hideWordGuide = false; // Opção de ocultar a palavra no fundo para praticar de memória
 var letterStatusMap = {};
 var currentEvalScore = 0;
+var currentEvalStars = 0;
 var currentEvalMessage = '';
 var autoEvalTimeout = null;
 var hasPassedCurrentWord = false;
@@ -245,6 +246,7 @@ function loadWord() {
     lastPoint = null;
     letterStatusMap = {};
     currentEvalScore = 0;
+    currentEvalStars = 0;
     currentEvalMessage = '';
 
     // Atualiza cabeçalhos
@@ -270,7 +272,7 @@ function loadWord() {
     setupCanvasResolution();
     redrawWritingCanvas();
     renderLetterTracker();
-    updateEvaluationUI(0, 'Passe o dedo por cima das letras. O sistema avalia sua escrita automaticamente!', 'info');
+    updateEvaluationUI(0, 0, 'Passe o dedo por cima das letras. O sistema avalia sua escrita automaticamente!', 'info');
 
     // Fala a palavra ao carregar a questão
     setTimeout(function() {
@@ -413,6 +415,13 @@ function attachCanvasEvents() {
         try { writingCanvas.releasePointerCapture(e.pointerId); } catch(err) {}
 
         if (currentStroke && currentStroke.points.length >= 2) {
+            var metrics = getLetterMetrics();
+            if (typeof findBestLetterForStroke === 'function') {
+                var assigned = findBestLetterForStroke(currentStroke, metrics);
+                if (assigned >= 0) {
+                    currentStroke.letterIndex = assigned;
+                }
+            }
             strokes.push(currentStroke);
             currentStroke = null;
 
@@ -459,11 +468,12 @@ function clearWritingCanvas() {
     strokes = [];
     currentStroke = null;
     lastPoint = null;
+    letterStatusMap = {};
     redrawWritingCanvas();
     var hint = document.getElementById('canvasHint');
     if (hint) hint.style.opacity = '1';
     renderLetterTracker();
-    updateEvaluationUI(0, 'Quadro limpo! Escreva novamente a palavra com calma.', 'info');
+    updateEvaluationUI(0, 0, 'Quadro limpo! Escreva novamente a palavra com calma.', 'info');
 }
 
 // ============================================================
@@ -700,8 +710,15 @@ function renderLetterTracker() {
     }
 }
 
-function updateEvaluationUI(score, message, type) {
+function updateEvaluationUI(score, stars, message, type) {
+    if (typeof stars === 'string') {
+        type = message;
+        message = stars;
+        stars = (score >= 88) ? 3 : (score >= 70) ? 2 : (score >= 45) ? 1 : 0;
+    }
+    stars = typeof stars === 'number' ? stars : 0;
     currentEvalScore = score;
+    currentEvalStars = stars;
     currentEvalMessage = message;
 
     var fill = document.getElementById('evalProgressBarFill');
@@ -719,15 +736,28 @@ function updateEvaluationUI(score, message, type) {
         textSpan.textContent = message;
     }
 
-    // Estrelas
-    var star1 = document.getElementById('star1');
-    var star2 = document.getElementById('star2');
-    var star3 = document.getElementById('star3');
-    [star1, star2, star3].forEach(function(s) { if (s) s.classList.remove('filled'); });
+    // Estrelas - Equivalente a Meu Nome (usa classe 'active')
+    for (var s = 1; s <= 3; s++) {
+        var starEl = document.getElementById('star' + s);
+        if (starEl) {
+            if (s <= stars) {
+                starEl.classList.add('active');
+            } else {
+                starEl.classList.remove('active');
+            }
+        }
+    }
+}
 
-    if (score >= 45 && star1) star1.classList.add('filled');
-    if (score >= 70 && star2) star2.classList.add('filled');
-    if (score >= 88 && star3) star3.classList.add('filled');
+function ensureNextWordButton(fbArea) {
+    if (!fbArea || fbArea.querySelector('.btn-next')) return;
+
+    var isLast = currentIdx >= TOTAL - 1;
+    fbArea.insertAdjacentHTML('beforeend',
+        '<button type="button" class="btn-next" onclick="nextWord()" aria-label="' +
+        (isLast ? 'Ver resultado' : 'Próxima palavra') + '"><i class="fas ' +
+        (isLast ? 'fa-flag-checkered' : 'fa-arrow-right') + '"></i> ' +
+        (isLast ? 'Concluir Lição' : 'Próxima Palavra') + '</button>');
 }
 
 function evaluateWriting(isManual) {
@@ -739,8 +769,13 @@ function evaluateWriting(isManual) {
     if (metrics.length === 0) return;
 
     if (strokes.length === 0) {
-        updateEvaluationUI(0, 'Passe o dedo com firmeza por cima das linhas para escrever.', 'info');
-        if (isManual) speak('Passe o dedo cobrindo as letras antes de avaliar.');
+        letterStatusMap = {};
+        updateEvaluationUI(0, 0, 'Passe o dedo com firmeza por cima das linhas para escrever.', 'info');
+        if (isManual) {
+            speak('Passe o dedo cobrindo as letras antes de avaliar.');
+            ensureNextWordButton(document.getElementById('feedbackArea'));
+        }
+        renderLetterTracker();
         return;
     }
 
@@ -749,10 +784,52 @@ function evaluateWriting(isManual) {
     var uncalibratedCount = 0;
 
     metrics.forEach(function(m, idx) {
+        m.allMetrics = metrics;
+        var filterFn = (typeof filterStrokesForLetter === 'function')
+            ? filterStrokesForLetter
+            : (typeof window !== 'undefined' && typeof window.filterStrokesForLetter === 'function' ? window.filterStrokesForLetter : null);
+
+        var letterStrokes = filterFn
+            ? filterFn(m, strokes, metrics)
+            : strokes.filter(function(st) {
+                if (!st || !st.points || st.points.length === 0) return false;
+                if (st.letterIndex !== undefined) return st.letterIndex === idx;
+                if (!metrics || metrics.length <= 1) return true;
+                var sumX = 0;
+                for (var p = 0; p < st.points.length; p++) sumX += st.points[p].x;
+                var avgX = sumX / st.points.length;
+                var prevM = (idx > 0) ? metrics[idx - 1] : null;
+                var nextM = (idx < metrics.length - 1) ? metrics[idx + 1] : null;
+                var leftCol = prevM ? (prevM.x2 + m.x1) / 2 : (m.x1 - (m.width || 50) * 0.45);
+                var rightCol = nextM ? (m.x2 + nextM.x1) / 2 : (m.x2 + (m.width || 50) * 0.45);
+                return avgX >= leftCol && avgX <= rightCol;
+            });
+
+        if (letterStrokes.length === 0) {
+            letterStatusMap[idx] = {
+                score: 0,
+                coverage: 0,
+                passed: false,
+                partial: false,
+                fallback: false,
+                strokeCount: 0
+            };
+            return;
+        }
+
+        // Estabilidade: se os traços desta letra específica não mudaram, mantém a avaliação estável
+        var prevStatus = letterStatusMap[idx];
+        if (prevStatus && prevStatus.strokeCount === letterStrokes.length && prevStatus._lastStrokeRef === letterStrokes[letterStrokes.length - 1]) {
+            if (prevStatus.passed) completedCount++;
+            if (prevStatus.fallback) uncalibratedCount++;
+            totalScoreSum += prevStatus.score;
+            return;
+        }
+
         var result = null;
         try {
             if (typeof window.evaluateLetter === 'function') {
-                result = window.evaluateLetter(m.char, m, strokes, 0.1);
+                result = window.evaluateLetter(m.char, m, letterStrokes, 0.1);
             }
         } catch (e) {
             console.error('Erro na avaliação da letra ' + m.char + ':', e);
@@ -761,7 +838,7 @@ function evaluateWriting(isManual) {
 
         // Se a avaliação principal não estiver disponível, falhar ou retornar inválido
         if (!result || typeof result !== 'object') {
-            result = evaluateLetterFallback(m, strokes);
+            result = evaluateLetterFallback(m, letterStrokes);
         }
 
         var isFallback = Boolean(result && result.fallback);
@@ -781,7 +858,9 @@ function evaluateWriting(isManual) {
             coverage: coverage,
             passed: passed,
             partial: partial,
-            fallback: isFallback
+            fallback: isFallback,
+            strokeCount: letterStrokes.length,
+            _lastStrokeRef: letterStrokes[letterStrokes.length - 1]
         };
 
         if (passed) completedCount++;
@@ -794,10 +873,23 @@ function evaluateWriting(isManual) {
     // A palavra só é considerada concluída quando TODAS as letras obrigatórias
     // forem individualmente avaliadas e aprovadas, sem letras em fallback/não calibradas.
     var allPassed = metrics.length > 0 && completedCount === metrics.length && uncalibratedCount === 0;
+    var partialRatio = completedCount / Math.max(metrics.length, 1);
     var fbArea = document.getElementById('feedbackArea');
 
+    // Feedback pedagógico e cálculo de estrelas equivalente ao Meu Nome
+    var stars = 0;
+    if (allPassed && avgScore >= 75) {
+        stars = 3;
+    } else if (allPassed || (partialRatio >= 0.70 && avgScore >= 55)) {
+        stars = 2;
+    } else if (partialRatio >= 0.35 || (completedCount > 0 && avgScore >= 35)) {
+        stars = 1;
+    } else {
+        stars = 0;
+    }
+
     if (allPassed) {
-        updateEvaluationUI(avgScore, 'Excelente caligrafia! Você escreveu a palavra ' + q.word + ' com maestria!', 'success');
+        updateEvaluationUI(avgScore, stars, 'Excelente caligrafia! Você escreveu a palavra ' + q.word + ' com maestria!', 'success');
 
         if (!hasPassedCurrentWord) {
             hasPassedCurrentWord = true;
@@ -806,33 +898,33 @@ function evaluateWriting(isManual) {
 
             speak('Excelente! Você escreveu a palavra ' + q.word + ' com perfeição!');
 
-            if (fbArea) {
-                var isLast = currentIdx >= TOTAL - 1;
-                fbArea.innerHTML = '<div class="feedback-msg success" role="alert"><i class="fas fa-check-circle"></i> Parabéns! Escrita completada com sucesso!</div>' +
-                    '<button class="btn-next" onclick="nextWord()" aria-label="' + (isLast ? 'Ver resultado' : 'Próxima palavra') + '"><i class="fas ' + (isLast ? 'fa-flag-checkered' : 'fa-arrow-right') + '"></i> ' + (isLast ? 'Concluir Lição' : 'Próxima Palavra') + '</button>';
-            }
+            if (fbArea) fbArea.innerHTML = '<div class="feedback-msg success" role="alert"><i class="fas fa-check-circle"></i> Parabéns! Escrita completada com sucesso!</div>';
         }
+        ensureNextWordButton(fbArea);
     } else if (uncalibratedCount > 0) {
         // Quando faltar referência para alguma letra, informa o usuário e não bloqueia a progressão
         var msgUncalibrated = 'A avaliação automática não está disponível para todas as letras desta palavra. Pratique o desenho e avance quando desejar.';
-        updateEvaluationUI(avgScore, msgUncalibrated, 'info');
+        updateEvaluationUI(avgScore, stars, msgUncalibrated, 'info');
         if (isManual) speak(msgUncalibrated);
 
-        if (fbArea && !hasPassedCurrentWord) {
-            var isLastUncal = currentIdx >= TOTAL - 1;
-            fbArea.innerHTML = '<div class="feedback-msg info" role="alert"><i class="fas fa-info-circle"></i> ' + msgUncalibrated + '</div>' +
-                '<button class="btn-next" onclick="nextWord()" aria-label="' + (isLastUncal ? 'Ver resultado' : 'Próxima palavra') + '"><i class="fas ' + (isLastUncal ? 'fa-flag-checkered' : 'fa-arrow-right') + '"></i> ' + (isLastUncal ? 'Concluir Lição' : 'Próxima Palavra') + '</button>';
+        if (fbArea) {
+            if (!hasPassedCurrentWord) {
+                fbArea.innerHTML = '<div class="feedback-msg info" role="alert"><i class="fas fa-info-circle"></i> ' + msgUncalibrated + '</div>';
+            }
+            ensureNextWordButton(fbArea);
         }
     } else if (avgScore >= 35 || completedCount > 0) {
         var msg = 'Muito bem! Você completou ' + completedCount + ' de ' + metrics.length + ' letras. Continue praticando o restante da palavra!';
-        updateEvaluationUI(avgScore, msg, 'partial');
+        updateEvaluationUI(avgScore, stars, msg, 'partial');
         if (isManual) speak(msg);
+        ensureNextWordButton(fbArea);
     } else {
         var tipMsg = hideWordGuide
             ? 'Continue escrevendo a palavra de memória. Você pode reativar a guia a qualquer momento.'
             : 'Passe o dedo cobrindo com firmeza as letras pontilhadas.';
-        updateEvaluationUI(avgScore, tipMsg, 'info');
+        updateEvaluationUI(avgScore, stars, tipMsg, 'info');
         if (isManual) speak(tipMsg);
+        ensureNextWordButton(fbArea);
     }
 }
 

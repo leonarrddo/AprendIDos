@@ -205,13 +205,16 @@ export function createProgressStore({ getCurrentUser, getSupabase, storage, now 
       const cloudProgress = {};
       for (const item of data) {
         if (!item?.licao_id) continue;
-        cloudProgress[item.licao_id] = {
+        const cloudRecord = {
           completed: item.concluido,
           score: item.pontuacao,
           tentativas: item.tentativas,
           updatedAt: item.atualizado_em,
           syncStatus: 'synced'
         };
+        const total = item.total_questoes ?? item.total;
+        if (total !== undefined) cloudRecord.total = total;
+        cloudProgress[item.licao_id] = cloudRecord;
       }
 
       // Keep pending local records when they are newer (or timestamps are unknown).
@@ -224,6 +227,22 @@ export function createProgressStore({ getCurrentUser, getSupabase, storage, now 
         if (!remoteRecord || (isPending && localPendingIsAtLeastAsRecent(localRecord, remoteRecord))) {
           progress[lessonId] = { ...localRecord, syncStatus: 'local_only' };
           pendingEntries.push([lessonId, progress[lessonId]]);
+        } else if (
+          remoteRecord &&
+          localRecord?.syncStatus === 'synced' &&
+          localRecord.score !== null &&
+          localRecord.score !== undefined &&
+          localRecord.score !== '' &&
+          Number.isSafeInteger(Number(localRecord.score)) &&
+          Number(localRecord.score) === Number(remoteRecord.score) &&
+          timestampOf(localRecord) !== null &&
+          timestampOf(localRecord) === timestampOf(remoteRecord) &&
+          (remoteRecord.total === undefined || remoteRecord.total === null) &&
+          Number.isSafeInteger(Number(localRecord.total)) &&
+          Number(localRecord.total) > 0
+        ) {
+          // Keep local result metadata only when it belongs to the exact row confirmed by Supabase.
+          progress[lessonId] = { ...remoteRecord, total: Number(localRecord.total) };
         }
       }
 

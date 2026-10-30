@@ -172,6 +172,43 @@ test('recovers cloud progress for the authenticated account on a fresh device', 
   assert.ok(storage.getItem(getProgressStorageKey(authenticatedUser)));
 });
 
+test('maps a question total returned by Supabase into the shared local result shape', async () => {
+  const { client } = createClient({
+    queryResult: {
+      data: [{ licao_id: 'frases', concluido: true, pontuacao: 3, total_questoes: 8, atualizado_em: '2026-10-24T10:00:00Z' }],
+      error: null
+    }
+  });
+  const { getLessonProgress } = createStore({ client });
+
+  const result = await getLessonProgress();
+
+  assert.equal(result.progress.frases.score, 3);
+  assert.equal(result.progress.frases.total, 8);
+});
+
+test('keeps a locally confirmed question total when the matching cloud row has no total column', async () => {
+  const updatedAt = '2026-10-25T11:00:00.000Z';
+  const storage = createStorage({
+    [getProgressStorageKey(authenticatedUser)]: JSON.stringify({
+      letras: { completed: true, score: 3, total: 10, updatedAt, syncStatus: 'synced' }
+    })
+  });
+  const { client } = createClient({
+    queryResult: {
+      data: [{ licao_id: 'letras', concluido: true, pontuacao: 3, atualizado_em: updatedAt }],
+      error: null
+    }
+  });
+  const { getLessonProgress } = createStore({ storage, client });
+
+  const result = await getLessonProgress();
+
+  assert.equal(result.progress.letras.score, 3);
+  assert.equal(result.progress.letras.total, 10);
+  assert.equal(result.progress.letras.syncStatus, 'synced');
+});
+
 test('a successful empty cloud query keeps a local record pending when retry fails', async () => {
   const stale = { letras: { completed: true, score: 10 } };
   const storage = createStorage({ [getProgressStorageKey(authenticatedUser)]: JSON.stringify(stale) });

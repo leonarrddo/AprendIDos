@@ -1044,36 +1044,7 @@ async function salvarEVerOutras(event) {
 }
 
 function verificarLicaoConcluida() {
-    var isDone = false, prevScore = null, prevTotal = TOTAL;
-    try {
-        var user = null;
-        try { var r = localStorage.getItem('aprendidos_usuario'); if (r) user = JSON.parse(r); } catch(e) {}
-        var uk = (user && user.id)
-            ? ((user.isDemo ? 'aprendidos_progresso_demo_' : 'aprendidos_progresso_') + user.id)
-            : 'aprendidos_progresso_anonymous_v2';
-        var keys = [uk];
-        for (var i = 0; i < keys.length; i++) {
-            var raw = localStorage.getItem(keys[i]);
-            if (raw) {
-                var p = JSON.parse(raw);
-                if (p && p.escrita && p.escrita.completed) {
-                    isDone = true;
-                    prevScore = p.escrita.score;
-                    prevTotal = p.escrita.total;
-                    break;
-                }
-            }
-        }
-    } catch(e) {}
-
-    if (isDone) {
-        var banner = document.getElementById('reviewBanner');
-        var bannerText = document.getElementById('reviewBannerText');
-        if (banner) banner.style.display = 'flex';
-        if (bannerText && prevScore !== null) {
-            bannerText.textContent = 'Você já concluiu este treino com ' + prevScore + ' de ' + prevTotal + ' acertos. Pratique novamente para manter a caligrafia afiada!';
-        }
-    }
+    if (window.AprendIDosReview) window.AprendIDosReview.render('escrita');
 }
 
 function toggleMenu() {

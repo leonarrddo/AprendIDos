@@ -9,7 +9,7 @@
  * - Estratégia Stale-While-Revalidate para recursos estáticos da aplicação.
  */
 
-const CACHE_VERSION = 'v5';
+const CACHE_VERSION = 'v6';
 const CACHE_PREFIX = 'aprendidos-';
 const STATIC_CACHE = `${CACHE_PREFIX}static-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `${CACHE_PREFIX}runtime-${CACHE_VERSION}`;
@@ -35,6 +35,7 @@ const PRECACHE_ASSETS = [
   'certificado.html',
   'certificado.js',
   'certificado-logic.js',
+  'review-progress.js',
   'theme.css',
   'theme.js',
   'accessibility.css',

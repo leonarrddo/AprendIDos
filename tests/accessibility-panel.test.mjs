@@ -61,7 +61,7 @@ test('painel de acessibilidade funciona e cabe em todas as larguras solicitadas'
       assert.match(fs.readFileSync(path.join(process.cwd(), name), 'utf8'), /<script src="accessibility\.js"><\/script>/, `${name} deve carregar o painel compartilhado`);
     }
     const serviceWorker = fs.readFileSync(path.join(process.cwd(), 'sw.js'), 'utf8');
-    assert.match(serviceWorker, /const CACHE_VERSION = 'v5';/);
+    assert.match(serviceWorker, /const CACHE_VERSION = 'v6';/);
     assert.match(serviceWorker, /'accessibility\.js'/);
     assert.match(serviceWorker, /'accessibility\.css'/);
     await page.waitForSelector('#aprendidos-a11y-toggle');

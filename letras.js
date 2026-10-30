@@ -984,48 +984,7 @@ async function salvarEVerOutras(event) {
 }
 
 function verificarLicaoConcluida() {
-    var isDone = false;
-    var prevScore = null;
-    var prevTotal = typeof TOTAL_QUESTIONS !== 'undefined' ? TOTAL_QUESTIONS : 8;
-
-    try {
-        var user = null;
-        try {
-            var uRaw = localStorage.getItem('aprendidos_usuario');
-            if (uRaw) user = JSON.parse(uRaw);
-        } catch(e) {}
-
-        var userKey = (user && user.id)
-            ? ((user.isDemo ? 'aprendidos_progresso_demo_' : 'aprendidos_progresso_') + user.id)
-            : 'aprendidos_progresso_anonymous_v2';
-        var keys = [userKey];
-
-        for (var i = 0; i < keys.length; i++) {
-            var raw = localStorage.getItem(keys[i]);
-            if (raw) {
-                var p = JSON.parse(raw);
-                if (p && p.letras && p.letras.completed) {
-                    isDone = true;
-                    if (p.letras.score !== undefined) prevScore = p.letras.score;
-                    if (p.letras.total !== undefined && p.letras.total !== null) prevTotal = p.letras.total;
-                    break;
-                }
-            }
-        }
-    } catch(e) {}
-
-    if (isDone) {
-        var banner = document.getElementById('reviewBanner');
-        var bannerText = document.getElementById('reviewBannerText');
-        if (banner) {
-            banner.style.display = 'flex';
-            if (bannerText) {
-                var total = (prevTotal !== null && prevTotal !== undefined) ? prevTotal : TOTAL_QUESTIONS;
-                var scoreMsg = (prevScore !== null && prevScore !== undefined) ? ' com <strong>' + prevScore + ' de ' + total + ' acertos</strong>' : '';
-                bannerText.innerHTML = 'Você já concluiu esta lição' + scoreMsg + '! Sinta-se à vontade para rever o alfabeto e praticar novamente quantas vezes desejar.';
-            }
-        }
-    }
+    if (window.AprendIDosReview) window.AprendIDosReview.render('letras');
 }
 
 // ============================================================================

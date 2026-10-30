@@ -108,27 +108,14 @@ test('Vogais waits for its completion save before scheduling navigation', async 
   assert.equal(window.location.href, 'licoes.html');
 });
 
-test('letras.js renderiza mensagem de conclusao sem null quando progresso nao tem campo total', () => {
+test('letras.js usa o renderizador compartilhado para apresentar conclusão e revisão', () => {
   const source = fs.readFileSync('letras.js', 'utf8');
   const start = source.indexOf('function verificarLicaoConcluida()');
   const end = source.indexOf('function announceSR', start);
   const fnCode = source.slice(start, end);
-  const banner = { style: {} };
-  const bannerText = { innerHTML: '' };
-  const elements = { reviewBanner: banner, reviewBannerText: bannerText };
-  const localStorage = {
-    getItem(key) {
-      if (key === 'aprendidos_progresso_anonymous_v2') {
-        return JSON.stringify({ letras: { completed: true, score: 3 } });
-      }
-      return null;
-    }
-  };
-  const document = { getElementById: id => elements[id] || null };
-  const fn = new Function('document', 'localStorage', 'TOTAL_QUESTIONS', fnCode + '\nreturn verificarLicaoConcluida;')(document, localStorage, 8);
+  let renderedLesson = null;
+  const window = { AprendIDosReview: { render(lessonId) { renderedLesson = lessonId; } } };
+  const fn = new Function('window', fnCode + '\nreturn verificarLicaoConcluida;')(window);
   fn();
-  assert.equal(banner.style.display, 'flex');
-  assert.match(bannerText.innerHTML, /3 de 8 acertos/);
-  assert.doesNotMatch(bannerText.innerHTML, /null/);
-  assert.doesNotMatch(bannerText.innerHTML, /undefined/);
+  assert.equal(renderedLesson, 'letras');
 });

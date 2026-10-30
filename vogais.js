@@ -1135,48 +1135,7 @@ async function salvarEVerOutras(event) {
 }
 
 function verificarLicaoConcluida() {
-    var isDone = false;
-    var prevScore = null;
-    var prevTotal = TOTAL;
-
-    try {
-        var user = null;
-        try {
-            var uRaw = localStorage.getItem('aprendidos_usuario');
-            if (uRaw) user = JSON.parse(uRaw);
-        } catch(e) {}
-
-        var userKey = (user && user.id)
-            ? ((user.isDemo ? 'aprendidos_progresso_demo_' : 'aprendidos_progresso_') + user.id)
-            : 'aprendidos_progresso_anonymous_v2';
-        var keys = [userKey];
-
-        for (var i = 0; i < keys.length; i++) {
-            var raw = localStorage.getItem(keys[i]);
-            if (raw) {
-                var p = JSON.parse(raw);
-                if (p && p.vogais && p.vogais.completed) {
-                    isDone = true;
-                    if (p.vogais.score !== undefined) prevScore = p.vogais.score;
-                    if (p.vogais.total !== undefined && p.vogais.total !== null) prevTotal = p.vogais.total;
-                    break;
-                }
-            }
-        }
-    } catch(e) {}
-
-    if (isDone) {
-        var banner = document.getElementById('reviewBanner');
-        var bannerText = document.getElementById('reviewBannerText');
-        if (banner) {
-            banner.style.display = 'flex';
-            if (bannerText) {
-                var total = (prevTotal !== null && prevTotal !== undefined) ? prevTotal : TOTAL;
-                var scoreMsg = (prevScore !== null && prevScore !== undefined) ? ' com <strong>' + prevScore + ' de ' + total + ' acertos</strong>' : '';
-                bannerText.innerHTML = 'Você já concluiu esta lição' + scoreMsg + '! Sinta-se à vontade para rever os sons das vogais e praticar novamente quantas vezes desejar.';
-            }
-        }
-    }
+    if (window.AprendIDosReview) window.AprendIDosReview.render('vogais');
 }
 
 function restartExercise() {

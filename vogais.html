@@ -1568,6 +1568,11 @@
 
         <hr class="divider" aria-hidden="true">
 
+        <div id="reviewBanner" role="status" aria-live="polite">
+            <i class="fas fa-check-circle" aria-hidden="true"></i>
+            <span id="reviewBannerText">Você já concluiu esta atividade. Pratique novamente para manter seu aprendizado!</span>
+        </div>
+
     <!-- EXERCÍCIO -->
     <section aria-labelledby="title-exercise">
         <h2 class="section-title" id="title-exercise">
@@ -1683,6 +1688,7 @@
 
 <!-- Módulo de Autenticação e Sincronização Supabase -->
 <script type="module" src="auth.js"></script>
+<script src="review-progress.js"></script>
 
 <script>
 // ============================================================
@@ -2154,7 +2160,7 @@ var vogaisCompletionSaveData = null;
 function salvarProgressoVogaisInline() {
     vogaisCompletionSaveData = {
         completed: true,
-        score: Math.round((hits / TOTAL) * 100),
+        score: hits,
         total: TOTAL
     };
     if (window.AprendIDosAuth && window.AprendIDosAuth.saveLessonProgress) {
@@ -2274,6 +2280,7 @@ document.addEventListener('click', function(e) {
 
 // Inicia os exercícios
 initExercise();
+window.AprendIDosReview?.render('vogais');
 </script>
 
   <script src="accessibility.js"></script>

@@ -392,24 +392,7 @@ async function salvarEVerOutras(event) {
 }
 
 function verificarLicaoConcluida() {
-    var isDone = false, prevScore = null, prevTotal = TOTAL;
-    try {
-        var user = null;
-        try { var r = localStorage.getItem('aprendidos_usuario'); if (r) user = JSON.parse(r); } catch(e) {}
-        var uk = (user && user.id)
-            ? ((user.isDemo ? 'aprendidos_progresso_demo_' : 'aprendidos_progresso_') + user.id)
-            : 'aprendidos_progresso_anonymous_v2';
-        var keys = [uk];
-        for (var i = 0; i < keys.length; i++) {
-            var raw = localStorage.getItem(keys[i]);
-            if (raw) { var p = JSON.parse(raw); if (p && p.silabas && p.silabas.completed) { isDone = true; prevScore = p.silabas.score; prevTotal = p.silabas.total; break; } }
-        }
-    } catch(e) {}
-    if (isDone) {
-        var banner = document.getElementById('reviewBanner');
-        var bt = document.getElementById('reviewBannerText');
-        if (banner) { banner.style.display = 'flex'; if (bt) bt.innerHTML = 'Você já concluiu esta lição' + (prevScore !== null ? ' com <strong>' + prevScore + ' de ' + prevTotal + ' acertos</strong>' : '') + '! Sinta-se à vontade para praticar novamente.'; }
-    }
+    if (window.AprendIDosReview) window.AprendIDosReview.render('silabas');
 }
 
 function restartExercise() {

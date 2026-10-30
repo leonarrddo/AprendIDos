@@ -89,7 +89,7 @@ test('login oferece recuperação acessível e etapa para definir nova senha', (
 });
 
 test('Service Worker invalida os recursos JS antigos após a inclusão da recuperação de senha', () => {
-  assert.match(serviceWorkerJs, /const CACHE_VERSION = 'v4';/);
+  assert.match(serviceWorkerJs, /const CACHE_VERSION = 'v5';/);
 });
 
 test('formulário de recuperação envia o e-mail informado e apresenta confirmação genérica', async (t) => {

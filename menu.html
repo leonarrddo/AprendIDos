@@ -285,6 +285,9 @@
         .area-telefone {
             display: flex;
             align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 100%;
             gap: 12px;
             margin-top: 4px;
         }
@@ -299,6 +302,10 @@
             font-weight: 700;
             color: #007A43;
             line-height: 1;
+            max-width: 100%;
+            min-width: 0;
+            overflow-wrap: anywhere;
+            text-align: center;
         }
 
         .texto-rodape-inferior {
@@ -635,10 +642,10 @@
     <footer class="rodape-ajuda animar-entrada animar-delay-7" role="contentinfo">
         <p class="texto-rodape-superior">Precisa de ajuda? Estamos aqui para você.</p>
         <div class="area-telefone">
-            <i class="bi bi-telephone-fill icone-telefone" aria-hidden="true"></i>
-            <span class="numero-telefone">(11) 90000-0000</span>
+            <i class="bi bi-envelope-fill icone-telefone" aria-hidden="true"></i>
+            <a class="numero-telefone" href="mailto:aprendidos.suporte@gmail.com">aprendidos.suporte@gmail.com</a>
         </div>
-        <p class="texto-rodape-inferior">Atendemos por telefone e WhatsApp, todos os dias.</p>
+        <p class="texto-rodape-inferior">Entre em contato pelo e-mail. Responderemos assim que possível.</p>
     </footer>
 
     <!-- Bootstrap 5 JS -->
@@ -730,5 +737,6 @@
       new window.VLibras.Widget('https://vlibras.gov.br/app');
     </script>
 
+  <script src="accessibility.js"></script>
 </body>
 </html>

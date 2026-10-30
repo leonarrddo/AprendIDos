@@ -120,6 +120,12 @@ self.addEventListener('fetch', (event) => {
     return; // Deixa o navegador executar a requisição na rede diretamente
   }
 
+  // APIs locais também são dinâmicas: não armazenar estados de solicitações,
+  // respostas de autenticação ou outros dados retornados por funções Vercel.
+  if (url.origin === self.location.origin && url.pathname.startsWith('/api/')) {
+    return;
+  }
+
   // 2. Requisições de navegação (páginas HTML):
   // Estratégia Network-First com fallback para cache offline
   const isHtmlNavigation =

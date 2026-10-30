@@ -1158,7 +1158,7 @@ function verificarLicaoConcluida() {
                 if (p && p.vogais && p.vogais.completed) {
                     isDone = true;
                     if (p.vogais.score !== undefined) prevScore = p.vogais.score;
-                    if (p.vogais.total !== undefined) prevTotal = p.vogais.total;
+                    if (p.vogais.total !== undefined && p.vogais.total !== null) prevTotal = p.vogais.total;
                     break;
                 }
             }
@@ -1171,7 +1171,8 @@ function verificarLicaoConcluida() {
         if (banner) {
             banner.style.display = 'flex';
             if (bannerText) {
-                var scoreMsg = prevScore !== null ? ' com <strong>' + prevScore + ' de ' + prevTotal + ' acertos</strong>' : '';
+                var total = (prevTotal !== null && prevTotal !== undefined) ? prevTotal : TOTAL;
+                var scoreMsg = (prevScore !== null && prevScore !== undefined) ? ' com <strong>' + prevScore + ' de ' + total + ' acertos</strong>' : '';
                 bannerText.innerHTML = 'Você já concluiu esta lição' + scoreMsg + '! Sinta-se à vontade para rever os sons das vogais e praticar novamente quantas vezes desejar.';
             }
         }

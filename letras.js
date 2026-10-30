@@ -986,7 +986,7 @@ async function salvarEVerOutras(event) {
 function verificarLicaoConcluida() {
     var isDone = false;
     var prevScore = null;
-    var prevTotal = null;
+    var prevTotal = typeof TOTAL_QUESTIONS !== 'undefined' ? TOTAL_QUESTIONS : 8;
 
     try {
         var user = null;
@@ -1007,7 +1007,7 @@ function verificarLicaoConcluida() {
                 if (p && p.letras && p.letras.completed) {
                     isDone = true;
                     if (p.letras.score !== undefined) prevScore = p.letras.score;
-                    if (p.letras.total !== undefined) prevTotal = p.letras.total;
+                    if (p.letras.total !== undefined && p.letras.total !== null) prevTotal = p.letras.total;
                     break;
                 }
             }
@@ -1020,7 +1020,8 @@ function verificarLicaoConcluida() {
         if (banner) {
             banner.style.display = 'flex';
             if (bannerText) {
-                var scoreMsg = prevScore !== null ? ' com <strong>' + prevScore + ' de ' + prevTotal + ' acertos</strong>' : '';
+                var total = (prevTotal !== null && prevTotal !== undefined) ? prevTotal : TOTAL_QUESTIONS;
+                var scoreMsg = (prevScore !== null && prevScore !== undefined) ? ' com <strong>' + prevScore + ' de ' + total + ' acertos</strong>' : '';
                 bannerText.innerHTML = 'Você já concluiu esta lição' + scoreMsg + '! Sinta-se à vontade para rever o alfabeto e praticar novamente quantas vezes desejar.';
             }
         }
